@@ -34,6 +34,20 @@ The pinned 0.1.40 tree needs gfx906 build compatibility fixes in
 held constant in both arms and are excluded from this patch. See
 [#1083](https://github.com/Niko1221/Strata/pull/1083) for the upstream build work.
 
+### Software and additional run details
+
+- Host: Ubuntu 26.04.1 LTS, kernel 7.0.0-30-generic; container: Ubuntu 24.04.4 LTS
+- Source build: HIP 7.14.60850, AMD clang 23.0.0git; Release, STRATA_HIP_GFX906=ON, gfx906, STRATA_PORTABLE=ON
+- Driver package version was not recorded. Exact compiler revision is in results.json
+- Hybrid GGUF and native pack are on SATA SSD; PLE is locked in RAM
+- Shards: Qwen3.8-Flash-Next-GSQ-RCO-abliterated-IQ3_XXS-Q2_0-00001-of-00002.gguf and the corresponding 00002-of-00002.gguf
+- Local MTP pack: Q2_0 expert weights, Q8_0 dense weights, the default 106299-entry draft vocabulary. Pack/profile SHA256 values are in results.json
+- 15 CPU pool workers; no other GPU workload during benchmarks; no calibration or speed projection enabled for this comparison
+- A post-run sysfs snapshot reported 190 W caps and 16.0 GT/s x16 GPU-facing links on both cards. These were not logged during ABBA; the full upstream PCIe topology was not measured
+- Each fresh engine preloads the profile-ranked VRAM tier. OS page-cache state was not controlled
+- All native output tokens, including reasoning, are counted. TTFT, peak host RAM, process RSS and exact peak VRAM were not measured for this report; expert-cache allocation above is not a peak
+- No failed model requests occurred in the reported ABBA series
+
 ## End-to-end measurements
 
 Each ABBA series starts four fresh engines: mode 7, 13, 13, 7.
@@ -63,6 +77,21 @@ are the equal-output performance evidence.
 A clean-source 4K check reproduced all 1024 IDs from the earlier code series:
 57.9510 -> 58.8171 tok/s. This extra pair is a verification check, not another
 ABBA series.
+
+### Per-arm medians and ranges
+
+There are two measured runs per arm in each ABBA series; the guide suggests at least three for a general community report. This is a bounded optimization comparison. The extra cleaned-source pair is kept separate.
+
+| Workload / mode | PP median [min, max] | TG median [min, max] |
+|---|---:|---:|
+| code4k / 7 | 339.903 [339.782, 340.024] | 58.106 [57.987, 58.226] |
+| code4k / 13 | 339.893 [339.872, 339.914] | 58.965 [58.780, 59.150] |
+| code64k / 7 | 584.361 [584.358, 584.364] | 46.439 [46.403, 46.475] |
+| code64k / 13 | 584.281 [584.181, 584.382] | 47.102 [47.063, 47.141] |
+| ru64k / 7 | 584.137 [584.046, 584.227] | 31.469 [31.468, 31.471] |
+| ru64k / 13 | 584.212 [584.191, 584.232] | 31.861 [31.814, 31.907] |
+
+The Russian rows retain the unequal-output qualification above.
 
 ## Component and numerical checks
 
