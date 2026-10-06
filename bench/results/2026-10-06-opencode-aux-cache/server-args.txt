@@ -1,0 +1,3 @@
+--conversation-cache-mib 4096
+--conversation-cache-slots 4
+--conversation-cache-min-free-mib 8192

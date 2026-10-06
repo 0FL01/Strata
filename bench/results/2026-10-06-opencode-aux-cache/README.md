@@ -1,7 +1,8 @@
 # OpenCode auxiliary requests and compression: investigation
 
-This branch is separate from the Q2_0 performance work. It contains evidence
-and reproducers, not a server/client behavior change.
+This branch is separate from the Q2_0 performance work. It contains evidence,
+reproducers and a verified server-configuration mitigation. No client or
+server request handler has been patched.
 
 ## Scope and pinned sources
 
@@ -96,7 +97,7 @@ A real context rewrite necessarily invalidates token-prefix reuse where its
 tokens changed. Re-reading the new summary is expected. Avoiding redundant
 summaries and preserving unrelated conversations are different problems.
 
-## Options, not applied
+## Options considered (applied parking result below)
 
 - Disable the built-in title agent in the client (agent.title.disable=true)
   if automatic titles are not needed. The title function returns when the
@@ -138,5 +139,58 @@ STRATA_API_KEY in the environment; it prints no credentials.
 It makes five real inference calls and changes the server's active prefix
 cache. Run only when that workload is acceptable.
 
-No production configuration, OpenCode setting or server handler was changed.
+The first investigation pass changed no production configuration, OpenCode
+setting or server handler; the later authorized configuration change is below.
 No user-session dump, screenshot, secret or private prompt is included.
+
+## Applied server-side mitigation (2026-10-06 20:08 UTC)
+
+The existing RAM conversation-parking mechanism was enabled in the persistent
+Strata model configuration. No client or server request handler was patched.
+Append the arguments in server-args.txt to the existing model args:
+
+- --conversation-cache-mib 4096
+- --conversation-cache-slots 4
+- --conversation-cache-min-free-mib 8192
+
+These are a total4096MiB parking budget, up to4 parked entries and a8192MiB
+free-RAM floor. They do not guarantee four full-context snapshots. Budget,
+space and prefix eligibility still determine whether a request can be reused.
+The original configuration was backed up before the restart; rollback removes
+these appended arguments and restarts the server.
+
+### Verified on the two-gfx906 server
+
+| Check | Cached prompt tokens | Wall time |
+|---|---:|---:|
+|6431-token main after title, parking off|0|15.304s|
+|6431-token main after title, parking on|6424|0.406s|
+|70852-token main, cold with parking on|0|122.080s|
+|Same long main after title, parking on|70845|0.711s|
+
+The long cold/restore rows are not a separate parking-off benchmark.
+All examples generate very short answers; these timings establish avoided
+prefill, not a TG benchmark or a guaranteed end-to-end workload speedup.
+
+Two independent synthetic conversations returned the expected distinct
+answers42 and17 after A/B switching. Simultaneous submission also returned
+the correct answers with6417/6415 cached tokens; the backend still serves
+them through its FIFO, not parallel decode.
+
+Parking is not free: the short repeated-request observations increased
+from about0.21s to0.35–0.42s. Snapshot logs for the short test showed roughly
+144–204ms to park and41–42ms to restore. Cache state used about1GB with three
+parked short entries in that snapshot. These are observations, not peak
+resource bounds. After the long test MemAvailable was about50.5GiB and
+SwapFree had not fallen.
+
+Native process arguments and the persisted config were checked. Mode13,
+Hybrid204800, CPU vision and API-key requirement are retained; unauthenticated
+models access returned401. A reboot was not tested. Results and the final
+receipt are in parking-results.json. The live test scripts ran no private
+conversation.
+
+This addresses auxiliary-request cache displacement. It does not cancel
+OpenCode's own compaction scheduling, and a genuinely rewritten history
+still needs to be read. The client-side incident attribution remains open
+until its version and usage/compaction metadata are supplied.
