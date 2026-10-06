@@ -3115,6 +3115,27 @@ __device__ __forceinline__ float q2_dot_fast(const void* vbq, const block_q8_1* 
     const float d2 = w->d, d8 = __low2float(a->ds);
     return d2 * d8 * sum;
 }
+// Two-stage bit spreading for down: identical signed bytes, fewer integer operations.
+// Keep gate/up on its already-qualified implementation.
+__device__ __forceinline__ int q2_four_bytes_spread(unsigned q) {
+    unsigned c = (q | (q << 12)) & 0x000f000fu;
+    c = (c | (c << 6)) & 0x03030303u;
+    return (int) ((c + 0x7f7f7f7fu) ^ 0x80808080u);
+}
+__device__ __forceinline__ float q2_dot_spread(const void* vbq, const block_q8_1* x, int kbx, int iqs) {
+    const block_q2_0* w = (const block_q2_0*) vbq + kbx;
+    const int16_t* qs = (const int16_t*) w->qs + iqs * 4;
+    const block_q8_1* a = x + iqs;
+    int sum = 0;
+#pragma unroll
+    for (int j = 0; j < 4; ++j) {
+        const unsigned q = (uint16_t) qs[j];
+        sum = ggml_cuda_dp4a(get_int_b4(a->qs, j * 2), q2_four_bytes_spread(q), sum);
+        sum = ggml_cuda_dp4a(get_int_b4(a->qs, j * 2 + 1), q2_four_bytes_spread(q >> 8), sum);
+    }
+    const float d2 = w->d, d8 = __low2float(a->ds);
+    return d2 * d8 * sum;
+}
 // Q2_0 token-inner R2 without shared memory. Keep the baseline CTA geometry
 // for singleton groups; reuse each thread's weight rows across up to NT tokens.
 template<int NT, int RB>
@@ -3278,7 +3299,7 @@ __global__ void __launch_bounds__(256) native_gu_lds_kernel(const unsigned long 
 
 // ---- 7 (down): the group's q8_1 h rows in LDS, the tokens inside the k loop, the R2 row pairs of mode 2 -
 // the same per-(row, entry) sums in the same order: bitwise the mode-2 output.
-template<int TD>
+template<int TD, bool FAST_Q2 = false>
 __global__ void __launch_bounds__(256) native_down_lds_kernel(const unsigned long long* __restrict__ grp_ptr,
                                                               const int32_t* __restrict__ grp_start,
                                                               const int32_t* __restrict__ n_groups,
@@ -3319,8 +3340,8 @@ __global__ void __launch_bounds__(256) native_down_lds_kernel(const unsigned lon
 #pragma unroll
                     for (int j = 0; j < NTC; ++j) {
                         const block_q8_1* xk = sh + (size_t) j * hb + kbx * (F::qk / 32);
-                        const float a = F::dot(w0, xk, kbx, iqs);
-                        const float b = F::dot(w1, xk, kbx, iqs);
+                        const float a = (FAST_Q2 && TD == 42) ? q2_dot_spread(w0, xk, kbx, iqs) : F::dot(w0, xk, kbx, iqs);
+                        const float b = (FAST_Q2 && TD == 42) ? q2_dot_spread(w1, xk, kbx, iqs) : F::dot(w1, xk, kbx, iqs);
                         s0[j] += a;
                         s1[j] += b;
                     }
@@ -3523,10 +3544,10 @@ void native_expert_grouped(const NativeExpertLayout& L, const unsigned long long
     if (g_exp_phase != 2) {
 #endif
 #if defined(STRATA_HIP_GFX906)
-    const bool lds_gu = (em0 == 5 || em0 == 6 || em0 == 7 || em0 == 8 || em0 == 13) && (L.gu_type == 18 || L.gu_type == 21 || L.gu_type == 22 || L.gu_type == 23);
-    // Mode 13 is the gfx906 Q2_0 gate/up candidate. Other formats and down
-    // retain mode 7 behavior. Qualified geometry: Flash-Next H=2560, FF=640.
-    if (em0 == 13 && L.gu_type == 42 && L.n_embd == 2560 && L.n_ff == 640) {
+    const bool lds_gu = (em0 == 5 || em0 == 6 || em0 == 7 || em0 == 8 || em0 == 13 || em0 == 15) && (L.gu_type == 18 || L.gu_type == 21 || L.gu_type == 22 || L.gu_type == 23);
+    // Modes 13/15 share the gfx906 Q2_0 gate/up candidate. Mode 15 only adds
+    // fast Q2_0 down unpacking. Qualified geometry: Flash-Next H=2560, FF=640.
+    if ((em0 == 13 || em0 == 15) && L.gu_type == 42 && L.n_embd == 2560 && L.n_ff == 640) {
         const dim3 gl((unsigned)((2 * L.n_ff + 15) / 16), (unsigned)cap_groups);
         native_gu_q2_global_kernel<4,16><<<gl,256,0,s>>>(grp_ptr,grp_start,n_groups,ent_tok,X,L,gate,up);
     } else if (lds_gu) {
@@ -3588,10 +3609,11 @@ void native_expert_grouped(const NativeExpertLayout& L, const unsigned long long
     const int d_rows = (!g_old_kernels && !g_no_sub16_gu && L.n_ff == 640) ? (L.d_type == 20 ? 32 : (L.d_type == 42 ? 16 : 8)) : 8;
     const dim3 gd((unsigned) ((L.n_embd + d_rows - 1) / d_rows), (unsigned) gy);
 #if defined(STRATA_HIP_GFX906)
-    if ((em0 == 7 || em0 == 8 || em0 == 13) && (L.d_type == 20 || L.d_type == 42)) {
+    if ((em0 == 7 || em0 == 8 || em0 == 13 || em0 == 15) && (L.d_type == 20 || L.d_type == 42)) {
         const dim3 gl((unsigned) ((L.n_embd + LDS_RB - 1) / LDS_RB), (unsigned) cap_groups);
         const size_t sh = (size_t) LDS_NT * (size_t) (L.n_ff / 32) * sizeof(block_q8_1);
         if (L.d_type == 20) native_down_lds_kernel<20><<<gl, 256, sh, s>>>(grp_ptr, grp_start, n_groups, ent_dst, hq, L, out);
+        else if (em0 == 15 && L.n_embd == 2560 && L.n_ff == 640) native_down_lds_kernel<42, true><<<gl, 256, sh, s>>>(grp_ptr, grp_start, n_groups, ent_dst, hq, L, out);
         else native_down_lds_kernel<42><<<gl, 256, sh, s>>>(grp_ptr, grp_start, n_groups, ent_dst, hq, L, out);
         check("native_expert_grouped/down");
         return;
