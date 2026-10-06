@@ -1,0 +1,17 @@
+{
+  "kind": "actual overflow functions plus source-order witness; not a user-session replay",
+  "threshold": 168000,
+  "syntheticPreviousUsage": 170000,
+  "syntheticNextPrompt": 108800,
+  "oldUsageTriggers": true,
+  "newUsageTriggers": false,
+  "promptOverflowBeforeDcpTransform": true,
+  "processorUsesReportedUsage": true,
+  "upstream_commit": "aec0b9a6d8898f68f923aaf08b7306d931fd9d76",
+  "source_sha256": {
+    "session/overflow.ts": "fa0d52e8a59b737e8129d6473f9f6416567cd765c6068f854e4ea0dd3d351d10",
+    "provider/transform.ts": "ddfea009d85f61172d056216addeeabd920cd368d4d27b2f652629f7e3bcb0d2",
+    "session/prompt.ts": "f0c5bc64c0f0e966693d4a57f7ede1e9d6e188b396152f04b55303dc75b9b768",
+    "session/processor.ts": "0b31e207beda56bd9a4b9b88c9e42d89a0651dd011773748c8e2938dfc3dcb74"
+  }
+}
