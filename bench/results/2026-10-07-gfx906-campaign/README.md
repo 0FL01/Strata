@@ -59,3 +59,23 @@ zero failures. Synthetic checks do not establish model quality independently.
   source path is actually used.
 
 No new runtime default is changed by this checkpoint.
+
+## Independent stream screening
+
+Same baseline engine and fixed-placement controls as above, 65536 prompt and
+2048 output tokens. A-B-C-D-D-C-B-A, two fresh processes per arm. Fusion remains
+off. All output IDs match across all eight runs.
+
+| Arm | Shared-expert stream | MTP shared branch | TG | PP |
+| --- | ---: | ---: | ---: | ---: |
+| A, current | 1 | 1 | 47.916 | 583.321 |
+| B | 0 | 1 | 47.067 | 581.390 |
+| C | 1 | 0 | 47.956 | 582.565 |
+| D | 0 | 0 | 46.908 | 583.615 |
+
+Disabling the main shared-expert stream loses about 1.77%; disabling both loses
+about 2.10%. Disabling only the MTP branch is indistinguishable at this sample
+size (+0.08%). The normal-HIP defaults do not improve this gfx906 backend.
+Keep the existing stream settings. See `streams.json` for per-run values.
+Some offered draft/look-up counts differ slightly despite identical output
+IDs; this is not a per-kernel timing attribution.
