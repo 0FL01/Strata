@@ -146,3 +146,33 @@ No 64K acceleration is claimed. `planner.json` contains individual values and
 the candidate hash. The branch carries these source changes for reproducible
 experiments; that is not a recommendation to enable every experiment in a
 production deployment.
+
+## Multi-row BF16 GEMV: positive result
+
+An isolated screening pass on the original baseline engine tested LFUSE,
+GDN_SPLIT, PLE_BATCH, MMVF_ROWS and ATTN_LANECELL, each at 4K/1024 outputs,
+between two baseline runs. All token IDs matched. This exploratory pass
+(`exact-knobs.json`) selected MMVF_ROWS for replicated validation; it is not
+evidence of a reliable gain for the other flags.
+
+`STRATA_MMVF_ROWS=1` reuses the activation reads across four output rows per
+block. The arithmetic order per output remains the single-row order.
+Replicated isolated ABBA, 2048 outputs, same baseline engine and mode13:
+
+| Prompt | Baseline TG | Rows TG | Change | Baseline PP | Rows PP |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| 4096 | 49.981 | 52.017 | +4.073% | 337.556 | 335.187 |
+| 65536 | 47.816 | 49.313 | +3.130% | 583.110 | 583.045 |
+
+Every candidate run beats both reference runs at its prompt length. All 2048
+output token IDs match in all four runs for each length. The 4K PP variation
+is retained rather than attributed to a decode-only switch. No PP improvement
+is claimed. `mmvf-rows.json` contains the individual rates.
+
+New `mmvf_rows_parity` tests the multi-row output against separate single-row
+calls, including graph capture, row tails, output/activation strides, 1–8
+tokens, nine shapes and three finite magnitude ranges. It also tests the
+optional auxiliary-row entry point. Each GPU passes 432 cases comparing
+1,660,200 output values including untouched padding, zero bit mismatches.
+Run with `STRATA_MMVF_ROWS=1`. This validation does not by itself establish
+all possible model workloads or full-window quality.
