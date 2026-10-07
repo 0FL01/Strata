@@ -33,6 +33,35 @@ No Russian draft-vocabulary changes were used. `final-comparison.json` and
 This does not establish arbitrary-prompt quality equivalence or performance
 on other machines. Capacity and live API verification are recorded separately.
 
+### Deployment and capacity verification
+
+Deployed on 2026-10-07 at 05:14 UTC. The running native process was checked
+for all seven selected environment values and the exact tested engine hash.
+The pre-existing local gfx906 build fixes and API-only/no-telemetry patch were
+preserved byte-for-byte. Experimental #1120/#1181 source changes were removed
+from the deployment; the qualified branch contains tests and evidence only
+above the already-deployed Q2_0 implementation.
+
+- Actual 200,000-token read plus 256 generated tokens at capacity204800:
+  PP575.585, TG42.389, native exit0. No prompt reuse. This repeated synthetic
+  fixture qualifies capacity/stability, not long-dialogue quality. SSH closed
+  after successful result and restore receipts were persisted; the summary
+  was reconstructed from those receipts and current health, not from a rerun.
+- Authenticated tool-call round-trip, CPU image encoder with the synthetic
+  red/blue image, and text after vision passed. Unauthenticated models401,
+  web UI404; service healthy with images and API key required.
+- Existing RAM conversation parking still works: 6430-token cold request
+  15.275s, warm0.415s; after an unrelated auxiliary request, 0.397s with6423
+  cached tokens. This is synthetic A/title/A, not an OpenCode incident replay.
+- Model, window204800, INT8 KV/resident32768, CPU FP16 vision, authentication,
+  sampling, parking budget and Docker `unless-stopped` are retained. Restart
+  persistence was inspected in configuration; no machine reboot is claimed.
+
+`verification.json` contains the receipts. For rollback, use expert mode13
+and unset the other six variables from `candidate.env`, then recreate the
+existing service. The engine binary is the same in both profiles. Preserve
+unrelated configuration, model packs and credentials when reverting.
+
 Baseline: `cc7eeb6`, the opt-in Q2_0 gate/up and down patch on upstream
 `82f46a8`. Two MI50-class gfx906 16 GiB cards, Xeon E5-2698B v3,
 128 GB RAM, HIP 7.14.60850. Model: shefowl Flash-Next Hybrid

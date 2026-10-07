@@ -1,0 +1,144 @@
+{
+  "verified_utc": "2026-10-07T05:20:45.047083+00:00",
+  "deployment": {
+    "started_utc": "2026-10-07T05:11:29.844696+00:00",
+    "target_commit": "a713ba4afe1bd1ab7aad3d3b47e49b381cbfc338",
+    "selected_env": {
+      "STRATA_EXP_MODE": "15",
+      "STRATA_MMVF_ROWS": "1",
+      "STRATA_HIP_SWIGLU_FUSED": "1",
+      "STRATA_GDN_HEAD": "1",
+      "STRATA_GDN_PP": "2",
+      "STRATA_GDN_CONVL2": "1",
+      "STRATA_GDN_NOY": "1"
+    },
+    "passed": true,
+    "finished_utc": "2026-10-07T05:14:37.292526+00:00",
+    "health": {
+      "status": "ok",
+      "max_context": 204800,
+      "model": "Qwen3.8-Flash-Next-GSQ-RCO-abliterated-IQ3_XXS-Q2_0",
+      "images": true,
+      "api_key": true,
+      "loaded": true,
+      "service": "strata"
+    },
+    "processes": [
+      {
+        "pid": 9,
+        "env": {
+          "STRATA_EXP_MODE": "15",
+          "STRATA_MMVF_ROWS": "1",
+          "STRATA_HIP_SWIGLU_FUSED": "1",
+          "STRATA_GDN_HEAD": "1",
+          "STRATA_GDN_PP": "2",
+          "STRATA_GDN_CONVL2": "1",
+          "STRATA_GDN_NOY": "1"
+        },
+        "binary_sha256": "3fdb12152c5e148c7af241cc4cde0e4f71494f657bba48f6ca9bb363b90757f6"
+      }
+    ],
+    "commit": "a713ba4afe1bd1ab7aad3d3b47e49b381cbfc338",
+    "restart_policy": "unless-stopped",
+    "config_unchanged": true,
+    "api_tests": [
+      "tool roundtrip",
+      "CPU vision",
+      "text after vision",
+      "models401",
+      "UI404"
+    ]
+  },
+  "capacity": {
+    "tag": "capacity200000-B1",
+    "passed": true,
+    "kv": "int8",
+    "prompt_tokens": 200000,
+    "actual_outputs": 256,
+    "prompt_ms": 347472.4,
+    "decode_ms": 6039.3,
+    "PP": 575.5852838959296,
+    "TG": 42.389018594870265,
+    "engine_total_s": 353.5117,
+    "request_wall_s": 353.58926709601656,
+    "load_wall_s": 74.81872636207845,
+    "accepted": 165,
+    "offered": 214,
+    "cache_hits": 142389,
+    "lookups": 146880,
+    "prompt_reused": 0,
+    "prompt_read": 200000,
+    "sampling": {
+      "temperature": 0,
+      "top_p": 1,
+      "top_k": 1,
+      "seed": 12345
+    },
+    "metric_scope": "PP=reported full prompt count /native prompt_ms; last prompt token executes in first decode window. TG=actual outputs/native decode_ms. Native wall/load separate. No quality or equal-token claim across KV quantizations."
+  },
+  "capacity_scope": "200000 repeated synthetic input token IDs plus256output at204800capacity; not a quality benchmark",
+  "capacity_transport_note": "SSH transport closed after persisted successful native result and successful service restore; reconstructed summary from those receipts, not a rerun",
+  "parking": {
+    "passed": true,
+    "rows": [
+      {
+        "tag": "cold",
+        "elapsed_s": 15.275348228984512,
+        "content": "42",
+        "usage": {
+          "prompt_tokens": 6430,
+          "completion_tokens": 3,
+          "total_tokens": 6433,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        },
+        "cached_tokens": 0
+      },
+      {
+        "tag": "warm",
+        "elapsed_s": 0.4147830998990685,
+        "content": "42",
+        "usage": {
+          "prompt_tokens": 6430,
+          "completion_tokens": 3,
+          "total_tokens": 6433,
+          "prompt_tokens_details": {
+            "cached_tokens": 6423
+          }
+        },
+        "cached_tokens": 6423
+      },
+      {
+        "tag": "auxiliary",
+        "elapsed_s": 0.5617520569358021,
+        "content": "TEST",
+        "usage": {
+          "prompt_tokens": 17,
+          "completion_tokens": 2,
+          "total_tokens": 19,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        },
+        "cached_tokens": 0
+      },
+      {
+        "tag": "restored",
+        "elapsed_s": 0.3973359090741724,
+        "content": "42",
+        "usage": {
+          "prompt_tokens": 6430,
+          "completion_tokens": 3,
+          "total_tokens": 6433,
+          "prompt_tokens_details": {
+            "cached_tokens": 6423
+          }
+        },
+        "cached_tokens": 6423
+      }
+    ],
+    "scope": "synthetic A/title/A RAM parking regression, not a client replay"
+  },
+  "original_local_patches_preserved": true
+}
