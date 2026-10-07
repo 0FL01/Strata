@@ -1,0 +1,127 @@
+{
+  "build": {
+    "source_commit": "b6731bf",
+    "source_tar_sha256": "b05c846feafa765b91e8b7e0cc4b29386da66ede7aee69fe8674faa42083329b",
+    "deployment_patch_sha256": "b1bb1c99e225ab425e368ac2a10cfd013cb41cbe3dfd94c757104c99980f70a3",
+    "baseline_commit": "82f4473fb56fd8cf7355814c9512e21d67f4e0d2",
+    "build_exit": 0,
+    "binary_sha256": "ce794788d64313236bbc24b47a3f8e06c841034afaf4e19a2fc5ffd84e337f14"
+  },
+  "checks": {
+    "passed": true,
+    "native_real_weight_cases": 72,
+    "binary_sha256": "ce794788d64313236bbc24b47a3f8e06c841034afaf4e19a2fc5ffd84e337f14",
+    "note": "Fused h scratch is unwritten and not an independent SwiGLU oracle; gate/up, active Q8 and expert output comparisons are meaningful."
+  },
+  "invocations": [
+    {
+      "tag": "cpu-ctest",
+      "exit": 0
+    },
+    {
+      "tag": "g0-grouped-topk",
+      "exit": 0
+    },
+    {
+      "tag": "g0-G1-T1",
+      "exit": 0
+    },
+    {
+      "tag": "g0-G1-T2",
+      "exit": 0
+    },
+    {
+      "tag": "g0-G1-T4",
+      "exit": 0
+    },
+    {
+      "tag": "g0-G1-T8",
+      "exit": 0
+    },
+    {
+      "tag": "g0-G8-T1",
+      "exit": 0
+    },
+    {
+      "tag": "g0-G8-T2",
+      "exit": 0
+    },
+    {
+      "tag": "g0-G8-T4",
+      "exit": 0
+    },
+    {
+      "tag": "g0-G8-T8",
+      "exit": 0
+    },
+    {
+      "tag": "g0-G32-T1",
+      "exit": 0
+    },
+    {
+      "tag": "g0-G32-T2",
+      "exit": 0
+    },
+    {
+      "tag": "g0-G32-T4",
+      "exit": 0
+    },
+    {
+      "tag": "g0-G32-T8",
+      "exit": 0
+    },
+    {
+      "tag": "g1-grouped-topk",
+      "exit": 0
+    },
+    {
+      "tag": "g1-G1-T1",
+      "exit": 0
+    },
+    {
+      "tag": "g1-G1-T2",
+      "exit": 0
+    },
+    {
+      "tag": "g1-G1-T4",
+      "exit": 0
+    },
+    {
+      "tag": "g1-G1-T8",
+      "exit": 0
+    },
+    {
+      "tag": "g1-G8-T1",
+      "exit": 0
+    },
+    {
+      "tag": "g1-G8-T2",
+      "exit": 0
+    },
+    {
+      "tag": "g1-G8-T4",
+      "exit": 0
+    },
+    {
+      "tag": "g1-G8-T8",
+      "exit": 0
+    },
+    {
+      "tag": "g1-G32-T1",
+      "exit": 0
+    },
+    {
+      "tag": "g1-G32-T2",
+      "exit": 0
+    },
+    {
+      "tag": "g1-G32-T4",
+      "exit": 0
+    },
+    {
+      "tag": "g1-G32-T8",
+      "exit": 0
+    }
+  ],
+  "cpu_ctest": "Test project /src/build-906\n    Start 69: q2_unpack_spread_check\n1/3 Test #69: q2_unpack_spread_check ...........   Passed    0.02 sec\n    Start 70: iq_avx2_parity_q2_spread\n2/3 Test #70: iq_avx2_parity_q2_spread .........   Passed    0.27 sec\n    Start 71: iq_avx2_parity\n3/3 Test #71: iq_avx2_parity ...................   Passed    0.27 sec\n\n100% tests passed out of 3\n\nTotal Test time (real) =   0.55 sec\n"
+}
