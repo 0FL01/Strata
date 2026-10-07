@@ -1,0 +1,17 @@
+PARITY p0=0 T=1 pass
+PARITY p0=0 T=4095 pass
+PARITY p0=0 T=4096 pass
+BENCH p0=0 T=4096 direct_ms=1.328480 dma_ms=0.596800 speedup=2.226006
+PARITY p0=3 T=1 pass
+PARITY p0=3 T=4095 pass
+PARITY p0=3 T=4096 pass
+BENCH p0=3 T=4096 direct_ms=1.364000 dma_ms=0.602721 speedup=2.263070
+PARITY p0=32767 T=1 pass
+PARITY p0=32767 T=4095 pass
+PARITY p0=32767 T=4096 pass
+BENCH p0=32767 T=4096 direct_ms=1.351680 dma_ms=0.599200 speedup=2.255808
+PARITY p0=32768 T=1 pass
+PARITY p0=32768 T=4095 pass
+PARITY p0=32768 T=4096 pass
+BENCH p0=32768 T=4096 direct_ms=1.387840 dma_ms=0.598880 speedup=2.317393
+kv append DMA: 12 cases 0 failures
