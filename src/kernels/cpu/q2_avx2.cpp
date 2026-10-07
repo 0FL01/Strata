@@ -163,6 +163,47 @@ void rows_bp(const uint8_t* w, size_t row_bytes, int npairs, const ActQ* const* 
     }
 }
 
+// Two independent output rows share activation loads; each row retains its FMA sequence.
+template<int NT>
+void rows_pair(const uint8_t* w, size_t row_bytes, int nblocks, const ActQ* const* a,
+               float* const* out, int r0, int r1) {
+    int r = r0;
+    for (; r + 1 < r1; r += 2) {
+        __m256 acc[2][NT];
+        float corr[2][NT] = {};
+        for (int p = 0; p < 2; ++p)
+            for (int t = 0; t < NT; ++t) acc[p][t] = _mm256_setzero_ps();
+        for (int b = 0; b < nblocks; ++b) {
+            __m256i lo[2], hi[2];
+            float d[2];
+            for (int p = 0; p < 2; ++p) {
+                const uint8_t* blk = w + size_t(r + p) * row_bytes + b * 18;
+                d[p] = h2f(blk);
+                unpack64_spread(blk + 2, lo[p], hi[p]);
+            }
+            for (int t = 0; t < NT; ++t) {
+                const int8_t* q = a[t]->q + b * 64;
+                const __m256i x0 = _mm256_loadu_si256((const __m256i*)q);
+                const __m256i x1 = _mm256_loadu_si256((const __m256i*)(q + 32));
+                const float s0 = a[t]->scale[2 * b], s1 = a[t]->scale[2 * b + 1];
+                const float hx = a[t]->hx[2 * b] + a[t]->hx[2 * b + 1];
+                for (int p = 0; p < 2; ++p) {
+                    const __m256i v0 = plain::dot4(lo[p], x0), v1 = plain::dot4(hi[p], x1);
+                    acc[p][t] = _mm256_fmadd_ps(_mm256_set1_ps(d[p] * s0), _mm256_cvtepi32_ps(v0), acc[p][t]);
+                    acc[p][t] = _mm256_fmadd_ps(_mm256_set1_ps(d[p] * s1), _mm256_cvtepi32_ps(v1), acc[p][t]);
+                    corr[p][t] += d[p] * hx;
+                }
+            }
+        }
+        for (int p = 0; p < 2; ++p) for (int t = 0; t < NT; ++t) {
+            const __m128 h = _mm_add_ps(_mm256_castps256_ps128(acc[p][t]), _mm256_extractf128_ps(acc[p][t], 1));
+            const __m128 s = _mm_add_ps(h, _mm_movehl_ps(h, h));
+            out[t][r + p] = _mm_cvtss_f32(_mm_add_ss(s, _mm_movehdup_ps(s))) - corr[p][t];
+        }
+    }
+    if (r < r1) spread::rows_nt(w, row_bytes, nblocks, a, NT, out, r, r1);
+}
+
 const bool kUnpackSpread = [] {
     const char* e = std::getenv("STRATA_Q2_AVX2_SPREAD");
     return e && e[0] == '1';
@@ -204,6 +245,13 @@ void q2_0_gguf_rows_multi_avx2_spread(const uint8_t* w, size_t row_bytes, int nb
         if (k == 4) plain::rows_nt(w, row_bytes, nblocks, a + t0, k, out + t0, r0, r1);
         else spread::rows_nt(w, row_bytes, nblocks, a + t0, k, out + t0, r0, r1);
     }
+}
+
+void q2_0_gguf_rows_multi_avx2_pair(const uint8_t* w, size_t row_bytes, int nblocks, const ActQ* const* a, int nt,
+                                    float* const* out, int r0, int r1) {
+    if (nt == 1) rows_pair<1>(w, row_bytes, nblocks, a, out, r0, r1);
+    else if (nt == 2) rows_pair<2>(w, row_bytes, nblocks, a, out, r0, r1);
+    else q2_0_gguf_rows_multi_avx2_spread(w, row_bytes, nblocks, a, nt, out, r0, r1);
 }
 
 void q2_0_gguf_rows_multi_avx2_legacy(const uint8_t* w, size_t row_bytes, int nblocks, const ActQ* const* a, int nt,

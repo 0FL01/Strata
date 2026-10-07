@@ -8,12 +8,15 @@
 #include <random>
 #include <vector>
 namespace c = strata::kernels::cpu;
+static bool pair_test = false;
 using Clock=std::chrono::steady_clock;
 static void ref(const uint8_t* w,size_t rb,int nb,const c::ActQ* const* a,int nt,float* const* o,int r0,int r1){
- c::q2_0_gguf_rows_multi_avx2_v(false,w,rb,nb,a,nt,o,r0,r1);
+ if(pair_test)c::q2_0_gguf_rows_multi_avx2_spread(w,rb,nb,a,nt,o,r0,r1);
+ else c::q2_0_gguf_rows_multi_avx2_v(false,w,rb,nb,a,nt,o,r0,r1);
 }
 static void alt(const uint8_t* w,size_t rb,int nb,const c::ActQ* const* a,int nt,float* const* o,int r0,int r1){
- c::q2_0_gguf_rows_multi_avx2_spread(w,rb,nb,a,nt,o,r0,r1);
+ if(pair_test)c::q2_0_gguf_rows_multi_avx2_pair(w,rb,nb,a,nt,o,r0,r1);
+ else c::q2_0_gguf_rows_multi_avx2_spread(w,rb,nb,a,nt,o,r0,r1);
 }
 static void weights(std::vector<uint8_t>& w,int rows,int nb,size_t rb,std::mt19937& rng){
  for(auto&v:w)v=uint8_t(rng());
@@ -24,6 +27,7 @@ static void weights(std::vector<uint8_t>& w,int rows,int nb,size_t rb,std::mt199
 }
 int main(int argc,char**){
  if(!c::cpu_avx2_ok())return 77;
+ pair_test=std::getenv("STRATA_Q2_TEST_PAIR") != nullptr;
  const char* flag=std::getenv("STRATA_Q2_AVX2_SPREAD");
  if(flag&&flag[0]=='1'){std::fprintf(stderr,"unset STRATA_Q2_AVX2_SPREAD for independent reference\n");return 2;}
  size_t checks=0,bad=0;
