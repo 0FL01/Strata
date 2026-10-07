@@ -61,3 +61,5 @@ Code/Russian A/A/B first-distribution and residual checks are pending.
 The exact qualified stack remains separate and unchanged.
 
 Diagnostic follow-up: STRATA_HC_F16_ARENA_ONLY=1 performs the same arena conversions but falls through to unchanged native BF16 math. This isolates scratch-lifetime corruption from the numerical route. It is diagnostic only, not a performance option.
+
+STRATA_HC_F16_SHADOW=1 runs the full FP16 route, samples64 outputs, then overwrites Y with the original native BF16 product and samples the same coordinates. Downstream state should match baseline if there is no scratch/library side effect. No extra GPU matrix buffer is allocated. Diagnostic only.

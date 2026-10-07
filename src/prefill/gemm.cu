@@ -16,6 +16,7 @@
 #include <algorithm>
 #include <atomic>
 #include <limits>
+#include <cmath>
 #include <cstring>
 
 #if defined(__HIPCC__) && defined(STRATA_HIPBLASLT_AVAILABLE)
@@ -109,6 +110,10 @@ __global__ void hc_plain_bf16_to_f16(const uint16_t* in, __half* out, int64_t n,
             if (threadIdx.x == 0) atomicMax(stats, magnitude);
         }
     }
+}
+__global__ void hc_f16_sample(const float* y, float* out, int64_t T, int64_t N, int64_t ldy) {
+    const int i = threadIdx.x;
+    if (i < 64) out[i] = y[((int64_t)i * 7919 % T) * ldy + ((int64_t)i * 97 % N)];
 }
 __global__ void hc_f16_check_output(const float* y, int64_t n, int64_t N, int64_t ldy, unsigned* bad) {
     const int64_t i = (int64_t)blockIdx.x * blockDim.x + threadIdx.x;
@@ -626,8 +631,11 @@ bool Gemm::try_hc_f16(const uint16_t* X, const uint16_t* W, float* Y,
     if (!on || f16_io_ || beta != 0.0f || ldx != 0 || (T != 4095 && T != 4096) ||
         !((N == 320 && K == 10240) || (N == 10240 && K == 320))) return false;
     ++hc_f16_attempts_;
+    static const bool shadow = [] {
+        const char* v = std::getenv("STRATA_HC_F16_SHADOW"); return v && std::atoi(v) == 1;
+    }();
     const uint64_t we = (uint64_t)N * K, xe = (uint64_t)T * K;
-    const size_t need = (size_t)((we + xe) * 2 + 64);
+    const size_t need = (size_t)((we + xe) * 2 + 64 + (shadow ? 128 * sizeof(float) : 0));
     if (!hc_scratch_ || hc_scratch_bytes_ < need || ldy < N || ldy > std::numeric_limits<int>::max() ||
         (uint64_t)ldy > std::numeric_limits<size_t>::max() / (4 * (uint64_t)T)) return false;
     const uintptr_t sb = reinterpret_cast<uintptr_t>(hc_scratch_);
@@ -669,6 +677,34 @@ bool Gemm::try_hc_f16(const uint16_t* X, const uint16_t* W, float* Y,
     }
     f16(xh, wh, Y, T, N, K, ldy, 0.0f);
     ++hc_f16_taken_;
+    if (shadow) {
+        auto* samples = reinterpret_cast<float*>(stats + 16);
+        hc_f16_sample<<<1, 64, 0, st>>>(Y, samples, T, N, ldy);
+        check(cudaGetLastError(), "shadow sample");
+        const float alpha = 1.0f, zero = 0.0f;
+        ck(cublasGemmEx((cublasHandle_t)handle_, CUBLAS_OP_T, CUBLAS_OP_N, (int)N, (int)T, (int)K,
+                       &alpha, W, CUDA_R_16BF, (int)K, X, CUDA_R_16BF, (int)K, &zero,
+                       Y, CUDA_R_32F, (int)ldy, CUBLAS_COMPUTE_32F, CUBLAS_GEMM_DEFAULT),
+           "HC shadow native BF16");
+        STRATA_ABSORB_HIPBLAS_STICKY("HC shadow native BF16");
+        hc_f16_sample<<<1, 64, 0, st>>>(Y, samples + 64, T, N, ldy);
+        check(cudaGetLastError(), "shadow reference");
+        float host[128]; check(cudaMemcpyAsync(host, samples, sizeof(host), cudaMemcpyDeviceToHost, st), "shadow copy");
+        check(cudaStreamSynchronize(st), "shadow sync");
+        double e2 = 0, r2 = 0, mx = 0; unsigned changed = 0;
+        for (int i = 0; i < 64; ++i) {
+            if (!std::isfinite(host[i]) || !std::isfinite(host[i + 64])) {
+                std::fprintf(stderr, "strata hc-f16: nonfinite shadow sample\n"); std::exit(1);
+            }
+            const double e = (double)host[i] - host[i + 64];
+            e2 += e * e; r2 += (double)host[i + 64] * host[i + 64]; mx = std::max(mx, std::abs(e));
+            changed += std::memcmp(host + i, host + i + 64, sizeof(float)) != 0;
+        }
+        int device = -1; check(cudaGetDevice(&device), "shadow device");
+        std::fprintf(stderr, "strata hc-f16 shadow: device=%d call=%llu T=%lld N=%lld K=%lld "
+                     "changed=%u rel_l2=%.9g max_abs=%.9g\n", device, (unsigned long long)hc_f16_taken_,
+                     (long long)T, (long long)N, (long long)K, changed, std::sqrt(e2 / std::max(r2, 1e-300)), mx);
+    }
     if (audit) {
         hc_f16_check_output<<<(unsigned)(((uint64_t)T * N + 255) / 256), 256, 0, st>>>(Y, T * N, N, ldy, stats + 10);
         check(cudaGetLastError(), "output audit");
