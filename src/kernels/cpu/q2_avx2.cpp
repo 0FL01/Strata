@@ -48,12 +48,31 @@ inline void unpack64(const uint8_t* codes, __m256i& lo, __m256i& hi) {
     hi = _mm256_set_m128i(_mm_unpackhi_epi16(b0, b1), _mm_unpacklo_epi16(b0, b1));  // values 32..63
 }
 
-// ---- the row kernel, twice: the AVX2 form and the AVX-VNNI one (q2_avx2_rows.inl)
+// Widen eight packed bytes to32-bit lanes, then spread each byte's four codes.
+// This changes only integer unpacking; row FMAs, corrections and reduction stay unchanged.
+inline void unpack64_spread(const uint8_t* codes, __m256i& lo, __m256i& hi) {
+    const __m128i b = _mm_loadu_si128((const __m128i*)codes);
+    auto spread = [](__m256i q) {
+        q = _mm256_and_si256(_mm256_or_si256(q, _mm256_slli_epi32(q,12)), _mm256_set1_epi32(0x000f000f));
+        return _mm256_and_si256(_mm256_or_si256(q, _mm256_slli_epi32(q,6)), _mm256_set1_epi32(0x03030303));
+    };
+    lo = spread(_mm256_cvtepu8_epi32(b));
+    hi = spread(_mm256_cvtepu8_epi32(_mm_srli_si128(b,8)));
+}
+
+// ---- the row kernel: AVX2, exact-unpack AVX2, and AVX-VNNI (q2_avx2_rows.inl)
 namespace plain {
 #define STRATA_ROWS_VNNI 0
 #define STRATA_ROWS_FN
 #include "q2_avx2_rows.inl"
 }  // namespace plain
+namespace spread {
+#define STRATA_ROWS_VNNI 0
+#define STRATA_ROWS_FN
+#define unpack64 unpack64_spread
+#include "q2_avx2_rows.inl"
+#undef unpack64
+}  // namespace spread
 #if STRATA_AVXVNNI
 namespace vnni {
 #define STRATA_ROWS_VNNI 1
@@ -143,6 +162,11 @@ void rows_bp(const uint8_t* w, size_t row_bytes, int npairs, const ActQ* const* 
     }
 }
 
+const bool kUnpackSpread = [] {
+    const char* e = std::getenv("STRATA_Q2_AVX2_SPREAD");
+    return e && e[0] == '1';
+}();
+
 const bool kBitplane = [] {
     const char* e = std::getenv("STRATA_Q2_BITPLANE");
     return e != nullptr && e[0] == '1';
@@ -161,7 +185,13 @@ void q2_0_gguf_rows_multi_avx2_v(bool vnni_rows, const uint8_t* w, size_t row_by
     }
 #endif
     (void) vnni_rows;
-    plain::rows_nt(w, row_bytes, nblocks, a, nt, out, r0, r1);
+    if (kUnpackSpread) spread::rows_nt(w, row_bytes, nblocks, a, nt, out, r0, r1);
+    else plain::rows_nt(w, row_bytes, nblocks, a, nt, out, r0, r1);
+}
+
+void q2_0_gguf_rows_multi_avx2_spread(const uint8_t* w, size_t row_bytes, int nblocks, const ActQ* const* a, int nt,
+                                      float* const* out, int r0, int r1) {
+    spread::rows_nt(w, row_bytes, nblocks, a, nt, out, r0, r1);
 }
 
 void q2_0_gguf_rows_multi_avx2_legacy(const uint8_t* w, size_t row_bytes, int nblocks, const ActQ* const* a, int nt,

@@ -188,6 +188,9 @@ void q2_0_gguf_rows_multi_avx2_legacy(const uint8_t* w, size_t row_bytes, int nb
 /// The same rows with AVX-VNNI on or off, not as cpu_avxvnni_ok() says (tests and benches; on only where it holds).
 void q2_0_gguf_rows_multi_avx2_v(bool vnni, const uint8_t* w, size_t row_bytes, int nblocks, const ActQ* const* a,
                                  int nt, float* const* out, int r0, int r1);
+// Explicit exact-unpack candidate for parity and microbenchmarks; engine opt-in STRATA_Q2_AVX2_SPREAD=1.
+void q2_0_gguf_rows_multi_avx2_spread(const uint8_t* w, size_t row_bytes, int nblocks, const ActQ* const* a, int nt,
+                                      float* const* out, int r0, int r1);
 void act_quant_q8_1_avx2(const float* x, int n, ActQ& a);
 
 void s2_expert_scalar(const uint8_t* blob, const float* x, float* out, bool quant_acts);

@@ -1,0 +1,214 @@
+{
+  "rows": [
+    {
+      "blocks": 10.0,
+      "tokens": 1.0,
+      "copies": 1.0,
+      "ref_us": 165.418955,
+      "spread_us": 148.95921,
+      "speedup": 1.110498
+    },
+    {
+      "blocks": 10.0,
+      "tokens": 1.0,
+      "copies": 256.0,
+      "ref_us": 154.619076,
+      "spread_us": 143.362309,
+      "speedup": 1.07852
+    },
+    {
+      "blocks": 10.0,
+      "tokens": 2.0,
+      "copies": 1.0,
+      "ref_us": 230.41161,
+      "spread_us": 202.259635,
+      "speedup": 1.139187
+    },
+    {
+      "blocks": 10.0,
+      "tokens": 2.0,
+      "copies": 256.0,
+      "ref_us": 231.797316,
+      "spread_us": 205.251797,
+      "speedup": 1.129331
+    },
+    {
+      "blocks": 10.0,
+      "tokens": 3.0,
+      "copies": 1.0,
+      "ref_us": 288.78901,
+      "spread_us": 269.034635,
+      "speedup": 1.073427
+    },
+    {
+      "blocks": 10.0,
+      "tokens": 3.0,
+      "copies": 256.0,
+      "ref_us": 297.200705,
+      "spread_us": 257.131801,
+      "speedup": 1.15583
+    },
+    {
+      "blocks": 10.0,
+      "tokens": 4.0,
+      "copies": 1.0,
+      "ref_us": 320.484005,
+      "spread_us": 327.34304,
+      "speedup": 0.979046
+    },
+    {
+      "blocks": 10.0,
+      "tokens": 4.0,
+      "copies": 256.0,
+      "ref_us": 323.648525,
+      "spread_us": 338.390584,
+      "speedup": 0.956435
+    },
+    {
+      "blocks": 10.0,
+      "tokens": 6.0,
+      "copies": 1.0,
+      "ref_us": 543.384605,
+      "spread_us": 523.651365,
+      "speedup": 1.037684
+    },
+    {
+      "blocks": 10.0,
+      "tokens": 6.0,
+      "copies": 256.0,
+      "ref_us": 554.473242,
+      "spread_us": 538.893453,
+      "speedup": 1.028911
+    },
+    {
+      "blocks": 10.0,
+      "tokens": 8.0,
+      "copies": 1.0,
+      "ref_us": 641.83324,
+      "spread_us": 652.100185,
+      "speedup": 0.984256
+    },
+    {
+      "blocks": 10.0,
+      "tokens": 8.0,
+      "copies": 256.0,
+      "ref_us": 640.801596,
+      "spread_us": 660.460424,
+      "speedup": 0.970235
+    },
+    {
+      "blocks": 40.0,
+      "tokens": 1.0,
+      "copies": 1.0,
+      "ref_us": 145.83088,
+      "spread_us": 133.3849,
+      "speedup": 1.093309
+    },
+    {
+      "blocks": 40.0,
+      "tokens": 1.0,
+      "copies": 256.0,
+      "ref_us": 148.872152,
+      "spread_us": 137.505111,
+      "speedup": 1.082666
+    },
+    {
+      "blocks": 40.0,
+      "tokens": 2.0,
+      "copies": 1.0,
+      "ref_us": 224.355295,
+      "spread_us": 194.118395,
+      "speedup": 1.155765
+    },
+    {
+      "blocks": 40.0,
+      "tokens": 2.0,
+      "copies": 256.0,
+      "ref_us": 226.169617,
+      "spread_us": 197.924916,
+      "speedup": 1.142704
+    },
+    {
+      "blocks": 40.0,
+      "tokens": 3.0,
+      "copies": 1.0,
+      "ref_us": 280.201745,
+      "spread_us": 249.322995,
+      "speedup": 1.12385
+    },
+    {
+      "blocks": 40.0,
+      "tokens": 3.0,
+      "copies": 256.0,
+      "ref_us": 283.917039,
+      "spread_us": 248.571789,
+      "speedup": 1.142193
+    },
+    {
+      "blocks": 40.0,
+      "tokens": 4.0,
+      "copies": 1.0,
+      "ref_us": 308.92019,
+      "spread_us": 316.291685,
+      "speedup": 0.976694
+    },
+    {
+      "blocks": 40.0,
+      "tokens": 4.0,
+      "copies": 256.0,
+      "ref_us": 311.988787,
+      "spread_us": 316.558057,
+      "speedup": 0.985566
+    },
+    {
+      "blocks": 40.0,
+      "tokens": 6.0,
+      "copies": 1.0,
+      "ref_us": 533.965275,
+      "spread_us": 510.069545,
+      "speedup": 1.046848
+    },
+    {
+      "blocks": 40.0,
+      "tokens": 6.0,
+      "copies": 256.0,
+      "ref_us": 535.500877,
+      "spread_us": 511.945586,
+      "speedup": 1.046011
+    },
+    {
+      "blocks": 40.0,
+      "tokens": 8.0,
+      "copies": 1.0,
+      "ref_us": 618.93524,
+      "spread_us": 630.965875,
+      "speedup": 0.980933
+    },
+    {
+      "blocks": 40.0,
+      "tokens": 8.0,
+      "copies": 256.0,
+      "ref_us": 639.612795,
+      "spread_us": 631.770988,
+      "speedup": 1.012412
+    }
+  ],
+  "checks": [
+    {
+      "tag": "exact",
+      "exit": 0
+    },
+    {
+      "tag": "existing-off",
+      "exit": 0
+    },
+    {
+      "tag": "existing-on",
+      "exit": 0
+    },
+    {
+      "tag": "bench",
+      "exit": 0
+    }
+  ]
+}
