@@ -903,6 +903,12 @@ if(STRATA_ENABLE_CUDA OR STRATA_ENABLE_HIP)
   target_include_directories(kv_stream_parity PRIVATE ${_strata_gpu_include_directories})
   target_link_libraries(kv_stream_parity PRIVATE strata_kernels ${_strata_gpu_runtime_target})
   add_test(NAME kv_stream_parity COMMAND kv_stream_parity)
+  if(TARGET strata_prefill)
+    add_executable(kv_append_dma_probe src/kernels/kv_append_dma_probe.cpp)
+    target_include_directories(kv_append_dma_probe PRIVATE ${_strata_gpu_include_directories})
+    target_link_libraries(kv_append_dma_probe PRIVATE strata_prefill strata_kernels ${_strata_gpu_runtime_target})
+  endif()
+
 
   # PR #120: the hybrid K8V4 KV (INT8 K + rotated Q4_0 V) vs host references (GPU, synthetic, no model).
   add_executable(kv_hybrid_parity src/kernels/kv_hybrid_parity.cpp)
