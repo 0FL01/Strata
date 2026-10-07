@@ -15,7 +15,7 @@ Model and 204800 capacity unchanged. Work began 2026-10-07 08:20 UTC.
 
 ## Screened paths
 
-- Idle-stage prefill helper: current gfx906 binary has MMQ disabled. set_stage_helper exits when mmq_plan().any is false. Enabling STRATA_PREFILL_HELP alone cannot activate it. Prepared helper benchmark was not launched; avoid benchmarking a proven no-op. Supporting this route would require a separate backend implementation.
+- CORRECTION (09:22 UTC): the earlier helper no-op conclusion was wrong. STRATA_PREFILL_MMQ=OFF in CMakeCache is the ordinary HIP option; gfx906 enables the CUDA-compatible branch, which compiles MMQ. Actual prefill target flags include STRATA_PREFILL_MMQ=1. The timing labels dequant/gemm are also used for MMQ gather/products and cannot identify the backend. Helper eligibility and benefit still require a live test; the prepared helper benchmark has not run.
 - Prior campaign's pipeline output divergence, shared-stream loss and planner noise remain documented in ../2026-10-07-gfx906-campaign; no blind repeats.
 
 ## Pending
@@ -61,3 +61,12 @@ draft_policy_test passes with -O2 -Wall -Wextra -Werror. GPU evaluation pending.
 Upstream #1123 is staged independently for gfx906 SGEMM microbenchmarks.
 Exact widening preserves input values but changes summation order; this is not a
 bitwise-equivalent route, and no model quality or speed claim is made before tests.
+
+## Mode16 at 64K
+
+ABBA, 2048 outputs each, fixed placement/greedy, original seven flags in both arms.
+Mode15 TG50.22217 -> mode16 TG50.57539 (+0.70331%).
+A range50.1979-50.2464, B50.4594-50.6919: both B runs beat both A runs in this series.
+All2048 IDs identical in all four runs. Accepted/offered counts1375/1691 match.
+PP597.7-598.5 is effectively unchanged. Two repetitions per arm are not a universal guarantee.
+No production promotion yet; Russian/longer-output validation remains pending.
