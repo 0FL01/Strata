@@ -43,3 +43,21 @@ hyper-connection read about22%. Timelines overlap and are not end-to-end fractio
 At64K: 376 decode windows, average3.30 verified /2.72 emitted tokens per window;
 57.57ms/window, verification49.94ms, commit1.49ms, draft6.13ms.
 Instrumented speed is not an optimization A/B result.
+
+## Full-model 4K screen
+
+Fresh processes A-T-Q-Q-T-A, fixed placement, greedy, 2048 outputs each.
+A is deployed mode15 with seven flags; Q changes mode16 only; T adds TSUM to A.
+Aggregate TG: A52.8522, Q53.1630 (+0.588%), T52.9969 (+0.274%).
+All output IDs identical. Per-arm rate ranges overlap; neither is a stable-gain claim.
+One Q repetition changed offered/accepted draft counts slightly, with the same output.
+TSUM is not selected from this screen. Mode16 proceeds to independent64K ABBA.
+See screen-4k.json for durations, rates, counters and output hashes.
+
+## Other work prepared
+
+Upstream #1316 was cherry-picked independently with original authorship; its expanded CPU
+draft_policy_test passes with -O2 -Wall -Wextra -Werror. GPU evaluation pending.
+Upstream #1123 is staged independently for gfx906 SGEMM microbenchmarks.
+Exact widening preserves input values but changes summation order; this is not a
+bitwise-equivalent route, and no model quality or speed claim is made before tests.
