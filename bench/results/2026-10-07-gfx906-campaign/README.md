@@ -79,3 +79,33 @@ size (+0.08%). The normal-HIP defaults do not improve this gfx906 backend.
 Keep the existing stream settings. See `streams.json` for per-run values.
 Some offered draft/look-up counts differ slightly despite identical output
 IDs; this is not a per-kernel timing attribution.
+
+## Two-window pipeline: do not promote
+
+Initial ABBA screening (two processes per arm, 2048 output tokens) gave
+50.102 -> 61.341 TG at 4K (+22.43%), but 47.796 -> 45.583 at 64K (-4.63%).
+The extra pipeline allocations lower resident experts from 19078 to 18734,
+so those output differences cannot on their own identify a pipeline defect.
+
+Two stronger controls were run:
+
+1. Equal cache counts: primary 9679, total 18734 in both arms, fixed placement,
+   `STRATA_IQ_MT_MIN=1`. The serial arm uses later-stage reserve 761 MiB;
+   pipeline uses 600 MiB. A first setup attempt at 760 MiB had one extra slot
+   and was rejected before generating tokens. ABBA at 4K and 64K completed.
+2. Identical pipeline allocations in both arms: `--pipeline-windows 2` with
+   the documented debug request switch choosing `pw=0` or `pw=2`; primary
+   cache 9679, later reserve 600, same CPU control. ABBA at 4K completed.
+
+In both stronger controls, the pipelined output first differs at output index
+93 on the 4K fixture. In the equal-cache 64K control it differs at index 13.
+Serial repeats match each other. Equal counts do not alone prove byte-identical
+residency maps; the identical-allocation control also removes that allocation
+confound, but no root cause or quality loss is claimed from token divergence.
+The advertised bitwise-equivalence expectation has not been reproduced for
+this backend/model. Combined with the 64K regression, this blocks promotion.
+
+`pipeline.json` retains each measured rate, cache counts, output-ID hashes and
+first differing position. These are screening measurements, not a successful
+quality qualification or a matched-token speed claim. The production pipeline
+setting remains off.
