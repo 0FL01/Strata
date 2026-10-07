@@ -15,3 +15,18 @@ One to three tokens improve about8-16% on the streaming cases. Four-token
 groups regress up to4.36%; eight tokens inherit that path. This raw all-width
 version is not selected. Next step: retain the old four-token kernel and use
 bit spreading for the1..3-token remainder. No full-model gain claimed yet.
+
+## Selected-width refinement
+
+The new path retains the original four-token kernel, using spread only for
+one-to-three-token tails. Widths divisible by four dispatch directly to the
+original routine. VNNI and non-model block sizes remain unchanged.
+
+All16,464 exact checks and existing parity tests pass again.32timing cases:
+hot median1.07385x; streaming median1.07493x. Streaming T1..3 gains7.94-22.55%;
+T5..7 gains3.07-9.33%. The unchanged T4/T8 route still has timing noise:
+worst observed ratio0.98234x. Do not describe every measurement as faster.
+
+These are single-core component timings, not model TG improvements.
+Full-model fixed-placement4K/64K ABBA2048-output qualification is running.
+See selected-widths.json; raw all-width prototype is retained as a dead end.

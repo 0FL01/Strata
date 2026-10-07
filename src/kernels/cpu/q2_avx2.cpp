@@ -11,6 +11,7 @@
 
 #include <immintrin.h>
 
+#include <algorithm>
 #include <cmath>
 #include <cstdlib>
 #include <cstring>
@@ -185,13 +186,24 @@ void q2_0_gguf_rows_multi_avx2_v(bool vnni_rows, const uint8_t* w, size_t row_by
     }
 #endif
     (void) vnni_rows;
-    if (kUnpackSpread) spread::rows_nt(w, row_bytes, nblocks, a, nt, out, r0, r1);
+    if (kUnpackSpread && (nblocks == 10 || nblocks == 40) && nt % 4 != 0)
+        q2_0_gguf_rows_multi_avx2_spread(w, row_bytes, nblocks, a, nt, out, r0, r1);
     else plain::rows_nt(w, row_bytes, nblocks, a, nt, out, r0, r1);
 }
 
 void q2_0_gguf_rows_multi_avx2_spread(const uint8_t* w, size_t row_bytes, int nblocks, const ActQ* const* a, int nt,
                                       float* const* out, int r0, int r1) {
-    spread::rows_nt(w, row_bytes, nblocks, a, nt, out, r0, r1);
+    if (nt % 4 == 0) {
+        plain::rows_nt(w, row_bytes, nblocks, a, nt, out, r0, r1);
+        return;
+    }
+    // Four-token groups lost in the measured AVX2 screen; keep that exact baseline kernel.
+    // Preserve the existing 4+remainder partition at widths5..8.
+    for (int t0 = 0; t0 < nt; t0 += 4) {
+        const int k = std::min(4, nt - t0);
+        if (k == 4) plain::rows_nt(w, row_bytes, nblocks, a + t0, k, out + t0, r0, r1);
+        else spread::rows_nt(w, row_bytes, nblocks, a + t0, k, out + t0, r0, r1);
+    }
 }
 
 void q2_0_gguf_rows_multi_avx2_legacy(const uint8_t* w, size_t row_bytes, int nblocks, const ActQ* const* a, int nt,

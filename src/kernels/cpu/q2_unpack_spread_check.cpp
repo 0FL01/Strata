@@ -56,7 +56,7 @@ int main(int argc,char**){
  std::printf("parity checks=%zu bad=%zu\n",checks,bad);if(bad)return 1;
  if(argc<=1)return 0;
  volatile float sink=0;
- for(int nb:{10,40})for(int nt:{1,2,3,4,6,8})for(int copies:{1,256}){
+ for(int nb:{10,40})for(int nt:{1,2,3,4,5,6,7,8})for(int copies:{1,256}){
   const int rows=nb==10?2560:640;const size_t rb=size_t(nb)*18,bytes=rb*rows;
   std::vector<uint8_t> ww(bytes*copies);weights(ww,rows*copies,nb,rb,rng);
   std::vector<c::ActQ> aa(nt);std::vector<const c::ActQ*> pp(nt);

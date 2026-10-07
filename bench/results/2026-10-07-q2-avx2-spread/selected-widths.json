@@ -1,0 +1,278 @@
+{
+  "rows": [
+    {
+      "blocks": 10.0,
+      "tokens": 1.0,
+      "copies": 1.0,
+      "ref_us": 163.244695,
+      "spread_us": 150.416805,
+      "speedup": 1.085282
+    },
+    {
+      "blocks": 10.0,
+      "tokens": 1.0,
+      "copies": 256.0,
+      "ref_us": 155.681211,
+      "spread_us": 144.232281,
+      "speedup": 1.079378
+    },
+    {
+      "blocks": 10.0,
+      "tokens": 2.0,
+      "copies": 1.0,
+      "ref_us": 232.14191,
+      "spread_us": 203.480705,
+      "speedup": 1.140855
+    },
+    {
+      "blocks": 10.0,
+      "tokens": 2.0,
+      "copies": 256.0,
+      "ref_us": 232.100965,
+      "spread_us": 206.107994,
+      "speedup": 1.126113
+    },
+    {
+      "blocks": 10.0,
+      "tokens": 3.0,
+      "copies": 1.0,
+      "ref_us": 288.228165,
+      "spread_us": 247.545415,
+      "speedup": 1.164345
+    },
+    {
+      "blocks": 10.0,
+      "tokens": 3.0,
+      "copies": 256.0,
+      "ref_us": 297.355627,
+      "spread_us": 249.792498,
+      "speedup": 1.190411
+    },
+    {
+      "blocks": 10.0,
+      "tokens": 4.0,
+      "copies": 1.0,
+      "ref_us": 321.333945,
+      "spread_us": 320.47747,
+      "speedup": 1.002672
+    },
+    {
+      "blocks": 10.0,
+      "tokens": 4.0,
+      "copies": 256.0,
+      "ref_us": 323.19027,
+      "spread_us": 322.795984,
+      "speedup": 1.001221
+    },
+    {
+      "blocks": 10.0,
+      "tokens": 5.0,
+      "copies": 1.0,
+      "ref_us": 471.21628,
+      "spread_us": 459.852495,
+      "speedup": 1.024712
+    },
+    {
+      "blocks": 10.0,
+      "tokens": 5.0,
+      "copies": 256.0,
+      "ref_us": 471.483844,
+      "spread_us": 457.460928,
+      "speedup": 1.030654
+    },
+    {
+      "blocks": 10.0,
+      "tokens": 6.0,
+      "copies": 1.0,
+      "ref_us": 543.14746,
+      "spread_us": 515.12317,
+      "speedup": 1.054403
+    },
+    {
+      "blocks": 10.0,
+      "tokens": 6.0,
+      "copies": 256.0,
+      "ref_us": 552.985291,
+      "spread_us": 516.576551,
+      "speedup": 1.070481
+    },
+    {
+      "blocks": 10.0,
+      "tokens": 7.0,
+      "copies": 1.0,
+      "ref_us": 612.193525,
+      "spread_us": 561.02284,
+      "speedup": 1.09121
+    },
+    {
+      "blocks": 10.0,
+      "tokens": 7.0,
+      "copies": 256.0,
+      "ref_us": 614.409395,
+      "spread_us": 561.961578,
+      "speedup": 1.09333
+    },
+    {
+      "blocks": 10.0,
+      "tokens": 8.0,
+      "copies": 1.0,
+      "ref_us": 629.297225,
+      "spread_us": 631.44933,
+      "speedup": 0.996592
+    },
+    {
+      "blocks": 10.0,
+      "tokens": 8.0,
+      "copies": 256.0,
+      "ref_us": 633.189127,
+      "spread_us": 634.561283,
+      "speedup": 0.997838
+    },
+    {
+      "blocks": 40.0,
+      "tokens": 1.0,
+      "copies": 1.0,
+      "ref_us": 142.544495,
+      "spread_us": 127.05104,
+      "speedup": 1.121947
+    },
+    {
+      "blocks": 40.0,
+      "tokens": 1.0,
+      "copies": 256.0,
+      "ref_us": 144.996791,
+      "spread_us": 131.346037,
+      "speedup": 1.10393
+    },
+    {
+      "blocks": 40.0,
+      "tokens": 2.0,
+      "copies": 1.0,
+      "ref_us": 221.995195,
+      "spread_us": 192.394425,
+      "speedup": 1.153855
+    },
+    {
+      "blocks": 40.0,
+      "tokens": 2.0,
+      "copies": 256.0,
+      "ref_us": 224.419643,
+      "spread_us": 194.344059,
+      "speedup": 1.154754
+    },
+    {
+      "blocks": 40.0,
+      "tokens": 3.0,
+      "copies": 1.0,
+      "ref_us": 289.158935,
+      "spread_us": 238.38524,
+      "speedup": 1.21299
+    },
+    {
+      "blocks": 40.0,
+      "tokens": 3.0,
+      "copies": 256.0,
+      "ref_us": 291.588012,
+      "spread_us": 237.930898,
+      "speedup": 1.225516
+    },
+    {
+      "blocks": 40.0,
+      "tokens": 4.0,
+      "copies": 1.0,
+      "ref_us": 304.416705,
+      "spread_us": 302.148495,
+      "speedup": 1.007507
+    },
+    {
+      "blocks": 40.0,
+      "tokens": 4.0,
+      "copies": 256.0,
+      "ref_us": 305.323535,
+      "spread_us": 310.811855,
+      "speedup": 0.982342
+    },
+    {
+      "blocks": 40.0,
+      "tokens": 5.0,
+      "copies": 1.0,
+      "ref_us": 443.300695,
+      "spread_us": 429.897865,
+      "speedup": 1.031177
+    },
+    {
+      "blocks": 40.0,
+      "tokens": 5.0,
+      "copies": 256.0,
+      "ref_us": 446.841996,
+      "spread_us": 433.334451,
+      "speedup": 1.031171
+    },
+    {
+      "blocks": 40.0,
+      "tokens": 6.0,
+      "copies": 1.0,
+      "ref_us": 525.31189,
+      "spread_us": 494.44727,
+      "speedup": 1.062422
+    },
+    {
+      "blocks": 40.0,
+      "tokens": 6.0,
+      "copies": 256.0,
+      "ref_us": 534.187436,
+      "spread_us": 499.570367,
+      "speedup": 1.069294
+    },
+    {
+      "blocks": 40.0,
+      "tokens": 7.0,
+      "copies": 1.0,
+      "ref_us": 593.83167,
+      "spread_us": 544.36394,
+      "speedup": 1.090873
+    },
+    {
+      "blocks": 40.0,
+      "tokens": 7.0,
+      "copies": 256.0,
+      "ref_us": 596.180813,
+      "spread_us": 548.074492,
+      "speedup": 1.087773
+    },
+    {
+      "blocks": 40.0,
+      "tokens": 8.0,
+      "copies": 1.0,
+      "ref_us": 612.117795,
+      "spread_us": 618.60402,
+      "speedup": 0.989515
+    },
+    {
+      "blocks": 40.0,
+      "tokens": 8.0,
+      "copies": 256.0,
+      "ref_us": 607.696908,
+      "spread_us": 608.411994,
+      "speedup": 0.998825
+    }
+  ],
+  "checks": [
+    {
+      "tag": "exact",
+      "exit": 0
+    },
+    {
+      "tag": "existing-off",
+      "exit": 0
+    },
+    {
+      "tag": "existing-on",
+      "exit": 0
+    },
+    {
+      "tag": "bench",
+      "exit": 0
+    }
+  ]
+}
