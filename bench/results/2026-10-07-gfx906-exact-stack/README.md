@@ -36,3 +36,47 @@ gate/up and final expert output comparisons are meaningful.
 Full-model comparison against the original production executable, actual200K,
 and API qualification are pending. This is not a production promotion.
 See components.json for source/deployment patch hashes and invocation receipts.
+
+## Whole-stack comparison and API qualification
+
+Fresh original production executable (3fdb1215...) versus clean candidate
+(ce794788...), same pinned image/model/fixtures. Each4K/code64K/Russian64K
+workload is a fresh A/B pair with1024 generated tokens. Fixed expert residency
+9900+9178, greedy, no prompt reuse. A retains the old seven settings, AUTO and
+MTP32768; B selects mode16, CPUspread, guarded top-k2, HIGH and MTP16384.
+This measures the actual combined configuration; it does not sum percentages.
+
+| Workload | Original TG | Candidate TG | Change |
+| --- | ---: | ---: | ---: |
+| Code4K |53.37670|55.87598|+4.68234%|
+| Code64K |47.22202|50.53870|+7.02360%|
+| Russian64K |49.81150|52.69957|+5.79798%|
+
+All1024 output IDs match within every pair. Draft counters may change with MTP
+window size. PP remains effectively unchanged: code64K597.2565->597.6797 and
+Russian597.0699->597.5250 tok/s. These are fixture-specific observations,
+supported by earlier isolated ABBA checks, not universal speed/quality guarantees.
+
+Actual candidate200000-input-token capacity check,256 outputs:
+PP573.61963, TG43.62347 tok/s; no error. This is not a controlled200K speed gain
+or long-context quality benchmark.
+
+Temporary API qualification passed: named tool call and tool-result follow-up,
+CPU FP16 vision twice with a synthetic red/blue image, text after image, and
+A/title/A conversation-cache restore. Vision process had no GPU libraries or
+GPU device descriptors. Unauthenticated models401, UI404, authenticated health
+loaded at204800. It is not an OpenCode incident replay or broad vision evaluation.
+
+Temporary API was removed and GPU profiles restored to AUTO. Original production
+configuration and executable remain available; the qualified candidate is
+preserved for further research/deployment. No production promotion is claimed.
+Qualification.json contains rates, durations, output hashes and concise API receipts.
+
+## Parked score hypothesis
+
+The suspected capacity-sized decode score grid is already fixed by upstream
+PR187/783 in this baseline: the default multi scorer uses256 CTAs, device-bounded
+stride and key reuse for up to8 queries. Verify omits active_blocks and takes that
+path. The existing qsa_select_bench supplies a positive count and measures a
+different path; do not reuse its numbers as decode evidence. Further scorer
+tuning is parked until actual scorer-only timing shows useful headroom.
