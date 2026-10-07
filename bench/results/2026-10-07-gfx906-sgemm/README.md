@@ -30,3 +30,26 @@ Additional actual-HC shapes and a cross-slice padded-beta case are now added;
 selected-route rebuild and full-model A/B still pending.
 
 Full micro results:micro.json. Benchmark source:bench/gfx906_gemm_screen.cpp.
+
+## Model and follow-up screening
+
+Selective-route checks passed on both GPUs, including actual HC shapes, padded output
+with beta1, and a3300-row HC down product crossing the activation slice boundary.
+Engine SHA256440fb79cf860bb43c96df3c3332754cf9c71c6bf4c3e55f096d10563ea63d769.
+
+Cold-process ABBA,2048 outputs:4K baseline PP348.21/348.04, candidate317.69/353.66;
+64K baseline597.71/599.23, candidate630.70/598.11. This is not a stable gain.
+Each arm repeats the same output; A/B first differs at output16(4K) and234(64K).
+TG comparisons therefore are not matched-output speedups.
+
+Odd dimensions are not the explanation in isolated kernels:4095 HC down still gains
+about1.38x and HC up1.88x;1535/3071 also improve. First-call wall costs are about
+one second for both routes, while warm calls take milliseconds.
+
+Four no-cache requests per process,4K/512 outputs, A-B-B-A:baseline warm PP356-359;
+candidate often375-381, but one warm request falls to339.6. All requests explicitly
+report zero reused tokens and4096 read tokens. Cold startup alone cannot explain
+the remaining variability. Allocation fallback and phase costs are being instrumented;
+they are hypotheses, not established causes. No production promotion.
+
+See model-evidence.json for every measured phase and output hash.

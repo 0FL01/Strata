@@ -2,6 +2,7 @@
 #include <hip/hip_fp16.h>
 #include "strata/prefill/gemm.hpp"
 #include <algorithm>
+#include <chrono>
 #include <cmath>
 #include <cstdio>
 #include <cstdlib>
@@ -12,7 +13,7 @@
 int main(){
  setvbuf(stdout,nullptr,_IONBF,0);
  hipStream_t st; CK(hipStreamCreate(&st)); bool ok=true;
- const int shapes[][4]={{1,4096,320,10240},{1,4096,10240,320},{1,256,320,10240},{0,4096,12288,2560},{0,64,1280,2560},{0,256,1280,2560},{0,128,2560,640}};
+ const int shapes[][4]={{1,4095,320,10240},{1,4095,10240,320},{1,4096,320,10240},{1,4096,10240,320},{1,1535,320,10240},{1,1535,10240,320},{1,1536,320,10240},{1,1536,10240,320},{1,3071,320,10240},{1,3071,10240,320},{1,3072,320,10240},{1,3072,10240,320},{1,256,320,10240},{0,4096,12288,2560},{0,64,1280,2560},{0,256,1280,2560},{0,128,2560,640}};
  for(auto &s:shapes){
   const bool bf=s[0];const int T=s[1],N=s[2],K=s[3];
   std::mt19937 rng(20261007+T+N+K);std::uniform_real_distribution<float>d(-.25f,.25f);
@@ -26,10 +27,13 @@ int main(){
   {
    strata::prefill::Gemm g;std::string err;if(!g.init(st,0,err)){std::fprintf(stderr,"%s\n",err.c_str());return 2;}
    auto call=[&](){if(bf)g.bf16(dx,dw,dy,T,N,K);else g.f16(dx,dw,dy,T,N,K);};
-   for(int i=0;i<3;++i)call();CK(hipStreamSynchronize(st));
+   const auto start=std::chrono::steady_clock::now(); call(); CK(hipStreamSynchronize(st));
+   const double first_ms=std::chrono::duration<double,std::milli>(std::chrono::steady_clock::now()-start).count();
+   for(int i=0;i<2;++i)call();CK(hipStreamSynchronize(st));
    hipEvent_t a,b;CK(hipEventCreate(&a));CK(hipEventCreate(&b));std::vector<float> times;
    for(int r=0;r<5;++r){CK(hipEventRecord(a,st));for(int i=0;i<10;++i)call();CK(hipEventRecord(b,st));CK(hipEventSynchronize(b));float t;CK(hipEventElapsedTime(&t,a,b));times.push_back(t/10);}
    std::sort(times.begin(),times.end());ms=times[2];
+   std::printf("FIRST bf16=%d T=%d N=%d K=%d wall_ms=%.6f\n",int(bf),T,N,K,first_ms);
    std::vector<float> y((size_t)T*N);CK(hipMemcpy(y.data(),dy,y.size()*4,hipMemcpyDeviceToHost));
    double d2=0,r2=0;
    for(int i=0;i<64;++i){int t=(i*7919)%T,n=(i*97)%N;double ref=0;for(int k=0;k<K;++k)ref+=(double)xf[(size_t)t*K+k]*wf[(size_t)n*K+k];double dd=y[(size_t)t*N+n]-ref;d2+=dd*dd;r2+=ref*ref;mx=std::max(mx,std::abs(dd));}
