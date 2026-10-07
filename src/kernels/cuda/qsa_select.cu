@@ -1239,10 +1239,33 @@ void qsa_block_topk(const float* scores, const int32_t* steps, int64_t nq, int64
                          (any_card || topk_active_turing_device());
 #endif
     const int64_t reach = counted && active_blocks < max_blocks ? active_blocks : max_blocks;
-    const int64_t fit = (int64_t) TK_T * (counted ? TK_PER_MAX : TK_PER);
+#if defined(STRATA_HIP_GFX906)
+    static const bool decode_reg66 = [] {
+        const char* v = std::getenv("STRATA_GFX906_TOPK_REG");
+        return v && std::atoi(v) == 1;
+    }();
+    const bool extended_decode = decode_reg66 && !counted && nq <= 8;
+#else
+    const bool extended_decode = false;
+#endif
+    const int64_t fit = (int64_t) TK_T * ((counted || extended_decode) ? TK_PER_MAX : TK_PER);
 #if defined(__HIPCC__)
     constexpr int64_t kRegMinBlocks = 7168;   // gfx1201: below ~28K cells the 1,024-thread kernel's fixed cost loses to the ref
     const bool too_small = counted && reach < kRegMinBlocks;
+#if defined(STRATA_HIP_GFX906)
+    static const bool trace = std::getenv("STRATA_TOPK_TRACE") != nullptr;
+    if (trace) {
+        int device = 0; cudaGetDevice(&device);
+        const int route = (old || too_small || reach > fit) ? 0 : (reach <= (int64_t) TK_T * TK_PER ? 1 : 2);
+        static unsigned seen[16] = {};
+        if (device >= 0 && device < 16 && !(seen[device] & (1u << route))) {
+            seen[device] |= 1u << route;
+            std::fprintf(stderr, "strata topk probe: device=%d kernel=%s nq=%lld capacity_blocks=%lld active_blocks=%lld cap=%lld\n",
+                         device, route == 0 ? "reference256" : route == 1 ? "reg33" : "reg66",
+                         (long long)nq, (long long)max_blocks, (long long)active_blocks, (long long)cap);
+        }
+    }
+#endif
     if (old || too_small || reach > fit) {
 #else
     constexpr int64_t kWideMinBlocks = 4608;   // RTX 3060: a prompt batch below ~18K cells is faster on the ref

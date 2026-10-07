@@ -1,0 +1,294 @@
+{
+  "passed": true,
+  "cases": [
+    {
+      "tag": "g0-n131072-q1-flag1-count0",
+      "reference_ms": 0.456,
+      "candidate_ms": 0.306,
+      "report": "strata topk probe: device=0 kernel=reg66 nq=1 capacity_blocks=51202 active_blocks=-1 cap=2051\nPASS context 131072 under a capacity of 204800 (51202 blocks), 1 queries without a block count: reference 0.456 ms, dispatched 0.306 ms (1.5x); identical ids: continuous 1/1, 64 levels 1/1, equal scores 1/1\nadversarial=1/1 changed-step-graph=PASS"
+    },
+    {
+      "tag": "g0-n131072-q4-flag1-count0",
+      "reference_ms": 0.513,
+      "candidate_ms": 0.333,
+      "report": "strata topk probe: device=0 kernel=reg66 nq=4 capacity_blocks=51202 active_blocks=-1 cap=2051\nPASS context 131072 under a capacity of 204800 (51202 blocks), 4 queries without a block count: reference 0.513 ms, dispatched 0.333 ms (1.5x); identical ids: continuous 4/4, 64 levels 4/4, equal scores 4/4\nadversarial=4/4 changed-step-graph=PASS"
+    },
+    {
+      "tag": "g0-n131072-q6-flag1-count0",
+      "reference_ms": 0.516,
+      "candidate_ms": 0.341,
+      "report": "strata topk probe: device=0 kernel=reg66 nq=6 capacity_blocks=51202 active_blocks=-1 cap=2051\nPASS context 131072 under a capacity of 204800 (51202 blocks), 6 queries without a block count: reference 0.516 ms, dispatched 0.341 ms (1.5x); identical ids: continuous 6/6, 64 levels 6/6, equal scores 6/6\nadversarial=6/6 changed-step-graph=PASS"
+    },
+    {
+      "tag": "g0-n16384-q1-flag1-count0",
+      "reference_ms": 0.106,
+      "candidate_ms": 0.108,
+      "report": "strata topk probe: device=0 kernel=reg66 nq=1 capacity_blocks=51202 active_blocks=-1 cap=2051\nPASS context 16384 under a capacity of 204800 (51202 blocks), 1 queries without a block count: reference 0.106 ms, dispatched 0.108 ms (1.0x); identical ids: continuous 1/1, 64 levels 1/1, equal scores 1/1\nadversarial=1/1 changed-step-graph=PASS"
+    },
+    {
+      "tag": "g0-n16384-q4-flag1-count0",
+      "reference_ms": 0.104,
+      "candidate_ms": 0.108,
+      "report": "strata topk probe: device=0 kernel=reg66 nq=4 capacity_blocks=51202 active_blocks=-1 cap=2051\nPASS context 16384 under a capacity of 204800 (51202 blocks), 4 queries without a block count: reference 0.104 ms, dispatched 0.108 ms (1.0x); identical ids: continuous 4/4, 64 levels 4/4, equal scores 4/4\nadversarial=4/4 changed-step-graph=PASS"
+    },
+    {
+      "tag": "g0-n16384-q6-flag1-count0",
+      "reference_ms": 0.117,
+      "candidate_ms": 0.127,
+      "report": "strata topk probe: device=0 kernel=reg66 nq=6 capacity_blocks=51202 active_blocks=-1 cap=2051\nPASS context 16384 under a capacity of 204800 (51202 blocks), 6 queries without a block count: reference 0.117 ms, dispatched 0.127 ms (0.9x); identical ids: continuous 6/6, 64 levels 6/6, equal scores 6/6\nadversarial=6/6 changed-step-graph=PASS"
+    },
+    {
+      "tag": "g0-n200000-q1-flag1-count0",
+      "reference_ms": 0.541,
+      "candidate_ms": 0.386,
+      "report": "strata topk probe: device=0 kernel=reg66 nq=1 capacity_blocks=51202 active_blocks=-1 cap=2051\nPASS context 200000 under a capacity of 204800 (51202 blocks), 1 queries without a block count: reference 0.541 ms, dispatched 0.386 ms (1.4x); identical ids: continuous 1/1, 64 levels 1/1, equal scores 1/1\nadversarial=1/1 changed-step-graph=PASS"
+    },
+    {
+      "tag": "g0-n200000-q4-flag1-count0",
+      "reference_ms": 0.554,
+      "candidate_ms": 0.444,
+      "report": "strata topk probe: device=0 kernel=reg66 nq=4 capacity_blocks=51202 active_blocks=-1 cap=2051\nPASS context 200000 under a capacity of 204800 (51202 blocks), 4 queries without a block count: reference 0.554 ms, dispatched 0.444 ms (1.3x); identical ids: continuous 4/4, 64 levels 4/4, equal scores 4/4\nadversarial=4/4 changed-step-graph=PASS"
+    },
+    {
+      "tag": "g0-n200000-q6-flag1-count0",
+      "reference_ms": 0.555,
+      "candidate_ms": 0.482,
+      "report": "strata topk probe: device=0 kernel=reg66 nq=6 capacity_blocks=51202 active_blocks=-1 cap=2051\nPASS context 200000 under a capacity of 204800 (51202 blocks), 6 queries without a block count: reference 0.555 ms, dispatched 0.482 ms (1.2x); identical ids: continuous 6/6, 64 levels 6/6, equal scores 6/6\nadversarial=6/6 changed-step-graph=PASS"
+    },
+    {
+      "tag": "g0-n204800-q1-flag1-count0",
+      "reference_ms": 0.624,
+      "candidate_ms": 0.391,
+      "report": "strata topk probe: device=0 kernel=reg66 nq=1 capacity_blocks=51202 active_blocks=-1 cap=2051\nPASS context 204800 under a capacity of 204800 (51202 blocks), 1 queries without a block count: reference 0.624 ms, dispatched 0.391 ms (1.6x); identical ids: continuous 1/1, 64 levels 1/1, equal scores 1/1\nadversarial=1/1 changed-step-graph=PASS"
+    },
+    {
+      "tag": "g0-n204800-q4-flag1-count0",
+      "reference_ms": 0.612,
+      "candidate_ms": 0.44,
+      "report": "strata topk probe: device=0 kernel=reg66 nq=4 capacity_blocks=51202 active_blocks=-1 cap=2051\nPASS context 204800 under a capacity of 204800 (51202 blocks), 4 queries without a block count: reference 0.612 ms, dispatched 0.440 ms (1.4x); identical ids: continuous 4/4, 64 levels 4/4, equal scores 4/4\nadversarial=4/4 changed-step-graph=PASS"
+    },
+    {
+      "tag": "g0-n204800-q6-flag1-count0",
+      "reference_ms": 0.626,
+      "candidate_ms": 0.495,
+      "report": "strata topk probe: device=0 kernel=reg66 nq=6 capacity_blocks=51202 active_blocks=-1 cap=2051\nPASS context 204800 under a capacity of 204800 (51202 blocks), 6 queries without a block count: reference 0.626 ms, dispatched 0.495 ms (1.3x); identical ids: continuous 6/6, 64 levels 6/6, equal scores 6/6\nadversarial=6/6 changed-step-graph=PASS"
+    },
+    {
+      "tag": "g0-n32768-q1-flag1-count0",
+      "reference_ms": 0.156,
+      "candidate_ms": 0.124,
+      "report": "strata topk probe: device=0 kernel=reg66 nq=1 capacity_blocks=51202 active_blocks=-1 cap=2051\nPASS context 32768 under a capacity of 204800 (51202 blocks), 1 queries without a block count: reference 0.156 ms, dispatched 0.124 ms (1.3x); identical ids: continuous 1/1, 64 levels 1/1, equal scores 1/1\nadversarial=1/1 changed-step-graph=PASS"
+    },
+    {
+      "tag": "g0-n32768-q4-flag1-count0",
+      "reference_ms": 0.172,
+      "candidate_ms": 0.14,
+      "report": "strata topk probe: device=0 kernel=reg66 nq=4 capacity_blocks=51202 active_blocks=-1 cap=2051\nPASS context 32768 under a capacity of 204800 (51202 blocks), 4 queries without a block count: reference 0.172 ms, dispatched 0.140 ms (1.2x); identical ids: continuous 4/4, 64 levels 4/4, equal scores 4/4\nadversarial=4/4 changed-step-graph=PASS"
+    },
+    {
+      "tag": "g0-n32768-q6-flag1-count0",
+      "reference_ms": 0.166,
+      "candidate_ms": 0.148,
+      "report": "strata topk probe: device=0 kernel=reg66 nq=6 capacity_blocks=51202 active_blocks=-1 cap=2051\nPASS context 32768 under a capacity of 204800 (51202 blocks), 6 queries without a block count: reference 0.166 ms, dispatched 0.148 ms (1.1x); identical ids: continuous 6/6, 64 levels 6/6, equal scores 6/6\nadversarial=6/6 changed-step-graph=PASS"
+    },
+    {
+      "tag": "g0-n4096-q1-flag1-count0",
+      "reference_ms": 0.089,
+      "candidate_ms": 0.11,
+      "report": "strata topk probe: device=0 kernel=reg66 nq=1 capacity_blocks=51202 active_blocks=-1 cap=2051\nPASS context 4096 under a capacity of 204800 (51202 blocks), 1 queries without a block count: reference 0.089 ms, dispatched 0.110 ms (0.8x); identical ids: continuous 1/1, 64 levels 1/1, equal scores 1/1\nadversarial=1/1 changed-step-graph=PASS"
+    },
+    {
+      "tag": "g0-n4096-q4-flag1-count0",
+      "reference_ms": 0.094,
+      "candidate_ms": 0.117,
+      "report": "strata topk probe: device=0 kernel=reg66 nq=4 capacity_blocks=51202 active_blocks=-1 cap=2051\nPASS context 4096 under a capacity of 204800 (51202 blocks), 4 queries without a block count: reference 0.094 ms, dispatched 0.117 ms (0.8x); identical ids: continuous 4/4, 64 levels 4/4, equal scores 4/4\nadversarial=4/4 changed-step-graph=PASS"
+    },
+    {
+      "tag": "g0-n4096-q6-flag1-count0",
+      "reference_ms": 0.089,
+      "candidate_ms": 0.119,
+      "report": "strata topk probe: device=0 kernel=reg66 nq=6 capacity_blocks=51202 active_blocks=-1 cap=2051\nPASS context 4096 under a capacity of 204800 (51202 blocks), 6 queries without a block count: reference 0.089 ms, dispatched 0.119 ms (0.7x); identical ids: continuous 6/6, 64 levels 6/6, equal scores 6/6\nadversarial=6/6 changed-step-graph=PASS"
+    },
+    {
+      "tag": "g0-n65536-q1-flag1-count0",
+      "reference_ms": 0.224,
+      "candidate_ms": 0.153,
+      "report": "strata topk probe: device=0 kernel=reg66 nq=1 capacity_blocks=51202 active_blocks=-1 cap=2051\nPASS context 65536 under a capacity of 204800 (51202 blocks), 1 queries without a block count: reference 0.224 ms, dispatched 0.153 ms (1.5x); identical ids: continuous 1/1, 64 levels 1/1, equal scores 1/1\nadversarial=1/1 changed-step-graph=PASS"
+    },
+    {
+      "tag": "g0-n65536-q4-flag1-count0",
+      "reference_ms": 0.288,
+      "candidate_ms": 0.193,
+      "report": "strata topk probe: device=0 kernel=reg66 nq=4 capacity_blocks=51202 active_blocks=-1 cap=2051\nPASS context 65536 under a capacity of 204800 (51202 blocks), 4 queries without a block count: reference 0.288 ms, dispatched 0.193 ms (1.5x); identical ids: continuous 4/4, 64 levels 4/4, equal scores 4/4\nadversarial=4/4 changed-step-graph=PASS"
+    },
+    {
+      "tag": "g0-n65536-q6-flag1-count0",
+      "reference_ms": 0.275,
+      "candidate_ms": 0.199,
+      "report": "strata topk probe: device=0 kernel=reg66 nq=6 capacity_blocks=51202 active_blocks=-1 cap=2051\nPASS context 65536 under a capacity of 204800 (51202 blocks), 6 queries without a block count: reference 0.275 ms, dispatched 0.199 ms (1.4x); identical ids: continuous 6/6, 64 levels 6/6, equal scores 6/6\nadversarial=6/6 changed-step-graph=PASS"
+    },
+    {
+      "tag": "g0-n8192-q1-flag1-count0",
+      "reference_ms": 0.091,
+      "candidate_ms": 0.105,
+      "report": "strata topk probe: device=0 kernel=reg66 nq=1 capacity_blocks=51202 active_blocks=-1 cap=2051\nPASS context 8192 under a capacity of 204800 (51202 blocks), 1 queries without a block count: reference 0.091 ms, dispatched 0.105 ms (0.9x); identical ids: continuous 1/1, 64 levels 1/1, equal scores 1/1\nadversarial=1/1 changed-step-graph=PASS"
+    },
+    {
+      "tag": "g0-n8192-q4-flag1-count0",
+      "reference_ms": 0.079,
+      "candidate_ms": 0.097,
+      "report": "strata topk probe: device=0 kernel=reg66 nq=4 capacity_blocks=51202 active_blocks=-1 cap=2051\nPASS context 8192 under a capacity of 204800 (51202 blocks), 4 queries without a block count: reference 0.079 ms, dispatched 0.097 ms (0.8x); identical ids: continuous 4/4, 64 levels 4/4, equal scores 4/4\nadversarial=4/4 changed-step-graph=PASS"
+    },
+    {
+      "tag": "g0-n8192-q6-flag1-count0",
+      "reference_ms": 0.107,
+      "candidate_ms": 0.129,
+      "report": "strata topk probe: device=0 kernel=reg66 nq=6 capacity_blocks=51202 active_blocks=-1 cap=2051\nPASS context 8192 under a capacity of 204800 (51202 blocks), 6 queries without a block count: reference 0.107 ms, dispatched 0.129 ms (0.8x); identical ids: continuous 6/6, 64 levels 6/6, equal scores 6/6\nadversarial=6/6 changed-step-graph=PASS"
+    },
+    {
+      "tag": "g1-n131072-q1-flag1-count0",
+      "reference_ms": 0.46,
+      "candidate_ms": 0.304,
+      "report": "strata topk probe: device=0 kernel=reg66 nq=1 capacity_blocks=51202 active_blocks=-1 cap=2051\nPASS context 131072 under a capacity of 204800 (51202 blocks), 1 queries without a block count: reference 0.460 ms, dispatched 0.304 ms (1.5x); identical ids: continuous 1/1, 64 levels 1/1, equal scores 1/1\nadversarial=1/1 changed-step-graph=PASS"
+    },
+    {
+      "tag": "g1-n131072-q4-flag1-count0",
+      "reference_ms": 0.514,
+      "candidate_ms": 0.333,
+      "report": "strata topk probe: device=0 kernel=reg66 nq=4 capacity_blocks=51202 active_blocks=-1 cap=2051\nPASS context 131072 under a capacity of 204800 (51202 blocks), 4 queries without a block count: reference 0.514 ms, dispatched 0.333 ms (1.5x); identical ids: continuous 4/4, 64 levels 4/4, equal scores 4/4\nadversarial=4/4 changed-step-graph=PASS"
+    },
+    {
+      "tag": "g1-n131072-q6-flag1-count0",
+      "reference_ms": 0.517,
+      "candidate_ms": 0.35,
+      "report": "strata topk probe: device=0 kernel=reg66 nq=6 capacity_blocks=51202 active_blocks=-1 cap=2051\nPASS context 131072 under a capacity of 204800 (51202 blocks), 6 queries without a block count: reference 0.517 ms, dispatched 0.350 ms (1.5x); identical ids: continuous 6/6, 64 levels 6/6, equal scores 6/6\nadversarial=6/6 changed-step-graph=PASS"
+    },
+    {
+      "tag": "g1-n16384-q1-flag1-count0",
+      "reference_ms": 0.105,
+      "candidate_ms": 0.109,
+      "report": "strata topk probe: device=0 kernel=reg66 nq=1 capacity_blocks=51202 active_blocks=-1 cap=2051\nPASS context 16384 under a capacity of 204800 (51202 blocks), 1 queries without a block count: reference 0.105 ms, dispatched 0.109 ms (1.0x); identical ids: continuous 1/1, 64 levels 1/1, equal scores 1/1\nadversarial=1/1 changed-step-graph=PASS"
+    },
+    {
+      "tag": "g1-n16384-q4-flag1-count0",
+      "reference_ms": 0.105,
+      "candidate_ms": 0.108,
+      "report": "strata topk probe: device=0 kernel=reg66 nq=4 capacity_blocks=51202 active_blocks=-1 cap=2051\nPASS context 16384 under a capacity of 204800 (51202 blocks), 4 queries without a block count: reference 0.105 ms, dispatched 0.108 ms (1.0x); identical ids: continuous 4/4, 64 levels 4/4, equal scores 4/4\nadversarial=4/4 changed-step-graph=PASS"
+    },
+    {
+      "tag": "g1-n16384-q6-flag1-count0",
+      "reference_ms": 0.118,
+      "candidate_ms": 0.126,
+      "report": "strata topk probe: device=0 kernel=reg66 nq=6 capacity_blocks=51202 active_blocks=-1 cap=2051\nPASS context 16384 under a capacity of 204800 (51202 blocks), 6 queries without a block count: reference 0.118 ms, dispatched 0.126 ms (0.9x); identical ids: continuous 6/6, 64 levels 6/6, equal scores 6/6\nadversarial=6/6 changed-step-graph=PASS"
+    },
+    {
+      "tag": "g1-n200000-q1-flag1-count0",
+      "reference_ms": 0.541,
+      "candidate_ms": 0.386,
+      "report": "strata topk probe: device=0 kernel=reg66 nq=1 capacity_blocks=51202 active_blocks=-1 cap=2051\nPASS context 200000 under a capacity of 204800 (51202 blocks), 1 queries without a block count: reference 0.541 ms, dispatched 0.386 ms (1.4x); identical ids: continuous 1/1, 64 levels 1/1, equal scores 1/1\nadversarial=1/1 changed-step-graph=PASS"
+    },
+    {
+      "tag": "g1-n200000-q4-flag1-count0",
+      "reference_ms": 0.555,
+      "candidate_ms": 0.44,
+      "report": "strata topk probe: device=0 kernel=reg66 nq=4 capacity_blocks=51202 active_blocks=-1 cap=2051\nPASS context 200000 under a capacity of 204800 (51202 blocks), 4 queries without a block count: reference 0.555 ms, dispatched 0.440 ms (1.3x); identical ids: continuous 4/4, 64 levels 4/4, equal scores 4/4\nadversarial=4/4 changed-step-graph=PASS"
+    },
+    {
+      "tag": "g1-n200000-q6-flag1-count0",
+      "reference_ms": 0.555,
+      "candidate_ms": 0.484,
+      "report": "strata topk probe: device=0 kernel=reg66 nq=6 capacity_blocks=51202 active_blocks=-1 cap=2051\nPASS context 200000 under a capacity of 204800 (51202 blocks), 6 queries without a block count: reference 0.555 ms, dispatched 0.484 ms (1.1x); identical ids: continuous 6/6, 64 levels 6/6, equal scores 6/6\nadversarial=6/6 changed-step-graph=PASS"
+    },
+    {
+      "tag": "g1-n204800-q1-flag1-count0",
+      "reference_ms": 0.625,
+      "candidate_ms": 0.391,
+      "report": "strata topk probe: device=0 kernel=reg66 nq=1 capacity_blocks=51202 active_blocks=-1 cap=2051\nPASS context 204800 under a capacity of 204800 (51202 blocks), 1 queries without a block count: reference 0.625 ms, dispatched 0.391 ms (1.6x); identical ids: continuous 1/1, 64 levels 1/1, equal scores 1/1\nadversarial=1/1 changed-step-graph=PASS"
+    },
+    {
+      "tag": "g1-n204800-q4-flag1-count0",
+      "reference_ms": 0.61,
+      "candidate_ms": 0.433,
+      "report": "strata topk probe: device=0 kernel=reg66 nq=4 capacity_blocks=51202 active_blocks=-1 cap=2051\nPASS context 204800 under a capacity of 204800 (51202 blocks), 4 queries without a block count: reference 0.610 ms, dispatched 0.433 ms (1.4x); identical ids: continuous 4/4, 64 levels 4/4, equal scores 4/4\nadversarial=4/4 changed-step-graph=PASS"
+    },
+    {
+      "tag": "g1-n204800-q6-flag1-count0",
+      "reference_ms": 0.627,
+      "candidate_ms": 0.5,
+      "report": "strata topk probe: device=0 kernel=reg66 nq=6 capacity_blocks=51202 active_blocks=-1 cap=2051\nPASS context 204800 under a capacity of 204800 (51202 blocks), 6 queries without a block count: reference 0.627 ms, dispatched 0.500 ms (1.3x); identical ids: continuous 6/6, 64 levels 6/6, equal scores 6/6\nadversarial=6/6 changed-step-graph=PASS"
+    },
+    {
+      "tag": "g1-n32768-q1-flag1-count0",
+      "reference_ms": 0.155,
+      "candidate_ms": 0.125,
+      "report": "strata topk probe: device=0 kernel=reg66 nq=1 capacity_blocks=51202 active_blocks=-1 cap=2051\nPASS context 32768 under a capacity of 204800 (51202 blocks), 1 queries without a block count: reference 0.155 ms, dispatched 0.125 ms (1.2x); identical ids: continuous 1/1, 64 levels 1/1, equal scores 1/1\nadversarial=1/1 changed-step-graph=PASS"
+    },
+    {
+      "tag": "g1-n32768-q4-flag1-count0",
+      "reference_ms": 0.172,
+      "candidate_ms": 0.138,
+      "report": "strata topk probe: device=0 kernel=reg66 nq=4 capacity_blocks=51202 active_blocks=-1 cap=2051\nPASS context 32768 under a capacity of 204800 (51202 blocks), 4 queries without a block count: reference 0.172 ms, dispatched 0.138 ms (1.3x); identical ids: continuous 4/4, 64 levels 4/4, equal scores 4/4\nadversarial=4/4 changed-step-graph=PASS"
+    },
+    {
+      "tag": "g1-n32768-q6-flag1-count0",
+      "reference_ms": 0.167,
+      "candidate_ms": 0.149,
+      "report": "strata topk probe: device=0 kernel=reg66 nq=6 capacity_blocks=51202 active_blocks=-1 cap=2051\nPASS context 32768 under a capacity of 204800 (51202 blocks), 6 queries without a block count: reference 0.167 ms, dispatched 0.149 ms (1.1x); identical ids: continuous 6/6, 64 levels 6/6, equal scores 6/6\nadversarial=6/6 changed-step-graph=PASS"
+    },
+    {
+      "tag": "g1-n4096-q1-flag1-count0",
+      "reference_ms": 0.089,
+      "candidate_ms": 0.11,
+      "report": "strata topk probe: device=0 kernel=reg66 nq=1 capacity_blocks=51202 active_blocks=-1 cap=2051\nPASS context 4096 under a capacity of 204800 (51202 blocks), 1 queries without a block count: reference 0.089 ms, dispatched 0.110 ms (0.8x); identical ids: continuous 1/1, 64 levels 1/1, equal scores 1/1\nadversarial=1/1 changed-step-graph=PASS"
+    },
+    {
+      "tag": "g1-n4096-q4-flag1-count0",
+      "reference_ms": 0.094,
+      "candidate_ms": 0.117,
+      "report": "strata topk probe: device=0 kernel=reg66 nq=4 capacity_blocks=51202 active_blocks=-1 cap=2051\nPASS context 4096 under a capacity of 204800 (51202 blocks), 4 queries without a block count: reference 0.094 ms, dispatched 0.117 ms (0.8x); identical ids: continuous 4/4, 64 levels 4/4, equal scores 4/4\nadversarial=4/4 changed-step-graph=PASS"
+    },
+    {
+      "tag": "g1-n4096-q6-flag1-count0",
+      "reference_ms": 0.089,
+      "candidate_ms": 0.126,
+      "report": "strata topk probe: device=0 kernel=reg66 nq=6 capacity_blocks=51202 active_blocks=-1 cap=2051\nPASS context 4096 under a capacity of 204800 (51202 blocks), 6 queries without a block count: reference 0.089 ms, dispatched 0.126 ms (0.7x); identical ids: continuous 6/6, 64 levels 6/6, equal scores 6/6\nadversarial=6/6 changed-step-graph=PASS"
+    },
+    {
+      "tag": "g1-n65536-q1-flag1-count0",
+      "reference_ms": 0.225,
+      "candidate_ms": 0.154,
+      "report": "strata topk probe: device=0 kernel=reg66 nq=1 capacity_blocks=51202 active_blocks=-1 cap=2051\nPASS context 65536 under a capacity of 204800 (51202 blocks), 1 queries without a block count: reference 0.225 ms, dispatched 0.154 ms (1.5x); identical ids: continuous 1/1, 64 levels 1/1, equal scores 1/1\nadversarial=1/1 changed-step-graph=PASS"
+    },
+    {
+      "tag": "g1-n65536-q4-flag1-count0",
+      "reference_ms": 0.289,
+      "candidate_ms": 0.191,
+      "report": "strata topk probe: device=0 kernel=reg66 nq=4 capacity_blocks=51202 active_blocks=-1 cap=2051\nPASS context 65536 under a capacity of 204800 (51202 blocks), 4 queries without a block count: reference 0.289 ms, dispatched 0.191 ms (1.5x); identical ids: continuous 4/4, 64 levels 4/4, equal scores 4/4\nadversarial=4/4 changed-step-graph=PASS"
+    },
+    {
+      "tag": "g1-n65536-q6-flag1-count0",
+      "reference_ms": 0.274,
+      "candidate_ms": 0.193,
+      "report": "strata topk probe: device=0 kernel=reg66 nq=6 capacity_blocks=51202 active_blocks=-1 cap=2051\nPASS context 65536 under a capacity of 204800 (51202 blocks), 6 queries without a block count: reference 0.274 ms, dispatched 0.193 ms (1.4x); identical ids: continuous 6/6, 64 levels 6/6, equal scores 6/6\nadversarial=6/6 changed-step-graph=PASS"
+    },
+    {
+      "tag": "g1-n8192-q1-flag1-count0",
+      "reference_ms": 0.09,
+      "candidate_ms": 0.107,
+      "report": "strata topk probe: device=0 kernel=reg66 nq=1 capacity_blocks=51202 active_blocks=-1 cap=2051\nPASS context 8192 under a capacity of 204800 (51202 blocks), 1 queries without a block count: reference 0.090 ms, dispatched 0.107 ms (0.8x); identical ids: continuous 1/1, 64 levels 1/1, equal scores 1/1\nadversarial=1/1 changed-step-graph=PASS"
+    },
+    {
+      "tag": "g1-n8192-q4-flag1-count0",
+      "reference_ms": 0.079,
+      "candidate_ms": 0.098,
+      "report": "strata topk probe: device=0 kernel=reg66 nq=4 capacity_blocks=51202 active_blocks=-1 cap=2051\nPASS context 8192 under a capacity of 204800 (51202 blocks), 4 queries without a block count: reference 0.079 ms, dispatched 0.098 ms (0.8x); identical ids: continuous 4/4, 64 levels 4/4, equal scores 4/4\nadversarial=4/4 changed-step-graph=PASS"
+    },
+    {
+      "tag": "g1-n8192-q6-flag1-count0",
+      "reference_ms": 0.107,
+      "candidate_ms": 0.132,
+      "report": "strata topk probe: device=0 kernel=reg66 nq=6 capacity_blocks=51202 active_blocks=-1 cap=2051\nPASS context 8192 under a capacity of 204800 (51202 blocks), 6 queries without a block count: reference 0.107 ms, dispatched 0.132 ms (0.8x); identical ids: continuous 6/6, 64 levels 6/6, equal scores 6/6\nadversarial=6/6 changed-step-graph=PASS"
+    }
+  ],
+  "binary_sha256": "227b41109eef04ba883e84fad78429dec88ce0459c52274afc9710e6eac5bded"
+}
