@@ -32,15 +32,17 @@ int main(int argc,char**){
  if(flag&&flag[0]=='1'){std::fprintf(stderr,"unset STRATA_Q2_AVX2_SPREAD for independent reference\n");return 2;}
  size_t checks=0,bad=0;
  c::ActQ a{};a.scale[0]=a.scale[1]=1;a.nchunks=2;
- const c::ActQ* ap[]={&a};float x=0,y=0;float* xp[]={&x};float* yp[]={&y};
- uint8_t w[18]={0,0x3c};
+ const c::ActQ* ap[]={&a};float x[2]={},y[2]={};float* xp[]={x};float* yp[]={y};
+ uint8_t w[36]={0,0x3c};
  for(int v=0;v<256;++v)for(int pos=0;pos<16;++pos)for(int sub=0;sub<4;++sub){
   for(int j=0;j<16;++j)w[j+2]=uint8_t(0xa5^(j*17));w[pos+2]=uint8_t(v);
+  std::memcpy(w+18,w,18);w[18+pos+2]=uint8_t(v^255);
   std::fill(a.q,a.q+64,0);a.hx[0]=a.hx[1]=0;
   int k=pos*4+sub;a.q[k]=1;a.hx[k/32]=1;
-  ref(w,18,1,ap,1,xp,0,1);alt(w,18,1,ap,1,yp,0,1);
+  ref(w,18,1,ap,1,xp,0,2);alt(w,18,1,ap,1,yp,0,2);
   const float expected=float(((v>>(2*sub))&3)-1);
-  bad+=std::memcmp(&x,&y,4)!=0||y!=expected;++checks;
+  const float expected2=float((((v^255)>>(2*sub))&3)-1);
+  bad+=std::memcmp(x,y,8)!=0||y[0]!=expected||y[1]!=expected2;++checks;
  }
  std::mt19937 rng(20261007);
  for(int nb:{0,1,3,10,40})for(int nt=1;nt<=8;++nt)for(int pad:{0,13}){
