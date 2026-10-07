@@ -242,6 +242,13 @@ void launch_rows(const float* x, int64_t ldx, const uint16_t* w, float* y, int64
                  cudaStream_t st, const uint16_t* w_aux = nullptr, float* y_aux = nullptr, int64_t ldy_aux = 0) {
 #if defined(STRATA_HIP_GFX906)
     static const int rows = [] { const char* v = std::getenv("STRATA_MMVF_RPB"); return v ? std::atoi(v) : 4; }();
+    // Select only measured HC shapes; wider up tiles spill at NT8.
+    if (rows == 1 && n_in == 10240 && n_out == 320) {
+        launch_rows_impl<B, 2>(x, ldx, w, y, ldy, n_in, n_out, n_tok, st, w_aux, y_aux, ldy_aux); return;
+    }
+    if (rows == 1 && n_in == 2560 && n_out == 10240 && n_tok <= 4) {
+        launch_rows_impl<B, 8>(x, ldx, w, y, ldy, n_in, n_out, n_tok, st, w_aux, y_aux, ldy_aux); return;
+    }
     if (rows == 2) { launch_rows_impl<B, 2>(x, ldx, w, y, ldy, n_in, n_out, n_tok, st, w_aux, y_aux, ldy_aux); return; }
     if (rows == 8) { launch_rows_impl<B, 8>(x, ldx, w, y, ldy, n_in, n_out, n_tok, st, w_aux, y_aux, ldy_aux); return; }
 #endif
