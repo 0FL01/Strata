@@ -21,7 +21,7 @@ int main(int argc, char**) {
     if (!flag || flag[0] != '1') { std::fprintf(stderr, "set STRATA_MMVF_ROWS=1\n"); return 2; }
     cudaStream_t s; ck(cudaStreamCreate(&s));
     const int shapes[][2] = {{64,64},{192,67},{512,65},{640,128},{2560,48},
-                             {2560,128},{2560,512},{2560,2560},{2560,10240},{10240,320}};
+                             {2560,128},{2560,512},{2560,2560},{2560,10240},{10240,320},{320,10240}};
     size_t cases = 0, values = 0, mismatches = 0;
     for (const auto& shape : shapes) for (int nt = 1; nt <= 8; ++nt)
     for (int pad : {0,2}) for (int range : {0,1,2}) {
