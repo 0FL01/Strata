@@ -831,7 +831,9 @@ int down_chunk(bool staged, int* tile_out) {
 // takes first).
 #if defined(STRATA_HIP_GFX906)
 __global__ void __launch_bounds__(THREADS) gr_norm_fast_kernel(GrMulti m);   // below, with the AMD fast path
+template<int MAX_T = kFusedGrMaxT, bool EXACT_T = false>
 __global__ void __launch_bounds__(THREADS) gr_up_fast_kernel(GrMulti m);
+void launch_up_fast(const GrMulti& m, cudaStream_t st);
 }  // namespace
 static bool gr_fast();
 namespace {
@@ -906,7 +908,7 @@ void launch_multi(const GrMulti& m, int variant, cudaStream_t st, unsigned long 
     }
     if (stamp_buf) gpu_stamp(stamp_buf, stamp_i0 + 1, (void*) st);
 #if defined(STRATA_HIP_GFX906)
-    if (fast) gr_up_fast_kernel<<<UPM_BLOCKS, THREADS, 0, st>>>(m);
+    if (fast) launch_up_fast(m, st);
     else
 #endif
     switch (no_multi_gr ? kFusedGrMaxT : n_tok) {
@@ -1004,11 +1006,12 @@ __device__ __forceinline__ float xor8(float v) {
     for (int o = 4; o > 0; o >>= 1) v += __shfl_xor(v, o, 64);
     return v;
 }
+template<int MAX_T, bool EXACT_T>
 __global__ void __launch_bounds__(THREADS) gr_up_fast_kernel(GrMulti m) {
-    __shared__ __align__(16) float lo[kFusedGrMaxT][LR];
-    __shared__ float g[kFusedGrMaxT][HC][UPM_COLS];
+    __shared__ __align__(16) float lo[MAX_T][LR];
+    __shared__ float g[MAX_T][HC][UPM_COLS];
     const int t = threadIdx.x, j = t & 7, grp = t >> 3;
-    const int T = m.T;
+    const int T = EXACT_T ? MAX_T : m.T;
     const int d0 = blockIdx.x * UPM_COLS;
     static_assert(LR == 40 * 8 && HC * UPM_COLS == 64 && THREADS == 256, "geometry");
     uint4 w[2][5];
@@ -1036,8 +1039,8 @@ __global__ void __launch_bounds__(THREADS) gr_up_fast_kernel(GrMulti m) {
         const int r = grp + 32 * p, c = r / UPM_COLS, dd = r - c * UPM_COLS, i = c * N + d0 + dd;
         float mine = 0.0f;
 #pragma unroll
-        for (int k = 0; k < kFusedGrMaxT; ++k) {
-            if (k >= T) break;
+        for (int k = 0; k < MAX_T; ++k) {
+            if (!EXACT_T && k >= T) break;
             const float* l = lo[k];
             const float p0 = dot8(w[p][0], l + j * 8) + dot8(w[p][4], l + (32 + j) * 8);   // old lane j
             const float p1 = dot8(w[p][1], l + (j + 8) * 8);                               // old lane j + 8
@@ -1065,6 +1068,27 @@ __global__ void __launch_bounds__(THREADS) gr_up_fast_kernel(GrMulti m) {
         m.a[k].mixed[d0 + col] = s / (float) HC;
     }
 }
+void launch_up_fast(const GrMulti& m, cudaStream_t st) {
+    static const bool exact = [] {
+        const char* e = std::getenv("STRATA_GR_UP_EXACT");
+        return e && e[0] == '1';
+    }();
+    if (exact) {
+        switch (m.T) {
+#define STRATA_GR_UP_CASE(T) case T: gr_up_fast_kernel<T, true><<<UPM_BLOCKS, THREADS, 0, st>>>(m); return
+            STRATA_GR_UP_CASE(1);
+            STRATA_GR_UP_CASE(2);
+            STRATA_GR_UP_CASE(3);
+            STRATA_GR_UP_CASE(4);
+            STRATA_GR_UP_CASE(5);
+            STRATA_GR_UP_CASE(6);
+#undef STRATA_GR_UP_CASE
+            default: break;
+        }
+    }
+    gr_up_fast_kernel<><<<UPM_BLOCKS, THREADS, 0, st>>>(m);
+}
+
 #endif
 
 #if defined(STRATA_HIP_GFX906)
@@ -1733,7 +1757,7 @@ bool fused_gr_read_multi(const FusedGrArgs* a, int n_tok, float* xn_scratch, voi
             m);
         gr_down_finish_kernel<<<(unsigned) ((n_tok * GS_ROWS + 255) / 256), 256, 0, st>>>(m);
         if (stamp_buf) gpu_stamp(stamp_buf, stamp_i0 + 1, stream);
-        if (fast) gr_up_fast_kernel<<<UPM_BLOCKS, THREADS, 0, st>>>(m);
+        if (fast) launch_up_fast(m, st);
         else gr_up_multi_kernel<<<UPM_BLOCKS, THREADS, 0, st>>>(m);
         const cudaError_t e = cudaGetLastError();
         if (e != cudaSuccess) {
