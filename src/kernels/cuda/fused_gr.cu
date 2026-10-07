@@ -1069,11 +1069,13 @@ __global__ void __launch_bounds__(THREADS) gr_up_fast_kernel(GrMulti m) {
     }
 }
 void launch_up_fast(const GrMulti& m, cudaStream_t st) {
-    static const bool exact = [] {
+    static const int exact = [] {
         const char* e = std::getenv("STRATA_GR_UP_EXACT");
-        return e && e[0] == '1';
+        return e ? std::atoi(e) : 0;
     }();
-    if (exact) {
+    // Screened on both gfx906 cards: T1/T2/T5 win; T6 regresses, T3/T4 are noise.
+    // Mode2 retains the all-width prototype for reproducible component comparisons.
+    if (exact == 2 || (exact == 1 && (m.T == 1 || m.T == 2 || m.T == 5))) {
         switch (m.T) {
 #define STRATA_GR_UP_CASE(T) case T: gr_up_fast_kernel<T, true><<<UPM_BLOCKS, THREADS, 0, st>>>(m); return
             STRATA_GR_UP_CASE(1);
