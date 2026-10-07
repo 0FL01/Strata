@@ -75,19 +75,39 @@ __global__ void widen_rows_f16(float* __restrict__ Y, int64_t n, int64_t ldy, in
 template <bool AUDIT>
 __global__ void hc_plain_bf16_to_f16(const uint16_t* in, __half* out, int64_t n, unsigned* stats) {
     const int64_t i = (int64_t)blockIdx.x * blockDim.x + threadIdx.x;
-    if (i >= n) return;
-    const float f = __uint_as_float((uint32_t)in[i] << 16);
-    const __half h = __float2half_rn(f);  // no saturation; this is a numerical-change opt-in
-    out[i] = h;
-    if constexpr (AUDIT) {
-        const float back = __half2float(h);
-        if (!isfinite(f)) atomicAdd(stats + 1, 1u);
-        else {
-            atomicMax(stats, __float_as_uint(fabsf(f)));
-            if (fabsf(f) > 65504.0f) atomicAdd(stats + 2, 1u);
+    unsigned magnitude = 0;
+    if (i < n) {
+        const float f = __uint_as_float((uint32_t)in[i] << 16);
+        const __half h = __float2half_rn(f);  // no saturation; numerical-change opt-in
+        out[i] = h;
+        if constexpr (AUDIT) {
+            const float back = __half2float(h);
+            if (!isfinite(f)) atomicAdd(stats + 1, 1u);
+            else {
+                magnitude = __float_as_uint(fabsf(f));
+                if (fabsf(f) > 65504.0f) atomicAdd(stats + 2, 1u);
+            }
+            if (__float_as_uint(f) != __float_as_uint(back)) atomicAdd(stats + 3, 1u);
+            if (f != 0.0f && back == 0.0f) atomicAdd(stats + 4, 1u);
         }
-        if (__float_as_uint(f) != __float_as_uint(back)) atomicAdd(stats + 3, 1u);
-        if (f != 0.0f && back == 0.0f) atomicAdd(stats + 4, 1u);
+    }
+    if constexpr (AUDIT) {
+        // One global maximum update per 256-thread block, including a partial tail.
+        __shared__ unsigned maxima[8];
+        for (int o = 16; o; o >>= 1) {
+            const unsigned v = __shfl_xor(magnitude, o, 32);
+            magnitude = magnitude > v ? magnitude : v;
+        }
+        if ((threadIdx.x & 31) == 0) maxima[threadIdx.x >> 5] = magnitude;
+        __syncthreads();
+        if (threadIdx.x < 32) {
+            magnitude = threadIdx.x < 8 ? maxima[threadIdx.x] : 0;
+            for (int o = 16; o; o >>= 1) {
+                const unsigned v = __shfl_xor(magnitude, o, 32);
+                magnitude = magnitude > v ? magnitude : v;
+            }
+            if (threadIdx.x == 0) atomicMax(stats, magnitude);
+        }
     }
 }
 __global__ void hc_f16_check_output(const float* y, int64_t n, int64_t N, int64_t ldy, unsigned* bad) {
@@ -608,7 +628,7 @@ bool Gemm::try_hc_f16(const uint16_t* X, const uint16_t* W, float* Y,
     ++hc_f16_attempts_;
     const uint64_t we = (uint64_t)N * K, xe = (uint64_t)T * K;
     const size_t need = (size_t)((we + xe) * 2 + 64);
-    if (!hc_scratch_ || hc_scratch_bytes_ < need || ldy < N ||
+    if (!hc_scratch_ || hc_scratch_bytes_ < need || ldy < N || ldy > std::numeric_limits<int>::max() ||
         (uint64_t)ldy > std::numeric_limits<size_t>::max() / (4 * (uint64_t)T)) return false;
     const uintptr_t sb = reinterpret_cast<uintptr_t>(hc_scratch_);
     if (hc_scratch_bytes_ > std::numeric_limits<uintptr_t>::max() - sb) return false;

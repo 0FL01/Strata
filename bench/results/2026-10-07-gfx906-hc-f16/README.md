@@ -15,7 +15,7 @@ activations and quality still require validation.
 
 Opt-in STRATA_GFX906_HC_F16=1 only for T4095/4096 and the two measured shapes.
 It borrows idle phase storage, preserves original xn16 for inject, retains FP32
-output/compute, and excludes helper/peer/pipeline, FP16-I/O and BF16X2 scopes.
+output/compute, and excludes peer-expert/helper, FP16-I/O and BF16X2 scopes.
 Unsupported geometry, stride, beta, capacity or aliasing keeps native BF16.
 No matrix allocation, scaling or saturation is added.
 
@@ -23,3 +23,5 @@ STRATA_HC_F16_AUDIT=1 counts actual input conversion changes/ranges and scans
 outputs for nonfinite values. It synchronizes and is excluded from timing.
 STRATA_HC_F16_TRACE records attempted/taken calls. Neither is model quality proof.
 The patch is experimental and unbuilt at this checkpoint.
+
+Review fixes: audit maximum now reduces per block rather than serializing every value; ldy is bounded by the BLAS int interface. Ordinary layer-split stages still qualify; layer-pipeline execution is not independently qualified. Explicit beta/stride/capacity/alias refusal tests remain pending.
