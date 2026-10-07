@@ -117,7 +117,7 @@ bool run_case(int64_t ctx, int64_t nq, int reps, int64_t capacity, bool counted)
         k::qsa_block_topk(d_scores,d_steps,nq,max_blocks,cap,s,ids_new,stream,active);
         ck(cudaStreamEndCapture(stream,&graph),"capture end");
         ck(cudaGraphInstantiate(&exec,graph,nullptr,nullptr,0),"instantiate");
-        for(int64_t next_ctx: {4096ll,65536ll,131072ll,200000ll,204800ll}) {
+        for(int64_t next_ctx: {4096ll,24577ll,65536ll,131072ll,200000ll,204800ll,4096ll}) {
             for(int64_t i=0;i<nq;++i) {
                 int32_t* st=steps.data()+i*k::kStepCount;
                 int64_t pos=next_ctx-nq+i;

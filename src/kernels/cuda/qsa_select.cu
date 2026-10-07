@@ -18,6 +18,7 @@ namespace {
 constexpr int IDX_DIM = 128, IDX_HEADS = 4, R = 4;
 constexpr int SCORE_WARPS = 8;
 constexpr int TOPK_T = 256;
+constexpr int64_t GFX906_TOPK_SHORT_CELLS = 24576;
 
 __device__ __forceinline__ uint32_t order_key(float s) {
     const float v = s + 0.0f;
@@ -55,6 +56,7 @@ __global__ void __launch_bounds__(SCORE_WARPS * 32) block_scores_kernel(const fl
     }
 }
 
+template <bool SHORT_ONLY = false>
 __global__ void __launch_bounds__(TOPK_T) block_topk_kernel(const float* __restrict__ scores,
                                                             const int32_t* __restrict__ steps, int64_t max_blocks,
                                                             int64_t cap, int32_t* __restrict__ ids) {
@@ -64,6 +66,7 @@ __global__ void __launch_bounds__(TOPK_T) block_topk_kernel(const float* __restr
     const int64_t qi = blockIdx.x;
     const int32_t* st = steps + qi * kStepCount;
     const int64_t n_kv = st[kStepNKv], n_bid = st[kStepNBid], width = st[kStepWidth];
+    if constexpr (SHORT_ONLY) { if (steps[((int64_t)gridDim.x - 1) * kStepCount + kStepNKv] > GFX906_TOPK_SHORT_CELLS) return; }
     int32_t* out = ids + qi * cap;
     const int t = threadIdx.x;
     if (n_kv <= width) {                               // everything is selected: the identity, ascending
@@ -526,7 +529,7 @@ __device__ __forceinline__ int block_excl_scan(int v, int* s_warp, int& total) {
     return r;
 }
 
-template <int PER>
+template <int PER, bool LONG_ONLY = false>
 __global__ void __launch_bounds__(TK_T) block_topk_reg_kernel(const float* __restrict__ scores,
                                                               const int32_t* __restrict__ steps, int64_t max_blocks,
                                                               int64_t cap, int32_t* __restrict__ ids) {
@@ -536,6 +539,7 @@ __global__ void __launch_bounds__(TK_T) block_topk_reg_kernel(const float* __res
     const int64_t qi = blockIdx.x;
     const int32_t* st = steps + qi * kStepCount;
     const int64_t n_kv = st[kStepNKv], n_bid = st[kStepNBid], width = st[kStepWidth];
+    if constexpr (LONG_ONLY) { if (steps[((int64_t)gridDim.x - 1) * kStepCount + kStepNKv] <= GFX906_TOPK_SHORT_CELLS) return; }
     int32_t* out = ids + qi * cap;
     const int t = threadIdx.x, lane = t & 31, warp = t >> 5;
     if (n_kv <= width) {
@@ -1117,7 +1121,7 @@ void qsa_block_topk_ref(const float* scores, const int32_t* steps, int64_t nq, i
         std::fprintf(stderr, "qsa_block_topk: unsupported geometry or cap\n");
         std::exit(1);
     }
-    block_topk_kernel<<<(unsigned) nq, TOPK_T, 0, (cudaStream_t) stream>>>(scores, steps, max_blocks, cap, ids);
+    block_topk_kernel<false><<<(unsigned) nq, TOPK_T, 0, (cudaStream_t) stream>>>(scores, steps, max_blocks, cap, ids);
     const cudaError_t e = cudaGetLastError();
     if (e != cudaSuccess) { std::fprintf(stderr, "qsa_block_topk: %s\n", cudaGetErrorString(e)); std::exit(1); }
 }
@@ -1240,11 +1244,11 @@ void qsa_block_topk(const float* scores, const int32_t* steps, int64_t nq, int64
 #endif
     const int64_t reach = counted && active_blocks < max_blocks ? active_blocks : max_blocks;
 #if defined(STRATA_HIP_GFX906)
-    static const bool decode_reg66 = [] {
+    static const int decode_reg66 = [] {
         const char* v = std::getenv("STRATA_GFX906_TOPK_REG");
-        return v && std::atoi(v) == 1;
+        return v ? std::atoi(v) : 0;
     }();
-    const bool extended_decode = decode_reg66 && !counted && nq <= 8;
+    const bool extended_decode = (decode_reg66 == 1 || decode_reg66 == 2) && !counted && nq <= 8;
 #else
     const bool extended_decode = false;
 #endif
@@ -1256,12 +1260,12 @@ void qsa_block_topk(const float* scores, const int32_t* steps, int64_t nq, int64
     static const bool trace = std::getenv("STRATA_TOPK_TRACE") != nullptr;
     if (trace) {
         int device = 0; cudaGetDevice(&device);
-        const int route = (old || too_small || reach > fit) ? 0 : (reach <= (int64_t) TK_T * TK_PER ? 1 : 2);
+        const int route = (old || too_small || reach > fit) ? 0 : (reach <= (int64_t) TK_T * TK_PER ? 1 : (decode_reg66 == 2 && !counted ? 3 : 2));
         static unsigned seen[16] = {};
         if (device >= 0 && device < 16 && !(seen[device] & (1u << route))) {
             seen[device] |= 1u << route;
             std::fprintf(stderr, "strata topk probe: device=%d kernel=%s nq=%lld capacity_blocks=%lld active_blocks=%lld cap=%lld\n",
-                         device, route == 0 ? "reference256" : route == 1 ? "reg33" : "reg66",
+                         device, route == 0 ? "reference256" : route == 1 ? "reg33" : route == 2 ? "reg66" : "guarded256/reg66",
                          (long long)nq, (long long)max_blocks, (long long)active_blocks, (long long)cap);
         }
     }
@@ -1279,6 +1283,18 @@ void qsa_block_topk(const float* scores, const int32_t* steps, int64_t nq, int64
         std::fprintf(stderr, "qsa_block_topk: unsupported geometry or cap\n");
         std::exit(1);
     }
+#if defined(STRATA_HIP_GFX906)
+    // Both launches read current device steps: capture is safe across growth and restores.
+    // Use the final query for the whole window, so a threshold crossing does not run both bodies.
+    // Each guard precedes every barrier. Exactly one arm writes all rows.
+    if (decode_reg66 == 2 && extended_decode && reach > (int64_t) TK_T * TK_PER) {
+        block_topk_kernel<true><<<(unsigned)nq, TOPK_T, 0, (cudaStream_t)stream>>>(scores, steps, max_blocks, cap, ids);
+        block_topk_reg_kernel<TK_PER_MAX, true><<<(unsigned)nq, TK_T, 0, (cudaStream_t)stream>>>(scores, steps, max_blocks, cap, ids);
+        const cudaError_t e = cudaGetLastError();
+        if (e != cudaSuccess) { std::fprintf(stderr, "qsa_block_topk guarded: %s\n", cudaGetErrorString(e)); std::exit(1); }
+        return;
+    }
+#endif
 #if !defined(__HIPCC__)
     // Turing prefill (the `counted` bound) above ~90K cells (22,528 blocks): the wide kernel, which reads the keys
     // coalesced, instead of the register kernel's uncoalesced per-thread runs (PR #743: 131K, 1.03 -> 0.75 ms); the
