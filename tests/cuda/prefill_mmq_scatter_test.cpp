@@ -13,6 +13,7 @@
 #include <cmath>
 #include <cstdint>
 #include <cstdio>
+#include <cstdlib>
 #include <cstring>
 #include <random>
 #include <stdexcept>
@@ -127,16 +128,22 @@ void bench(ggml_type t, int64_t T) {
 
 int main(int argc, char** argv) {
     const bool do_bench = argc > 1 && std::strcmp(argv[1], "--bench") == 0;
+    const char* gather = std::getenv("STRATA_QUANT_GATHER");
+    if (gather && std::atoi(gather) != 0) {
+        std::fprintf(stderr, "unset STRATA_QUANT_GATHER for an independent scatter comparison\n");
+        return 2;
+    }
     int fails = 0;
     try {
         const ggml_type types[] = {GGML_TYPE_Q2_0, GGML_TYPE_Q8_0, GGML_TYPE_IQ2_XS, GGML_TYPE_Q4_1, GGML_TYPE_Q2_K};
         uint32_t seed = 11;
         for (ggml_type t : types)
-            for (int64_t T : {1, 2, 7, 600, 2099}) fails += check(t, T, seed++);
+            for (int64_t T : {1, 2, 7, 600, 2099, 4095, 4096, 4097}) fails += check(t, T, seed++);
         if (do_bench) {
             std::printf("--bench (median of 20):\n");
             for (ggml_type t : {GGML_TYPE_IQ2_XS, GGML_TYPE_Q2_0}) {
                 bench(t, 2048);
+                bench(t, 4096);
                 bench(t, 8192);
                 bench(t, 32768);
             }
