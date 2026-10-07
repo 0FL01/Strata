@@ -1,0 +1,316 @@
+{
+  "weight_range": {
+    "tensors": 194,
+    "elements": 635699200,
+    "changed": 63197,
+    "overflow": 0,
+    "underflow_to_zero": 400,
+    "nonfinite_source": 0,
+    "scope": "all BF16 HC up/down weights in native dense pack; does not inspect activations or establish model-quality equivalence"
+  },
+  "actual_weight_synthetic_normal_input_components": {
+    "g0-layer0-attn": "ACTUAL_WEIGHT blk.0.hc_attn_down.weight X=synthetic_normal_BF16\nCONVERT T=4095 N=320 K=10240 ms=0.685686\nFIRST bf16=1 T=4095 N=320 K=10240 wall_ms=299.553937\nOUTPUT_FNV1A64 T=4095 N=320 K=10240 hash=d6f9ed1faf3647c5 converted=1\nFULL_NATIVE_REFERENCE elements=1310400 changed=202244 rel_l2=5.87728145e-08 max_abs=3.81469727e-06\nCONVERTED_REFERENCE rel_l2=6.94180711e-07 max_abs=7.26345752e-06\n{\"bf16\":true,\"T\":4095,\"N\":320,\"K\":10240,\"ms\":4.785039,\"rel_l2_sample\":6.94281896e-07,\"max_abs_sample\":7.25501741e-06,\"all_finite\":true}\nACTUAL_WEIGHT blk.0.hc_attn_up.weight X=synthetic_normal_BF16\nCONVERT T=4095 N=10240 K=320 ms=0.072691\nFIRST bf16=1 T=4095 N=10240 K=320 wall_ms=3.122863\nOUTPUT_FNV1A64 T=4095 N=10240 K=320 hash=f364a581aa7b9acc converted=1\nFULL_NATIVE_REFERENCE elements=41932800 changed=1088141 rel_l2=8.58957586e-09 max_abs=1.90734863e-06\nCONVERTED_REFERENCE rel_l2=1.24541033e-07 max_abs=7.04079866e-07\n{\"bf16\":true,\"T\":4095,\"N\":10240,\"K\":320,\"ms\":2.977391,\"rel_l2_sample\":1.24682155e-07,\"max_abs_sample\":7.04079866e-07,\"all_finite\":true}\nACTUAL_WEIGHT blk.0.hc_attn_down.weight X=synthetic_normal_BF16\nCONVERT T=4096 N=320 K=10240 ms=0.684755\nFIRST bf16=1 T=4096 N=320 K=10240 wall_ms=4.876388\nOUTPUT_FNV1A64 T=4096 N=320 K=10240 hash=38608b45924880d8 converted=1\nFULL_NATIVE_REFERENCE elements=1310720 changed=202200 rel_l2=5.84861183e-08 max_abs=3.81469727e-06\nCONVERTED_REFERENCE rel_l2=1.21745562e-06 max_abs=1.52398497e-05\n{\"bf16\":true,\"T\":4096,\"N\":320,\"K\":10240,\"ms\":4.816191,\"rel_l2_sample\":1.21749276e-06,\"max_abs_sample\":1.53049332e-05,\"all_finite\":true}\nACTUAL_WEIGHT blk.0.hc_attn_up.weight X=synthetic_normal_BF16\nCONVERT T=4096 N=10240 K=320 ms=0.072723\nFIRST bf16=1 T=4096 N=10240 K=320 wall_ms=3.082962\nOUTPUT_FNV1A64 T=4096 N=10240 K=320 hash=f0cab6b90a786304 converted=1\nFULL_NATIVE_REFERENCE elements=41943040 changed=1087777 rel_l2=8.56471294e-09 max_abs=1.90734863e-06\nCONVERTED_REFERENCE rel_l2=1.1790353e-07 max_abs=8.84756446e-07\n{\"bf16\":true,\"T\":4096,\"N\":10240,\"K\":320,\"ms\":2.973343,\"rel_l2_sample\":1.16302931e-07,\"max_abs_sample\":8.63103196e-07,\"all_finite\":true}\n",
+    "g0-layer23-ffn": "ACTUAL_WEIGHT blk.23.hc_ffn_down.weight X=synthetic_normal_BF16\nCONVERT T=4095 N=320 K=10240 ms=0.685526\nFIRST bf16=1 T=4095 N=320 K=10240 wall_ms=294.112774\nOUTPUT_FNV1A64 T=4095 N=320 K=10240 hash=a703cb4820902012 converted=1\nFULL_NATIVE_REFERENCE elements=1310400 changed=37245 rel_l2=2.62314774e-08 max_abs=7.62939453e-06\nCONVERTED_REFERENCE rel_l2=2.02227364e-06 max_abs=8.10076599e-05\n{\"bf16\":true,\"T\":4095,\"N\":320,\"K\":10240,\"ms\":4.771519,\"rel_l2_sample\":2.02114893e-06,\"max_abs_sample\":8.095667e-05,\"all_finite\":true}\nACTUAL_WEIGHT blk.23.hc_ffn_up.weight X=synthetic_normal_BF16\nCONVERT T=4095 N=10240 K=320 ms=0.072662\nFIRST bf16=1 T=4095 N=10240 K=320 wall_ms=3.084373\nOUTPUT_FNV1A64 T=4095 N=10240 K=320 hash=ff47ec548fad9d30 converted=1\nFULL_NATIVE_REFERENCE elements=41932800 changed=194897 rel_l2=6.99398761e-09 max_abs=3.81469727e-06\nCONVERTED_REFERENCE rel_l2=1.2783018e-07 max_abs=5.29922545e-07\n{\"bf16\":true,\"T\":4095,\"N\":10240,\"K\":320,\"ms\":2.978256,\"rel_l2_sample\":1.27738757e-07,\"max_abs_sample\":5.29922545e-07,\"all_finite\":true}\nACTUAL_WEIGHT blk.23.hc_ffn_down.weight X=synthetic_normal_BF16\nCONVERT T=4096 N=320 K=10240 ms=0.685792\nFIRST bf16=1 T=4096 N=320 K=10240 wall_ms=4.907243\nOUTPUT_FNV1A64 T=4096 N=320 K=10240 hash=cc9f1a0aab8a2125 converted=1\nFULL_NATIVE_REFERENCE elements=1310720 changed=37341 rel_l2=2.6275076e-08 max_abs=7.62939453e-06\nCONVERTED_REFERENCE rel_l2=9.45786732e-07 max_abs=1.50045962e-05\n{\"bf16\":true,\"T\":4096,\"N\":320,\"K\":10240,\"ms\":4.785839,\"rel_l2_sample\":9.45590016e-07,\"max_abs_sample\":1.49525586e-05,\"all_finite\":true}\nACTUAL_WEIGHT blk.23.hc_ffn_up.weight X=synthetic_normal_BF16\nCONVERT T=4096 N=10240 K=320 ms=0.072739\nFIRST bf16=1 T=4096 N=10240 K=320 wall_ms=3.081011\nOUTPUT_FNV1A64 T=4096 N=10240 K=320 hash=b68b53bb6e2d0115 converted=1\nFULL_NATIVE_REFERENCE elements=41943040 changed=195251 rel_l2=6.93793252e-09 max_abs=3.81469727e-06\nCONVERTED_REFERENCE rel_l2=1.46552868e-07 max_abs=9.04197805e-07\n{\"bf16\":true,\"T\":4096,\"N\":10240,\"K\":320,\"ms\":2.973487,\"rel_l2_sample\":1.46616499e-07,\"max_abs_sample\":9.04197805e-07,\"all_finite\":true}\n",
+    "g0-layer47-attn": "ACTUAL_WEIGHT blk.47.hc_attn_down.weight X=synthetic_normal_BF16\nCONVERT T=4095 N=320 K=10240 ms=0.685481\nFIRST bf16=1 T=4095 N=320 K=10240 wall_ms=299.230983\nOUTPUT_FNV1A64 T=4095 N=320 K=10240 hash=667bc851fb3f5816 converted=1\nFULL_NATIVE_REFERENCE elements=1310400 changed=30840 rel_l2=2.39344776e-08 max_abs=3.81469727e-06\nCONVERTED_REFERENCE rel_l2=1.2831015e-06 max_abs=2.64831906e-05\n{\"bf16\":true,\"T\":4095,\"N\":320,\"K\":10240,\"ms\":4.803903,\"rel_l2_sample\":1.28252728e-06,\"max_abs_sample\":2.64382543e-05,\"all_finite\":true}\nACTUAL_WEIGHT blk.47.hc_attn_up.weight X=synthetic_normal_BF16\nCONVERT T=4095 N=10240 K=320 ms=0.072666\nFIRST bf16=1 T=4095 N=10240 K=320 wall_ms=3.119185\nOUTPUT_FNV1A64 T=4095 N=10240 K=320 hash=f9f6aafb713b908c converted=1\nFULL_NATIVE_REFERENCE elements=41932800 changed=260951 rel_l2=8.70703824e-09 max_abs=1.90734863e-06\nCONVERTED_REFERENCE rel_l2=1.16902715e-07 max_abs=3.36673111e-07\n{\"bf16\":true,\"T\":4095,\"N\":10240,\"K\":320,\"ms\":2.977311,\"rel_l2_sample\":1.16760909e-07,\"max_abs_sample\":3.36673111e-07,\"all_finite\":true}\nACTUAL_WEIGHT blk.47.hc_attn_down.weight X=synthetic_normal_BF16\nCONVERT T=4096 N=320 K=10240 ms=0.685309\nFIRST bf16=1 T=4096 N=320 K=10240 wall_ms=4.980888\nOUTPUT_FNV1A64 T=4096 N=320 K=10240 hash=77a0c072f5ba2d64 converted=1\nFULL_NATIVE_REFERENCE elements=1310720 changed=31593 rel_l2=2.42418907e-08 max_abs=7.62939453e-06\nCONVERTED_REFERENCE rel_l2=1.07180863e-06 max_abs=1.65078673e-05\n{\"bf16\":true,\"T\":4096,\"N\":320,\"K\":10240,\"ms\":4.801183,\"rel_l2_sample\":1.07280467e-06,\"max_abs_sample\":1.65093443e-05,\"all_finite\":true}\nACTUAL_WEIGHT blk.47.hc_attn_up.weight X=synthetic_normal_BF16\nCONVERT T=4096 N=10240 K=320 ms=0.072650\nFIRST bf16=1 T=4096 N=10240 K=320 wall_ms=3.079206\nOUTPUT_FNV1A64 T=4096 N=10240 K=320 hash=0bc9fdc0f2fc1b0c converted=1\nFULL_NATIVE_REFERENCE elements=41943040 changed=260554 rel_l2=8.65677852e-09 max_abs=1.90734863e-06\nCONVERTED_REFERENCE rel_l2=1.21232698e-07 max_abs=5.06639481e-07\n{\"bf16\":true,\"T\":4096,\"N\":10240,\"K\":320,\"ms\":2.972831,\"rel_l2_sample\":1.20804597e-07,\"max_abs_sample\":5.06639481e-07,\"all_finite\":true}\n",
+    "g1-layer0-attn": "ACTUAL_WEIGHT blk.0.hc_attn_down.weight X=synthetic_normal_BF16\nCONVERT T=4095 N=320 K=10240 ms=0.685443\nFIRST bf16=1 T=4095 N=320 K=10240 wall_ms=299.599334\nOUTPUT_FNV1A64 T=4095 N=320 K=10240 hash=d6f9ed1faf3647c5 converted=1\nFULL_NATIVE_REFERENCE elements=1310400 changed=202244 rel_l2=5.87728145e-08 max_abs=3.81469727e-06\nCONVERTED_REFERENCE rel_l2=6.94180711e-07 max_abs=7.26345752e-06\n{\"bf16\":true,\"T\":4095,\"N\":320,\"K\":10240,\"ms\":4.794545,\"rel_l2_sample\":6.94281896e-07,\"max_abs_sample\":7.25501741e-06,\"all_finite\":true}\nACTUAL_WEIGHT blk.0.hc_attn_up.weight X=synthetic_normal_BF16\nCONVERT T=4095 N=10240 K=320 ms=0.072637\nFIRST bf16=1 T=4095 N=10240 K=320 wall_ms=3.083909\nOUTPUT_FNV1A64 T=4095 N=10240 K=320 hash=f364a581aa7b9acc converted=1\nFULL_NATIVE_REFERENCE elements=41932800 changed=1088141 rel_l2=8.58957586e-09 max_abs=1.90734863e-06\nCONVERTED_REFERENCE rel_l2=1.24541033e-07 max_abs=7.04079866e-07\n{\"bf16\":true,\"T\":4095,\"N\":10240,\"K\":320,\"ms\":2.972305,\"rel_l2_sample\":1.24682155e-07,\"max_abs_sample\":7.04079866e-07,\"all_finite\":true}\nACTUAL_WEIGHT blk.0.hc_attn_down.weight X=synthetic_normal_BF16\nCONVERT T=4096 N=320 K=10240 ms=0.685712\nFIRST bf16=1 T=4096 N=320 K=10240 wall_ms=4.946106\nOUTPUT_FNV1A64 T=4096 N=320 K=10240 hash=38608b45924880d8 converted=1\nFULL_NATIVE_REFERENCE elements=1310720 changed=202200 rel_l2=5.84861183e-08 max_abs=3.81469727e-06\nCONVERTED_REFERENCE rel_l2=1.21745562e-06 max_abs=1.52398497e-05\n{\"bf16\":true,\"T\":4096,\"N\":320,\"K\":10240,\"ms\":4.780113,\"rel_l2_sample\":1.21749276e-06,\"max_abs_sample\":1.53049332e-05,\"all_finite\":true}\nACTUAL_WEIGHT blk.0.hc_attn_up.weight X=synthetic_normal_BF16\nCONVERT T=4096 N=10240 K=320 ms=0.072624\nFIRST bf16=1 T=4096 N=10240 K=320 wall_ms=3.078940\nOUTPUT_FNV1A64 T=4096 N=10240 K=320 hash=f0cab6b90a786304 converted=1\nFULL_NATIVE_REFERENCE elements=41943040 changed=1087777 rel_l2=8.56471294e-09 max_abs=1.90734863e-06\nCONVERTED_REFERENCE rel_l2=1.1790353e-07 max_abs=8.84756446e-07\n{\"bf16\":true,\"T\":4096,\"N\":10240,\"K\":320,\"ms\":2.967729,\"rel_l2_sample\":1.16302931e-07,\"max_abs_sample\":8.63103196e-07,\"all_finite\":true}\n",
+    "g1-layer23-ffn": "ACTUAL_WEIGHT blk.23.hc_ffn_down.weight X=synthetic_normal_BF16\nCONVERT T=4095 N=320 K=10240 ms=0.685754\nFIRST bf16=1 T=4095 N=320 K=10240 wall_ms=304.501291\nOUTPUT_FNV1A64 T=4095 N=320 K=10240 hash=a703cb4820902012 converted=1\nFULL_NATIVE_REFERENCE elements=1310400 changed=37245 rel_l2=2.62314774e-08 max_abs=7.62939453e-06\nCONVERTED_REFERENCE rel_l2=2.02227364e-06 max_abs=8.10076599e-05\n{\"bf16\":true,\"T\":4095,\"N\":320,\"K\":10240,\"ms\":4.755025,\"rel_l2_sample\":2.02114893e-06,\"max_abs_sample\":8.095667e-05,\"all_finite\":true}\nACTUAL_WEIGHT blk.23.hc_ffn_up.weight X=synthetic_normal_BF16\nCONVERT T=4095 N=10240 K=320 ms=0.072656\nFIRST bf16=1 T=4095 N=10240 K=320 wall_ms=3.086596\nOUTPUT_FNV1A64 T=4095 N=10240 K=320 hash=ff47ec548fad9d30 converted=1\nFULL_NATIVE_REFERENCE elements=41932800 changed=194897 rel_l2=6.99398761e-09 max_abs=3.81469727e-06\nCONVERTED_REFERENCE rel_l2=1.2783018e-07 max_abs=5.29922545e-07\n{\"bf16\":true,\"T\":4095,\"N\":10240,\"K\":320,\"ms\":2.970529,\"rel_l2_sample\":1.27738757e-07,\"max_abs_sample\":5.29922545e-07,\"all_finite\":true}\nACTUAL_WEIGHT blk.23.hc_ffn_down.weight X=synthetic_normal_BF16\nCONVERT T=4096 N=320 K=10240 ms=0.685882\nFIRST bf16=1 T=4096 N=320 K=10240 wall_ms=4.712950\nOUTPUT_FNV1A64 T=4096 N=320 K=10240 hash=cc9f1a0aab8a2125 converted=1\nFULL_NATIVE_REFERENCE elements=1310720 changed=37341 rel_l2=2.6275076e-08 max_abs=7.62939453e-06\nCONVERTED_REFERENCE rel_l2=9.45786732e-07 max_abs=1.50045962e-05\n{\"bf16\":true,\"T\":4096,\"N\":320,\"K\":10240,\"ms\":4.778818,\"rel_l2_sample\":9.45590016e-07,\"max_abs_sample\":1.49525586e-05,\"all_finite\":true}\nACTUAL_WEIGHT blk.23.hc_ffn_up.weight X=synthetic_normal_BF16\nCONVERT T=4096 N=10240 K=320 ms=0.072611\nFIRST bf16=1 T=4096 N=10240 K=320 wall_ms=3.080002\nOUTPUT_FNV1A64 T=4096 N=10240 K=320 hash=b68b53bb6e2d0115 converted=1\nFULL_NATIVE_REFERENCE elements=41943040 changed=195251 rel_l2=6.93793252e-09 max_abs=3.81469727e-06\nCONVERTED_REFERENCE rel_l2=1.46552868e-07 max_abs=9.04197805e-07\n{\"bf16\":true,\"T\":4096,\"N\":10240,\"K\":320,\"ms\":2.967153,\"rel_l2_sample\":1.46616499e-07,\"max_abs_sample\":9.04197805e-07,\"all_finite\":true}\n",
+    "g1-layer47-attn": "ACTUAL_WEIGHT blk.47.hc_attn_down.weight X=synthetic_normal_BF16\nCONVERT T=4095 N=320 K=10240 ms=0.685187\nFIRST bf16=1 T=4095 N=320 K=10240 wall_ms=291.981950\nOUTPUT_FNV1A64 T=4095 N=320 K=10240 hash=667bc851fb3f5816 converted=1\nFULL_NATIVE_REFERENCE elements=1310400 changed=30840 rel_l2=2.39344776e-08 max_abs=3.81469727e-06\nCONVERTED_REFERENCE rel_l2=1.2831015e-06 max_abs=2.64831906e-05\n{\"bf16\":true,\"T\":4095,\"N\":320,\"K\":10240,\"ms\":4.785985,\"rel_l2_sample\":1.28252728e-06,\"max_abs_sample\":2.64382543e-05,\"all_finite\":true}\nACTUAL_WEIGHT blk.47.hc_attn_up.weight X=synthetic_normal_BF16\nCONVERT T=4095 N=10240 K=320 ms=0.072659\nFIRST bf16=1 T=4095 N=10240 K=320 wall_ms=3.095404\nOUTPUT_FNV1A64 T=4095 N=10240 K=320 hash=f9f6aafb713b908c converted=1\nFULL_NATIVE_REFERENCE elements=41932800 changed=260951 rel_l2=8.70703824e-09 max_abs=1.90734863e-06\nCONVERTED_REFERENCE rel_l2=1.16902715e-07 max_abs=3.36673111e-07\n{\"bf16\":true,\"T\":4095,\"N\":10240,\"K\":320,\"ms\":2.970289,\"rel_l2_sample\":1.16760909e-07,\"max_abs_sample\":3.36673111e-07,\"all_finite\":true}\nACTUAL_WEIGHT blk.47.hc_attn_down.weight X=synthetic_normal_BF16\nCONVERT T=4096 N=320 K=10240 ms=0.685757\nFIRST bf16=1 T=4096 N=320 K=10240 wall_ms=4.799414\nOUTPUT_FNV1A64 T=4096 N=320 K=10240 hash=77a0c072f5ba2d64 converted=1\nFULL_NATIVE_REFERENCE elements=1310720 changed=31593 rel_l2=2.42418907e-08 max_abs=7.62939453e-06\nCONVERTED_REFERENCE rel_l2=1.07180863e-06 max_abs=1.65078673e-05\n{\"bf16\":true,\"T\":4096,\"N\":320,\"K\":10240,\"ms\":4.778466,\"rel_l2_sample\":1.07280467e-06,\"max_abs_sample\":1.65093443e-05,\"all_finite\":true}\nACTUAL_WEIGHT blk.47.hc_attn_up.weight X=synthetic_normal_BF16\nCONVERT T=4096 N=10240 K=320 ms=0.072630\nFIRST bf16=1 T=4096 N=10240 K=320 wall_ms=3.258270\nOUTPUT_FNV1A64 T=4096 N=10240 K=320 hash=0bc9fdc0f2fc1b0c converted=1\nFULL_NATIVE_REFERENCE elements=41943040 changed=260554 rel_l2=8.65677852e-09 max_abs=1.90734863e-06\nCONVERTED_REFERENCE rel_l2=1.21232698e-07 max_abs=5.06639481e-07\n{\"bf16\":true,\"T\":4096,\"N\":10240,\"K\":320,\"ms\":2.965905,\"rel_l2_sample\":1.20804597e-07,\"max_abs_sample\":5.06639481e-07,\"all_finite\":true}\n"
+  },
+  "route_checks": [
+    {
+      "tag": "g0-flag0",
+      "passed": true,
+      "routes": []
+    },
+    {
+      "tag": "g0-flag1",
+      "passed": true,
+      "routes": [
+        [
+          "53",
+          "53"
+        ],
+        [
+          "53",
+          "53"
+        ],
+        [
+          "53",
+          "53"
+        ],
+        [
+          "53",
+          "53"
+        ]
+      ]
+    },
+    {
+      "tag": "g1-flag0",
+      "passed": true,
+      "routes": []
+    },
+    {
+      "tag": "g1-flag1",
+      "passed": true,
+      "routes": [
+        [
+          "53",
+          "53"
+        ],
+        [
+          "53",
+          "53"
+        ],
+        [
+          "53",
+          "53"
+        ],
+        [
+          "53",
+          "53"
+        ]
+      ]
+    }
+  ],
+  "audit": {
+    "calls": 192,
+    "max_X": 71.5,
+    "max_W": 8.5625,
+    "counts": {
+      "Wchanged": 62385,
+      "Xchanged": 1268975,
+      "Wzero": 396,
+      "Xzero": 384124,
+      "Ynonfinite": 0,
+      "Woverflow": 0,
+      "Xoverflow": 0,
+      "Wnonfinite": 0,
+      "Xnonfinite": 0
+    },
+    "disabled_matches_qualified": true,
+    "enabled_matches_disabled": false,
+    "first_different_output_index_zero_based": 168,
+    "scope": "actual4K operands, full output-finiteness scan; not model quality equivalence"
+  },
+  "warm_requests": {
+    "code4096-A1.requests": [
+      {
+        "iteration": 1,
+        "prompt_ms": 11774.7,
+        "decode_ms": 4680.2,
+        "PP": 347.8644891164955,
+        "TG": 54.69851715738644,
+        "prompt_reused": 0,
+        "prompt_read": 4096,
+        "accepted": 173,
+        "offered": 218,
+        "wall_s": 16.459870956001396,
+        "output_ids_sha256": "e8fbfcacb55ae3af13c7b9900d338cd2450573507778e6780c4f7b0ffb8e9b7c"
+      },
+      {
+        "iteration": 2,
+        "prompt_ms": 11425.1,
+        "decode_ms": 4486.9,
+        "PP": 358.5088970774873,
+        "TG": 57.05498228175355,
+        "prompt_reused": 0,
+        "prompt_read": 4096,
+        "accepted": 173,
+        "offered": 216,
+        "wall_s": 15.91552182599844,
+        "output_ids_sha256": "e8fbfcacb55ae3af13c7b9900d338cd2450573507778e6780c4f7b0ffb8e9b7c"
+      },
+      {
+        "iteration": 3,
+        "prompt_ms": 11408.8,
+        "decode_ms": 4468.9,
+        "PP": 359.0211065142697,
+        "TG": 57.2847904406006,
+        "prompt_reused": 0,
+        "prompt_read": 4096,
+        "accepted": 173,
+        "offered": 214,
+        "wall_s": 15.88108648799971,
+        "output_ids_sha256": "e8fbfcacb55ae3af13c7b9900d338cd2450573507778e6780c4f7b0ffb8e9b7c"
+      },
+      {
+        "iteration": 4,
+        "prompt_ms": 11412.2,
+        "decode_ms": 4468.4,
+        "PP": 358.9141445120134,
+        "TG": 57.29120042968401,
+        "prompt_reused": 0,
+        "prompt_read": 4096,
+        "accepted": 173,
+        "offered": 214,
+        "wall_s": 15.884020534998854,
+        "output_ids_sha256": "e8fbfcacb55ae3af13c7b9900d338cd2450573507778e6780c4f7b0ffb8e9b7c"
+      }
+    ],
+    "code4096-A2.requests": [
+      {
+        "iteration": 1,
+        "prompt_ms": 11768.3,
+        "decode_ms": 4679.2,
+        "PP": 348.05366960393604,
+        "TG": 54.71020687296974,
+        "prompt_reused": 0,
+        "prompt_read": 4096,
+        "accepted": 173,
+        "offered": 218,
+        "wall_s": 16.452840580997872,
+        "output_ids_sha256": "e8fbfcacb55ae3af13c7b9900d338cd2450573507778e6780c4f7b0ffb8e9b7c"
+      },
+      {
+        "iteration": 2,
+        "prompt_ms": 11413.5,
+        "decode_ms": 4485.3,
+        "PP": 358.87326411705436,
+        "TG": 57.07533498316723,
+        "prompt_reused": 0,
+        "prompt_read": 4096,
+        "accepted": 173,
+        "offered": 216,
+        "wall_s": 15.902334772999893,
+        "output_ids_sha256": "e8fbfcacb55ae3af13c7b9900d338cd2450573507778e6780c4f7b0ffb8e9b7c"
+      },
+      {
+        "iteration": 3,
+        "prompt_ms": 11399.3,
+        "decode_ms": 4469.0,
+        "PP": 359.32030914178944,
+        "TG": 57.283508614902665,
+        "prompt_reused": 0,
+        "prompt_read": 4096,
+        "accepted": 173,
+        "offered": 214,
+        "wall_s": 15.871774396000546,
+        "output_ids_sha256": "e8fbfcacb55ae3af13c7b9900d338cd2450573507778e6780c4f7b0ffb8e9b7c"
+      },
+      {
+        "iteration": 4,
+        "prompt_ms": 11409.4,
+        "decode_ms": 4468.8,
+        "PP": 359.0022262345084,
+        "TG": 57.2860723236663,
+        "prompt_reused": 0,
+        "prompt_read": 4096,
+        "accepted": 173,
+        "offered": 214,
+        "wall_s": 15.881661198000074,
+        "output_ids_sha256": "e8fbfcacb55ae3af13c7b9900d338cd2450573507778e6780c4f7b0ffb8e9b7c"
+      }
+    ],
+    "code4096-B1.requests": [
+      {
+        "iteration": 1,
+        "prompt_ms": 10822.0,
+        "decode_ms": 4549.0,
+        "PP": 378.4882646460913,
+        "TG": 56.27610463838206,
+        "prompt_reused": 0,
+        "prompt_read": 4096,
+        "accepted": 172,
+        "offered": 212,
+        "wall_s": 15.378301194999949,
+        "output_ids_sha256": "d378aab58f3872853e0b23c24083292ae7aaf13aa3649d11025d97e1519eb3d0"
+      },
+      {
+        "iteration": 2,
+        "prompt_ms": 10467.3,
+        "decode_ms": 4359.7,
+        "PP": 391.3139013881326,
+        "TG": 58.71963667224809,
+        "prompt_reused": 0,
+        "prompt_read": 4096,
+        "accepted": 172,
+        "offered": 210,
+        "wall_s": 14.831289728997945,
+        "output_ids_sha256": "d378aab58f3872853e0b23c24083292ae7aaf13aa3649d11025d97e1519eb3d0"
+      },
+      {
+        "iteration": 3,
+        "prompt_ms": 10461.1,
+        "decode_ms": 4340.2,
+        "PP": 391.545822141075,
+        "TG": 58.98345698354915,
+        "prompt_reused": 0,
+        "prompt_read": 4096,
+        "accepted": 172,
+        "offered": 208,
+        "wall_s": 14.805912902000273,
+        "output_ids_sha256": "d378aab58f3872853e0b23c24083292ae7aaf13aa3649d11025d97e1519eb3d0"
+      },
+      {
+        "iteration": 4,
+        "prompt_ms": 10452.8,
+        "decode_ms": 4340.6,
+        "PP": 391.85672738405026,
+        "TG": 58.978021471685935,
+        "prompt_reused": 0,
+        "prompt_read": 4096,
+        "accepted": 172,
+        "offered": 208,
+        "wall_s": 14.797941451000952,
+        "output_ids_sha256": "d378aab58f3872853e0b23c24083292ae7aaf13aa3649d11025d97e1519eb3d0"
+      }
+    ],
+    "code4096-B2.requests": [
+      {
+        "iteration": 1,
+        "prompt_ms": 10820.2,
+        "decode_ms": 4556.5,
+        "PP": 378.55122825825765,
+        "TG": 56.18347415779655,
+        "prompt_reused": 0,
+        "prompt_read": 4096,
+        "accepted": 172,
+        "offered": 212,
+        "wall_s": 15.381561139998666,
+        "output_ids_sha256": "d378aab58f3872853e0b23c24083292ae7aaf13aa3649d11025d97e1519eb3d0"
+      },
+      {
+        "iteration": 2,
+        "prompt_ms": 10469.5,
+        "decode_ms": 4363.9,
+        "PP": 391.2316729547734,
+        "TG": 58.66312243635281,
+        "prompt_reused": 0,
+        "prompt_read": 4096,
+        "accepted": 172,
+        "offered": 210,
+        "wall_s": 14.837127237999084,
+        "output_ids_sha256": "d378aab58f3872853e0b23c24083292ae7aaf13aa3649d11025d97e1519eb3d0"
+      },
+      {
+        "iteration": 3,
+        "prompt_ms": 10460.9,
+        "decode_ms": 4347.5,
+        "PP": 391.5533080327697,
+        "TG": 58.88441633122484,
+        "prompt_reused": 0,
+        "prompt_read": 4096,
+        "accepted": 172,
+        "offered": 208,
+        "wall_s": 14.811962439001945,
+        "output_ids_sha256": "d378aab58f3872853e0b23c24083292ae7aaf13aa3649d11025d97e1519eb3d0"
+      },
+      {
+        "iteration": 4,
+        "prompt_ms": 10461.3,
+        "decode_ms": 4344.9,
+        "PP": 391.53833653561225,
+        "TG": 58.91965292641949,
+        "prompt_reused": 0,
+        "prompt_read": 4096,
+        "accepted": 172,
+        "offered": 208,
+        "wall_s": 14.80970445300045,
+        "output_ids_sha256": "d378aab58f3872853e0b23c24083292ae7aaf13aa3649d11025d97e1519eb3d0"
+      }
+    ]
+  },
+  "performance_binary_sha256": "8152d8ba908b29c92476e5c79ea089d9810f2a887e670eaf141b7d7a30b5a6a9",
+  "math_source_commit": "f9065d1b24090d644493d63008aef7ab59bf1f73",
+  "scope": "numerical-change prototype, no deployment or matched-output TG gain claim"
+}

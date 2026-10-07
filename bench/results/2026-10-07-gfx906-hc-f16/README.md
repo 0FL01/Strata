@@ -25,3 +25,37 @@ STRATA_HC_F16_TRACE records attempted/taken calls. Neither is model quality proo
 The patch is experimental and unbuilt at this checkpoint.
 
 Review fixes: audit maximum now reduces per block rather than serializing every value; ldy is bounded by the BLAS int interface. Ordinary layer-split stages still qualify; layer-pipeline execution is not independently qualified. Explicit beta/stride/capacity/alias refusal tests remain pending.
+
+## Actual route audit and whole-model screen
+
+Fresh build of f9065d1 plus the four existing deployment patches passed the
+isolated route probe on both gfx906 cards. Eligible calls all took the new path;
+unsupported shapes retained native BF16. The disabled prototype reproduces the
+qualified exact engine's1024 output IDs.
+
+An actual uncached4K request exercised192 calls (108+84 across the two stages):
+maximum absolute X71.5 and W8.5625, no input overflow/nonfinite and no nonfinite
+FP32 output. Across this call stream,1,268,975 X values changed on conversion
+and384,124 became zero; W counts62385 and396 respectively. Those are repeated
+operand-conversion events, not a unique model-weight census.
+
+Enabled generation first differs after168 matching tokens. This establishes
+numerical divergence; it is not itself a quality verdict. No exactness claim.
+
+Four fresh processes A/B/B/A, four uncached4K requests per process,256 outputs
+each; all best-known exact settings and MTP16K/HIGH fixed in both arms.
+First requests: PP347.95905 ->378.51974 (+8.78284%).
+Subsequent requests: PP358.93983 ->391.50653 (+9.07302%).
+Prompt reuse was0 and every request read4096 tokens. Audit/synchronizations
+were disabled for timing; route summaries remained enabled. Do not infer a TG
+speedup from numerically divergent generated work. GPU profiles restored AUTO.
+
+Performance executable:
+8152d8ba908b29c92476e5c79ea089d9810f2a887e670eaf141b7d7a30b5a6a9
+See prefill-screen.json for observations and numerical-scope limits.
+
+A separate diagnostic-only commit13e26a9 ports the existing first-logits dump
+to serial serve with explicit final-stage device selection and checked writes.
+It has no GPU allocation and is not used in the performance numbers above.
+Code/Russian A/A/B first-distribution and residual checks are pending.
+The exact qualified stack remains separate and unchanged.
