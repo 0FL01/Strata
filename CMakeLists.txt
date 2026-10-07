@@ -874,6 +874,11 @@ if(STRATA_ENABLE_CUDA OR STRATA_ENABLE_HIP)
   target_include_directories(qsa_topk_parity PRIVATE ${_strata_gpu_include_directories})
   target_link_libraries(qsa_topk_parity PRIVATE strata_kernels ${_strata_gpu_runtime_target})
   add_test(NAME qsa_topk_parity COMMAND qsa_topk_parity --selftest)
+  if(STRATA_HIP_GFX906)
+    add_test(NAME qsa_topk_gfx906_guarded COMMAND qsa_topk_parity 24577 6 3 204800 0)
+    set_tests_properties(qsa_topk_gfx906_guarded PROPERTIES
+      ENVIRONMENT "STRATA_GFX906_TOPK_REG=2" TIMEOUT 120)
+  endif()
 
   # ---- P2.S4: the PLE n-gram hash, the IQ4_NL table read, and the PLE block ----
   # `ngram.cpp` is host-only but lives in `strata_kernels` because `ple.cu` shares its geometry constants, and
@@ -1185,7 +1190,16 @@ if(STRATA_NATIVE_EXPERTS)
   # against ggml-cpu's dot, on random blocks; --bench: ms per expert on one thread, the weights streamed from DRAM
   add_executable(iq_avx2_parity src/kernels/cpu/iq_avx2_parity.cpp)
   target_link_libraries(iq_avx2_parity PRIVATE strata_kernels_cpu)
+  add_executable(q2_unpack_spread_check src/kernels/cpu/q2_unpack_spread_check.cpp)
+  target_link_libraries(q2_unpack_spread_check PRIVATE strata_kernels_cpu)
+
   if(STRATA_BUILD_TESTS)
+    add_test(NAME q2_unpack_spread_check COMMAND q2_unpack_spread_check)
+    set_tests_properties(q2_unpack_spread_check PROPERTIES
+      ENVIRONMENT "STRATA_Q2_AVX2_SPREAD=0" SKIP_RETURN_CODE 77 TIMEOUT 60)
+    add_test(NAME iq_avx2_parity_q2_spread COMMAND iq_avx2_parity)
+    set_tests_properties(iq_avx2_parity_q2_spread PROPERTIES
+      ENVIRONMENT "STRATA_Q2_AVX2_SPREAD=1" SKIP_RETURN_CODE 77 TIMEOUT 60)
     add_test(NAME iq_avx2_parity COMMAND iq_avx2_parity)
     add_test(NAME iq_avx2_parity_iq3s_mt1 COMMAND ${CMAKE_COMMAND} -E env STRATA_IQ3S_MT1=1 $<TARGET_FILE:iq_avx2_parity>)
   endif()

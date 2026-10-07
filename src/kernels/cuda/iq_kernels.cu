@@ -3138,7 +3138,7 @@ __device__ __forceinline__ float q2_dot_spread(const void* vbq, const block_q8_1
 }
 // Q2_0 token-inner R2 without shared memory. Keep the baseline CTA geometry
 // for singleton groups; reuse each thread's weight rows across up to NT tokens.
-template<int NT, int RB>
+template<int NT, int RB, bool SPREAD = false>
 __global__ void __launch_bounds__(256) native_gu_q2_global_kernel(
     const unsigned long long* __restrict__ grp_ptr, const int32_t* __restrict__ grp_start,
     const int32_t* __restrict__ n_groups, const int32_t* __restrict__ ent_tok,
@@ -3177,8 +3177,8 @@ __global__ void __launch_bounds__(256) native_gu_q2_global_kernel(
 #pragma unroll
                     for (int j = 0; j < N; ++j) {
                         const block_q8_1* xx = x[j] + kb * (Fmt<42>::qk / 32);
-                        a[j] += q2_dot_fast(w0, xx, kb, iq);
-                        b[j] += q2_dot_fast(w1, xx, kb, iq);
+                        a[j] += SPREAD ? q2_dot_spread(w0, xx, kb, iq) : q2_dot_fast(w0, xx, kb, iq);
+                        b[j] += SPREAD ? q2_dot_spread(w1, xx, kb, iq) : q2_dot_fast(w1, xx, kb, iq);
                     }
                 }
 #pragma unroll
@@ -3544,12 +3544,14 @@ void native_expert_grouped(const NativeExpertLayout& L, const unsigned long long
     if (g_exp_phase != 2) {
 #endif
 #if defined(STRATA_HIP_GFX906)
-    const bool lds_gu = (em0 == 5 || em0 == 6 || em0 == 7 || em0 == 8 || em0 == 13 || em0 == 15) && (L.gu_type == 18 || L.gu_type == 21 || L.gu_type == 22 || L.gu_type == 23);
+    const bool lds_gu = (em0 == 5 || em0 == 6 || em0 == 7 || em0 == 8 || em0 == 13 || em0 == 15 || em0 == 16) && (L.gu_type == 18 || L.gu_type == 21 || L.gu_type == 22 || L.gu_type == 23);
     // Modes 13/15 share the gfx906 Q2_0 gate/up candidate. Mode 15 only adds
-    // fast Q2_0 down unpacking. Qualified geometry: Flash-Next H=2560, FF=640.
-    if ((em0 == 13 || em0 == 15) && L.gu_type == 42 && L.n_embd == 2560 && L.n_ff == 640) {
+    // fast Q2_0 down unpacking. Experimental mode 16 also spreads gate/up bytes.
+    // Qualified geometry: Flash-Next H=2560, FF=640.
+    if ((em0 == 13 || em0 == 15 || em0 == 16) && L.gu_type == 42 && L.n_embd == 2560 && L.n_ff == 640) {
         const dim3 gl((unsigned)((2 * L.n_ff + 15) / 16), (unsigned)cap_groups);
-        native_gu_q2_global_kernel<4,16><<<gl,256,0,s>>>(grp_ptr,grp_start,n_groups,ent_tok,X,L,gate,up);
+        if (em0 == 16) native_gu_q2_global_kernel<4,16,true><<<gl,256,0,s>>>(grp_ptr,grp_start,n_groups,ent_tok,X,L,gate,up);
+        else native_gu_q2_global_kernel<4,16><<<gl,256,0,s>>>(grp_ptr,grp_start,n_groups,ent_tok,X,L,gate,up);
     } else if (lds_gu) {
         const dim3 gl((unsigned) ((2 * L.n_ff + LDS_RB - 1) / LDS_RB), (unsigned) cap_groups);
         const size_t sh = (size_t) LDS_NT * (size_t) (L.n_embd / 32) * sizeof(block_q8_1);
@@ -3609,11 +3611,11 @@ void native_expert_grouped(const NativeExpertLayout& L, const unsigned long long
     const int d_rows = (!g_old_kernels && !g_no_sub16_gu && L.n_ff == 640) ? (L.d_type == 20 ? 32 : (L.d_type == 42 ? 16 : 8)) : 8;
     const dim3 gd((unsigned) ((L.n_embd + d_rows - 1) / d_rows), (unsigned) gy);
 #if defined(STRATA_HIP_GFX906)
-    if ((em0 == 7 || em0 == 8 || em0 == 13 || em0 == 15) && (L.d_type == 20 || L.d_type == 42)) {
+    if ((em0 == 7 || em0 == 8 || em0 == 13 || em0 == 15 || em0 == 16) && (L.d_type == 20 || L.d_type == 42)) {
         const dim3 gl((unsigned) ((L.n_embd + LDS_RB - 1) / LDS_RB), (unsigned) cap_groups);
         const size_t sh = (size_t) LDS_NT * (size_t) (L.n_ff / 32) * sizeof(block_q8_1);
         if (L.d_type == 20) native_down_lds_kernel<20><<<gl, 256, sh, s>>>(grp_ptr, grp_start, n_groups, ent_dst, hq, L, out);
-        else if (em0 == 15 && L.n_embd == 2560 && L.n_ff == 640) native_down_lds_kernel<42, true><<<gl, 256, sh, s>>>(grp_ptr, grp_start, n_groups, ent_dst, hq, L, out);
+        else if ((em0 == 15 || em0 == 16) && L.n_embd == 2560 && L.n_ff == 640) native_down_lds_kernel<42, true><<<gl, 256, sh, s>>>(grp_ptr, grp_start, n_groups, ent_dst, hq, L, out);
         else native_down_lds_kernel<42><<<gl, 256, sh, s>>>(grp_ptr, grp_start, n_groups, ent_dst, hq, L, out);
         check("native_expert_grouped/down");
         return;
