@@ -84,6 +84,9 @@ int main() {
         std::string error;
         if (!gemm.init(stream,0,error)) { std::fprintf(stderr,"%s\n",error.c_str()); return 2; }
         ok=run(gemm,stream,true,16,96,2560,96,0) && ok;
+        ok=run(gemm,stream,true,17,320,10240,328,1) && ok;
+        ok=run(gemm,stream,true,17,10240,320,10248,0) && ok;
+        ok=run(gemm,stream,true,3300,320,10240,328,1) && ok;
         ok=run(gemm,stream,true,17,48,2560,64,1) && ok;
         ok=run(gemm,stream,false,32,640,2560,648,0) && ok;
         ok=run(gemm,stream,false,64,2560,640,2560,1) && ok;

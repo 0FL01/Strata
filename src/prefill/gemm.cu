@@ -635,7 +635,13 @@ constexpr int64_t kRdna2SliceF32 = 32ll << 20;   // 128 MiB of FP32 activations 
 // runs its native GEMM, nothing was written)
 bool Gemm::rdna2_sgemm(const uint16_t* X, const uint16_t* W, float* Y, int64_t T, int64_t N, int64_t K, int64_t ldy,
                        float beta, bool bf16) {
-    if (K <= 0 || !rdna2_sgemm_on(N)) return false;
+    bool exact_shape_opt_in = false;
+#if defined(STRATA_HIP_GFX906)
+    // Measured gfx906 candidate: only BF16 HC down/up, not slower FP16 products.
+    static const bool hc = [] { const char* v = std::getenv("STRATA_GFX906_HC_SGEMM"); return v && v[0] == '1'; }();
+    exact_shape_opt_in = hc && bf16 && ((N == 320 && K == 10240) || (N == 10240 && K == 320));
+#endif
+    if (K <= 0 || (!exact_shape_opt_in && !rdna2_sgemm_on(N))) return false;
     const int64_t rows = std::max<int64_t>(1, std::min<int64_t>(T, kRdna2SliceF32 / K));
     if (!rdna2_grow(tc_w_, tc_w_elems_, N * K) || !rdna2_grow(tc_x_, tc_x_elems_, rows * K)) return false;
     float* const wf = reinterpret_cast<float*>(tc_w_);
