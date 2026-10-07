@@ -21,3 +21,25 @@ Model and 204800 capacity unchanged. Work began 2026-10-07 08:20 UTC.
 ## Pending
 
 Profile current paths, test transposed reductions with independent parity checks, test Q2 gate/up bit spreading, and evaluate #1316 separately. No new speed claim yet.
+
+## Initial Q2 gate/up component screen
+
+Mode16 changes only gate/up integer unpacking from mode15; its down remains identical.
+Real model layers 0/23/47, both GPUs, groups 1/8/32, tokens per group 1/2/4/8: 72 cases.
+Every gate/up/SwiGLU value, active Q8 byte and expert output matched bitwise.
+Gate/up speedup min/median/max: 1.0246/1.0855/1.3069x.
+Whole-expert speedup: 1.0158/1.0378/1.1540x. Rates derived from rounded microsecond output;
+three interleaved timing rounds use the minimum, not a confidence interval.
+This is a component screen, not an end-to-end throughput or model quality claim.
+Full-model alternating screen is pending.
+
+STRATA_TSUM=1 with the current rows/fusion/mode15 profile passed mmvf_rows_parity,
+gr_multi_parity and native_grouped_parity on both GPUs (six invocations).
+The rows test has 432 cases / 1660200 checked values per GPU; all zero mismatch.
+
+Profiling baseline: code4K, 1024 outputs, instrumentation on.
+Expert GEMMs account for about30% of summed per-stage GPU prompt timelines;
+hyper-connection read about22%. Timelines overlap and are not end-to-end fractions.
+At64K: 376 decode windows, average3.30 verified /2.72 emitted tokens per window;
+57.57ms/window, verification49.94ms, commit1.49ms, draft6.13ms.
+Instrumented speed is not an optimization A/B result.
