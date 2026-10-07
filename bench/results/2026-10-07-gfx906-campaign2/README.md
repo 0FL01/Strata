@@ -70,3 +70,14 @@ A range50.1979-50.2464, B50.4594-50.6919: both B runs beat both A runs in this s
 All2048 IDs identical in all four runs. Accepted/offered counts1375/1691 match.
 PP597.7-598.5 is effectively unchanged. Two repetitions per arm are not a universal guarantee.
 No production promotion yet; Russian/longer-output validation remains pending.
+
+## Idle-stage helper: engaged, default share not selected
+
+Eight processes, ABBA at1536 and3072 input tokens,512 outputs each.
+STRATA_PREFILL_HELP alone changes; seven selected settings and instrumentation remain equal.
+The peer GPU really ran (streamed-expert counts and its phase timings were logged).
+PP at1536:269.755->270.033 (+0.103%, overlapping variability).
+PP at3072:325.579->311.450 (-4.340%); both candidate runs slower than both controls.
+All512 output IDs match within each workload. Default helper share is not promoted.
+This excludes this setting on these two fixtures, not every possible share or prompt.
+The earlier absent-MMQ diagnosis is retracted above; the negative result here is measured.

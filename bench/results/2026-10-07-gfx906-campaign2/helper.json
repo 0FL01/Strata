@@ -1,0 +1,110 @@
+{
+  "results": [
+    {
+      "tag": "help1536-A1",
+      "passed": true,
+      "PP": 275.9116220585594,
+      "TG": 59.74189633847518,
+      "prompt_ms": 5567.0,
+      "decode_ms": 8570.2,
+      "prompt_tokens": 1536,
+      "actual_outputs": 512,
+      "accepted": 369,
+      "offered": 405,
+      "output_sha256": "48819607bb78bf8252ed27f7fa0eb13a76c78744f6c4282f3fd9f745f5664be2"
+    },
+    {
+      "tag": "help1536-B1",
+      "passed": true,
+      "PP": 272.678856737085,
+      "TG": 59.758631153855134,
+      "prompt_ms": 5633.0,
+      "decode_ms": 8567.8,
+      "prompt_tokens": 1536,
+      "actual_outputs": 512,
+      "accepted": 369,
+      "offered": 405,
+      "output_sha256": "48819607bb78bf8252ed27f7fa0eb13a76c78744f6c4282f3fd9f745f5664be2"
+    },
+    {
+      "tag": "help1536-B2",
+      "passed": true,
+      "PP": 267.43740641431907,
+      "TG": 59.03990959513843,
+      "prompt_ms": 5743.4,
+      "decode_ms": 8672.1,
+      "prompt_tokens": 1536,
+      "actual_outputs": 512,
+      "accepted": 369,
+      "offered": 405,
+      "output_sha256": "48819607bb78bf8252ed27f7fa0eb13a76c78744f6c4282f3fd9f745f5664be2"
+    },
+    {
+      "tag": "help1536-A2",
+      "passed": true,
+      "PP": 263.8676538798509,
+      "TG": 59.53488372093023,
+      "prompt_ms": 5821.1,
+      "decode_ms": 8600.0,
+      "prompt_tokens": 1536,
+      "actual_outputs": 512,
+      "accepted": 369,
+      "offered": 405,
+      "output_sha256": "48819607bb78bf8252ed27f7fa0eb13a76c78744f6c4282f3fd9f745f5664be2"
+    },
+    {
+      "tag": "help3072-A1",
+      "passed": true,
+      "PP": 324.48533372767315,
+      "TG": 54.794520547945204,
+      "prompt_ms": 9467.3,
+      "decode_ms": 9344.0,
+      "prompt_tokens": 3072,
+      "actual_outputs": 512,
+      "accepted": 355,
+      "offered": 429,
+      "output_sha256": "96e31fdf845ba1930827c0581505afa051c51bb0d8fe74327a519a5c7e2cf0f6"
+    },
+    {
+      "tag": "help3072-B1",
+      "passed": true,
+      "PP": 315.50730740394584,
+      "TG": 55.60201122899993,
+      "prompt_ms": 9736.7,
+      "decode_ms": 9208.3,
+      "prompt_tokens": 3072,
+      "actual_outputs": 512,
+      "accepted": 355,
+      "offered": 429,
+      "output_sha256": "96e31fdf845ba1930827c0581505afa051c51bb0d8fe74327a519a5c7e2cf0f6"
+    },
+    {
+      "tag": "help3072-B2",
+      "passed": true,
+      "PP": 307.4951953875721,
+      "TG": 55.45206428973703,
+      "prompt_ms": 9990.4,
+      "decode_ms": 9233.2,
+      "prompt_tokens": 3072,
+      "actual_outputs": 512,
+      "accepted": 355,
+      "offered": 429,
+      "output_sha256": "96e31fdf845ba1930827c0581505afa051c51bb0d8fe74327a519a5c7e2cf0f6"
+    },
+    {
+      "tag": "help3072-A2",
+      "passed": true,
+      "PP": 326.6799238597573,
+      "TG": 55.470688291567804,
+      "prompt_ms": 9403.7,
+      "decode_ms": 9230.1,
+      "prompt_tokens": 3072,
+      "actual_outputs": 512,
+      "accepted": 355,
+      "offered": 429,
+      "output_sha256": "96e31fdf845ba1930827c0581505afa051c51bb0d8fe74327a519a5c7e2cf0f6"
+    }
+  ],
+  "profile": "mode15 + seven qualified flags; only PREFILL_HELP differs; phase instrumentation on both arms; fixed placement greedy, capacity204800",
+  "helper_engagement": "peer-streamed experts and peer GPU phase timings observed in candidate logs"
+}
