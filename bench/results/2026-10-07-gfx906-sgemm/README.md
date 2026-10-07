@@ -27,7 +27,7 @@ Thresholds: relativeL2<1e-4, maxabsolute<5e-3 on uniform[-.25,.25] operands.
 This is not a bitwise-equivalence claim or model quality qualification.
 Exact widening preserves operands; SGEMM changes floating-point summation order.
 Additional actual-HC shapes and a cross-slice padded-beta case are now added;
-selected-route rebuild and full-model A/B still pending.
+selected-route checks and full-model A/B results are recorded below.
 
 Full micro results:micro.json. Benchmark source:bench/gfx906_gemm_screen.cpp.
 
@@ -74,4 +74,27 @@ Added alias refusal cases for each input/output and both possible scratch region
 Arena microbenchmarks retain about7.58ms down and3.37ms up atT4095, with53/53
 borrowed calls and zero owned matrix-buffer capacity in each standalone case.
 These remain numerical-tolerance checks, not model quality equivalence.
-Whole-model warm and64K comparisons of arena reuse are pending.
+## Arena model results
+
+Candidate engine SHA256:
+b7652893f150f1720e467c10c70e4eb69c5bcd695ec1e62d50f2a176edc4c83e.
+
+4K: six independent processes A-O-B-B-O-A, four uncached512-output requests each.
+A=native; O=owned selected SGEMM; B=arena selected SGEMM.
+Exclude the first request only for explicitly warm statistics; raw evidence retains it.
+Pooled warm PP: native358.72345, owned374.69355, arena380.55479 tok/s.
+Arena improvement over native:6.08584%. Six warm requests but only two independent
+processes per arm. Owned/arena have identical outputs across all16requests.
+Arena reports432+336 borrowed calls across four requests and zero owned matrix
+buffer capacity. It avoids about140.47MiB additional matrix buffers per GPU.
+
+64K: independent ABBA processes,2048 outputs each, fixed placement, greedy sampling.
+A PP599.77413/594.96563; B631.61019/609.33283.
+Pooled PP597.36021 ->620.27155 tok/s (+3.83543%).
+Both B runs exceed both A runs, though candidate run-to-run variability remains.
+TG A50.17714/50.10336, B50.91424/50.97038 is observational ONLY:
+native versus SGEMM outputs differ. No matched-output TG speedup or quality
+equivalence is claimed. Production not promoted. Next: longer/repeated and
+task-quality checks before considering deployment.
+
+Curated measurements and output hashes:arena-model.json. Prompt text is excluded.
