@@ -81,3 +81,29 @@ PP at3072:325.579->311.450 (-4.340%); both candidate runs slower than both contr
 All512 output IDs match within each workload. Default helper share is not promoted.
 This excludes this setting on these two fixtures, not every possible share or prompt.
 The earlier absent-MMQ diagnosis is retracted above; the negative result here is measured.
+
+## Combined exact Q2 candidate
+
+Mode16 GPU gate/up+down integer unpack with selected-width CPU AVX2 spread,
+against mode15/CPU spread off. Both arms retain the seven qualified production
+settings, MMVF tile4 and HC-up exact off. Same binary and pinned baseline epoch.
+Native text, fixed placement, greedy, no reuse,64Kprompt,4096outputs, ABBA
+(two fresh processes per arm per workload):
+
+- Code TG49.89834 ->50.63188 tok/s (+1.47007%).
+- Russian TG40.85818 ->41.41685 tok/s (+1.36733%).
+- Every4096output ID matches across each workload's four runs. The first2048
+  also match all prior controlled production-qualification runs on the original
+  engine binary. Both candidate TG runs exceed both baselines in each workload.
+- No PP gain: code598.31678 ->595.22528; Russian597.91693 ->595.54252 tok/s.
+  The changes target decode; small negative PP observations are retained.
+- No new weight/KV quantization, no Russian vocabulary change, no clock or power
+  modification. No arbitrary-prompt quality or universal percentage claim.
+
+Results finished before a reverse-SSH outage and were recovered after host
+reboot; no completed model case was rerun. Initial driver attempt failed on a
+label NameError before anygeneration, was fixed, and its logs retained.
+Production restore receipt14:35:32UTC is historical, not current server health.
+
+Curated raw phase times, output hashes, counters and binarySHA:exact-combined.json.
+Candidate is preserved, not yet deployed as a new production build.
