@@ -137,3 +137,12 @@ are in config-qualification.json. Hardware sensor logs remain local.
 Qualification caveat for the earlier exact-combined Russian runs: accepted/
 offered draft counters vary slightly even between baseline repetitions.
 Output equality is verified; identical speculative work is not claimed.
+
+### Actual 200K capacity check
+
+The candidate processed200000 fresh prompt tokens and generated256 output tokens
+with main capacity204800, INT8 resident32768 and unchanged19078 expert slots.
+PP573.88365 tok/s, TG42.57938 tok/s; exit0, AUTO restored. This synthetic capacity
+check is not a controlled200K speed comparison and is not a quality evaluation.
+API/tool/vision qualification and clean-build promotion remain pending.
+See config-capacity-200k.json.
