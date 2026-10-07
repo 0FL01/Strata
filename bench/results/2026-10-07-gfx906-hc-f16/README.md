@@ -63,3 +63,34 @@ The exact qualified stack remains separate and unchanged.
 Diagnostic follow-up: STRATA_HC_F16_ARENA_ONLY=1 performs the same arena conversions but falls through to unchanged native BF16 math. This isolates scratch-lifetime corruption from the numerical route. It is diagnostic only, not a performance option.
 
 STRATA_HC_F16_SHADOW=1 runs the full FP16 route, samples64 outputs, then overwrites Y with the original native BF16 product and samples the same coordinates. Downstream state should match baseline if there is no scratch/library side effect. No extra GPU matrix buffer is allocated. Diagnostic only.
+
+## Distribution sensitivity and shadow control
+
+Two fresh4K fixtures, A/A/B, diagnostic-only executable4bdc1f2d...:
+baseline repeats are bitwise identical in full first-token logits and all64
+sampled final residual rows. Candidate residual relativeL2 is0.27317(code)
+and0.29057(Russian); logit relativeL2 is0.17302 and0.06613. This is substantial
+end-state divergence, despite small isolated matrix errors.
+
+The first predicted IDs248068/248046 are near-certain control tokens, with
+baseline probability approximately1. Their tiny KL values are not reassuring
+quality evidence. These checks do not establish quality equivalence or loss.
+
+A subsequent two-process shadow control executes the full FP16 route but
+overwrites Y with native BF16 before consumers. Its final logits and residuals
+are bitwise identical to baseline, which also matches the prior A. Across192
+calls,64 output coordinates per call on this baseline trajectory differ by at
+most6.6375e-8 relativeL2 and7.6294e-6 absolute error. This does not show scratch
+or library corruption in that control; diagnostic synchronizations prevent a
+universal race claim. Numerical-result propagation remains under investigation.
+
+Source80e0dc, diagnostic binary:
+f34d1e3c80cbcaa564995830b086657e7fd12d4d452eff937ae12d55bea33456
+
+Next evidence must score ordinary fixed text after actual batched PP. Existing
+serve supports a complete prefix plus129 continuation IDs, last-turn split at
+the first continuation ID, short-read128, prompt-cache1 and GEN ckpt=1.
+STRATA_LOGPOS then records128 teacher-forced targets. Require no reuse, exact
+position/target checks and route proof; top256 output is not full-vocabulary KL.
+The exact qualified stack remains unchanged. This numerical option stays
+experimental and is not promoted.
