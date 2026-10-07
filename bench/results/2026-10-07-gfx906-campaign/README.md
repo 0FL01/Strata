@@ -109,3 +109,40 @@ this backend/model. Combined with the 64K regression, this blocks promotion.
 first differing position. These are screening measurements, not a successful
 quality qualification or a matched-token speed claim. The production pipeline
 setting remains off.
+
+## Upstream PR #1120: overlapped stage hand-off
+
+Cherry-picked the four upstream commits through `202d4cc`, retaining original
+authorship. Flag off/on ABBA, 2048 outputs at each prompt length, mode13,
+fixed placement and greedy controls. Both arms use the same candidate binary.
+All output IDs match within each prompt group.
+
+| Prompt | Off TG | On TG | Change |
+| --- | ---: | ---: | ---: |
+| 4096 | 49.719 | 50.362 | +1.292% |
+| 65536 | 47.838 | 48.026 | +0.392% |
+
+Two runs per arm: the 64K effect is near the observed noise. PP is not improved.
+See `overlap.json` for individual rates and exact binary hash. A dropped fifth
+hand-off with `STRATA_SPLIT_WAIT_MS=2000` returned the expected native error
+after 13 valid output tokens; the driver stopped that test and restored the
+healthy authenticated image-capable service. This is a successful fault check,
+not successful completion of the deliberately failed generation.
+
+## Upstream PR #1181: linear expert planner
+
+Cherry-picked `42d72ac`, retaining original authorship. The 4020-case planner
+differential test passes on the host. Candidate binary versus the saved
+pre-planner binary, #1120 overlap disabled in both, mode13, ABBA and 2048
+outputs. All output IDs match at each prompt length.
+
+| Prompt | Old planner TG | New planner TG | Change |
+| --- | ---: | ---: | ---: |
+| 4096 | 49.665 | 50.065 | +0.805% |
+| 65536 | 47.883 | 47.725 | -0.329% |
+
+This does not demonstrate a stable end-to-end gain on the target 64K workload.
+No 64K acceleration is claimed. `planner.json` contains individual values and
+the candidate hash. The branch carries these source changes for reproducible
+experiments; that is not a recommendation to enable every experiment in a
+production deployment.
