@@ -51,3 +51,11 @@ Two fresh processes per arm per context,2048 outputs each.
   restored afterward. Candidate is opt-in, not promoted.
 
 Curated individual timings and output hashes:model.json.
+
+## Regression registration
+
+The independent checker is now registered with CTest, forcing spread off for
+its reference and treating return77 as unsupported-ISA skip. A second CTest
+runs existing iq_avx2_parity with engine spread enabled.
+Both targeted CTests passed on the MI50 host (0.28seconds total).
+This is not a claim that the entire repository test suite was rerun.
