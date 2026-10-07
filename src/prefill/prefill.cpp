@@ -2159,6 +2159,22 @@ bool Prefill::run_impl(const int64_t* tokens, int64_t n, int64_t pos0, std::stri
             }
             for (int half = 0; half < 2; ++half) {
                 // ---- the hyper-connection read of this half
+#if defined(STRATA_HIP_GFX906)
+                static const bool hc_f16 = [] {
+                    const char* v = std::getenv("STRATA_GFX906_HC_F16");
+                    return v && std::atoi(v) == 1;
+                }();
+                struct HcScratchScope {
+                    Gemm& gemm;
+                    HcScratchScope(Gemm& g, void* p, size_t bytes) : gemm(g) { gemm.set_hc_scratch(p, bytes); }
+                    void clear() { gemm.set_hc_scratch(nullptr, 0); }
+                    ~HcScratchScope() { clear(); }
+                };
+                const bool borrow_hc = hc_f16 && !helped && !m.pp && !core::peer_portable() &&
+                                       !m.f16_io && !m.xn16_lo && !m.lo16_lo;
+                HcScratchScope hc_scratch(m.gemm, borrow_hc ? m.region : nullptr,
+                                         borrow_hc ? (size_t)m.region_bytes : 0);
+#endif
                 const char* pre = half == 0 ? "hc_attn_" : "hc_ffn_";
                 const std::string sn = std::string(pre) + "norm.weight", sd = std::string(pre) + "down.weight",
                                   su = std::string(pre) + "up.weight", si = std::string(pre) + "inject.weight";
@@ -2226,6 +2242,9 @@ bool Prefill::run_impl(const int64_t* tokens, int64_t n, int64_t pos0, std::stri
                              m.mixed_bf_lo);
                 }
 
+#if defined(STRATA_HIP_GFX906)
+                hc_scratch.clear();
+#endif
                 if (half == 0 && !core::is_qsa_layer(g, l)) {
                     // ======================= GDN =======================
                     const core::WeightRef *wqkv = need(v, "attn_qkv.weight", err), *wg = need(v, "attn_gate.weight", err),

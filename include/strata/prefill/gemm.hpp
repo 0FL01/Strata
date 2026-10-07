@@ -54,12 +54,20 @@ public:
 
     /// Caller-owned buffers only: the scratch and workspace moved (the prompt path laid its buffers out again).
     void rebind(uint16_t* scratch, int64_t scratch_elems, void* workspace, size_t ws_bytes);
+    /// Borrowed idle HC phase storage, same compute stream; caller clears before the next phase.
+    void set_hc_scratch(void* p, size_t bytes) { hc_scratch_ = p; hc_scratch_bytes_ = bytes; }
+
 
     uint16_t* scratch() const { return scratch_; }
     int64_t scratch_elems() const { return scratch_elems_; }
     void* stream() const { return stream_; }
 
 private:
+    void* hc_scratch_ = nullptr;
+    size_t hc_scratch_bytes_ = 0;
+    uint64_t hc_f16_attempts_ = 0, hc_f16_taken_ = 0;
+    bool try_hc_f16(const uint16_t* X, const uint16_t* W, float* Y,
+                   int64_t T, int64_t N, int64_t K, int64_t ldy, float beta, int64_t ldx);
     void* handle_ = nullptr;
     void* stream_ = nullptr;
     uint16_t* scratch_ = nullptr;

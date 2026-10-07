@@ -1466,3 +1466,8 @@ if(STRATA_HIP_GFX906)
   endif()
   set_source_files_properties(${_strata_cu} PROPERTIES LANGUAGE HIP)
 endif()
+
+if(STRATA_HIP_GFX906)
+  add_executable(gfx906_hc_f16_probe bench/gfx906_hc_f16_probe.cpp)
+  target_link_libraries(gfx906_hc_f16_probe PRIVATE strata_prefill ${_strata_gpu_runtime_target})
+endif()

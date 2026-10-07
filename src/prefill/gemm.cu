@@ -15,6 +15,8 @@
 
 #include <algorithm>
 #include <atomic>
+#include <limits>
+#include <cstring>
 
 #if defined(__HIPCC__) && defined(STRATA_HIPBLASLT_AVAILABLE)
 // The HIP compatibility shim maps CUDA shuffle spellings to Strata helpers.
@@ -69,6 +71,30 @@ __global__ void widen_rows_f16(float* __restrict__ Y, int64_t n, int64_t ldy, in
         __syncthreads();
     }
 }
+#if defined(STRATA_HIP_GFX906)
+template <bool AUDIT>
+__global__ void hc_plain_bf16_to_f16(const uint16_t* in, __half* out, int64_t n, unsigned* stats) {
+    const int64_t i = (int64_t)blockIdx.x * blockDim.x + threadIdx.x;
+    if (i >= n) return;
+    const float f = __uint_as_float((uint32_t)in[i] << 16);
+    const __half h = __float2half_rn(f);  // no saturation; this is a numerical-change opt-in
+    out[i] = h;
+    if constexpr (AUDIT) {
+        const float back = __half2float(h);
+        if (!isfinite(f)) atomicAdd(stats + 1, 1u);
+        else {
+            atomicMax(stats, __float_as_uint(fabsf(f)));
+            if (fabsf(f) > 65504.0f) atomicAdd(stats + 2, 1u);
+        }
+        if (__float_as_uint(f) != __float_as_uint(back)) atomicAdd(stats + 3, 1u);
+        if (f != 0.0f && back == 0.0f) atomicAdd(stats + 4, 1u);
+    }
+}
+__global__ void hc_f16_check_output(const float* y, int64_t n, int64_t N, int64_t ldy, unsigned* bad) {
+    const int64_t i = (int64_t)blockIdx.x * blockDim.x + threadIdx.x;
+    if (i < n && !isfinite(y[(i / N) * ldy + i % N])) atomicAdd(bad, 1u);
+}
+#endif
 // BF16 weight rows -> FP16, saturated (bench/results/2026-10-04-rdna2-fp16-prompt: none leaves FP16's range)
 __global__ void bf16_to_f16_rows(const uint16_t* __restrict__ s, __half* __restrict__ d, int64_t n) {
     for (int64_t i = blockIdx.x * (int64_t) blockDim.x + threadIdx.x; i < n; i += (int64_t) gridDim.x * blockDim.x) {
@@ -375,6 +401,9 @@ bool prompt_f16() {
 }
 
 Gemm::~Gemm() {
+    if (hc_f16_attempts_ && std::getenv("STRATA_HC_F16_TRACE"))
+        std::fprintf(stderr, "strata hc-f16 route: attempts=%llu taken=%llu\n",
+                     (unsigned long long)hc_f16_attempts_, (unsigned long long)hc_f16_taken_);
 #if defined(STRATA_PREFILL_MMQ) && defined(__HIPCC__)
     delete static_cast<strata::prefill::mmq::Context*>(mmq_ctx_);
     if (mmq_buf_) cudaFree(mmq_buf_);
@@ -568,6 +597,73 @@ bool Gemm::bf16_hcd_exact(const uint16_t* X, int64_t ldx, const uint16_t* W, flo
 #endif
 }
 
+bool Gemm::try_hc_f16(const uint16_t* X, const uint16_t* W, float* Y,
+                       int64_t T, int64_t N, int64_t K, int64_t ldy, float beta, int64_t ldx) {
+#if defined(STRATA_HIP_GFX906)
+    static const bool on = [] {
+        const char* v = std::getenv("STRATA_GFX906_HC_F16"); return v && std::atoi(v) == 1;
+    }();
+    if (!on || f16_io_ || beta != 0.0f || ldx != 0 || (T != 4095 && T != 4096) ||
+        !((N == 320 && K == 10240) || (N == 10240 && K == 320))) return false;
+    ++hc_f16_attempts_;
+    const uint64_t we = (uint64_t)N * K, xe = (uint64_t)T * K;
+    const size_t need = (size_t)((we + xe) * 2 + 64);
+    if (!hc_scratch_ || hc_scratch_bytes_ < need || ldy < N ||
+        (uint64_t)ldy > std::numeric_limits<size_t>::max() / (4 * (uint64_t)T)) return false;
+    const uintptr_t sb = reinterpret_cast<uintptr_t>(hc_scratch_);
+    if (hc_scratch_bytes_ > std::numeric_limits<uintptr_t>::max() - sb) return false;
+    const uintptr_t se = sb + hc_scratch_bytes_;
+    auto overlaps = [&](const void* p, uint64_t bytes) {
+        const uintptr_t lo = reinterpret_cast<uintptr_t>(p);
+        return lo < se && (lo >= sb || bytes > sb - lo);
+    };
+    if (overlaps(X, xe * 2) || overlaps(W, we * 2) || overlaps(Y, (uint64_t)T * ldy * 4)) return false;
+    auto check = [](cudaError_t e, const char* what) {
+        if (e != cudaSuccess) {
+            std::fprintf(stderr, "strata hc-f16 %s: %s\n", what, cudaGetErrorString(e)); std::exit(1);
+        }
+    };
+    auto* wh = reinterpret_cast<uint16_t*>(hc_scratch_);
+    auto* xh = wh + we;
+    auto* stats = reinterpret_cast<unsigned*>(xh + xe);
+    const auto st = (cudaStream_t)stream_;
+    static const bool audit = [] {
+        const char* v = std::getenv("STRATA_HC_F16_AUDIT"); return v && std::atoi(v) == 1;
+    }();
+    if (audit) {
+        check(cudaMemsetAsync(stats, 0, 64, st), "audit reset");
+        hc_plain_bf16_to_f16<true><<<(unsigned)((we + 255) / 256), 256, 0, st>>>(W, (__half*)wh, we, stats);
+        hc_plain_bf16_to_f16<true><<<(unsigned)((xe + 255) / 256), 256, 0, st>>>(X, (__half*)xh, xe, stats + 5);
+    } else {
+        hc_plain_bf16_to_f16<false><<<(unsigned)((we + 255) / 256), 256, 0, st>>>(W, (__half*)wh, we, nullptr);
+        hc_plain_bf16_to_f16<false><<<(unsigned)((xe + 255) / 256), 256, 0, st>>>(X, (__half*)xh, xe, nullptr);
+    }
+    check(cudaGetLastError(), "conversion");
+    f16(xh, wh, Y, T, N, K, ldy, 0.0f);
+    ++hc_f16_taken_;
+    if (audit) {
+        hc_f16_check_output<<<(unsigned)(((uint64_t)T * N + 255) / 256), 256, 0, st>>>(Y, T * N, N, ldy, stats + 10);
+        check(cudaGetLastError(), "output audit");
+        unsigned host[16] = {};
+        check(cudaMemcpyAsync(host, stats, sizeof(host), cudaMemcpyDeviceToHost, st), "audit download");
+        check(cudaStreamSynchronize(st), "audit sync");
+        float wm, xm; std::memcpy(&wm, host, 4); std::memcpy(&xm, host + 5, 4);
+        int device = -1; check(cudaGetDevice(&device), "device");
+        std::fprintf(stderr, "strata hc-f16 audit: device=%d T=%lld N=%lld K=%lld Wmax=%g Xmax=%g "
+                     "Wnonfinite=%u Xnonfinite=%u Woverflow=%u Xoverflow=%u Wchanged=%u Xchanged=%u "
+                     "Wzero=%u Xzero=%u Ynonfinite=%u\n", device, (long long)T, (long long)N, (long long)K,
+                     wm, xm, host[1], host[6], host[2], host[7], host[3], host[8], host[4], host[9], host[10]);
+        if (host[1] || host[6] || host[2] || host[7] || host[10]) {
+            std::fprintf(stderr, "strata hc-f16: numerical audit rejected this request\n"); std::exit(1);
+        }
+    }
+    return true;
+#else
+    (void)X; (void)W; (void)Y; (void)T; (void)N; (void)K; (void)ldy; (void)beta; (void)ldx;
+    return false;
+#endif
+}
+
 void Gemm::bf16(const uint16_t* X, const uint16_t* W, float* Y, int64_t T, int64_t N, int64_t K, int64_t ldy,
                 float beta, int64_t ldx) {
     if (T <= 0 || N <= 0) return;
@@ -604,6 +700,9 @@ void Gemm::bf16(const uint16_t* X, const uint16_t* W, float* Y, int64_t T, int64
         STRATA_ABSORB_HIPBLAS_STICKY("hipBLASLt bf16");
         return;
     }
+#endif
+#if defined(STRATA_HIP_GFX906)
+    if (try_hc_f16(X, W, Y, T, N, K, ldy, beta, ldx)) return;
 #endif
 #if !defined(__HIPCC__)
     if (const int path = K > 0 ? bf16_path() : 0; path == 1 && N > 1 && beta == 0.0f) {
