@@ -19,5 +19,19 @@ Other shapes retain four rows in selected mode.
 Microbench uses100 graph replays after10 warmups per shape, with palindromic
 4-2-8-selected-selected-8-2-4 process order on each GPU. Component timings are
 not whole-model TG gains. Clocks are not locked. Raw parsed results:micro.json.
-Final selected-HC-up parity and isolated full-model4K/64K ABBA are pending.
+Final selected-HC-up parity passed on both GPUs with TSUM off/on. Model ABBA was cancelled at the user's availability request before generating any tokens.
 CPU spread remains off and expert mode15 throughout that isolated comparison.
+
+## Call-site audit: deprioritized for this deployment
+
+The default Hybrid verifier and MTP use fused_gr_read_multi, whose staged down
+and gfx906 gr_up_fast kernels bypass the generic MMVF HC projection calls.
+Thus the measured HC matrix improvements are not demonstrated improvements to
+the active HC decode path. The2560->10240 attention QKV matrix in this Hybrid
+is quantized; the measured BF16 shape is not evidence that this shortcut runs.
+Router/indexer/PLE BF16 calls have other shapes, retained at the original tile.
+
+No full-model speedup is claimed and no deployment promotion. Do not rerun this
+candidate on Hybrid until actual eligible dispatch is demonstrated. This is a
+call-site eligibility lesson, not a failure of the component correctness tests.
+The later fused HC-up experiment is separate and targets the active kernel.
