@@ -215,10 +215,9 @@ __global__ void bf16_f32_mmvf_rows_kernel(const float* __restrict__ x, int64_t l
                     if (k < n_tok) y[(size_t) k * ldy + o0 + r] = acc[r][k];
 }
 
-template <int B>
-void launch_rows(const float* x, int64_t ldx, const uint16_t* w, float* y, int64_t ldy, int n_in, int n_out, int n_tok,
+template <int B, int RPB>
+void launch_rows_impl(const float* x, int64_t ldx, const uint16_t* w, float* y, int64_t ldy, int n_in, int n_out, int n_tok,
                  cudaStream_t st, const uint16_t* w_aux = nullptr, float* y_aux = nullptr, int64_t ldy_aux = 0) {
-    constexpr int RPB = 4;
     const unsigned nb = (unsigned) ((n_out + RPB - 1) / RPB);
     static const bool ts = [] { const char* v = std::getenv("STRATA_TSUM"); return v && v[0] == '1'; }();
     if (w_aux != nullptr) {   // S26 STRATA_LFUSE: + one aux row block
@@ -236,6 +235,17 @@ void launch_rows(const float* x, int64_t ldx, const uint16_t* w, float* y, int64
     }
     if (n_tok <= 4) bf16_f32_mmvf_rows_kernel<B, 4, RPB><<<nb, B, 0, st>>>(x, ldx, w, y, ldy, n_in, n_out, n_tok);
     else bf16_f32_mmvf_rows_kernel<B, 8, RPB><<<nb, B, 0, st>>>(x, ldx, w, y, ldy, n_in, n_out, n_tok);
+}
+
+template <int B>
+void launch_rows(const float* x, int64_t ldx, const uint16_t* w, float* y, int64_t ldy, int n_in, int n_out, int n_tok,
+                 cudaStream_t st, const uint16_t* w_aux = nullptr, float* y_aux = nullptr, int64_t ldy_aux = 0) {
+#if defined(STRATA_HIP_GFX906)
+    static const int rows = [] { const char* v = std::getenv("STRATA_MMVF_RPB"); return v ? std::atoi(v) : 4; }();
+    if (rows == 2) { launch_rows_impl<B, 2>(x, ldx, w, y, ldy, n_in, n_out, n_tok, st, w_aux, y_aux, ldy_aux); return; }
+    if (rows == 8) { launch_rows_impl<B, 8>(x, ldx, w, y, ldy, n_in, n_out, n_tok, st, w_aux, y_aux, ldy_aux); return; }
+#endif
+    launch_rows_impl<B, 4>(x, ldx, w, y, ldy, n_in, n_out, n_tok, st, w_aux, y_aux, ldy_aux);
 }
 
 int mmvf_block_size(int64_t n_in) {

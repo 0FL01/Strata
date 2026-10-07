@@ -16,12 +16,12 @@ static void ck(cudaError_t e) {
 template<class T> static T* alloc(size_t n) {
     T* p = nullptr; ck(cudaMalloc(&p, n * sizeof(T))); return p;
 }
-int main() {
+int main(int argc, char**) {
     const char* flag = std::getenv("STRATA_MMVF_ROWS");
     if (!flag || flag[0] != '1') { std::fprintf(stderr, "set STRATA_MMVF_ROWS=1\n"); return 2; }
     cudaStream_t s; ck(cudaStreamCreate(&s));
     const int shapes[][2] = {{64,64},{192,67},{512,65},{640,128},{2560,48},
-                             {2560,128},{2560,512},{2560,2560},{10240,320}};
+                             {2560,128},{2560,512},{2560,2560},{2560,10240},{10240,320}};
     size_t cases = 0, values = 0, mismatches = 0;
     for (const auto& shape : shapes) for (int nt = 1; nt <= 8; ++nt)
     for (int pad : {0,2}) for (int range : {0,1,2}) {
@@ -61,6 +61,16 @@ int main() {
             if (bad) std::printf("FAIL ni=%d no=%d nt=%d pad=%d range=%d different=%zu\n",ni,no,nt,pad,range,bad);
         };
         compare(ref,got,count);
+        if (argc > 1 && pad == 0 && range == 0 && nt >= 2 && no >= 64) {
+            cudaEvent_t a,b; ck(cudaEventCreate(&a)); ck(cudaEventCreate(&b));
+            for (int i=0;i<10;++i) ck(cudaGraphLaunch(exec,s));
+            ck(cudaEventRecord(a,s));
+            for (int i=0;i<100;++i) ck(cudaGraphLaunch(exec,s));
+            ck(cudaEventRecord(b,s)); ck(cudaEventSynchronize(b));
+            float ms=0; ck(cudaEventElapsedTime(&ms,a,b));
+            std::printf("BENCH ni=%d no=%d nt=%d us=%.6f\n",ni,no,nt,ms*10);
+            ck(cudaEventDestroy(a)); ck(cudaEventDestroy(b));
+        }
         ck(cudaMemset(got,0xff,count*4));
         const bool fused = k::bf16_gemv_fp32_mmvf_multi_aux(dx,ldx,dw,got,ldy,ni,no,nt,
                                                           dw+(size_t)no*ni,aux,3,s);
