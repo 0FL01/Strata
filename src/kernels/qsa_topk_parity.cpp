@@ -109,8 +109,9 @@ bool run_case(int64_t ctx, int64_t nq, int reps, int64_t capacity, bool counted)
     const float t_ref = timed([&] { k::qsa_block_topk_ref(d_scores, d_steps, nq, max_blocks, cap, s, ids_ref, nullptr); });
     const float t_new = timed([&] { k::qsa_block_topk(d_scores, d_steps, nq, max_blocks, cap, s, ids_new, nullptr, active); });
 
+    const bool graph_ran=!counted && capacity==204800;
     bool graph_ok=true;
-    if(!counted && capacity==204800) {
+    if(graph_ran) {
         cudaStream_t stream;ck(cudaStreamCreate(&stream),"stream");
         cudaGraph_t graph;cudaGraphExec_t exec;
         ck(cudaStreamBeginCapture(stream,cudaStreamCaptureModeGlobal),"capture");
@@ -147,7 +148,7 @@ bool run_case(int64_t ctx, int64_t nq, int reps, int64_t capacity, bool counted)
                 (long long) nq, counted ? "with their block count" : "without a block count", t_ref, t_new, t_ref / t_new,
                 (long long) same_cont, (long long) nq, (long long) same_tied,
                 (long long) nq, (long long) same_equal, (long long) nq);
-    std::printf("adversarial=%lld/%lld changed-step-graph=%s\n",(long long)same_special,(long long)nq,graph_ok?"PASS":"FAIL");
+    std::printf("adversarial=%lld/%lld changed-step-graph=%s\n",(long long)same_special,(long long)nq,graph_ran?(graph_ok?"PASS":"FAIL"):"SKIP");
     return ok;
 }
 }  // namespace

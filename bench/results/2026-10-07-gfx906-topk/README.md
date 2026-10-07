@@ -66,3 +66,23 @@ An earlier per-query guard was correct but ran both bodies at cutoff crossings
 
 Both variants remain opt-in. Guarded full-model ABBA qualification is pending.
 See guarded.json for the raw-model screen and all final guarded component logs.
+
+## Guarded model qualification and dispatch boundaries
+
+Same immutable executable in both arms, original seven settings plus GPUmode16,
+selected CPUspread, normal HIGH and MTP16K. A uses top-k flag0; B flag2.
+Main context204800, resident INT8 KV32768, expert slots9900+9178, fixed placement,
+greedy, no prompt reuse.1024 generated tokens, fresh processes ABBA per workload:
+- 4K TG55.83105 ->55.77965 (-0.09206%); ranges overlap.
+- 64K TG49.75995 ->50.43552 (+1.35767%); both B runs exceed both A runs.
+- Every output ID and accepted/offered draft count matches within each workload.
+- No PP gain claimed. AUTO restored. No production promotion yet.
+
+22 additional component invocations on both GPUs pass: nq8, nq9 fallback,
+capacity135160/135164 and270328/270332 around register fit limits, OLD override,
+disabled flag and unrecognized flag3. Graph coverage is now printed SKIP when
+not exercised. A registered gfx906-only CTest runs the actual guarded path at
+capacity204800 with a cutoff-straddling window and short-long-short replay;
+it passed in0.52s. This focused check is not a full CTest-suite claim.
+See qualification.json for durations, counters, output hashes, boundary receipts
+and the exact model executable hash.
