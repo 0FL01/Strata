@@ -376,9 +376,9 @@ bool prompt_f16() {
 
 Gemm::~Gemm() {
     if (hc_sgemm_attempts_ && std::getenv("STRATA_HC_SGEMM_TRACE"))
-        std::fprintf(stderr, "strata HC SGEMM: attempts=%llu taken=%llu allocation_fallbacks=%llu w_capacity_bytes=%lld x_capacity_bytes=%lld\n",
+        std::fprintf(stderr, "strata HC SGEMM: attempts=%llu taken=%llu borrowed=%llu allocation_fallbacks=%llu w_capacity_bytes=%lld x_capacity_bytes=%lld\n",
                      (unsigned long long)hc_sgemm_attempts_, (unsigned long long)hc_sgemm_taken_,
-                     (unsigned long long)hc_sgemm_alloc_fallbacks_, (long long)(tc_w_elems_*2), (long long)(tc_x_elems_*2));
+                     (unsigned long long)hc_sgemm_borrowed_, (unsigned long long)hc_sgemm_alloc_fallbacks_, (long long)(tc_w_elems_*2), (long long)(tc_x_elems_*2));
 #if defined(STRATA_PREFILL_MMQ) && defined(__HIPCC__)
     delete static_cast<strata::prefill::mmq::Context*>(mmq_ctx_);
     if (mmq_buf_) cudaFree(mmq_buf_);
@@ -646,15 +646,48 @@ bool Gemm::rdna2_sgemm(const uint16_t* X, const uint16_t* W, float* Y, int64_t T
     exact_shape_opt_in = hc && bf16 && ((N == 320 && K == 10240) || (N == 10240 && K == 320));
 #endif
     if (K <= 0 || (!exact_shape_opt_in && !rdna2_sgemm_on(N))) return false;
-    const int64_t rows = std::max<int64_t>(1, std::min<int64_t>(T, kRdna2SliceF32 / K));
+    int64_t rows = std::max<int64_t>(1, std::min<int64_t>(T, kRdna2SliceF32 / K));
     if (exact_shape_opt_in) ++hc_sgemm_attempts_;
-    if (!rdna2_grow(tc_w_, tc_w_elems_, N * K) || !rdna2_grow(tc_x_, tc_x_elems_, rows * K)) {
-        if (exact_shape_opt_in) ++hc_sgemm_alloc_fallbacks_;
-        return false;
+    float* wf = nullptr;
+    float* xf = nullptr;
+#if defined(STRATA_HIP_GFX906)
+    static const int borrow = [] { const char* v = std::getenv("STRATA_GFX906_HC_SGEMM_BORROW"); return v ? std::atoi(v) : 0; }();
+    void* borrowed_base = borrow == 2 ? hc_scratch_ : scratch_;
+    const size_t borrowed_bytes = borrow == 2 ? hc_scratch_bytes_ : (size_t)scratch_elems_ * 2;
+    const int64_t capacity_f32 = (int64_t)(borrowed_bytes / 4);
+    if (exact_shape_opt_in && (borrow == 1 || borrow == 2) && borrowed_base && capacity_f32 > N * K) {
+        // HC inputs/weights/output live outside the dequant scratch. All uses of
+        // this scratch and this GEMM are ordered on the same compute stream.
+        const uintptr_t sb = reinterpret_cast<uintptr_t>(borrowed_base);
+        const uintptr_t se = sb + borrowed_bytes;
+        auto overlaps = [&](const void* p, uint64_t bytes) {
+            const uintptr_t lo = reinterpret_cast<uintptr_t>(p);
+            return lo < se && (lo >= sb || bytes > sb - lo);
+        };
+        int64_t cap = (capacity_f32 - N * K) / K;
+        if (cap > 0 && !overlaps(X, (uint64_t)T*K*2) && !overlaps(W, (uint64_t)N*K*2) &&
+            !overlaps(Y, (uint64_t)T*ldy*4)) {
+            if (borrow == 1 && K == 10240) { // legacy64MiB screen: down slices are limited to1024 rows
+                int64_t aligned = 1;
+                while (aligned <= cap / 2) aligned *= 2;
+                cap = aligned;
+            }
+            rows = std::min(rows, cap);
+            wf = reinterpret_cast<float*>(borrowed_base);
+            xf = wf + N*K;
+            ++hc_sgemm_borrowed_;
+        }
+    }
+#endif
+    if (!wf) {
+        if (!rdna2_grow(tc_w_, tc_w_elems_, N * K) || !rdna2_grow(tc_x_, tc_x_elems_, rows * K)) {
+            if (exact_shape_opt_in) ++hc_sgemm_alloc_fallbacks_;
+            return false;
+        }
+        wf = reinterpret_cast<float*>(tc_w_);
+        xf = reinterpret_cast<float*>(tc_x_);
     }
     if (exact_shape_opt_in) ++hc_sgemm_taken_;
-    float* const wf = reinterpret_cast<float*>(tc_w_);
-    float* const xf = reinterpret_cast<float*>(tc_x_);
     const float alpha = 1.0f;
     rdna2_widen(W, wf, N * K, bf16, (cudaStream_t) stream_);
     for (int64_t t0 = 0; t0 < T; t0 += rows) {

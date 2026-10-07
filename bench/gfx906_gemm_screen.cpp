@@ -20,12 +20,14 @@ int main(){
   std::vector<uint16_t>x((size_t)T*K),w((size_t)N*K);
   std::vector<float> xf(x.size()),wf(w.size());
   auto fill=[&](auto& a,auto& f){for(size_t i=0;i<a.size();++i){float v=d(rng);if(bf){uint32_t b;std::memcpy(&b,&v,4);a[i]=b>>16;b=(uint32_t)a[i]<<16;std::memcpy(&f[i],&b,4);}else{__half h=__float2half_rn(v);std::memcpy(&a[i],&h,2);f[i]=__half2float(h);}}};
-  fill(x,xf);fill(w,wf);uint16_t *dx,*dw;float*dy;
+  fill(x,xf);fill(w,wf);uint16_t *dx,*dw;float*dy;void* phase=nullptr;
   CK(hipMalloc((void**)&dx,x.size()*2));CK(hipMalloc((void**)&dw,w.size()*2));CK(hipMalloc((void**)&dy,(size_t)T*N*4));
   CK(hipMemcpy(dx,x.data(),x.size()*2,hipMemcpyHostToDevice));CK(hipMemcpy(dw,w.data(),w.size()*2,hipMemcpyHostToDevice));
+  CK(hipMalloc(&phase,160ull<<20));
   double ms=0,rel=0,mx=0;
   {
-   strata::prefill::Gemm g;std::string err;if(!g.init(st,0,err)){std::fprintf(stderr,"%s\n",err.c_str());return 2;}
+   strata::prefill::Gemm g;std::string err;if(!g.init(st,32ll<<20,err)){std::fprintf(stderr,"%s\n",err.c_str());return 2;}
+   g.set_hc_scratch(phase,160ull<<20);
    auto call=[&](){if(bf)g.bf16(dx,dw,dy,T,N,K);else g.f16(dx,dw,dy,T,N,K);};
    const auto start=std::chrono::steady_clock::now(); call(); CK(hipStreamSynchronize(st));
    const double first_ms=std::chrono::duration<double,std::milli>(std::chrono::steady_clock::now()-start).count();
@@ -41,7 +43,7 @@ int main(){
    std::printf("{\"bf16\":%s,\"T\":%d,\"N\":%d,\"K\":%d,\"ms\":%.6f,\"rel_l2_sample\":%.9g,\"max_abs_sample\":%.9g,\"all_finite\":%s}\n",bf?"true":"false",T,N,K,ms,rel,mx,finite?"true":"false");
    CK(hipEventDestroy(a));CK(hipEventDestroy(b));
   }
-  CK(hipFree(dx));CK(hipFree(dw));CK(hipFree(dy));
+  CK(hipFree(dx));CK(hipFree(dw));CK(hipFree(dy));CK(hipFree(phase));
  }
  CK(hipStreamDestroy(st));return ok?0:1;
 }

@@ -55,6 +55,10 @@ public:
     /// Caller-owned buffers only: the scratch and workspace moved (the prompt path laid its buffers out again).
     void rebind(uint16_t* scratch, int64_t scratch_elems, void* workspace, size_t ws_bytes);
 
+    // A caller-owned region idle during HC projections, ordered on this handle's stream.
+    // The caller clears it before the region's next phase. Inputs/output must not overlap it.
+    void set_hc_scratch(void* p, size_t bytes) { hc_scratch_ = p; hc_scratch_bytes_ = bytes; }
+
     uint16_t* scratch() const { return scratch_; }
     int64_t scratch_elems() const { return scratch_elems_; }
     void* stream() const { return stream_; }
@@ -66,9 +70,11 @@ private:
     int64_t scratch_elems_ = 0;
     void* workspace_ = nullptr;
     bool external_ = false;
+    void* hc_scratch_ = nullptr;
+    size_t hc_scratch_bytes_ = 0;
     void* hipblaslt_state_ = nullptr;
     bool f16_io_ = false;
-    uint64_t hc_sgemm_attempts_ = 0, hc_sgemm_taken_ = 0, hc_sgemm_alloc_fallbacks_ = 0;
+    uint64_t hc_sgemm_attempts_ = 0, hc_sgemm_taken_ = 0, hc_sgemm_alloc_fallbacks_ = 0, hc_sgemm_borrowed_ = 0;
     // RDNA2 (gfx103x, HIP): the product as an SGEMM on FP32 copies (tc_w_, tc_x_); false: the native call runs (gemm.cu)
     bool rdna2_sgemm(const uint16_t* X, const uint16_t* W, float* Y, int64_t T, int64_t N, int64_t K, int64_t ldy,
                      float beta, bool bf16);

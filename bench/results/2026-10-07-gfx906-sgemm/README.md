@@ -53,3 +53,25 @@ the remaining variability. Allocation fallback and phase costs are being instrum
 they are hypotheses, not established causes. No production promotion.
 
 See model-evidence.json for every measured phase and output hash.
+
+## Scratch reuse experiment
+
+Instrumented4K and64K runs used every selected SGEMM call, with zero allocation
+fallbacks. The intermittent slowdown is not silent fallback to native GEMM.
+The original route allocates13,107,200 weight bytes and134,184,960 activation bytes
+per stage. This is about140.47MiB per GPU beyond the existing prompt workspace.
+
+Reusing only the64MiB dequant scratch was tested first (BORROW=1). Its1024-row
+down slices slowed HC down from about7.6 to11.0ms; not selected.
+BORROW=2 instead uses the attention/MoE region while it is idle during HC.
+It retains the original slice shapes and needs no extra matrix buffers.
+The region is cleared from the handle before its next phase; its uses share the
+compute stream. Peer/helper paths retain the original allocation route.
+Input/weight/output overlap with a borrowed region refuses borrowing.
+
+Native, owned-SGEMM and arena-SGEMM component checks passed on both GPUs.
+Added alias refusal cases for each input/output and both possible scratch regions.
+Arena microbenchmarks retain about7.58ms down and3.37ms up atT4095, with53/53
+borrowed calls and zero owned matrix-buffer capacity in each standalone case.
+These remain numerical-tolerance checks, not model quality equivalence.
+Whole-model warm and64K comparisons of arena reuse are pending.
