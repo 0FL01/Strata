@@ -59,3 +59,5 @@ to serial serve with explicit final-stage device selection and checked writes.
 It has no GPU allocation and is not used in the performance numbers above.
 Code/Russian A/A/B first-distribution and residual checks are pending.
 The exact qualified stack remains separate and unchanged.
+
+Diagnostic follow-up: STRATA_HC_F16_ARENA_ONLY=1 performs the same arena conversions but falls through to unchanged native BF16 math. This isolates scratch-lifetime corruption from the numerical route. It is diagnostic only, not a performance option.

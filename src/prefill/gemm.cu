@@ -659,6 +659,14 @@ bool Gemm::try_hc_f16(const uint16_t* X, const uint16_t* W, float* Y,
         hc_plain_bf16_to_f16<false><<<(unsigned)((xe + 255) / 256), 256, 0, st>>>(X, (__half*)xh, xe, nullptr);
     }
     check(cudaGetLastError(), "conversion");
+    static const bool arena_only = [] {
+        const char* v = std::getenv("STRATA_HC_F16_ARENA_ONLY"); return v && std::atoi(v) == 1;
+    }();
+    if (arena_only) {
+        std::fprintf(stderr, "strata hc-f16 arena-only: T=%lld N=%lld K=%lld\n",
+                     (long long)T, (long long)N, (long long)K);
+        return false;  // same scratch writes, then the unchanged native BF16 product
+    }
     f16(xh, wh, Y, T, N, K, ldy, 0.0f);
     ++hc_f16_taken_;
     if (audit) {
