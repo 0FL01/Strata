@@ -169,7 +169,7 @@ __global__ void bf16_f32_mmvf_rows_kernel(const float* __restrict__ x, int64_t l
             }
         }
     }
-    if constexpr (TS) {   // S26 STRATA_TSUM=1: the RPB x NT warp sums (both stages) as transposed butterflies, bitwise the same
+    if constexpr (TS && RPB * NT <= 32) {   // The transposed reduction holds at most 32 outputs; larger tiles use the exact plain sums.
         constexpr int V = RPB * NT, P = s26ts::pow2_ceil(V);
         const int lane = t & 31, j = s26ts::tsum_token<P>(lane);
         const bool own = lane == s26ts::tsum_lane<P>(j) && j < V;
