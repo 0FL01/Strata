@@ -1,0 +1,42 @@
+[
+  {
+    "tag": "code65536-A1",
+    "PP": 580.5585182717896,
+    "TG": 45.32377284999779,
+    "accepted": 331,
+    "offered": 435,
+    "equal_ids": true
+  },
+  {
+    "tag": "code65536-A2",
+    "PP": 583.054792168404,
+    "TG": 45.3888637713536,
+    "accepted": 331,
+    "offered": 435,
+    "equal_ids": true
+  },
+  {
+    "tag": "code65536-full",
+    "PP": 598.1887120358826,
+    "TG": 45.479578603279506,
+    "accepted": 331,
+    "offered": 435,
+    "equal_ids": true
+  },
+  {
+    "tag": "code65536-head",
+    "PP": 591.2709582891251,
+    "TG": 45.54754915043146,
+    "accepted": 331,
+    "offered": 435,
+    "equal_ids": true
+  },
+  {
+    "tag": "code65536-pp2",
+    "PP": 596.7431170940824,
+    "TG": 44.996748281862445,
+    "accepted": 331,
+    "offered": 435,
+    "equal_ids": true
+  }
+]

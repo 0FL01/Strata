@@ -99,6 +99,7 @@ std::vector<uint8_t> random_rows(int t, int64_t rows, int64_t n, std::mt19937& r
 struct Setup {
     k::NativeExpertLayout L;
     int T = 0, K = 0, cap = 0, n_blobs = 0;
+    int active_lo = 0, active_hi = 0;
     size_t slot = 0;
     uint8_t* blobs = nullptr;
     uint8_t* xq = nullptr;
@@ -174,6 +175,7 @@ struct Setup {
         }
         if (st.back() > cap) { std::fprintf(stderr, "plan: %d entries > cap %d\n", st.back(), cap); std::exit(2); }
         const int ng = (int) p.size();
+        active_lo = base; active_hi = st.back();
         std::iota(ds.begin(), ds.end(), 0);
         std::shuffle(ds.begin(), ds.end(), rng);                  // scattered rows of `out`
         for (int e = 0; e < cap; ++e) tk_v.push_back(tk(rng));
@@ -197,6 +199,13 @@ struct Setup {
         ck(cudaStreamSynchronize(s), "sync");
         std::vector<uint32_t> o(out_floats);
         ck(cudaMemcpy(o.data(), out, o.size() * 4, cudaMemcpyDeviceToHost), "out");
+        // Compare only active Q8_1 bytes: fused mode intentionally leaves h and inactive hq untouched.
+        const size_t fa = ((size_t) cap * L.n_ff * sizeof(float) + 255) & ~(size_t) 255;
+        const size_t qrow = (size_t)(L.n_ff / 32) * 36;
+        const size_t qb = (size_t)(active_hi - active_lo) * qrow;
+        const size_t old = o.size();
+        o.resize(old + qb / sizeof(uint32_t));
+        if (qb) ck(cudaMemcpy(o.data() + old, scr + 3 * fa + active_lo * qrow, qb, cudaMemcpyDeviceToHost), "active hq");
         return o;
     }
 };
@@ -225,7 +234,7 @@ void check(int gu, int dt, int64_t H, int64_t FF, cudaStream_t s, std::mt19937& 
             }
         }
     }
-    std::printf("%-8s/%-7s %5lld x %4lld  %d calls: %s (%zu output floats written in all)\n", name_of(gu), name_of(dt),
+    std::printf("%-8s/%-7s %5lld x %4lld  %d calls: %s (%zu output/Q8 words covered)\n", name_of(gu), name_of(dt),
                 (long long) H, (long long) FF, calls, bad ? "FAIL" : "bitwise equal to v1", written);
     if (written == 0) { std::printf("  nothing was written: the check checked nothing  FAIL\n"); ++bad; }
     g_fail += bad;
@@ -302,8 +311,8 @@ void bench(cudaStream_t s, std::mt19937& rng) {
     std::printf("\n--bench: microseconds per call, a window's 48 calls in a graph, each layer with its own experts (the\n"
                 "weights stream from DRAM as in the engine); v1 / new (grid_groups): medians of %d launches each,\n"
                 "alternating, after %d warm-up pairs - idle GPU assumed\n", kPairs, kWarmPairs);
-    // a verify window's shape: 4 tokens x 10 experts, 2560 x 768 IQ3_S / IQ4_XS experts
-    Setup S(21, 23, 2560, 768, 4, 10, 32, rng, s);
+    // The qualified Hybrid shape: 4 tokens x 10 experts, 2560 x 640 Q2_0 / Q2_0 experts
+    Setup S(42, 42, 2560, 640, 4, 10, 32, rng, s);
     std::vector<int> vram(16, 1);
     vram.insert(vram.end(), 12, 2);                                   // 28 groups, 40 entries
     const struct { const char* what; std::vector<int> sizes; int64_t gy; } rows[] = {
@@ -316,7 +325,7 @@ void bench(cudaStream_t s, std::mt19937& rng) {
     ck(cudaEventCreate(&e1), "event");
     for (const auto& r : rows) {
         const int ng = S.plan_sizes(r.sizes, 0, rng);
-        const Layers Ls(S, ng);                                       // 48 x 28 experts: 3.7 GB for the VRAM call
+        const Layers Ls(S, ng);                                       // each layer has its own expert blobs
         cudaGraphExec_t ga = make_graph(s, S, Ls, true, 0), gb = make_graph(s, S, Ls, false, r.gy);
         std::vector<float> ta, tb;
         for (int i = 0; i < kWarmPairs + kPairs; ++i) {
@@ -347,6 +356,7 @@ int main(int argc, char** argv) {
 #endif
                    8})        // STRATA_GU_FMTS
         for (int dt : {20, 23, 42, 7, 8}) check(gu, dt, 512, 256, s, rng);   // STRATA_D_FMTS; IQ4_XS: n_ff % 256
+    check(42, 42, 2560, 640, s, rng);
     check(21, 20, 2560, 640, s, rng);                                   // a model's shapes
     check(21, 23, 2560, 768, s, rng);
     if (do_bench) bench(s, rng);

@@ -1,0 +1,65 @@
+[
+  {
+    "tag": "code4096-A1",
+    "PP": 339.52536078714184,
+    "TG": 50.54892978437722,
+    "accepted": 684,
+    "offered": 855,
+    "equal_ids": true,
+    "matching_prefix": 1024
+  },
+  {
+    "tag": "code4096-lfuse",
+    "PP": 337.5138021391256,
+    "TG": 50.504801408610476,
+    "accepted": 684,
+    "offered": 855,
+    "equal_ids": true,
+    "matching_prefix": 1024
+  },
+  {
+    "tag": "code4096-gdn",
+    "PP": 337.32479040732625,
+    "TG": 49.690646609244205,
+    "accepted": 684,
+    "offered": 855,
+    "equal_ids": true,
+    "matching_prefix": 1024
+  },
+  {
+    "tag": "code4096-ple",
+    "PP": 339.9847272485806,
+    "TG": 50.463485430147,
+    "accepted": 684,
+    "offered": 855,
+    "equal_ids": true,
+    "matching_prefix": 1024
+  },
+  {
+    "tag": "code4096-rows",
+    "PP": 340.03553105646785,
+    "TG": 52.6053519780948,
+    "accepted": 684,
+    "offered": 855,
+    "equal_ids": true,
+    "matching_prefix": 1024
+  },
+  {
+    "tag": "code4096-attn",
+    "PP": 340.2728163889212,
+    "TG": 50.9762144187019,
+    "accepted": 684,
+    "offered": 855,
+    "equal_ids": true,
+    "matching_prefix": 1024
+  },
+  {
+    "tag": "code4096-A2",
+    "PP": 340.10611709415195,
+    "TG": 50.104465854100106,
+    "accepted": 684,
+    "offered": 855,
+    "equal_ids": true,
+    "matching_prefix": 1024
+  }
+]
