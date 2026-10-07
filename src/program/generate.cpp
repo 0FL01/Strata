@@ -9711,6 +9711,33 @@ int main(int argc, char** argv) {
                     std::printf("ERR %s\n", drive.d.failed && drive.d.fail ? drive.d.fail : err.c_str());
                     return 1;
                 }
+                // Diagnostic only: same raw-f32 first-logits format as the non-serve path.
+                // Select the final head device explicitly for a layer split.
+                if (first_window) {
+                    const char* dump = std::getenv("STRATA_DUMP_FIRST_LOGITS");
+                    if (dump && dump[0]) {
+                        auto& head = stage_ver(n_stages - 1);
+                        const strata::core::OnDevice on_head(head.device());
+                        std::vector<float> row((size_t)head.vocab());
+                        if (cudaStreamSynchronize(head.stream()) != cudaSuccess || !head.copy_logits(0, row.data())) {
+                            std::printf("ERR first-logits diagnostic copy failed\n");
+                            return 1;
+                        }
+                        FILE* f = std::fopen(dump, "wb");
+                        if (!f) {
+                            std::printf("ERR first-logits diagnostic open failed\n");
+                            return 1;
+                        }
+                        const bool written = std::fwrite(row.data(), sizeof(float), row.size(), f) == row.size();
+                        const int closed = std::fclose(f);
+                        if (!written || closed != 0) {
+                            std::printf("ERR first-logits diagnostic write failed\n");
+                            return 1;
+                        }
+                        std::fprintf(stderr, "strata first-logits diagnostic: vocab=%zu device=%d\n",
+                                     row.size(), head.device());
+                    }
+                }
                 int a = 0;
                 while (a < T - 1 && window[(size_t) a + 1] == outv[(size_t) a]) ++a;
                 if (from_sfx) { ++sfx_windows; sfx_drafts += T - 1; sfx_ok += a; }
