@@ -107,3 +107,33 @@ Production restore receipt14:35:32UTC is historical, not current server health.
 
 Curated raw phase times, output hashes, counters and binarySHA:exact-combined.json.
 Candidate is preserved, not yet deployed as a new production build.
+
+## Configuration qualification on the exact Q2 candidate
+
+Both arms use mode16 and selected CPU spread, retaining the seven previously
+qualified settings. A uses AUTO and MTP window32768; B uses normal amdgpu HIGH
+and MTP window16384. Main context204800 and resident INT8 KV32768 are unchanged.
+B reserves623MiB on the later GPU instead of600; both arms explicitly retain
+9900 primary +9178 secondary expert slots. No power limit or voltage increase.
+
+Fresh processes, fixed placement, greedy, no prompt reuse:
+- 4K code,1024 outputs,A/B:54.07746 ->55.75156 TG (+3.09574%).
+- 64K code,2048 outputs,ABBA:50.99443 ->53.02293 TG (+3.97789%).
+- 64K Russian,2048 outputs,ABBA:48.73220 ->50.61802 TG (+3.86976%).
+- All output IDs match within each workload. Draft accepted/offered counts
+  differ with the shorter MTP window. Equal output does not establish identical
+  internal work or quality on arbitrary prompts.
+- No material PP gain. These gains are additional to the exact Q2 comparison,
+  but percentages from different output lengths/epochs must not be simply added.
+
+Preliminary separate64K/512-output ABBA screens found MTP16K +1.53876% TG
+and normal HIGH +2.19255% TG. They motivated the longer combined test, not
+independent deployment promises. HIGH is a machine-specific runtime setting,
+not a source-code optimization. All tests restore AUTO afterward.
+Production has not been promoted. Actual200K capacity and API qualification
+remain separate gates. Curated durations/counters/output hashes and binary SHA
+are in config-qualification.json. Hardware sensor logs remain local.
+
+Qualification caveat for the earlier exact-combined Russian runs: accepted/
+offered draft counters vary slightly even between baseline repetitions.
+Output equality is verified; identical speculative work is not claimed.
