@@ -68,6 +68,7 @@ private:
     bool external_ = false;
     void* hipblaslt_state_ = nullptr;
     bool f16_io_ = false;
+    uint64_t hc_sgemm_attempts_ = 0, hc_sgemm_taken_ = 0, hc_sgemm_alloc_fallbacks_ = 0;
     // RDNA2 (gfx103x, HIP): the product as an SGEMM on FP32 copies (tc_w_, tc_x_); false: the native call runs (gemm.cu)
     bool rdna2_sgemm(const uint16_t* X, const uint16_t* W, float* Y, int64_t T, int64_t N, int64_t K, int64_t ldy,
                      float beta, bool bf16);

@@ -375,6 +375,10 @@ bool prompt_f16() {
 }
 
 Gemm::~Gemm() {
+    if (hc_sgemm_attempts_ && std::getenv("STRATA_HC_SGEMM_TRACE"))
+        std::fprintf(stderr, "strata HC SGEMM: attempts=%llu taken=%llu allocation_fallbacks=%llu w_capacity_bytes=%lld x_capacity_bytes=%lld\n",
+                     (unsigned long long)hc_sgemm_attempts_, (unsigned long long)hc_sgemm_taken_,
+                     (unsigned long long)hc_sgemm_alloc_fallbacks_, (long long)(tc_w_elems_*2), (long long)(tc_x_elems_*2));
 #if defined(STRATA_PREFILL_MMQ) && defined(__HIPCC__)
     delete static_cast<strata::prefill::mmq::Context*>(mmq_ctx_);
     if (mmq_buf_) cudaFree(mmq_buf_);
@@ -643,7 +647,12 @@ bool Gemm::rdna2_sgemm(const uint16_t* X, const uint16_t* W, float* Y, int64_t T
 #endif
     if (K <= 0 || (!exact_shape_opt_in && !rdna2_sgemm_on(N))) return false;
     const int64_t rows = std::max<int64_t>(1, std::min<int64_t>(T, kRdna2SliceF32 / K));
-    if (!rdna2_grow(tc_w_, tc_w_elems_, N * K) || !rdna2_grow(tc_x_, tc_x_elems_, rows * K)) return false;
+    if (exact_shape_opt_in) ++hc_sgemm_attempts_;
+    if (!rdna2_grow(tc_w_, tc_w_elems_, N * K) || !rdna2_grow(tc_x_, tc_x_elems_, rows * K)) {
+        if (exact_shape_opt_in) ++hc_sgemm_alloc_fallbacks_;
+        return false;
+    }
+    if (exact_shape_opt_in) ++hc_sgemm_taken_;
     float* const wf = reinterpret_cast<float*>(tc_w_);
     float* const xf = reinterpret_cast<float*>(tc_x_);
     const float alpha = 1.0f;
