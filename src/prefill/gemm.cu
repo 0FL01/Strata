@@ -73,20 +73,30 @@ __global__ void widen_rows_f16(float* __restrict__ Y, int64_t n, int64_t ldy, in
     }
 }
 #if defined(STRATA_HIP_GFX906)
-template <bool AUDIT>
-__global__ void hc_plain_bf16_to_f16(const uint16_t* in, __half* out, int64_t n, unsigned* stats) {
+template <bool AUDIT, bool SCALED = false, bool EXACT = false>
+__global__ void hc_plain_bf16_to_f16(const uint16_t* in, __half* out, int64_t n, unsigned* stats, float scale = 1.0f) {
     const int64_t i = (int64_t)blockIdx.x * blockDim.x + threadIdx.x;
     unsigned magnitude = 0;
     if (i < n) {
         const float f = __uint_as_float((uint32_t)in[i] << 16);
-        const __half h = __float2half_rn(f);  // no saturation; numerical-change opt-in
+        const float converted = SCALED ? f * scale : f;
+        const __half h = __float2half_rn(converted);  // no saturation; numerical-change opt-in
         out[i] = h;
+        if constexpr (SCALED && !AUDIT) {
+            // Guard fused into the conversion pass; ordinary finite values do no atomics.
+            if (!isfinite(f)) atomicOr(stats + 1, 1u);
+            if (!isfinite(converted) || fabsf(converted) > 65504.0f) atomicOr(stats + 2, 1u);
+            if constexpr (EXACT) {
+                const float back = __half2float(h) / scale;
+                if (__float_as_uint(f) != __float_as_uint(back)) atomicOr(stats + 3, 1u);
+            }
+        }
         if constexpr (AUDIT) {
-            const float back = __half2float(h);
+            const float back = SCALED ? __half2float(h) / scale : __half2float(h);
             if (!isfinite(f)) atomicAdd(stats + 1, 1u);
             else {
                 magnitude = __float_as_uint(fabsf(f));
-                if (fabsf(f) > 65504.0f) atomicAdd(stats + 2, 1u);
+                if (fabsf(converted) > 65504.0f) atomicAdd(stats + 2, 1u);
             }
             if (__float_as_uint(f) != __float_as_uint(back)) atomicAdd(stats + 3, 1u);
             if (f != 0.0f && back == 0.0f) atomicAdd(stats + 4, 1u);
@@ -658,7 +668,40 @@ bool Gemm::try_hc_f16(const uint16_t* X, const uint16_t* W, float* Y,
     static const bool audit = [] {
         const char* v = std::getenv("STRATA_HC_F16_AUDIT"); return v && std::atoi(v) == 1;
     }();
-    if (audit) {
+    static const bool scaled_probe = [] {
+        const char* v = std::getenv("STRATA_HC_F16_SCALE_PROBE"); return v && std::atoi(v) == 1;
+    }();
+    static const bool exact_input = [] {
+        const char* v = std::getenv("STRATA_HC_F16_EXACT_INPUT"); return v && std::atoi(v) == 1;
+    }();
+    if (exact_input && !scaled_probe) {
+        std::fprintf(stderr, "strata hc-f16: exact-input route requires scaled conversion\n");
+        std::exit(1);
+    }
+    if (scaled_probe) {
+        check(cudaMemsetAsync(stats, 0, 64, st), "scaled audit reset");
+        if (audit) {
+            hc_plain_bf16_to_f16<true, true><<<(unsigned)((we + 255) / 256), 256, 0, st>>>(W, (__half*)wh, we, stats, 4096.0f);
+            hc_plain_bf16_to_f16<true, true><<<(unsigned)((xe + 255) / 256), 256, 0, st>>>(X, (__half*)xh, xe, stats + 5, 512.0f);
+        } else if (exact_input) {
+            hc_plain_bf16_to_f16<false, true, true><<<(unsigned)((we + 255) / 256), 256, 0, st>>>(W, (__half*)wh, we, stats, 4096.0f);
+            hc_plain_bf16_to_f16<false, true, true><<<(unsigned)((xe + 255) / 256), 256, 0, st>>>(X, (__half*)xh, xe, stats + 5, 512.0f);
+        } else {
+            hc_plain_bf16_to_f16<false, true><<<(unsigned)((we + 255) / 256), 256, 0, st>>>(W, (__half*)wh, we, stats, 4096.0f);
+            hc_plain_bf16_to_f16<false, true><<<(unsigned)((xe + 255) / 256), 256, 0, st>>>(X, (__half*)xh, xe, stats + 5, 512.0f);
+        }
+        check(cudaGetLastError(), "scaled conversion");
+        unsigned guard[10] = {};
+        check(cudaMemcpyAsync(guard, stats, sizeof(guard), cudaMemcpyDeviceToHost, st), "scaled guard copy");
+        check(cudaStreamSynchronize(st), "scaled guard sync");
+        if (guard[1] || guard[6] || guard[2] || guard[7]) {
+            std::fprintf(stderr, "strata hc-f16: scaled input outside safe range; native BF16 fallback\n"); return false;
+        }
+        if (exact_input && (guard[3] || guard[8])) {
+            if (audit) std::fprintf(stderr, "strata hc-f16 exact-input fallback: Wchanged=%u Xchanged=%u\n", guard[3], guard[8]);
+            return false;
+        }
+    } else if (audit) {
         check(cudaMemsetAsync(stats, 0, 64, st), "audit reset");
         hc_plain_bf16_to_f16<true><<<(unsigned)((we + 255) / 256), 256, 0, st>>>(W, (__half*)wh, we, stats);
         hc_plain_bf16_to_f16<true><<<(unsigned)((xe + 255) / 256), 256, 0, st>>>(X, (__half*)xh, xe, stats + 5);
@@ -675,7 +718,17 @@ bool Gemm::try_hc_f16(const uint16_t* X, const uint16_t* W, float* Y,
                      (long long)T, (long long)N, (long long)K);
         return false;  // same scratch writes, then the unchanged native BF16 product
     }
-    f16(xh, wh, Y, T, N, K, ldy, 0.0f);
+    if (scaled_probe) {
+        // FP32 scaling and output: half inputs, FP32 accumulation, inverse power-of-two alpha.
+        const float alpha = 0x1p-21f, zero = 0.0f;
+        ck(cublasGemmEx((cublasHandle_t)handle_, CUBLAS_OP_T, CUBLAS_OP_N, (int)N, (int)T, (int)K,
+                       &alpha, wh, CUDA_R_16F, (int)K, xh, CUDA_R_16F, (int)K, &zero,
+                       Y, CUDA_R_32F, (int)ldy, CUBLAS_COMPUTE_32F, CUBLAS_GEMM_DEFAULT),
+           "HC scaled FP16 probe");
+        STRATA_ABSORB_HIPBLAS_STICKY("HC scaled FP16 probe");
+    } else {
+        f16(xh, wh, Y, T, N, K, ldy, 0.0f);
+    }
     ++hc_f16_taken_;
     if (shadow) {
         auto* samples = reinterpret_cast<float*>(stats + 16);

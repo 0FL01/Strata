@@ -1468,6 +1468,8 @@ if(STRATA_HIP_GFX906)
 endif()
 
 if(STRATA_HIP_GFX906)
+  add_executable(gfx906_hc_guard_probe bench/gfx906_hc_guard_probe.cpp)
+  target_link_libraries(gfx906_hc_guard_probe PRIVATE strata_prefill ${_strata_gpu_runtime_target})
   add_executable(gfx906_hc_f16_probe bench/gfx906_hc_f16_probe.cpp)
   target_link_libraries(gfx906_hc_f16_probe PRIVATE strata_prefill ${_strata_gpu_runtime_target})
 endif()
