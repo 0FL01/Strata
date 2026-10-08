@@ -1,0 +1,114 @@
+{
+  "scope": "Incremental PR1525 dequantization slice on qualified HC+MMQ base. Not production baseline. No production promotion.",
+  "source_pr": "https://github.com/Niko1221/Strata/pull/1525",
+  "source_head": "52de5c0a31ab25a5c4d73ea6a1c39b3d1bfa7236",
+  "candidate_binary_sha256": "849ad4035552455425331ae55e844f90f2c3238b39fd5deb87e54441b8f49c28",
+  "control_binary_sha256": "8ac058d275828e6cc09ab8603040016508a6f20284f3e9970b86074eecfd3ac4",
+  "control_flat_flag": 0,
+  "results": [
+    {
+      "tag": "code4096-A1",
+      "passed": true,
+      "prompt_tokens": 4096,
+      "actual_outputs": 256,
+      "prompt_ms": 11297.1,
+      "decode_ms": 4682.2,
+      "PP": 362.57092528170944,
+      "TG": 54.675152705992915,
+      "sampling": {
+        "temperature": 0,
+        "top_p": 1,
+        "top_k": 1,
+        "seed": 12345
+      },
+      "output_ids_sha256": "e8fbfcacb55ae3af13c7b9900d338cd2450573507778e6780c4f7b0ffb8e9b7c"
+    },
+    {
+      "tag": "code4096-B1",
+      "passed": true,
+      "prompt_tokens": 4096,
+      "actual_outputs": 256,
+      "prompt_ms": 11209.0,
+      "decode_ms": 4678.2,
+      "PP": 365.4206441252565,
+      "TG": 54.721901586080115,
+      "sampling": {
+        "temperature": 0,
+        "top_p": 1,
+        "top_k": 1,
+        "seed": 12345
+      },
+      "output_ids_sha256": "e8fbfcacb55ae3af13c7b9900d338cd2450573507778e6780c4f7b0ffb8e9b7c"
+    },
+    {
+      "tag": "code4096-B2",
+      "passed": true,
+      "prompt_tokens": 4096,
+      "actual_outputs": 256,
+      "prompt_ms": 11215.8,
+      "decode_ms": 4682.7,
+      "PP": 365.1990941350595,
+      "TG": 54.66931471159801,
+      "sampling": {
+        "temperature": 0,
+        "top_p": 1,
+        "top_k": 1,
+        "seed": 12345
+      },
+      "output_ids_sha256": "e8fbfcacb55ae3af13c7b9900d338cd2450573507778e6780c4f7b0ffb8e9b7c"
+    },
+    {
+      "tag": "code4096-A2",
+      "passed": true,
+      "prompt_tokens": 4096,
+      "actual_outputs": 256,
+      "prompt_ms": 11308.5,
+      "decode_ms": 4669.8,
+      "PP": 362.2054207012424,
+      "TG": 54.82033491798364,
+      "sampling": {
+        "temperature": 0,
+        "top_p": 1,
+        "top_k": 1,
+        "seed": 12345
+      },
+      "output_ids_sha256": "e8fbfcacb55ae3af13c7b9900d338cd2450573507778e6780c4f7b0ffb8e9b7c"
+    },
+    {
+      "tag": "code65536-B1",
+      "passed": true,
+      "prompt_tokens": 65536,
+      "actual_outputs": 256,
+      "prompt_ms": 106035.2,
+      "decode_ms": 4896.6,
+      "PP": 618.0589087397393,
+      "TG": 52.28117469264387,
+      "sampling": {
+        "temperature": 0,
+        "top_p": 1,
+        "top_k": 1,
+        "seed": 12345
+      },
+      "output_ids_sha256": "666d3820088a4c23e8a2d65beb7e1c48ec650ed908bec0caa904d739f6f12515"
+    },
+    {
+      "tag": "code65536-A1",
+      "passed": true,
+      "prompt_tokens": 65536,
+      "actual_outputs": 256,
+      "prompt_ms": 107275.6,
+      "decode_ms": 4900.9,
+      "PP": 610.9124535309054,
+      "TG": 52.23530371972495,
+      "sampling": {
+        "temperature": 0,
+        "top_p": 1,
+        "top_k": 1,
+        "seed": 12345
+      },
+      "output_ids_sha256": "666d3820088a4c23e8a2d65beb7e1c48ec650ed908bec0caa904d739f6f12515"
+    }
+  ],
+  "production_api_restored": true,
+  "finished_utc": "2026-10-08T19:44:39.380017+00:00"
+}
