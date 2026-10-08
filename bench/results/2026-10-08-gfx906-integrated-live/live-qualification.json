@@ -1,0 +1,406 @@
+{
+  "deployment": {
+    "started_utc": "2026-10-08T08:31:04.222598+00:00",
+    "passed": true,
+    "release_binary_sha256": "ce794788d64313236bbc24b47a3f8e06c841034afaf4e19a2fc5ffd84e337f14",
+    "release_path": "/home/radneon/strata/releases/gfx906-exact-20261008",
+    "source_commit": "b6731bf",
+    "env": {
+      "STRATA_EXP_MODE": "16",
+      "STRATA_Q2_AVX2_SPREAD": "1",
+      "STRATA_GFX906_TOPK_REG": "2",
+      "STRATA_MMVF_RPB": "4",
+      "STRATA_TSUM": "0",
+      "STRATA_GR_UP_EXACT": "0"
+    },
+    "R_and_D_paused": true,
+    "health": {
+      "status": "ok",
+      "max_context": 204800,
+      "model": "Qwen3.8-Flash-Next-GSQ-RCO-abliterated-IQ3_XXS-Q2_0",
+      "images": true,
+      "api_key": true,
+      "loaded": true,
+      "service": "strata"
+    },
+    "tools": "passed",
+    "vision": "passed",
+    "parking": "passed",
+    "processes": [
+      {
+        "pid": 9,
+        "argv": [
+          "/src/releases/gfx906-exact-20261008/strata",
+          "--serve",
+          "--pack",
+          "/src/runtime/shefowl-hybrid",
+          "--native",
+          "/sata/shefowl-qwen38-hybrid/Qwen3.8-Flash-Next-GSQ-RCO-abliterated-IQ3_XXS-Q2_0-00001-of-00002.gguf",
+          "--ple-gguf",
+          "/sata/shefowl-qwen38-hybrid/Qwen3.8-Flash-Next-GSQ-RCO-abliterated-IQ3_XXS-Q2_0-00002-of-00002.gguf",
+          "--expert-profile",
+          "/src/data/expert-profile.bin",
+          "--expert-cache",
+          "9900",
+          "--prefill",
+          "4096",
+          "--spec",
+          "4",
+          "--spec-min-p",
+          "0.5",
+          "--mtp",
+          "/src/runtime/mtp",
+          "--max-context",
+          "204800",
+          "--kv",
+          "int8",
+          "--kv-resident",
+          "32768",
+          "--vram-reserve-mib",
+          "600",
+          "--pcie-frac",
+          "0",
+          "--vision",
+          "--ple-io",
+          "ram",
+          "--conversation-cache-mib",
+          "4096",
+          "--conversation-cache-slots",
+          "4",
+          "--conversation-cache-min-free-mib",
+          "8192",
+          "--mtp-window",
+          "16384",
+          "--vram-reserve-later-mib",
+          "623",
+          "--layer-split",
+          "27"
+        ],
+        "env": {
+          "STRATA_EXP_MODE": "16",
+          "STRATA_Q2_AVX2_SPREAD": "1",
+          "STRATA_GFX906_TOPK_REG": "2",
+          "STRATA_MMVF_RPB": "4",
+          "STRATA_TSUM": "0",
+          "STRATA_GR_UP_EXACT": "0"
+        },
+        "binary_sha256": "ce794788d64313236bbc24b47a3f8e06c841034afaf4e19a2fc5ffd84e337f14"
+      }
+    ],
+    "restart_policy": "unless-stopped",
+    "finished_utc": "2026-10-08T08:32:17.422776+00:00",
+    "left_running_for_user": true
+  },
+  "tool-test.json": {
+    "passed": true,
+    "forced_named_call": {
+      "id": "chatcmpl-aa5d2b95fe7944129d9a91e4",
+      "object": "chat.completion",
+      "created": 1791448295,
+      "model": "Qwen3.8-Flash-Next-GSQ-RCO-abliterated-IQ3_XXS-Q2_0",
+      "choices": [
+        {
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": null,
+            "reasoning_content": "We need answer user's request. Need call add_numbers once with a=17 b=25. Then final likely result 42. Need ensure tool call format.\n",
+            "tool_calls": [
+              {
+                "id": "call_5955bd631d844cfa8e99f10a",
+                "type": "function",
+                "function": {
+                  "name": "add_numbers",
+                  "arguments": "{\"a\":17,\"b\":25}"
+                }
+              }
+            ]
+          },
+          "finish_reason": "tool_calls"
+        }
+      ],
+      "usage": {
+        "prompt_tokens": 340,
+        "completion_tokens": 77,
+        "total_tokens": 417,
+        "prompt_tokens_details": {
+          "cached_tokens": 378
+        }
+      },
+      "timings": {
+        "cache_n": 378,
+        "prompt_n": 0,
+        "prompt_ms": 124,
+        "prompt_per_token_ms": null,
+        "prompt_per_second": null,
+        "predicted_n": 77,
+        "predicted_ms": 547,
+        "predicted_per_token_ms": 18.233,
+        "predicted_per_second": 54.8,
+        "draft_n": 26,
+        "draft_n_accepted": 22
+      }
+    },
+    "tool_result_followup": {
+      "id": "chatcmpl-191a6ad95be941da90a067ae",
+      "object": "chat.completion",
+      "created": 1791448299,
+      "model": "Qwen3.8-Flash-Next-GSQ-RCO-abliterated-IQ3_XXS-Q2_0",
+      "choices": [
+        {
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "42",
+            "reasoning_content": "User says state only resulting decimal integer. Need final 42 only.\n"
+          },
+          "finish_reason": "stop"
+        }
+      ],
+      "usage": {
+        "prompt_tokens": 186,
+        "completion_tokens": 21,
+        "total_tokens": 207,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      },
+      "timings": {
+        "cache_n": 0,
+        "prompt_n": 186,
+        "prompt_ms": 2129.1,
+        "prompt_per_token_ms": 11.447,
+        "prompt_per_second": 87.4,
+        "predicted_n": 21,
+        "predicted_ms": 445.4,
+        "predicted_per_token_ms": 21.21,
+        "predicted_per_second": 47.1,
+        "draft_n": 18,
+        "draft_n_accepted": 12
+      }
+    },
+    "scope": "synthetic tool roundtrip; original user incident not reproduced"
+  },
+  "api-result.json": {
+    "passed": true,
+    "health": {
+      "status": "ok",
+      "max_context": 204800,
+      "model": "Qwen3.8-Flash-Next-GSQ-RCO-abliterated-IQ3_XXS-Q2_0",
+      "images": true,
+      "api_key": true,
+      "loaded": true,
+      "service": "strata"
+    },
+    "image_trials": [
+      {
+        "trial": 0,
+        "elapsed_s": 17.142457732996263,
+        "response": {
+          "id": "chatcmpl-a91a10ffe3fa4ff6b0685a31",
+          "object": "chat.completion",
+          "created": 1791448315,
+          "model": "Qwen3.8-Flash-Next-GSQ-RCO-abliterated-IQ3_XXS-Q2_0",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "content": "red blue"
+              },
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 1062,
+            "completion_tokens": 3,
+            "total_tokens": 1065,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            }
+          },
+          "timings": {
+            "cache_n": 0,
+            "prompt_n": 1062,
+            "prompt_ms": 4496.2,
+            "prompt_per_token_ms": 4.234,
+            "prompt_per_second": 236.2,
+            "predicted_n": 3,
+            "predicted_ms": 85.7,
+            "predicted_per_token_ms": 28.567,
+            "predicted_per_second": 35,
+            "draft_n": 3,
+            "draft_n_accepted": 3
+          }
+        }
+      },
+      {
+        "trial": 1,
+        "elapsed_s": 0.3461937169995508,
+        "response": {
+          "id": "chatcmpl-4a4e9d73d661475c8a104c64",
+          "object": "chat.completion",
+          "created": 1791448319,
+          "model": "Qwen3.8-Flash-Next-GSQ-RCO-abliterated-IQ3_XXS-Q2_0",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "content": "red blue"
+              },
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 1062,
+            "completion_tokens": 3,
+            "total_tokens": 1065,
+            "prompt_tokens_details": {
+              "cached_tokens": 1055
+            }
+          },
+          "timings": {
+            "cache_n": 1055,
+            "prompt_n": 7,
+            "prompt_ms": 232.6,
+            "prompt_per_token_ms": 33.229,
+            "prompt_per_second": 30.1,
+            "predicted_n": 3,
+            "predicted_ms": 82.7,
+            "predicted_per_token_ms": 27.567,
+            "predicted_per_second": 36.3,
+            "draft_n": 3,
+            "draft_n_accepted": 3
+          }
+        }
+      }
+    ],
+    "text_smoke": {
+      "id": "chatcmpl-59634f05bcf64a05b8b64b1e",
+      "object": "chat.completion",
+      "created": 1791448319,
+      "model": "Qwen3.8-Flash-Next-GSQ-RCO-abliterated-IQ3_XXS-Q2_0",
+      "choices": [
+        {
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "42"
+          },
+          "finish_reason": "stop"
+        }
+      ],
+      "usage": {
+        "prompt_tokens": 28,
+        "completion_tokens": 3,
+        "total_tokens": 31,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      },
+      "timings": {
+        "cache_n": 0,
+        "prompt_n": 28,
+        "prompt_ms": 560.2,
+        "prompt_per_token_ms": 20.007,
+        "prompt_per_second": 50,
+        "predicted_n": 3,
+        "predicted_ms": 80.4,
+        "predicted_per_token_ms": 26.8,
+        "predicted_per_second": 37.3,
+        "draft_n": 3,
+        "draft_n_accepted": 3
+      }
+    },
+    "vision_processes": [
+      {
+        "pid": 7,
+        "argv": [
+          "/src/build-vision-cpu/bin/strata-vision",
+          "--mmproj",
+          "/sata/shefowl-qwen38-hybrid/mmproj-Qwen3.8-Flash-Next-f16.gguf",
+          "--model",
+          "/sata/shefowl-qwen38-hybrid/Qwen3.8-Flash-Next-GSQ-RCO-abliterated-IQ3_XXS-Q2_0-00001-of-00002.gguf",
+          "--threads",
+          "16",
+          "--max-tokens",
+          "1024"
+        ],
+        "memory": {
+          "VmHWM": "1176508 kB",
+          "VmRSS": "1176508 kB",
+          "Threads": "1"
+        },
+        "gpu_libraries": [],
+        "gpu_device_fds": []
+      }
+    ],
+    "unauthenticated_models": 401,
+    "ui": 404,
+    "scope": "synthetic1024x1024 red-left/blue-right image twice and text reuse; CPU backend/mappings/fds checked, not broad vision accuracy"
+  },
+  "parking.json": {
+    "passed": true,
+    "rows": [
+      {
+        "tag": "cold",
+        "elapsed_s": 15.107461474995944,
+        "content": "42",
+        "usage": {
+          "prompt_tokens": 6430,
+          "completion_tokens": 3,
+          "total_tokens": 6433,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        },
+        "cached_tokens": 0
+      },
+      {
+        "tag": "warm",
+        "elapsed_s": 0.4089117500043358,
+        "content": "42",
+        "usage": {
+          "prompt_tokens": 6430,
+          "completion_tokens": 3,
+          "total_tokens": 6433,
+          "prompt_tokens_details": {
+            "cached_tokens": 6423
+          }
+        },
+        "cached_tokens": 6423
+      },
+      {
+        "tag": "auxiliary",
+        "elapsed_s": 0.5408314270025585,
+        "content": "TEST",
+        "usage": {
+          "prompt_tokens": 17,
+          "completion_tokens": 2,
+          "total_tokens": 19,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        },
+        "cached_tokens": 0
+      },
+      {
+        "tag": "restored",
+        "elapsed_s": 0.38790377599798376,
+        "content": "42",
+        "usage": {
+          "prompt_tokens": 6430,
+          "completion_tokens": 3,
+          "total_tokens": 6433,
+          "prompt_tokens_details": {
+            "cached_tokens": 6423
+          }
+        },
+        "cached_tokens": 6423
+      }
+    ],
+    "scope": "synthetic A/title/A RAM parking regression, not a client replay"
+  },
+  "running_containers": "strata-api Up 4 minutes (healthy)"
+}
