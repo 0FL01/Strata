@@ -80,7 +80,7 @@ __device__ __forceinline__ void load8(const QsaAttnPools& p, bool value, long lo
     } else load8_q4(p, value, row, d0, out);
 }
 
-template <int KV_MODE, bool LANE_CELL = false>
+template <int KV_MODE, bool LANE_CELL = false, bool CELL_MAJOR = false>
 __global__ void __launch_bounds__(THREADS) attn_chunk_kernel(const float* __restrict__ q, QsaAttnPools p,
                                                              const int32_t* __restrict__ ids,
                                                              const int32_t* __restrict__ step, int n_kv_heads,
@@ -97,6 +97,9 @@ __global__ void __launch_bounds__(THREADS) attn_chunk_kernel(const float* __rest
     __shared__ __align__(16) float sq[G][HD];     // 12 KB: this KV head's query heads
     __shared__ float sp[G][CHUNK];                // scores, then probabilities
     __shared__ long long srow[CHUNK];             // pool row of each cell (page, kv head, slot)
+    // Query storage is dead after the score-phase barrier; preserve the existing shared-memory budget.
+    float (*const spt)[G] = reinterpret_cast<float (*)[G]>(&sq[0][0]);
+    static_assert(G == 12 && CHUNK * G <= G * HD, "cell-major probabilities must fit aligned query storage");
     const int n_ids = __ldg(step + kStepWidth);
     const int chunk = blockIdx.x, kvh = blockIdx.y;
     const int t = threadIdx.x, lane = t & 31, warp = t >> 5;
@@ -180,8 +183,8 @@ __global__ void __launch_bounds__(THREADS) attn_chunk_kernel(const float* __rest
         const float m = warp_max(fmaxf(a, b));
         const float ea = (lane < n_here && srow[lane] >= 0) ? __expf(a - m) : 0.0f;
         const float eb = (lane + 32 < n_here && srow[lane + 32] >= 0) ? __expf(b - m) : 0.0f;
-        sp[h][lane] = ea;
-        sp[h][lane + 32] = eb;
+        if constexpr (CELL_MAJOR) { spt[lane][h] = ea; spt[lane + 32][h] = eb; }
+        else { sp[h][lane] = ea; sp[h][lane + 32] = eb; }
         const float l = warp_sum(ea + eb);
         if (lane == 0) { part_m[slot * G + h] = m; part_l[slot * G + h] = l; }
     }
@@ -209,8 +212,19 @@ __global__ void __launch_bounds__(THREADS) attn_chunk_kernel(const float* __rest
             const int nibble = (rem < 16) ? ((byte & 0x0F) - 8) : ((byte >> 4) - 8);
             v = (float) nibble * d;
         }
+        if constexpr (CELL_MAJOR) {
+            const float4* w4 = reinterpret_cast<const float4*>(spt[c]);
+            const float4 w0 = w4[0], w1 = w4[1], w2 = w4[2];
+            acc[0] = fmaf(w0.x, v, acc[0]);  acc[1] = fmaf(w0.y, v, acc[1]);
+            acc[2] = fmaf(w0.z, v, acc[2]);  acc[3] = fmaf(w0.w, v, acc[3]);
+            acc[4] = fmaf(w1.x, v, acc[4]);  acc[5] = fmaf(w1.y, v, acc[5]);
+            acc[6] = fmaf(w1.z, v, acc[6]);  acc[7] = fmaf(w1.w, v, acc[7]);
+            acc[8] = fmaf(w2.x, v, acc[8]);  acc[9] = fmaf(w2.y, v, acc[9]);
+            acc[10] = fmaf(w2.z, v, acc[10]); acc[11] = fmaf(w2.w, v, acc[11]);
+        } else {
 #pragma unroll
-        for (int h = 0; h < G; ++h) acc[h] = fmaf(sp[h][c], v, acc[h]);
+            for (int h = 0; h < G; ++h) acc[h] = fmaf(sp[h][c], v, acc[h]);
+        }
     }
 #pragma unroll
     for (int h = 0; h < G; ++h) part_acc[((size_t) slot * G + h) * HD + t] = acc[h];
@@ -504,6 +518,27 @@ void qsa_decode_attn_batch(const float* q, const QsaAttnPools& pools, const int3
     // S25: STRATA_ATTN_LANECELL=1 - the score phase one cell per thread (bit-identical scores, no shuffle reductions)
     static const bool lane_cell = [] { const char* v = std::getenv("STRATA_ATTN_LANECELL"); return v && v[0] == '1'; }();
 #define STRATA_ATTN_LC(M) attn_chunk_kernel<M, true><<<grid, THREADS, 0, st>>>(q, pools, ids, steps, (int) s.n_head_kv, (int) s.page_size, scale, part_acc, part_m, part_l, n_chunks, (int) cap, stride)
+#if defined(STRATA_HIP_GFX906)
+    static const bool cell_prob = [] {
+        const char* v = std::getenv("STRATA_GFX906_ATTN_CELL_PROB"); return v && v[0] == '1';
+    }();
+    const bool use_cell_prob = cell_prob && kv_mode == 1 && n_q > 8 && !lane_cell;
+    static const bool trace = [] {
+        const char* v = std::getenv("STRATA_ATTN_CELL_PROB_TRACE"); return v && v[0] == '1';
+    }();
+    static thread_local unsigned seen = 0;
+    const unsigned bit = n_q > 8 ? 2u : 1u;
+    if (trace && !(seen & bit)) {
+        seen |= bit;
+        std::fprintf(stderr, "strata attn-cell-prob: active=%d nq=%lld cap=%lld kv_mode=%d\n",
+                     (int)use_cell_prob, (long long)n_q, (long long)cap, kv_mode);
+    }
+    // The production verify/MTP windows are at most six queries; retain their existing specialization.
+    if (use_cell_prob)
+        attn_chunk_kernel<1, false, true><<<grid, THREADS, 0, st>>>(q, pools, ids, steps, (int)s.n_head_kv,
+            (int)s.page_size, scale, part_acc, part_m, part_l, n_chunks, (int)cap, stride);
+    else
+#endif
     if (lane_cell) {
         if (kv_mode == 3) STRATA_ATTN_LC(3);
         else if (kv_mode == 2) STRATA_ATTN_LC(2);
