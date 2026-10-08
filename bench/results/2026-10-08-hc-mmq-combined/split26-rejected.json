@@ -1,0 +1,20 @@
+{
+  "decision": "rejected_output_parity",
+  "scope": "split plus changed expert placement; not a split-only fixed-placement comparison",
+  "layer_split": 26,
+  "primary_slots": 9959,
+  "secondary_slots": 9119,
+  "total_slots": 19078,
+  "reserves_changed": false,
+  "memory_admission_passed": true,
+  "prompt_tokens": 65536,
+  "output_tokens": 1024,
+  "first_different_output_zero_based": 13,
+  "PP": 628.2130303207495,
+  "reference_PP": 610.7980096126872,
+  "reference_time_separated": true,
+  "TG": 53.63587318049204,
+  "equal_work_TG_comparison_valid": false,
+  "fresh_control_skipped": true,
+  "original_live_restored": true
+}

@@ -30,3 +30,9 @@ Combined binary: 17b688afdca41976020cd2e2889d170c6fd29e39f84d1369a752b25b617f322
 Source baseline b6731bf plus retained deployment patches; llama.cpp 3cf03257f219afbe7334045ff7c6a06ac68c627d. The new selector preserves p.max_rows as launch bound and changes only ncols_opt. Non-gfx906 builds, other formats and single-expert products are unchanged. Gating is a build macro, not a runtime architecture guard; this is not yet a generalized upstream patch.
 
 Candidate additions to the exact-stack environment: STRATA_GFX906_HC_F16=1, STRATA_HC_F16_SCALE_PROBE=1, STRATA_HC_F16_EXACT_INPUT=1, STRATA_HC_F16_AUDIT=0, STRATA_GFX906_MMQ_OPT_CAP=32. No adaptive scale selection, approximate unguarded path, expert reordering or new persistent allocation is enabled. Diagnostic tracing was enabled for qualification. The existing live build was restored after each completed test window.
+
+## Rejected placement follow-up
+
+The refreshed profile showed a long-prefill pipeline imbalance. Existing Hybrid receipts all used split 27, inherited from the earlier Coder deployment; no measured Hybrid split optimum was found. One 26/22 operating point was screened, explicitly allowing changed expert placement rather than claiming fixed-placement isolation. Admission retained both reserve settings and 19,078 total resident slots: 9959 primary and9119 secondary. Physical VRAM headroom passed both the 256 MiB minimum and 32 MiB maximum loss checks. No residency ranking was edited.
+
+The 64K + 1024-output run completed, but its 14th output token differed from the successful 27/21 candidate reference. The variant was rejected for the output-preserving branch, and the conditional fresh control was not run. Its raw 628.213 PP is only a time-separated preliminary observation; its 53.636 TG is not comparable equal work because generated tokens and accepted speculative tokens changed. Production 27/21 was restored. No further split sweep was run.
