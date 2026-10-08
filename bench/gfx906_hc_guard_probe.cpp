@@ -14,15 +14,16 @@ int main(){
  setvbuf(stdout,nullptr,_IONBF,0);
  hipStream_t st; CK(hipStreamCreate(&st)); bool ok=true;
  const int shapes[][4]={{1,4095,320,10240},{1,4095,10240,320},{1,4096,320,10240},{1,4096,10240,320}};
+ const char* mode=std::getenv("STRATA_HC_GUARD_CASE");
+ const int test=mode?std::atoi(mode):0;
  for(auto &s:shapes){
+  if(test==7 && (s[1]!=4096 || s[2]!=320))continue;
   const bool bf=s[0];const int T=s[1],N=s[2],K=s[3];
   std::mt19937 rng(20261007+T+N+K);std::uniform_real_distribution<float>d(-.25f,.25f);
   std::vector<uint16_t>x((size_t)T*K),w((size_t)N*K);
   std::vector<float> xf(x.size()),wf(w.size());
   auto fill=[&](auto& a,auto& f){for(size_t i=0;i<a.size();++i){float v=d(rng);if(bf){uint32_t b;std::memcpy(&b,&v,4);a[i]=b>>16;b=(uint32_t)a[i]<<16;std::memcpy(&f[i],&b,4);}else{__half h=__float2half_rn(v);std::memcpy(&a[i],&h,2);f[i]=__half2float(h);}}};
   fill(x,xf);fill(w,wf);
-  const char* mode=std::getenv("STRATA_HC_GUARD_CASE");
-  const int test=mode?std::atoi(mode):0;
   auto constant=[](auto& a,auto& f,float v){uint32_t bits;std::memcpy(&bits,&v,4);std::fill(a.begin(),a.end(),uint16_t(bits>>16));std::fill(f.begin(),f.end(),v);};
   if(test==1){constant(x,xf,128.0f);constant(w,wf,.125f);}
   if(test==2){constant(x,xf,.125f);constant(w,wf,16.0f);}
@@ -30,6 +31,15 @@ int main(){
   if(test==4){constant(x,xf,.125f);constant(w,wf,std::ldexp(1.0f,-40));}
   if(test==5){constant(x,xf,std::ldexp(1.0f,-45));constant(w,wf,.125f);}
   if(test==6){constant(x,xf,-0.0f);constant(w,wf,.125f);}
+  if(test==7){
+   constant(x,xf,0.0f);constant(w,wf,0.25f);
+   const int positions[4][3]={{0,1,2},{0,2,3},{0,31,32},{0,63,64}};
+   const float values[3]={4.0f,std::ldexp(1.0f,-22),-4.0f};
+   for(int t=0;t<4;++t)for(int j=0;j<3;++j){
+    const size_t idx=(size_t)t*K+positions[t][j];uint32_t bits;
+    std::memcpy(&bits,&values[j],4);x[idx]=uint16_t(bits>>16);xf[idx]=values[j];
+   }
+  }
   uint16_t *dx,*dw;float*dy;void* phase=nullptr;
   CK(hipMalloc((void**)&dx,x.size()*2));CK(hipMalloc((void**)&dw,w.size()*2));CK(hipMalloc((void**)&dy,(size_t)T*N*4));
   CK(hipMemcpy(dx,x.data(),x.size()*2,hipMemcpyHostToDevice));CK(hipMemcpy(dw,w.data(),w.size()*2,hipMemcpyHostToDevice));
@@ -54,13 +64,17 @@ int main(){
    g.bf16(dx,dw,dy,T,N,K);CK(hipStreamSynchronize(st));
    std::vector<float> native(y.size());CK(hipMemcpy(native.data(),dy,native.size()*4,hipMemcpyDeviceToHost));
    const bool native_equal=std::memcmp(y.data(),native.data(),y.size()*4)==0;
+   if(test==7)for(int t=0;t<4;++t){
+    const size_t j=(size_t)t*N;uint32_t a,b;std::memcpy(&a,&y[j],4);std::memcpy(&b,&native[j],4);
+    std::printf("CANCELLATION row=%d candidate=%a native=%a candidate_bits=%08x native_bits=%08x\n",t,y[j],native[j],a,b);
+   }
    if(test!=0 || std::getenv("STRATA_HC_F16_EXACT_INPUT"))ok=ok&&native_equal;
    double ne2=0,nr2=0;
    for(size_t j=0;j<y.size();++j){double z=double(y[j])-native[j];ne2+=z*z;nr2+=double(native[j])*native[j];}
    std::printf("NATIVE_PARITY case=%d T=%d N=%d K=%d bitwise=%d rel_l2=%.9g\n",test,T,N,K,int(native_equal),std::sqrt(ne2/std::max(nr2,1e-300)));
    double d2=0,r2=0;
    for(int i=0;i<64;++i){int t=(i*7919)%T,n=(i*97)%N;double ref=0;for(int k=0;k<K;++k)ref+=(double)xf[(size_t)t*K+k]*wf[(size_t)n*K+k];double dd=y[(size_t)t*N+n]-ref;d2+=dd*dd;r2+=ref*ref;mx=std::max(mx,std::abs(dd));}
-   rel=std::sqrt(d2/std::max(r2,1e-300));bool finite=std::all_of(y.begin(),y.end(),[](float v){return std::isfinite(v);});ok=ok&&finite&&rel<1e-4&&mx<5e-3;
+   rel=std::sqrt(d2/std::max(r2,1e-300));bool finite=std::all_of(y.begin(),y.end(),[](float v){return std::isfinite(v);});ok=ok&&finite&&(test==7 || (rel<1e-4&&mx<5e-3));
    std::printf("{\"bf16\":%s,\"T\":%d,\"N\":%d,\"K\":%d,\"ms\":%.6f,\"rel_l2_sample\":%.9g,\"max_abs_sample\":%.9g,\"all_finite\":%s}\n",bf?"true":"false",T,N,K,ms,rel,mx,finite?"true":"false");
    CK(hipEventDestroy(a));CK(hipEventDestroy(b));
   }

@@ -73,6 +73,46 @@ __global__ void widen_rows_f16(float* __restrict__ Y, int64_t n, int64_t ldy, in
     }
 }
 #if defined(STRATA_HIP_GFX906)
+// Disposable feasibility probe. It does not change the selected scales or GEMM output.
+__global__ void hc_scale_bounds_init(unsigned* out) {
+    const int i = threadIdx.x;
+    if (i < 8) out[i] = (i == 1 || i == 4) ? 512u : 0u;
+}
+__global__ void hc_scale_bounds_scan(const uint16_t* in, int64_t n, unsigned* out, int operand) {
+    int lo = -256, hi = 256, normal = -256;
+    unsigned flags = 0;
+    for (int64_t i = (int64_t)blockIdx.x * blockDim.x + threadIdx.x;
+         i < n; i += (int64_t)gridDim.x * blockDim.x) {
+        const unsigned bits = in[i], exponent = (bits >> 7) & 255u, fraction = bits & 127u;
+        if (exponent == 255u) { flags |= 1u; continue; }
+        if (exponent == 0u && fraction == 0u) { if (bits & 32768u) flags |= 2u; continue; }
+        const unsigned m = exponent ? (128u | fraction) : fraction;
+        const int e = exponent ? (int)exponent - 127 : -126;
+        const int h = 31 - __clz(m), t = __ffs(m) - 1;
+        const int l = -17 - e - t, u = 22 - e - h, ln = -7 - e - h;
+        lo = lo > l ? lo : l; hi = hi < u ? hi : u; normal = normal > ln ? normal : ln;
+    }
+    __shared__ int lower[256], upper[256], norm[256];
+    __shared__ unsigned bad[256];
+    const int t = threadIdx.x;
+    lower[t] = lo; upper[t] = hi; norm[t] = normal; bad[t] = flags;
+    __syncthreads();
+    for (int step = 128; step; step >>= 1) {
+        if (t < step) {
+            lower[t] = lower[t] > lower[t + step] ? lower[t] : lower[t + step];
+            upper[t] = upper[t] < upper[t + step] ? upper[t] : upper[t + step];
+            norm[t] = norm[t] > norm[t + step] ? norm[t] : norm[t + step];
+            bad[t] |= bad[t + step];
+        }
+        __syncthreads();
+    }
+    if (t == 0) {
+        atomicMax(out + operand * 3, (unsigned)(lower[0] + 256));
+        atomicMin(out + operand * 3 + 1, (unsigned)(upper[0] + 256));
+        atomicMax(out + operand * 3 + 2, (unsigned)(norm[0] + 256));
+        atomicOr(out + 6, bad[0] << (operand * 2));
+    }
+}
 template <bool AUDIT, bool SCALED = false, bool EXACT = false>
 __global__ void hc_plain_bf16_to_f16(const uint16_t* in, __half* out, int64_t n, unsigned* stats, float scale = 1.0f) {
     const int64_t i = (int64_t)blockIdx.x * blockDim.x + threadIdx.x;
@@ -674,6 +714,18 @@ bool Gemm::try_hc_f16(const uint16_t* X, const uint16_t* W, float* Y,
     static const bool exact_input = [] {
         const char* v = std::getenv("STRATA_HC_F16_EXACT_INPUT"); return v && std::atoi(v) == 1;
     }();
+    static const bool bounds_probe = [] {
+        const char* v = std::getenv("STRATA_HC_SCALE_BOUNDS"); return v && std::atoi(v) == 1;
+    }();
+    unsigned bounds[8] = {};
+    if (bounds_probe) {
+        hc_scale_bounds_init<<<1, 32, 0, st>>>(stats);
+        hc_scale_bounds_scan<<<(unsigned)std::min<uint64_t>((we + 255) / 256, 256), 256, 0, st>>>(W, we, stats, 0);
+        hc_scale_bounds_scan<<<(unsigned)std::min<uint64_t>((xe + 255) / 256, 256), 256, 0, st>>>(X, xe, stats, 1);
+        check(cudaGetLastError(), "scale bounds probe");
+        check(cudaMemcpyAsync(bounds, stats, sizeof(bounds), cudaMemcpyDeviceToHost, st), "scale bounds copy");
+        check(cudaStreamSynchronize(st), "scale bounds sync");
+    }
     if (exact_input && !scaled_probe) {
         std::fprintf(stderr, "strata hc-f16: exact-input route requires scaled conversion\n");
         std::exit(1);
@@ -694,6 +746,15 @@ bool Gemm::try_hc_f16(const uint16_t* X, const uint16_t* W, float* Y,
         unsigned guard[10] = {};
         check(cudaMemcpyAsync(guard, stats, sizeof(guard), cudaMemcpyDeviceToHost, st), "scaled guard copy");
         check(cudaStreamSynchronize(st), "scaled guard sync");
+        if (bounds_probe) {
+            int device = -1; check(cudaGetDevice(&device), "scale bounds device");
+            std::fprintf(stderr, "strata hc-scale-bounds: device=%d call=%llu T=%lld N=%lld K=%lld "
+                         "Wlo=%d Whi=%d Wnormal=%d Xlo=%d Xhi=%d Xnormal=%d flags=%u fixed_ok=%d\n",
+                         device, (unsigned long long)hc_f16_attempts_, (long long)T, (long long)N, (long long)K,
+                         (int)bounds[0]-256, (int)bounds[1]-256, (int)bounds[2]-256,
+                         (int)bounds[3]-256, (int)bounds[4]-256, (int)bounds[5]-256, bounds[6],
+                         int(!(guard[1] || guard[6] || guard[2] || guard[7] || guard[3] || guard[8])));
+        }
         if (guard[1] || guard[6] || guard[2] || guard[7]) {
             std::fprintf(stderr, "strata hc-f16: scaled input outside safe range; native BF16 fallback\n"); return false;
         }

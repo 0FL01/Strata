@@ -1,0 +1,32 @@
+[
+  {
+    "workload": "code4096",
+    "PP_best": 347.9590536465191,
+    "PP_combined": 361.6936730098459,
+    "PP_gain_pct": 3.947194136606469,
+    "TG_best": 55.9223640305607,
+    "TG_combined": 55.87567661952156,
+    "output_tokens": 1024,
+    "all_output_ids_equal": true
+  },
+  {
+    "workload": "code65536",
+    "PP_best": 598.328521945225,
+    "PP_combined": 610.7980096126872,
+    "PP_gain_pct": 2.084053694602872,
+    "TG_best": 50.504801408610476,
+    "TG_combined": 50.53670573719926,
+    "output_tokens": 1024,
+    "all_output_ids_equal": true
+  },
+  {
+    "workload": "ru65536",
+    "PP_best": 598.1564994847727,
+    "PP_combined": 610.6955589081357,
+    "PP_gain_pct": 2.096284071837995,
+    "TG_best": 52.69821011352759,
+    "TG_combined": 52.705804844404646,
+    "output_tokens": 1024,
+    "all_output_ids_equal": true
+  }
+]

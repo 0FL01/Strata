@@ -193,11 +193,37 @@ void Context::run(const Product& p, void* stream) {
     if (p.n <= 0 || p.max_rows <= 0) return;
     const ggml_type t = (ggml_type) p.type;
     const int64_t qk = ggml_blck_size(t), bpr = p.w_cols / qk;
+    int64_t ncols_opt = p.max_rows;
+#if defined(STRATA_HIP_GFX906)
+    static const int opt_cap = [] {
+        const char* v = std::getenv("STRATA_GFX906_MMQ_OPT_CAP"); return v ? std::atoi(v) : 0;
+    }();
+    if (t == GGML_TYPE_Q2_0 && p.n > 1 && opt_cap == 32) ncols_opt = std::min<int64_t>(ncols_opt, 32);
+    static const bool opt_trace = [] {
+        const char* v = std::getenv("STRATA_MMQ_OPT_TRACE"); return v && v[0] == '1';
+    }();
+    static thread_local unsigned said = 0;
+    const unsigned key = p.w_rows == 1280 ? 1u : 2u;
+    if (opt_trace && t == GGML_TYPE_Q2_0 && p.n > 1 && !(said & key)) {
+        said |= key;
+        const int dev = ggml_cuda_get_device(), cc = ggml_cuda_info().devices[dev].cc;
+        const size_t smpbo = ggml_cuda_info().devices[dev].smpbo;
+        int best = 0, tiles = 0x7fffffff, ii = 0;
+        for (int j = 8; j <= 128 && tiles > 1; j += 8) {
+            const auto c = ggml_cuda_mmq_get_config(t, j, p.w_rows % 128 != 0, cc);
+            if (c.type == GGML_TYPE_COUNT || mmq_get_nbytes_shared(c, cc) > smpbo) continue;
+            const int nt = (int)((ncols_opt + c.J - 1) / c.J);
+            if (nt < tiles) { best = j; tiles = nt; ii = c.I; }
+        }
+        std::fprintf(stderr, "strata mmq-opt: dev=%d type=%d group=%d rows=%lld max=%lld opt=%lld J=%d I=%d\n",
+                     dev, (int)t, p.n, (long long)p.w_rows, (long long)p.max_rows, (long long)ncols_opt, best, ii);
+    }
+#endif
     const mmq_args a = {(const char*) p.w, t, (const int*) p.xq, p.ids, p.bounds, p.dst, nullptr,
                         p.w_cols, p.w_rows, p.total_rows, bpr, p.total_rows, p.ld_dst,
                         p.n, p.n, (int64_t) (p.expert_bytes / ggml_type_size(t)), 0, 0,
                         1, 1, 0, 0, 0,
-                        p.max_rows, p.max_rows};
+                        p.max_rows, ncols_opt};
     auto& ctx = *(ggml_backend_cuda_context*) ctx_;
     const cudaStream_t s = (cudaStream_t) stream;
     switch (t) {
