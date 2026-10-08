@@ -1479,3 +1479,12 @@ if(STRATA_HIP_GFX906)
   target_include_directories(gfx906_mmq_tile_probe PRIVATE ${STRATA_GGML_DIR}/ggml/include)
   target_link_libraries(gfx906_mmq_tile_probe PRIVATE strata_prefill ${_strata_gpu_runtime_target})
 endif()
+
+# Component-only extraction from Niko1221/Strata PR #1525. Never calls the model path.
+if(STRATA_HIP_GFX906 AND STRATA_BUILD_TESTS)
+  add_executable(gfx906_swiglu_quant_probe tests/cuda/prefill_swiglu_quant_test.cpp)
+  target_link_libraries(gfx906_swiglu_quant_probe PRIVATE strata_mmq ggml-base ${_strata_gpu_runtime_target})
+  add_test(NAME gfx906_swiglu_quant_probe COMMAND gfx906_swiglu_quant_probe)
+  set_tests_properties(gfx906_swiglu_quant_probe PROPERTIES
+    ENVIRONMENT "STRATA_GFX906_MMQ_SWIGLU_QUANT=1" TIMEOUT 300)
+endif()
