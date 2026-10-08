@@ -21,7 +21,7 @@ PP/TG are reported native prompt/generation tokens per second. These are combine
 - Prior strict HC tests cover 72 full-output native comparisons, including fast-route and fallback cases; see the strict-light report.
 - An additional cancellation falsifier used W=0.25 and sparse X=(4,2^-22,-4) in four deliberate adjacent/boundary placements, with all scaled halves normal and losslessly represented. Both GPUs matched native bitwise; route counters confirmed three fast executions and one forced-native comparison. Both paths returned zero rather than the exact-real 2^-24 on these witnesses. This fails to falsify their equivalence, not a proof for arbitrary inputs or library algorithms.
 - HC still invokes separate default BF16 and F16 library GEMMs. Exact operand conversion does not specify their reduction trees. Numerical equivalence remains empirical and limited to tested shapes, inputs and this pinned software/hardware configuration.
-- A real 200K capacity pair is pending. Candidate API tools/vision/cache qualification and production deployment have not been performed.
+- The actual 200,000-token capacity pair passed: PP 574.0887 to 585.0057 tokens/s (+1.9016%), 256 output IDs equal, fixed expert residency preserved. TG 43.7465 to 43.6875 tokens/s. The partial final prompt chunk was exercised. Candidate API qualification passed: forced named tool call and result roundtrip, two synthetic images through the CPU vision process, text after image, 401 authentication and 404 UI checks, and A/title/A RAM prompt-cache restoration. The actual engine hash and opt-in environment were verified. Original live configuration and service were restored; no production promotion is claimed.
 
 ## Reproduction identity
 

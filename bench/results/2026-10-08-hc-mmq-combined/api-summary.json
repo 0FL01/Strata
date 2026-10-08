@@ -1,0 +1,32 @@
+{
+  "passed": true,
+  "candidate_binary_sha256": "17b688afdca41976020cd2e2889d170c6fd29e39f84d1369a752b25b617f3228",
+  "candidate_environment_verified": true,
+  "tools": "passed",
+  "cpu_vision": "passed",
+  "auth_and_ui": "passed",
+  "prompt_cache_restore": "passed",
+  "original_live_restored": true,
+  "cache_trials": [
+    {
+      "tag": "cold",
+      "elapsed_s": 14.62735833399347,
+      "cached_tokens": 0
+    },
+    {
+      "tag": "warm",
+      "elapsed_s": 0.40737719800381456,
+      "cached_tokens": 6423
+    },
+    {
+      "tag": "auxiliary",
+      "elapsed_s": 0.5414929129910888,
+      "cached_tokens": 0
+    },
+    {
+      "tag": "restored",
+      "elapsed_s": 0.38973307400010526,
+      "cached_tokens": 6423
+    }
+  ]
+}

@@ -28,5 +28,15 @@
     "TG_combined": 52.705804844404646,
     "output_tokens": 1024,
     "all_output_ids_equal": true
+  },
+  {
+    "workload": "code200000",
+    "PP_best": 574.088734599352,
+    "PP_combined": 585.0057184308977,
+    "PP_gain_pct": 1.9016195883314824,
+    "TG_best": 43.74647550368257,
+    "TG_combined": 43.68749786682139,
+    "output_tokens": 256,
+    "all_output_ids_equal": true
   }
 ]
