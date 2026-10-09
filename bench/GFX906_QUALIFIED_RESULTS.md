@@ -100,3 +100,8 @@ Offline consistency validation passed, including 18 rejected corruption cases. F
 ### FIT17 public selector component follow-up
 
 [Separate public component report](results/2026-10-09-gfx906-qsa-fit17/PUBLIC-COMPONENT.md): 54 processes completed on both gfx906 devices, with 46 correctness and 8 ABBA timing processes. Direct public selector TU/headers, no support archive. Captured-layer selector latency reduction is **25.7331752864% / 26.0592091451%**; the original 30% discovery gate remains failed. Exact public/private selector ISA comparison and scratch/spill caveats are documented. This advances component qualification only, not a full public-tree build or public-port model result. Existing numerical model receipts remain unchanged.
+
+
+## Complete c183 stack versus optimized stable ce
+
+[Direct benchmark report](results/2026-10-09-gfx906-direct-c183-vs-ce/README.md): fresh-process 64K/1,024-output A1/B1/B2/A2 gives **+8.147793% PP / +6.509285% TG** against already optimized stable ce. Both pairs are positive; all complete IDs, topology and available aggregate counters match. Unavailable optional counters stay null. Timing-trained adaptive policy means observed counter equality is not proof of constant work. This is a direct whole-stack comparison, separate from ff34-versus-ce; no gains were summed and no stock-upstream or isolated-selector attribution is made. The receipt validator passed 14 corruption tests. Earlier artifacts remain unchanged.

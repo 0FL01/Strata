@@ -1,0 +1,9 @@
+{
+  "passed": true,
+  "PP_gain_pct": 8.147793445691764,
+  "TG_gain_pct": 6.509284708999252,
+  "all_available_counters_equal": true,
+  "constant_workload_proof": false,
+  "scope": "offline consistency only; no hardware execution",
+  "negative_cases_rejected": 14
+}
