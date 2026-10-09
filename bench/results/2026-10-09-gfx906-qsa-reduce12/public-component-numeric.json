@@ -1,0 +1,122 @@
+{
+  "schema_version": 1,
+  "scope": "isolated exact-public QSA TU plus unchanged public probe and frozen support archive; not a full public-tree build",
+  "public_commit": "08a844d3f31199798b7ea78dc5c8512fd9c17e79",
+  "source_sha256": "ec0a11258848d6e2bf6ca0bbe463f06eada460a72be10ff5bb4dce065abe3ab0",
+  "probe_binary_sha256": "eff7174652dccc4129ab719e4425c288f93379fd43f3bc59faa758236ecd5f28",
+  "cross_gpu_full_output_equal": true,
+  "benchmark_passed": true,
+  "GPUs": [
+    {
+      "gpu_ordinal": 0,
+      "measurement": {
+        "process_medians_ms": {
+          "A1": 1.038399,
+          "B1": 0.7608,
+          "B2": 0.76096,
+          "A2": 1.03848
+        },
+        "A_mean_ms": 1.0384395,
+        "B_mean_ms": 0.76088,
+        "component_latency_reduction_pct": 26.728519090423656,
+        "input_fnv1a64": "02d08d8b2acb9cca",
+        "metric": "full production QSA chunk+merge component latency; not model TPS"
+      },
+      "passed": true,
+      "exit_code": 0,
+      "full_output_sha256": {
+        "A1.bin": "a00011ca8b03549db7aeaea38307583373bfdfebfa31e34207763903af9879a2",
+        "A2.bin": "a00011ca8b03549db7aeaea38307583373bfdfebfa31e34207763903af9879a2",
+        "B1.bin": "a00011ca8b03549db7aeaea38307583373bfdfebfa31e34207763903af9879a2",
+        "B2.bin": "a00011ca8b03549db7aeaea38307583373bfdfebfa31e34207763903af9879a2",
+        "edge1-A.bin": "02664df8e50693193060413c9f8eaf55131eaf456b74245e8347b24e824c7c6f",
+        "edge1-B.bin": "02664df8e50693193060413c9f8eaf55131eaf456b74245e8347b24e824c7c6f",
+        "edge33-A.bin": "24122feb972bfa4d0c33cacf0133b831b697a9e87af7085900d2a0447d73d4c8",
+        "edge33-B.bin": "24122feb972bfa4d0c33cacf0133b831b697a9e87af7085900d2a0447d73d4c8",
+        "route-smoke.bin": "a00011ca8b03549db7aeaea38307583373bfdfebfa31e34207763903af9879a2"
+      },
+      "selected_route_smoke": true
+    },
+    {
+      "gpu_ordinal": 1,
+      "measurement": {
+        "process_medians_ms": {
+          "A1": 1.032482,
+          "B1": 0.758963,
+          "B2": 0.758402,
+          "A2": 1.032242
+        },
+        "A_mean_ms": 1.032362,
+        "B_mean_ms": 0.7586825,
+        "component_latency_reduction_pct": 26.510032333619407,
+        "input_fnv1a64": "02d08d8b2acb9cca",
+        "metric": "full production QSA chunk+merge component latency; not model TPS"
+      },
+      "passed": true,
+      "exit_code": 0,
+      "full_output_sha256": {
+        "A1.bin": "a00011ca8b03549db7aeaea38307583373bfdfebfa31e34207763903af9879a2",
+        "A2.bin": "a00011ca8b03549db7aeaea38307583373bfdfebfa31e34207763903af9879a2",
+        "B1.bin": "a00011ca8b03549db7aeaea38307583373bfdfebfa31e34207763903af9879a2",
+        "B2.bin": "a00011ca8b03549db7aeaea38307583373bfdfebfa31e34207763903af9879a2",
+        "edge1-A.bin": "02664df8e50693193060413c9f8eaf55131eaf456b74245e8347b24e824c7c6f",
+        "edge1-B.bin": "02664df8e50693193060413c9f8eaf55131eaf456b74245e8347b24e824c7c6f",
+        "edge33-A.bin": "24122feb972bfa4d0c33cacf0133b831b697a9e87af7085900d2a0447d73d4c8",
+        "edge33-B.bin": "24122feb972bfa4d0c33cacf0133b831b697a9e87af7085900d2a0447d73d4c8",
+        "route-smoke.bin": "a00011ca8b03549db7aeaea38307583373bfdfebfa31e34207763903af9879a2"
+      },
+      "selected_route_smoke": true
+    }
+  ],
+  "ISA": {
+    "arms": {
+      "A": {
+        "full_kernel": {
+          "ds_bpermute_b32": 70,
+          "v_add_f32_e32": 66,
+          "v_fmac_f32_e32": 87,
+          "v_mul_f32_e32": 27
+        },
+        "score_region": {
+          "ds_bpermute_b32": 60,
+          "v_add_f32_e32": 60,
+          "v_fmac_f32_e32": 84,
+          "v_mul_f32_e32": 24
+        },
+        "compiler_resources": {
+          "TotalSGPRs": 42,
+          "VGPRs": 42,
+          "ScratchSize [bytes/lane]": 0,
+          "Occupancy [waves/SIMD]": 4,
+          "SGPRs Spill": 0,
+          "VGPRs Spill": 0,
+          "LDS Size [bytes/block]": 15872
+        }
+      },
+      "B": {
+        "full_kernel": {
+          "ds_bpermute_b32": 26,
+          "v_add_f32_e32": 22,
+          "v_fmac_f32_e32": 87,
+          "v_mul_f32_e32": 16
+        },
+        "score_region": {
+          "ds_bpermute_b32": 16,
+          "v_add_f32_e32": 16,
+          "v_fmac_f32_e32": 84,
+          "v_mul_f32_e32": 13
+        },
+        "compiler_resources": {
+          "TotalSGPRs": 43,
+          "VGPRs": 48,
+          "ScratchSize [bytes/lane]": 0,
+          "Occupancy [waves/SIMD]": 4,
+          "SGPRs Spill": 0,
+          "VGPRs Spill": 0,
+          "LDS Size [bytes/block]": 15872
+        }
+      }
+    },
+    "gate_passed": true
+  }
+}

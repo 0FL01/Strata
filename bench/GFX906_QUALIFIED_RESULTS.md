@@ -71,3 +71,12 @@ python3 bench/check_gfx906_reduce12_results.py bench/results/2026-10-09-gfx906-q
 ```
 
 The offline validator passed and rejected all 15 corruption cases. This verifies receipt consistency, not a new hardware run. Raw token-ID arrays and the historical micro report/receipt are preserved. [Future public-source probe instructions](results/2026-10-09-gfx906-qsa-reduce12/PROBE-REUSE.md) are not executed results.
+
+
+## New direct combined and public-component evidence
+
+[Numeric report](results/2026-10-09-gfx906-direct-ff34-vs-ce/README.md): direct whole-combined-versus-optimized-stable 64K/1,024 ABBA gives **+8.101919% PP / +5.049872% TG**, with all four complete token-ID arrays equal. This supersedes the historical absence of a fresh post-overlap combined comparison above. It is not stock-upstream performance or isolated reduce12 attribution. The new public derivative omits private filesystem and service-configuration provenance; its exact validation limits are stated in the report.
+
+[Public reduce12 component receipt](results/2026-10-09-gfx906-qsa-reduce12/public-component-numeric.json) separately records both-GPU full-output parity, ISA and **26.728519% / 26.510032% component latency reduction** for the exact public QSA translation unit with a frozen support archive. This advances the earlier source-only public-port status, but is not a full public-tree build or public-port model qualification.
+
+The separate [implementation commit](https://github.com/0FL01/Strata/commit/08a844d3f31199798b7ea78dc5c8512fd9c17e79) stacks on #1661; the incremental diff is one source file +74/−3. [Prepared upstream PR body](results/2026-10-09-gfx906-qsa-reduce12/PR-DRAFT.md) is available for manual submission after the connector returned HTTP403, `Resource not accessible by integration`. #1661 was unchanged. The archive itself still only changes bench artifacts.
