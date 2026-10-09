@@ -125,3 +125,8 @@ Offline consistency validation passed, including 18 rejected corruption cases. F
 ## HC fixed-scale: parked after synthetic component screening
 
 [Report](results/2026-10-09-gfx906-hc-fixed-scale/README.md) and [numeric metrics](results/2026-10-09-gfx906-hc-fixed-scale/metrics.json): fixed-scale specialization removes generic division and reduces VGPR 7 to 5, with exhaustive actual-GPU output/stats/guard equivalence at both scales. The original tiny wrapper serialization failure and separate strict raw recovery remain disclosed. A fixed 752-launch / 360-sample synthetic screen gives a largest within-scenario optimistic weighted saving of **2.5656605928 ms**, below the **1,003.739604 ms** gate; **PARK_WITHOUT_MODEL_QUALIFICATION**. Maximum call counts and synthetic stress distributions are not a measured model gain or bound. No candidate model build, promotion or TG improvement is claimed.
+
+
+## HC guard observations: attribution and lifetime investigation only
+
+[Report](results/2026-10-09-gfx906-hc-guard-observation/README.md) and [numeric metrics](results/2026-10-09-gfx906-hc-guard-observation/metrics.json): independent counts and cost audits reconcile 192 weights / 576 attempts, 203 taken / 373 exactness rejections, and 20 W-bad weights with 40 repeats. Most rejections are X-only (313). The conditional 64K host-wall screen is **13,579.974339 ms** against a **1,003.739604 ms** threshold, but includes required queued predecessor work and intentionally double-counts stage overlap. **ATTRIBUTION_AND_LIFETIME_INVESTIGATION_ONLY**: no removable-cost, model-bound or gain claim, no safe cache lifetime established, no cache patch or promotion. The exact c183 baseline remains unchanged.
