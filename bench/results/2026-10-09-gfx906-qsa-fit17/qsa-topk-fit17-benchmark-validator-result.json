@@ -1,0 +1,15 @@
+{
+  "passed": true,
+  "studies": {
+    "fixed_draft": {
+      "TG_gain_pct": 1.413176853430742,
+      "PP_gain_pct": -0.001825573298297467
+    },
+    "adaptive_default": {
+      "TG_gain_pct": 1.299911307482149,
+      "PP_gain_pct": 0.08468024425434262
+    }
+  },
+  "scope": "offline arithmetic/parity/provenance/claims checks only",
+  "negative_cases_rejected": 18
+}

@@ -80,3 +80,18 @@ The offline validator passed and rejected all 15 corruption cases. This verifies
 [Public reduce12 component receipt](results/2026-10-09-gfx906-qsa-reduce12/public-component-numeric.json) separately records both-GPU full-output parity, ISA and **26.728519% / 26.510032% component latency reduction** for the exact public QSA translation unit with a frozen support archive. This advances the earlier source-only public-port status, but is not a full public-tree build or public-port model qualification.
 
 The separate [implementation commit](https://github.com/0FL01/Strata/commit/08a844d3f31199798b7ea78dc5c8512fd9c17e79) stacks on #1661; the incremental diff is one source file +74/−3. [Prepared upstream PR body](results/2026-10-09-gfx906-qsa-reduce12/PR-DRAFT.md) is available for manual submission after the connector returned HTTP403, `Resource not accessible by integration`. #1661 was unchanged. The archive itself still only changes bench artifacts.
+
+
+## Scalar FIT17: frozen combined-stack model studies
+
+[Report](results/2026-10-09-gfx906-qsa-fit17/README.md) and [numeric receipts](results/2026-10-09-gfx906-qsa-fit17/qsa-topk-fit17-benchmark-results.json): two separate 64K/1,024-output ABBA studies on the same frozen c183 binary. Suffix-disabled fixed policy gives **+1.413177% TG / −0.001826% PP** with matched counters; ordinary adaptive policy gives **+1.299911% TG / +0.084680% PP** with exact IDs but documented second-pair counter drift. Do not pool these different workloads or attribute the adaptive result to constant work.
+
+All eight full model-output arrays match historical IDs. Separate 4K/200K candidate checks have exact reference IDs and establish correctness only; fallback ownership is explicitly source-inferred, not instrumented. The original component gate failure, historical-counter gate failure and parser infrastructure failure remain preserved. This evidence binds the private combined c183 stack; no public-port build/GPU result or stock-upstream gain is claimed here. No implementation branch or existing PR body is changed by this archive update.
+
+Run from this checkout root (or run the report's relative command after entering its directory):
+
+```sh
+python3 bench/results/2026-10-09-gfx906-qsa-fit17/check_qsa_topk_fit17_benchmark_results.py bench/results/2026-10-09-gfx906-qsa-fit17/qsa-topk-fit17-benchmark-results.json --selftest
+```
+
+Offline consistency validation passed, including 18 rejected corruption cases. Full numeric IDs, source hashes and failure evidence are retained; private host paths, configuration contents and raw logs are excluded.
