@@ -54,3 +54,20 @@ exit "$status"
 ```
 
 The same patch sequence was checked on the five verified public-parent blobs plus the public `gfx_arch.hpp` header during archive preparation: 63 compiled mocked cases passed, 21 each for gfx906 compatibility, native HIP and unsupported-backend definitions. A full fresh worktree was not materialized during this preparation. This is host/source evidence, not GPU fault injection, runtime qualification or a new performance run.
+
+
+## QSA reduce12: qualified frozen-stack increment (2026-10-09)
+
+[Final report](results/2026-10-09-gfx906-qsa-reduce12/qsa-reduce12-report.md) · [full receipt/token IDs](results/2026-10-09-gfx906-qsa-reduce12/qsa-reduce12-results.json).
+
+Native 64K + 1,024 outputs: candidate PP **646.536120 tokens/s**, TG **53.106939 tokens/s**; incremental **+3.440197% PP / +1.581280% TG** versus the retained qualified HC/J32/dequant/QSA/empty-PCIe/primary-overlap stack. Both matched ABBA pairs are positive and all 1,024 IDs match. 4K, 200K capacity/archived parity, and API checks passed; 4K is a single pair and 200K has no fresh performance comparison. This is not a new combined-versus-stable measurement. The separate micro result is component latency reduction, not model throughput gain.
+
+Release `gfx906-qualified-20261009-reduce12`, binary SHA256 `ff348b38ad9b531e8df701311b1ae736f1378a6aaef322eeaa86e78f685917d9`, is **not promoted**; live API remains stablece. Both frozen-base and public-1f555 patch artifacts are linked in the report. Public-source port is only source-reviewed/apply-checked, with no separate full upstream build or runtime qualification claimed. The archive still changes only `bench/`, not runtime sources or PR1661. Earlier two-patch reproduction limits above continue to describe the earlier archived experiments; the new patch alone likewise does not recreate its full qualified stack.
+
+From this archive checkout root:
+
+```sh
+python3 bench/check_gfx906_reduce12_results.py bench/results/2026-10-09-gfx906-qsa-reduce12/qsa-reduce12-results.json --selftest
+```
+
+The offline validator passed and rejected all 15 corruption cases. This verifies receipt consistency, not a new hardware run. Raw token-ID arrays and the historical micro report/receipt are preserved. [Future public-source probe instructions](results/2026-10-09-gfx906-qsa-reduce12/PROBE-REUSE.md) are not executed results.
