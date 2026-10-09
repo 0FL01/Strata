@@ -1,0 +1,276 @@
+{
+  "schema_version": 1,
+  "date_utc": "2026-10-09",
+  "target": "gfx906",
+  "decision": "PARKED_RESOURCE_GATE_FAILED",
+  "candidate_variants": 2,
+  "targeted_repairs": 1,
+  "baseline_public_source_sha256": "5fc5d78c6155fa0987dee751a875ab714516c88209b0938db17699061cc7de1a",
+  "compiler": {
+    "name": "AMD clang",
+    "version": "23.0.0git",
+    "llvm_commit": "46fcb339fb61119b337f973c7ca9e710a319fdd0",
+    "patch_identity": "440716f8b87be9d8e20ed910e10e5b6d14d57cf6",
+    "optimization": "O3",
+    "language": "C++20",
+    "target": "gfx906"
+  },
+  "fixed_gate": {
+    "checker_sha256": "f5b9f629345bbf730410c507250754cf690e3dcb15079241060d2d997cf0645c",
+    "byte_identical_between_variants": true,
+    "unchanged_functions_required": 13,
+    "added_specializations_expected": 2,
+    "no_increase": [
+      "scratch_bytes_per_lane",
+      "sgpr_spill_count",
+      "vgpr_spill_count",
+      "sgpr_count",
+      "vgpr_count"
+    ],
+    "no_decrease": [
+      "occupancy_waves_per_simd"
+    ],
+    "layout_fixed": [
+      "lds_bytes_per_block",
+      "wavefront_size",
+      "max_flat_workgroup_size"
+    ],
+    "criteria_relaxed": false
+  },
+  "not_run": [
+    "candidate_gpu_execution",
+    "hardware_exact_id_replay",
+    "gpu_sanitizer_race_checks",
+    "graph_growth_restore_checks",
+    "paired_performance_timing",
+    "model_qualification",
+    "full_engine_build"
+  ],
+  "claims": {
+    "gpu_correctness_qualified": false,
+    "performance_qualified": false,
+    "modeled_early_stop_count_is_timing_fraction": false,
+    "speedup": null,
+    "throughput_gain": null
+  },
+  "variants": [
+    {
+      "version": "v1",
+      "design": "shared_full_key_recovery",
+      "status": "RESOURCE_GATE_FAILED",
+      "compile_status": "PASS",
+      "build_wrapper_exit_code": 14,
+      "resource_gate_passed": false,
+      "gpu_executed": false,
+      "gpu_runtime_loaded": false,
+      "support_archive_used": false,
+      "manual_isa_qualification_status": "NOT_CLAIMED",
+      "old_functions_identical": 13,
+      "exported_files_verified": 35,
+      "provenance": {
+        "build_receipt_json_sha256": "00d3d3d20fd65a366fd83ebccdda6d220a948d53150ab1877bbe661c8c980192",
+        "resource_gate_json_sha256": "a79f32c67832c791c0a8956d198e18b165549f82c817d7904a4822eeafb16a6f",
+        "resource_isa_receipts_tar_gz_sha256": "e1e5cd2d15c3ee1fe4090877fd3d235f2aa38de90ba3ea59a9b782b7816c4174",
+        "OUTPUTS_sha256_sha256": "8d63e462bb5535199577957c9433dcb166bf39d0f4923089c1a7e56f0041ba96",
+        "input_manifest_sha256": "489583ddf41d7be32ba18abeee64ebc06e5e532503d900bd0b347820b4e4545b",
+        "public_source_sha256": "587c02f9a76916605be595bbf8cdf4ce72ac04edbade4c80686772e72903064c",
+        "source_review_sha256": "853665d9c88deb24be816ab747e264870a2bdafeef9b721e8683de4679e6711f",
+        "source_review_summary_sha256": "6dfeb34f4747d65168a8a66f89259d966d590e33f5beef2989e2b4830b75f946",
+        "independent_cpu_receipt_sha256": "21045b86c46c1bbce86dcaf08be9e6eaa8daa446cb717fa00ace86f7c499063b",
+        "extracted_cpu_receipt_sha256": "1df9a9cdf2133d90880027b9f5f7352549a7834e5daa2284185e4a858c4f683c",
+        "source_provenance_sha256": "3f103e6a8dca029f5141ee83b516b63ff25b6d0ee2d82b55047e790f083b9aea"
+      },
+      "cpu": {
+        "exact_output_cases": 361968,
+        "exhaustive_cases": 260816,
+        "random_cases": 100000,
+        "ownership_boundary_cases": 1152,
+        "additional_partial_budget_cases": 0,
+        "independent_raw_float_cases": 1000014,
+        "extracted_adversarial_cases": 3136,
+        "extracted_raw_float_cases": 100014,
+        "address_and_undefined_sanitizer_repeat": "PASS",
+        "capture_rows": 16,
+        "capture_rows_exact": 16,
+        "modeled_three_pass_rows": 13,
+        "modeled_four_pass_rows": 3,
+        "capture_window_sizes": [
+          65536,
+          200000
+        ],
+        "host_dispatch_cases": 282,
+        "supplemental_host_dispatch_cases": 108,
+        "device_guard_cpu_cases": 152,
+        "rejected_invalid_template_cases": 6
+      },
+      "resources": [
+        {
+          "per": 17,
+          "baseline": {
+            "scratch_bytes_per_lane": 56,
+            "sgpr_count": 104,
+            "vgpr_count": 64,
+            "sgpr_spill_count": 44,
+            "vgpr_spill_count": 25,
+            "occupancy_waves_per_simd": 4,
+            "lds_bytes_per_block": 32908,
+            "wavefront_size": 64,
+            "max_flat_workgroup_size": 1024
+          },
+          "candidate": {
+            "scratch_bytes_per_lane": 56,
+            "sgpr_count": 104,
+            "vgpr_count": 64,
+            "sgpr_spill_count": 44,
+            "vgpr_spill_count": 26,
+            "occupancy_waves_per_simd": 4,
+            "lds_bytes_per_block": 32908,
+            "wavefront_size": 64,
+            "max_flat_workgroup_size": 1024
+          },
+          "failed_checks": [
+            "vgpr_spill_count"
+          ]
+        },
+        {
+          "per": 66,
+          "baseline": {
+            "scratch_bytes_per_lane": 1048,
+            "sgpr_count": 104,
+            "vgpr_count": 64,
+            "sgpr_spill_count": 539,
+            "vgpr_spill_count": 468,
+            "occupancy_waves_per_simd": 4,
+            "lds_bytes_per_block": 32908,
+            "wavefront_size": 64,
+            "max_flat_workgroup_size": 1024
+          },
+          "candidate": {
+            "scratch_bytes_per_lane": 1096,
+            "sgpr_count": 104,
+            "vgpr_count": 64,
+            "sgpr_spill_count": 539,
+            "vgpr_spill_count": 493,
+            "occupancy_waves_per_simd": 4,
+            "lds_bytes_per_block": 32908,
+            "wavefront_size": 64,
+            "max_flat_workgroup_size": 1024
+          },
+          "failed_checks": [
+            "scratch_bytes_per_lane",
+            "vgpr_spill_count"
+          ]
+        }
+      ]
+    },
+    {
+      "version": "v2",
+      "design": "in_place_positive_key_normalization",
+      "status": "RESOURCE_GATE_FAILED",
+      "compile_status": "PASS",
+      "build_wrapper_exit_code": 14,
+      "resource_gate_passed": false,
+      "gpu_executed": false,
+      "gpu_runtime_loaded": false,
+      "support_archive_used": false,
+      "manual_isa_qualification_status": "NOT_CLAIMED",
+      "old_functions_identical": 13,
+      "exported_files_verified": 35,
+      "provenance": {
+        "build_receipt_json_sha256": "4f2af66d90a591ca84a86a46bfd4231cca3d0a41e57d43f1a0b48afcfdcc511f",
+        "resource_gate_json_sha256": "898040dca9f6872cf5f76f31cc475491058daebeb410d96ffe6e1fd89eebf02f",
+        "resource_isa_receipts_tar_gz_sha256": "1971a3a6b3708e7756d14d349778af40e00d85f5c09073fa819ffedf3582dc05",
+        "OUTPUTS_sha256_sha256": "a9252beceafead4b2a480fb11f5ea2fc78ca14176d1269fe3a633faf9dbabc3e",
+        "input_manifest_sha256": "5d7d39a0ce721ea8d9fcadd1814a41a11c5f93605b7e325db36a20e7b27697db",
+        "public_source_sha256": "7036ef4eb84a145bbeeab46d0a735548cd719a656c5dcf6ec2a3ab0e3e089964",
+        "source_review_sha256": "f9c69f2f97cabdde48b99391aa141a0e9c881d6389aac4da98c4d9f8c48947ba",
+        "source_review_summary_sha256": "6aa08d3f05be2f10c0b496283b1c1a9bb62aedc53d61025306a03f7c8d903ec6",
+        "independent_cpu_receipt_sha256": "07c0156047b30f48f3cad0bc86e946a6fd821b569e254a68dabee98af9ac83e3",
+        "extracted_cpu_receipt_sha256": "fd70b55229c2fbb3ccfbd18da3415ddc6dbbe6d650866821fe4452fdb2b0b3bf",
+        "source_provenance_sha256": "3ca487625575ab04a6b88f73e45094047ad7352b136ce28cb6fa5d9ebe073120"
+      },
+      "cpu": {
+        "exact_output_cases": 362107,
+        "exhaustive_cases": 260816,
+        "random_cases": 100000,
+        "ownership_boundary_cases": 1152,
+        "additional_partial_budget_cases": 139,
+        "independent_raw_float_cases": 1000014,
+        "extracted_adversarial_cases": 3136,
+        "extracted_raw_float_cases": 100014,
+        "address_and_undefined_sanitizer_repeat": "PASS",
+        "capture_rows": 16,
+        "capture_rows_exact": 16,
+        "modeled_three_pass_rows": 13,
+        "modeled_four_pass_rows": 3,
+        "capture_window_sizes": [
+          65536,
+          200000
+        ],
+        "host_dispatch_cases": 282,
+        "supplemental_host_dispatch_cases": 108,
+        "device_guard_cpu_cases": 152,
+        "rejected_invalid_template_cases": 6
+      },
+      "resources": [
+        {
+          "per": 17,
+          "baseline": {
+            "scratch_bytes_per_lane": 56,
+            "sgpr_count": 104,
+            "vgpr_count": 64,
+            "sgpr_spill_count": 44,
+            "vgpr_spill_count": 25,
+            "occupancy_waves_per_simd": 4,
+            "lds_bytes_per_block": 32908,
+            "wavefront_size": 64,
+            "max_flat_workgroup_size": 1024
+          },
+          "candidate": {
+            "scratch_bytes_per_lane": 56,
+            "sgpr_count": 104,
+            "vgpr_count": 64,
+            "sgpr_spill_count": 44,
+            "vgpr_spill_count": 34,
+            "occupancy_waves_per_simd": 4,
+            "lds_bytes_per_block": 32908,
+            "wavefront_size": 64,
+            "max_flat_workgroup_size": 1024
+          },
+          "failed_checks": [
+            "vgpr_spill_count"
+          ]
+        },
+        {
+          "per": 66,
+          "baseline": {
+            "scratch_bytes_per_lane": 1048,
+            "sgpr_count": 104,
+            "vgpr_count": 64,
+            "sgpr_spill_count": 539,
+            "vgpr_spill_count": 468,
+            "occupancy_waves_per_simd": 4,
+            "lds_bytes_per_block": 32908,
+            "wavefront_size": 64,
+            "max_flat_workgroup_size": 1024
+          },
+          "candidate": {
+            "scratch_bytes_per_lane": 1096,
+            "sgpr_count": 104,
+            "vgpr_count": 64,
+            "sgpr_spill_count": 529,
+            "vgpr_spill_count": 559,
+            "occupancy_waves_per_simd": 4,
+            "lds_bytes_per_block": 32908,
+            "wavefront_size": 64,
+            "max_flat_workgroup_size": 1024
+          },
+          "failed_checks": [
+            "scratch_bytes_per_lane",
+            "vgpr_spill_count"
+          ]
+        }
+      ]
+    }
+  ]
+}

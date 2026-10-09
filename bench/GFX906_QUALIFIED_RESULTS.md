@@ -110,3 +110,8 @@ Offline consistency validation passed, including 18 rejected corruption cases. F
 ## WIDE51: parked isolated real-200K selector experiment
 
 [Report](results/2026-10-09-gfx906-wide51/README.md) and [numeric metrics](results/2026-10-09-gfx906-wide51/metrics.json): one fresh-process ABBA per physical gfx906 GPU measured **1.654291% / 0.588942% lower isolated selector latency** on the two actual 200K captures. All 12 correctness/timing processes passed parity and safety checks. WIDE51 is parked as an engineering prioritization decision; there was no predeclared speed threshold. One ABBA per device does not establish statistical significance or broad repeatability. No model-throughput or tokens-per-second gain is claimed; capture payloads remain private.
+
+
+## Radix-stop: parked before GPU qualification
+
+[Report](results/2026-10-09-gfx906-radix-stop/README.md) and [numeric metrics](results/2026-10-09-gfx906-radix-stop/metrics.json): original radix-stop and its single lower-live-state repair both compiled, then failed the unchanged scratch/spill resource gate (wrapper exit 14). All 13 old functions retained exact machine bytes, metadata and remarks. CPU exact-output proofs and all 16 captured-row replays passed for both; 13 modeled early stops are not a measured time fraction or speedup. No candidate GPU test, paired timing or model qualification ran. Both failures are preserved; the line is parked without promotion.
