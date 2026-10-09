@@ -1,0 +1,5917 @@
+{
+  "schema_version": 1,
+  "date_utc": "2026-10-09",
+  "decision": "PARK_WITHOUT_MODEL_QUALIFICATION",
+  "scope": "Synthetic component screening only; no measured whole-model gain or bound",
+  "candidate_model_build": false,
+  "candidate_model_run": false,
+  "promotion": false,
+  "tg_gain_claim": false,
+  "baseline_binding": {
+    "binary_sha256": "c18316d678a669c309cb95e2f5de9af03fa5573256fd0e093aafc4b41000d049",
+    "source_sha256": "6f73546e4b654a9cc81f4b333a09530c7425e13f6ce33ac16ecb88a05b07fabd",
+    "object_sha256": "9b0d9fb8cf20c97bb81e43b363e6a6b68d32af0d36234b90ed058ad4433ad048",
+    "device_elf_sha256": "5abe1289b549a9fa4ad7da00398fd81179a6d3b414bd2b3c44b749d5e315f377",
+    "binary_elf_offset": 819200,
+    "binary_elf_occurrences": 1,
+    "kernel": "_ZN6strata7prefill12_GLOBAL__N_120hc_plain_bf16_to_f16ILb0ELb1ELb1EEEvPKtP6__halflPjf",
+    "function_bytes": 428,
+    "complete_opcode_match": true,
+    "body_sha256": "f2387ce571db27651b55936cbc61ab83b1c84af1878bb034fac4403536860fb4",
+    "archive_sha256": "56f94c06db6f505212fb74a5057e9fed77a651ae7279b810c18a90da3c2375ef",
+    "archive_member": "gemm.cu.o",
+    "archive_member_sha256": "9b0d9fb8cf20c97bb81e43b363e6a6b68d32af0d36234b90ed058ad4433ad048"
+  },
+  "candidate_source_sha256": "f862f4efadb0b53b9127a690ced056d1903b372d61917f7d195e4538a8cb4561",
+  "candidate_elf_sha256": "3f0c5ecb285232b1e338bf0aa51ebe729eefaa547388c14ebbd488167105ecf9",
+  "cpu_proof": {
+    "sha256": "be4ff98d441d70cecdcc9261f85238fc272f1239b122f7073557a4ea4843e25d",
+    "bf16_patterns_per_scale": 65536,
+    "non_nan_patterns_proven_per_scale": 65282,
+    "nan_patterns_not_cpu_proven_per_scale": 254,
+    "scales": [
+      4096,
+      512
+    ],
+    "scope": "Host IEEE arithmetic model only; actual GPU parity separately required"
+  },
+  "resource_gate": {
+    "status": "PASS_RESOURCE_AND_STATIC_ISA_ONLY",
+    "sha256": "b4da67f44d01b0a9af96358ba897640d5e6906afff3658838010c03829e52659",
+    "baseline": {
+      ".vgpr_count": 7,
+      ".sgpr_count": 20,
+      ".group_segment_fixed_size": 0,
+      ".private_segment_fixed_size": 0,
+      ".vgpr_spill_count": 0,
+      ".sgpr_spill_count": 0,
+      ".wavefront_size": 64,
+      ".uses_dynamic_stack": false
+    },
+    "kernels": [
+      {
+        "name": "hc_exact_scale4096",
+        "resource_metadata": {
+          ".vgpr_count": 5,
+          ".sgpr_count": 20,
+          ".group_segment_fixed_size": 0,
+          ".private_segment_fixed_size": 0,
+          ".vgpr_spill_count": 0,
+          ".sgpr_spill_count": 0,
+          ".wavefront_size": 64,
+          ".uses_dynamic_stack": false
+        },
+        "resource_gate": "PASS",
+        "generic_divide_absent": true,
+        "forward_opcode": "v_fma_mixlo_f16",
+        "backward_opcode": "v_fma_mix_f32, neg(0), op_sel_hi:[1,0,0]"
+      },
+      {
+        "name": "hc_exact_scale512",
+        "resource_metadata": {
+          ".vgpr_count": 5,
+          ".sgpr_count": 20,
+          ".group_segment_fixed_size": 0,
+          ".private_segment_fixed_size": 0,
+          ".vgpr_spill_count": 0,
+          ".sgpr_spill_count": 0,
+          ".wavefront_size": 64,
+          ".uses_dynamic_stack": false
+        },
+        "resource_gate": "PASS",
+        "generic_divide_absent": true,
+        "forward_opcode": "v_fma_mixlo_f16",
+        "backward_opcode": "v_fma_mix_f32, neg(0), op_sel_hi:[1,0,0]"
+      }
+    ],
+    "elected_active_lane_atomic_sites_retained_per_kernel": 3,
+    "opcode_words_verified": 219,
+    "text_bytes_verified": 876
+  },
+  "tiny_sanity": {
+    "original_results_manifest_sha256": "4de47b93213da836209137f35179c7c5c06b3ce62348d8c1be2273889365be4b",
+    "original_summary_sha256": "90edcacdd18177d8792e676949f14dc87cd28d7ee38015f05a247f20d51e5f4a",
+    "original_wrapper_passed": false,
+    "original_error_type": "JSONDecodeError",
+    "native_exit_code": 0,
+    "original_cleanup": {
+      "passed": true,
+      "errors": [],
+      "api_left_stopped": true
+    },
+    "native_driver_sha256": "55b935c71a86717cf8c0690e428a8407e118a1dcc01ade74096dc03759e71833",
+    "build_receipt_sha256": "dc7722944c1dabb380e4f40df882ae3f16c9d404e173d9571e07df9b8828be02",
+    "recovered_parity_sha256": "a2d839c4a1c260dca9c999b87830b3abe11f9ce43a021859ec9326362d7b0a7b",
+    "original_sources_and_results_unchanged": true,
+    "gpu_rerun": false,
+    "future_driver_gpu_tested": false,
+    "host_serialization_test_only": true,
+    "signed_zero_observation": {
+      "bf16_input_hex": "8000",
+      "baseline_and_candidate_half_hex": "0000",
+      "exactness_flag": 1,
+      "scales": [
+        4096,
+        512
+      ],
+      "interpretation": "Exact parity with baseline, not signed-zero preservation"
+    }
+  },
+  "exhaustive_gpu_audit": {
+    "status": "PASS_EXHAUSTIVE_RAW_GPU_PARITY_AUDIT",
+    "created_utc": "2026-10-09T21:11:41.905209+00:00",
+    "archive_sha256": "929e9bbf426d0dc987f02c2c6039ad2e74383783c9161c964a9cdbd3080cafae",
+    "safe_extraction": "Hash checked before extraction; only regular files/directories, approved topdirs, no absolute/traversal/link members. Fresh directory.",
+    "manifests": {
+      "hc-scale-exhaustive-results": {
+        "files_verified": 2200,
+        "manifest_sha256": "89534483197cafe3281b539c2872aec3418692a7a9de60a10bcd50bedb58f588"
+      },
+      "hc-scale-exhaustive-build": {
+        "files_verified": 6,
+        "manifest_sha256": "507fbbcf1d426bf2ea7737450aa04ba5177ba36e5f10c4aa0664a077d1a15e57"
+      }
+    },
+    "summary_sha256": "18136ad023ebea7b2c8e3e020300152e1e61607c6548bd9e8d49b8e1428f5303",
+    "driver_sha256": "7d808f3ecb9ac682aaff8a7c6c21b47c5f3b17f4f521ce7f5924cdeb87c51144",
+    "rechecker_sha256": "e1c1517a23675b845f611496c6cd857ba7543583d890b45ece7dd7ef0ec8a94e",
+    "rechecker_receipt_sha256": "1bcbb96f6725ab0480e469bef27dedfd1ded8faa2f1350cf81347b7e3fd7b7ee",
+    "rechecker_rerun_matches_original": true,
+    "own_audit": {
+      "all_patterns_exactly_once_per_scale": true,
+      "scalar_pairs": 131072,
+      "mixed_pairs": 36,
+      "total_pairs": 131108,
+      "total_launches": 262216,
+      "batches": 548,
+      "zero_hip_return_codes": 266070,
+      "raw_event_counts": {
+        "hip_rc": 266070,
+        "batch_begin": 548,
+        "batch_complete": 548,
+        "complete": 1
+      },
+      "all_16_stats_words_and_half_outputs_equal": true,
+      "canaries_intact": true,
+      "inactive_stats_zero": true,
+      "n0_no_write": true,
+      "all_four_stages_consistent": true,
+      "native_wrapper_exit": 0,
+      "cleanup_passed": true
+    },
+    "scalar_flag_histograms": {
+      "4096": {
+        "(0, 0, 0)": 8703,
+        "(0, 0, 1)": 24833,
+        "(0, 1, 1)": 31744,
+        "(1, 1, 0)": 130,
+        "(1, 1, 1)": 126
+      },
+      "512": {
+        "(0, 0, 0)": 8703,
+        "(0, 0, 1)": 25601,
+        "(0, 1, 1)": 30976,
+        "(1, 1, 0)": 130,
+        "(1, 1, 1)": 126
+      }
+    },
+    "no_gpu_rerun": true,
+    "limits": "Scalar all-encoding and prescribed mixed-tail/offset equivalence to exact baseline at scales4096/512 only. No full model integration or speed claim."
+  },
+  "timing_screen": {
+    "independent_audit_status": "PASS_SCREEN_RAW_PARITY_TIMING_AND_GATE_AUDIT",
+    "started_utc": "2026-10-09T21:19:38.993696+00:00",
+    "finished_utc": "2026-10-09T21:20:05.611428+00:00",
+    "native_exit_code": 0,
+    "wrapper_exit_code": 0,
+    "cleanup_passed": true,
+    "api_left_stopped": true,
+    "automatic_retries": 0,
+    "power_changes": false,
+    "driver_sha256": "d18e13f99994738ef0341f01e647e3baba364b58ee7c5b28b78e4dab857c1502",
+    "source_sha256": "2946fe219195844ea2a41333d29c46437bd2aead35977b726750b0f088f96ed9",
+    "package_manifest_sha256": "93696662402718ab5a2aebc549706d586001c568625e804b4d1f8c3b92837f52",
+    "full_receipts_archive_sha256": "dae2be775c122a35ad14d27eb29eb8fab85ce07387b06929adac1aab34edf0bc",
+    "analysis_sha256": "105f0f2620cd24e85b25985791af5e0321c7e2e839d9b2ff6d44bd54dea7f43d",
+    "summary_sha256": "0bbe4c365f8a941fdabb39057123c13621e0a60d11352658a5ce32edfa4fa8f1",
+    "descriptors": [
+      {
+        "name": "W_both_halves",
+        "scale": 4096,
+        "n": 3276800,
+        "maximum_calls": 1728
+      },
+      {
+        "name": "X_down_4096",
+        "scale": 512,
+        "n": 41943040,
+        "maximum_calls": 810
+      },
+      {
+        "name": "X_down_4095",
+        "scale": 512,
+        "n": 41932800,
+        "maximum_calls": 54
+      },
+      {
+        "name": "X_up_4096",
+        "scale": 512,
+        "n": 1310720,
+        "maximum_calls": 810
+      },
+      {
+        "name": "X_up_4095",
+        "scale": 512,
+        "n": 1310400,
+        "maximum_calls": 54
+      }
+    ],
+    "pattern_labels": {
+      "0": "synthetic accepted",
+      "1": "synthetic sparse reject",
+      "2": "synthetic dense reject"
+    },
+    "regime_labels": {
+      "0": "warm",
+      "1": "scrub-conditioned; not guaranteed cold"
+    },
+    "analysis": {
+      "cells": [
+        {
+          "descriptor": 0,
+          "pattern": 0,
+          "regime": 0,
+          "calls": 1728,
+          "raw_samples": [
+            {
+              "type": "sample",
+              "index": 0,
+              "descriptor": 0,
+              "pattern": 0,
+              "regime": 0,
+              "quartet": 0,
+              "position": 0,
+              "arm": 0,
+              "ms": 0.0590399988,
+              "launches": 34
+            },
+            {
+              "type": "sample",
+              "index": 1,
+              "descriptor": 0,
+              "pattern": 0,
+              "regime": 0,
+              "quartet": 0,
+              "position": 1,
+              "arm": 1,
+              "ms": 0.0588800013,
+              "launches": 36
+            },
+            {
+              "type": "sample",
+              "index": 2,
+              "descriptor": 0,
+              "pattern": 0,
+              "regime": 0,
+              "quartet": 0,
+              "position": 2,
+              "arm": 1,
+              "ms": 0.0587200001,
+              "launches": 38
+            },
+            {
+              "type": "sample",
+              "index": 3,
+              "descriptor": 0,
+              "pattern": 0,
+              "regime": 0,
+              "quartet": 0,
+              "position": 3,
+              "arm": 0,
+              "ms": 0.0590399988,
+              "launches": 40
+            },
+            {
+              "type": "sample",
+              "index": 4,
+              "descriptor": 0,
+              "pattern": 0,
+              "regime": 0,
+              "quartet": 1,
+              "position": 0,
+              "arm": 0,
+              "ms": 0.0588800013,
+              "launches": 42
+            },
+            {
+              "type": "sample",
+              "index": 5,
+              "descriptor": 0,
+              "pattern": 0,
+              "regime": 0,
+              "quartet": 1,
+              "position": 1,
+              "arm": 1,
+              "ms": 0.0585599989,
+              "launches": 44
+            },
+            {
+              "type": "sample",
+              "index": 6,
+              "descriptor": 0,
+              "pattern": 0,
+              "regime": 0,
+              "quartet": 1,
+              "position": 2,
+              "arm": 1,
+              "ms": 0.0587200001,
+              "launches": 46
+            },
+            {
+              "type": "sample",
+              "index": 7,
+              "descriptor": 0,
+              "pattern": 0,
+              "regime": 0,
+              "quartet": 1,
+              "position": 3,
+              "arm": 0,
+              "ms": 0.0590399988,
+              "launches": 48
+            },
+            {
+              "type": "sample",
+              "index": 8,
+              "descriptor": 0,
+              "pattern": 0,
+              "regime": 0,
+              "quartet": 2,
+              "position": 0,
+              "arm": 0,
+              "ms": 0.0592,
+              "launches": 50
+            },
+            {
+              "type": "sample",
+              "index": 9,
+              "descriptor": 0,
+              "pattern": 0,
+              "regime": 0,
+              "quartet": 2,
+              "position": 1,
+              "arm": 1,
+              "ms": 0.0585599989,
+              "launches": 52
+            },
+            {
+              "type": "sample",
+              "index": 10,
+              "descriptor": 0,
+              "pattern": 0,
+              "regime": 0,
+              "quartet": 2,
+              "position": 2,
+              "arm": 1,
+              "ms": 0.0588800013,
+              "launches": 54
+            },
+            {
+              "type": "sample",
+              "index": 11,
+              "descriptor": 0,
+              "pattern": 0,
+              "regime": 0,
+              "quartet": 2,
+              "position": 3,
+              "arm": 0,
+              "ms": 0.0590399988,
+              "launches": 56
+            }
+          ],
+          "quartets": [
+            {
+              "baseline_ms": 0.0590399988,
+              "candidate_ms": 0.0588000007,
+              "signed_delta_ms": 0.00023999809999999955,
+              "baseline_over_candidate": 1.0040816002915456
+            },
+            {
+              "baseline_ms": 0.05896000005,
+              "candidate_ms": 0.0586399995,
+              "signed_delta_ms": 0.0003200005500000047,
+              "baseline_over_candidate": 1.0054570353466665
+            },
+            {
+              "baseline_ms": 0.0591199994,
+              "candidate_ms": 0.0587200001,
+              "signed_delta_ms": 0.00039999929999999517,
+              "baseline_over_candidate": 1.0068119771682356
+            }
+          ],
+          "median_paired_delta_ms": 0.0003200005500000047,
+          "median_baseline_ms": 0.0590399988,
+          "median_candidate_ms": 0.0587200001,
+          "baseline_range_ms": [
+            0.0588800013,
+            0.0592
+          ],
+          "candidate_range_ms": [
+            0.0585599989,
+            0.0588800013
+          ]
+        },
+        {
+          "descriptor": 1,
+          "pattern": 0,
+          "regime": 0,
+          "calls": 810,
+          "raw_samples": [
+            {
+              "type": "sample",
+              "index": 12,
+              "descriptor": 1,
+              "pattern": 0,
+              "regime": 0,
+              "quartet": 0,
+              "position": 0,
+              "arm": 0,
+              "ms": 0.641438007,
+              "launches": 58
+            },
+            {
+              "type": "sample",
+              "index": 13,
+              "descriptor": 1,
+              "pattern": 0,
+              "regime": 0,
+              "quartet": 0,
+              "position": 1,
+              "arm": 1,
+              "ms": 0.640959978,
+              "launches": 60
+            },
+            {
+              "type": "sample",
+              "index": 14,
+              "descriptor": 1,
+              "pattern": 0,
+              "regime": 0,
+              "quartet": 0,
+              "position": 2,
+              "arm": 1,
+              "ms": 0.640959978,
+              "launches": 62
+            },
+            {
+              "type": "sample",
+              "index": 15,
+              "descriptor": 1,
+              "pattern": 0,
+              "regime": 0,
+              "quartet": 0,
+              "position": 3,
+              "arm": 0,
+              "ms": 0.641120017,
+              "launches": 64
+            },
+            {
+              "type": "sample",
+              "index": 16,
+              "descriptor": 1,
+              "pattern": 0,
+              "regime": 0,
+              "quartet": 1,
+              "position": 0,
+              "arm": 0,
+              "ms": 0.641120017,
+              "launches": 66
+            },
+            {
+              "type": "sample",
+              "index": 17,
+              "descriptor": 1,
+              "pattern": 0,
+              "regime": 0,
+              "quartet": 1,
+              "position": 1,
+              "arm": 1,
+              "ms": 0.640959978,
+              "launches": 68
+            },
+            {
+              "type": "sample",
+              "index": 18,
+              "descriptor": 1,
+              "pattern": 0,
+              "regime": 0,
+              "quartet": 1,
+              "position": 2,
+              "arm": 1,
+              "ms": 0.64064002,
+              "launches": 70
+            },
+            {
+              "type": "sample",
+              "index": 19,
+              "descriptor": 1,
+              "pattern": 0,
+              "regime": 0,
+              "quartet": 1,
+              "position": 3,
+              "arm": 0,
+              "ms": 0.641279995,
+              "launches": 72
+            },
+            {
+              "type": "sample",
+              "index": 20,
+              "descriptor": 1,
+              "pattern": 0,
+              "regime": 0,
+              "quartet": 2,
+              "position": 0,
+              "arm": 0,
+              "ms": 0.641120017,
+              "launches": 74
+            },
+            {
+              "type": "sample",
+              "index": 21,
+              "descriptor": 1,
+              "pattern": 0,
+              "regime": 0,
+              "quartet": 2,
+              "position": 1,
+              "arm": 1,
+              "ms": 0.640799999,
+              "launches": 76
+            },
+            {
+              "type": "sample",
+              "index": 22,
+              "descriptor": 1,
+              "pattern": 0,
+              "regime": 0,
+              "quartet": 2,
+              "position": 2,
+              "arm": 1,
+              "ms": 0.640799999,
+              "launches": 78
+            },
+            {
+              "type": "sample",
+              "index": 23,
+              "descriptor": 1,
+              "pattern": 0,
+              "regime": 0,
+              "quartet": 2,
+              "position": 3,
+              "arm": 0,
+              "ms": 0.641120017,
+              "launches": 80
+            }
+          ],
+          "quartets": [
+            {
+              "baseline_ms": 0.641279012,
+              "candidate_ms": 0.640959978,
+              "signed_delta_ms": 0.0003190339999999958,
+              "baseline_over_candidate": 1.000497744026071
+            },
+            {
+              "baseline_ms": 0.641200006,
+              "candidate_ms": 0.640799999,
+              "signed_delta_ms": 0.00040000700000009104,
+              "baseline_over_candidate": 1.0006242306501627
+            },
+            {
+              "baseline_ms": 0.641120017,
+              "candidate_ms": 0.640799999,
+              "signed_delta_ms": 0.000320018000000033,
+              "baseline_over_candidate": 1.0004994038709416
+            }
+          ],
+          "median_paired_delta_ms": 0.000320018000000033,
+          "median_baseline_ms": 0.641200006,
+          "median_candidate_ms": 0.640799999,
+          "baseline_range_ms": [
+            0.641120017,
+            0.641438007
+          ],
+          "candidate_range_ms": [
+            0.64064002,
+            0.640959978
+          ]
+        },
+        {
+          "descriptor": 2,
+          "pattern": 0,
+          "regime": 0,
+          "calls": 54,
+          "raw_samples": [
+            {
+              "type": "sample",
+              "index": 24,
+              "descriptor": 2,
+              "pattern": 0,
+              "regime": 0,
+              "quartet": 0,
+              "position": 0,
+              "arm": 0,
+              "ms": 0.641439974,
+              "launches": 82
+            },
+            {
+              "type": "sample",
+              "index": 25,
+              "descriptor": 2,
+              "pattern": 0,
+              "regime": 0,
+              "quartet": 0,
+              "position": 1,
+              "arm": 1,
+              "ms": 0.64064002,
+              "launches": 84
+            },
+            {
+              "type": "sample",
+              "index": 26,
+              "descriptor": 2,
+              "pattern": 0,
+              "regime": 0,
+              "quartet": 0,
+              "position": 2,
+              "arm": 1,
+              "ms": 0.655359983,
+              "launches": 86
+            },
+            {
+              "type": "sample",
+              "index": 27,
+              "descriptor": 2,
+              "pattern": 0,
+              "regime": 0,
+              "quartet": 0,
+              "position": 3,
+              "arm": 0,
+              "ms": 0.640959978,
+              "launches": 88
+            },
+            {
+              "type": "sample",
+              "index": 28,
+              "descriptor": 2,
+              "pattern": 0,
+              "regime": 0,
+              "quartet": 1,
+              "position": 0,
+              "arm": 0,
+              "ms": 0.640959978,
+              "launches": 90
+            },
+            {
+              "type": "sample",
+              "index": 29,
+              "descriptor": 2,
+              "pattern": 0,
+              "regime": 0,
+              "quartet": 1,
+              "position": 1,
+              "arm": 1,
+              "ms": 0.640799999,
+              "launches": 92
+            },
+            {
+              "type": "sample",
+              "index": 30,
+              "descriptor": 2,
+              "pattern": 0,
+              "regime": 0,
+              "quartet": 1,
+              "position": 2,
+              "arm": 1,
+              "ms": 0.640478969,
+              "launches": 94
+            },
+            {
+              "type": "sample",
+              "index": 31,
+              "descriptor": 2,
+              "pattern": 0,
+              "regime": 0,
+              "quartet": 1,
+              "position": 3,
+              "arm": 0,
+              "ms": 0.641120017,
+              "launches": 96
+            },
+            {
+              "type": "sample",
+              "index": 32,
+              "descriptor": 2,
+              "pattern": 0,
+              "regime": 0,
+              "quartet": 2,
+              "position": 0,
+              "arm": 0,
+              "ms": 0.641120017,
+              "launches": 98
+            },
+            {
+              "type": "sample",
+              "index": 33,
+              "descriptor": 2,
+              "pattern": 0,
+              "regime": 0,
+              "quartet": 2,
+              "position": 1,
+              "arm": 1,
+              "ms": 0.640959978,
+              "launches": 100
+            },
+            {
+              "type": "sample",
+              "index": 34,
+              "descriptor": 2,
+              "pattern": 0,
+              "regime": 0,
+              "quartet": 2,
+              "position": 2,
+              "arm": 1,
+              "ms": 0.640479982,
+              "launches": 102
+            },
+            {
+              "type": "sample",
+              "index": 35,
+              "descriptor": 2,
+              "pattern": 0,
+              "regime": 0,
+              "quartet": 2,
+              "position": 3,
+              "arm": 0,
+              "ms": 0.640799999,
+              "launches": 104
+            }
+          ],
+          "quartets": [
+            {
+              "baseline_ms": 0.641199976,
+              "candidate_ms": 0.6480000015,
+              "signed_delta_ms": -0.006800025500000029,
+              "baseline_over_candidate": 0.9895061335119456
+            },
+            {
+              "baseline_ms": 0.6410399975000001,
+              "candidate_ms": 0.640639484,
+              "signed_delta_ms": 0.0004005135000000326,
+              "baseline_over_candidate": 1.0006251776701294
+            },
+            {
+              "baseline_ms": 0.640960008,
+              "candidate_ms": 0.6407199800000001,
+              "signed_delta_ms": 0.00024002799999989222,
+              "baseline_over_candidate": 1.0003746223116061
+            }
+          ],
+          "median_paired_delta_ms": 0.00024002799999989222,
+          "median_baseline_ms": 0.6410399975000001,
+          "median_candidate_ms": 0.6407199800000001,
+          "baseline_range_ms": [
+            0.640799999,
+            0.641439974
+          ],
+          "candidate_range_ms": [
+            0.640478969,
+            0.655359983
+          ]
+        },
+        {
+          "descriptor": 3,
+          "pattern": 0,
+          "regime": 0,
+          "calls": 810,
+          "raw_samples": [
+            {
+              "type": "sample",
+              "index": 36,
+              "descriptor": 3,
+              "pattern": 0,
+              "regime": 0,
+              "quartet": 0,
+              "position": 0,
+              "arm": 0,
+              "ms": 0.0287999995,
+              "launches": 106
+            },
+            {
+              "type": "sample",
+              "index": 37,
+              "descriptor": 3,
+              "pattern": 0,
+              "regime": 0,
+              "quartet": 0,
+              "position": 1,
+              "arm": 1,
+              "ms": 0.0291200001,
+              "launches": 108
+            },
+            {
+              "type": "sample",
+              "index": 38,
+              "descriptor": 3,
+              "pattern": 0,
+              "regime": 0,
+              "quartet": 0,
+              "position": 2,
+              "arm": 1,
+              "ms": 0.0287999995,
+              "launches": 110
+            },
+            {
+              "type": "sample",
+              "index": 39,
+              "descriptor": 3,
+              "pattern": 0,
+              "regime": 0,
+              "quartet": 0,
+              "position": 3,
+              "arm": 0,
+              "ms": 0.0287999995,
+              "launches": 112
+            },
+            {
+              "type": "sample",
+              "index": 40,
+              "descriptor": 3,
+              "pattern": 0,
+              "regime": 0,
+              "quartet": 1,
+              "position": 0,
+              "arm": 0,
+              "ms": 0.0289600007,
+              "launches": 114
+            },
+            {
+              "type": "sample",
+              "index": 41,
+              "descriptor": 3,
+              "pattern": 0,
+              "regime": 0,
+              "quartet": 1,
+              "position": 1,
+              "arm": 1,
+              "ms": 0.0289600007,
+              "launches": 116
+            },
+            {
+              "type": "sample",
+              "index": 42,
+              "descriptor": 3,
+              "pattern": 0,
+              "regime": 0,
+              "quartet": 1,
+              "position": 2,
+              "arm": 1,
+              "ms": 0.0289600007,
+              "launches": 118
+            },
+            {
+              "type": "sample",
+              "index": 43,
+              "descriptor": 3,
+              "pattern": 0,
+              "regime": 0,
+              "quartet": 1,
+              "position": 3,
+              "arm": 0,
+              "ms": 0.0287999995,
+              "launches": 120
+            },
+            {
+              "type": "sample",
+              "index": 44,
+              "descriptor": 3,
+              "pattern": 0,
+              "regime": 0,
+              "quartet": 2,
+              "position": 0,
+              "arm": 0,
+              "ms": 0.0287999995,
+              "launches": 122
+            },
+            {
+              "type": "sample",
+              "index": 45,
+              "descriptor": 3,
+              "pattern": 0,
+              "regime": 0,
+              "quartet": 2,
+              "position": 1,
+              "arm": 1,
+              "ms": 0.0287999995,
+              "launches": 124
+            },
+            {
+              "type": "sample",
+              "index": 46,
+              "descriptor": 3,
+              "pattern": 0,
+              "regime": 0,
+              "quartet": 2,
+              "position": 2,
+              "arm": 1,
+              "ms": 0.0291200001,
+              "launches": 126
+            },
+            {
+              "type": "sample",
+              "index": 47,
+              "descriptor": 3,
+              "pattern": 0,
+              "regime": 0,
+              "quartet": 2,
+              "position": 3,
+              "arm": 0,
+              "ms": 0.0289600007,
+              "launches": 128
+            }
+          ],
+          "quartets": [
+            {
+              "baseline_ms": 0.0287999995,
+              "candidate_ms": 0.0289599998,
+              "signed_delta_ms": -0.00016000030000000096,
+              "baseline_over_candidate": 0.9944751277242757
+            },
+            {
+              "baseline_ms": 0.028880000099999997,
+              "candidate_ms": 0.0289600007,
+              "signed_delta_ms": -8.000060000000128e-05,
+              "baseline_over_candidate": 0.9972375484093133
+            },
+            {
+              "baseline_ms": 0.028880000099999997,
+              "candidate_ms": 0.0289599998,
+              "signed_delta_ms": -7.999970000000314e-05,
+              "baseline_over_candidate": 0.9972375794008119
+            }
+          ],
+          "median_paired_delta_ms": -8.000060000000128e-05,
+          "median_baseline_ms": 0.028880000099999997,
+          "median_candidate_ms": 0.0289599998,
+          "baseline_range_ms": [
+            0.0287999995,
+            0.0289600007
+          ],
+          "candidate_range_ms": [
+            0.0287999995,
+            0.0291200001
+          ]
+        },
+        {
+          "descriptor": 4,
+          "pattern": 0,
+          "regime": 0,
+          "calls": 54,
+          "raw_samples": [
+            {
+              "type": "sample",
+              "index": 48,
+              "descriptor": 4,
+              "pattern": 0,
+              "regime": 0,
+              "quartet": 0,
+              "position": 0,
+              "arm": 0,
+              "ms": 0.0291200001,
+              "launches": 130
+            },
+            {
+              "type": "sample",
+              "index": 49,
+              "descriptor": 4,
+              "pattern": 0,
+              "regime": 0,
+              "quartet": 0,
+              "position": 1,
+              "arm": 1,
+              "ms": 0.0291200001,
+              "launches": 132
+            },
+            {
+              "type": "sample",
+              "index": 50,
+              "descriptor": 4,
+              "pattern": 0,
+              "regime": 0,
+              "quartet": 0,
+              "position": 2,
+              "arm": 1,
+              "ms": 0.0291200001,
+              "launches": 134
+            },
+            {
+              "type": "sample",
+              "index": 51,
+              "descriptor": 4,
+              "pattern": 0,
+              "regime": 0,
+              "quartet": 0,
+              "position": 3,
+              "arm": 0,
+              "ms": 0.0289600007,
+              "launches": 136
+            },
+            {
+              "type": "sample",
+              "index": 52,
+              "descriptor": 4,
+              "pattern": 0,
+              "regime": 0,
+              "quartet": 1,
+              "position": 0,
+              "arm": 0,
+              "ms": 0.0289600007,
+              "launches": 138
+            },
+            {
+              "type": "sample",
+              "index": 53,
+              "descriptor": 4,
+              "pattern": 0,
+              "regime": 0,
+              "quartet": 1,
+              "position": 1,
+              "arm": 1,
+              "ms": 0.0289600007,
+              "launches": 140
+            },
+            {
+              "type": "sample",
+              "index": 54,
+              "descriptor": 4,
+              "pattern": 0,
+              "regime": 0,
+              "quartet": 1,
+              "position": 2,
+              "arm": 1,
+              "ms": 0.0289600007,
+              "launches": 142
+            },
+            {
+              "type": "sample",
+              "index": 55,
+              "descriptor": 4,
+              "pattern": 0,
+              "regime": 0,
+              "quartet": 1,
+              "position": 3,
+              "arm": 0,
+              "ms": 0.0289600007,
+              "launches": 144
+            },
+            {
+              "type": "sample",
+              "index": 56,
+              "descriptor": 4,
+              "pattern": 0,
+              "regime": 0,
+              "quartet": 2,
+              "position": 0,
+              "arm": 0,
+              "ms": 0.0287999995,
+              "launches": 146
+            },
+            {
+              "type": "sample",
+              "index": 57,
+              "descriptor": 4,
+              "pattern": 0,
+              "regime": 0,
+              "quartet": 2,
+              "position": 1,
+              "arm": 1,
+              "ms": 0.0289600007,
+              "launches": 148
+            },
+            {
+              "type": "sample",
+              "index": 58,
+              "descriptor": 4,
+              "pattern": 0,
+              "regime": 0,
+              "quartet": 2,
+              "position": 2,
+              "arm": 1,
+              "ms": 0.0291200001,
+              "launches": 150
+            },
+            {
+              "type": "sample",
+              "index": 59,
+              "descriptor": 4,
+              "pattern": 0,
+              "regime": 0,
+              "quartet": 2,
+              "position": 3,
+              "arm": 0,
+              "ms": 0.0289600007,
+              "launches": 152
+            }
+          ],
+          "quartets": [
+            {
+              "baseline_ms": 0.0290400004,
+              "candidate_ms": 0.0291200001,
+              "signed_delta_ms": -7.999969999999967e-05,
+              "baseline_over_candidate": 0.9972527575643793
+            },
+            {
+              "baseline_ms": 0.0289600007,
+              "candidate_ms": 0.0289600007,
+              "signed_delta_ms": 0.0,
+              "baseline_over_candidate": 1.0
+            },
+            {
+              "baseline_ms": 0.028880000099999997,
+              "candidate_ms": 0.0290400004,
+              "signed_delta_ms": -0.00016000030000000443,
+              "baseline_over_candidate": 0.9944903478720336
+            }
+          ],
+          "median_paired_delta_ms": -7.999969999999967e-05,
+          "median_baseline_ms": 0.0289600007,
+          "median_candidate_ms": 0.0290400004,
+          "baseline_range_ms": [
+            0.0287999995,
+            0.0291200001
+          ],
+          "candidate_range_ms": [
+            0.0289600007,
+            0.0291200001
+          ]
+        },
+        {
+          "descriptor": 0,
+          "pattern": 0,
+          "regime": 1,
+          "calls": 1728,
+          "raw_samples": [
+            {
+              "type": "sample",
+              "index": 60,
+              "descriptor": 0,
+              "pattern": 0,
+              "regime": 1,
+              "quartet": 0,
+              "position": 0,
+              "arm": 0,
+              "ms": 0.0593600012,
+              "launches": 154
+            },
+            {
+              "type": "sample",
+              "index": 61,
+              "descriptor": 0,
+              "pattern": 0,
+              "regime": 1,
+              "quartet": 0,
+              "position": 1,
+              "arm": 1,
+              "ms": 0.0593600012,
+              "launches": 156
+            },
+            {
+              "type": "sample",
+              "index": 62,
+              "descriptor": 0,
+              "pattern": 0,
+              "regime": 1,
+              "quartet": 0,
+              "position": 2,
+              "arm": 1,
+              "ms": 0.0585599989,
+              "launches": 158
+            },
+            {
+              "type": "sample",
+              "index": 63,
+              "descriptor": 0,
+              "pattern": 0,
+              "regime": 1,
+              "quartet": 0,
+              "position": 3,
+              "arm": 0,
+              "ms": 0.0588800013,
+              "launches": 160
+            },
+            {
+              "type": "sample",
+              "index": 64,
+              "descriptor": 0,
+              "pattern": 0,
+              "regime": 1,
+              "quartet": 1,
+              "position": 0,
+              "arm": 0,
+              "ms": 0.0590399988,
+              "launches": 162
+            },
+            {
+              "type": "sample",
+              "index": 65,
+              "descriptor": 0,
+              "pattern": 0,
+              "regime": 1,
+              "quartet": 1,
+              "position": 1,
+              "arm": 1,
+              "ms": 0.0585599989,
+              "launches": 164
+            },
+            {
+              "type": "sample",
+              "index": 66,
+              "descriptor": 0,
+              "pattern": 0,
+              "regime": 1,
+              "quartet": 1,
+              "position": 2,
+              "arm": 1,
+              "ms": 0.0585599989,
+              "launches": 166
+            },
+            {
+              "type": "sample",
+              "index": 67,
+              "descriptor": 0,
+              "pattern": 0,
+              "regime": 1,
+              "quartet": 1,
+              "position": 3,
+              "arm": 0,
+              "ms": 0.0587200001,
+              "launches": 168
+            },
+            {
+              "type": "sample",
+              "index": 68,
+              "descriptor": 0,
+              "pattern": 0,
+              "regime": 1,
+              "quartet": 2,
+              "position": 0,
+              "arm": 0,
+              "ms": 0.0590399988,
+              "launches": 170
+            },
+            {
+              "type": "sample",
+              "index": 69,
+              "descriptor": 0,
+              "pattern": 0,
+              "regime": 1,
+              "quartet": 2,
+              "position": 1,
+              "arm": 1,
+              "ms": 0.0585599989,
+              "launches": 172
+            },
+            {
+              "type": "sample",
+              "index": 70,
+              "descriptor": 0,
+              "pattern": 0,
+              "regime": 1,
+              "quartet": 2,
+              "position": 2,
+              "arm": 1,
+              "ms": 0.0587200001,
+              "launches": 174
+            },
+            {
+              "type": "sample",
+              "index": 71,
+              "descriptor": 0,
+              "pattern": 0,
+              "regime": 1,
+              "quartet": 2,
+              "position": 3,
+              "arm": 0,
+              "ms": 0.0588800013,
+              "launches": 176
+            }
+          ],
+          "quartets": [
+            {
+              "baseline_ms": 0.05912000125,
+              "candidate_ms": 0.05896000005,
+              "signed_delta_ms": 0.00016000119999999562,
+              "baseline_over_candidate": 1.0027137245567217
+            },
+            {
+              "baseline_ms": 0.05887999945,
+              "candidate_ms": 0.0585599989,
+              "signed_delta_ms": 0.0003200005499999978,
+              "baseline_over_candidate": 1.0054644903690393
+            },
+            {
+              "baseline_ms": 0.05896000005,
+              "candidate_ms": 0.0586399995,
+              "signed_delta_ms": 0.0003200005500000047,
+              "baseline_over_candidate": 1.0054570353466665
+            }
+          ],
+          "median_paired_delta_ms": 0.0003200005499999978,
+          "median_baseline_ms": 0.05896000005,
+          "median_candidate_ms": 0.0586399995,
+          "baseline_range_ms": [
+            0.0587200001,
+            0.0593600012
+          ],
+          "candidate_range_ms": [
+            0.0585599989,
+            0.0593600012
+          ]
+        },
+        {
+          "descriptor": 1,
+          "pattern": 0,
+          "regime": 1,
+          "calls": 810,
+          "raw_samples": [
+            {
+              "type": "sample",
+              "index": 72,
+              "descriptor": 1,
+              "pattern": 0,
+              "regime": 1,
+              "quartet": 0,
+              "position": 0,
+              "arm": 0,
+              "ms": 0.646879971,
+              "launches": 178
+            },
+            {
+              "type": "sample",
+              "index": 73,
+              "descriptor": 1,
+              "pattern": 0,
+              "regime": 1,
+              "quartet": 0,
+              "position": 1,
+              "arm": 1,
+              "ms": 0.644159973,
+              "launches": 180
+            },
+            {
+              "type": "sample",
+              "index": 74,
+              "descriptor": 1,
+              "pattern": 0,
+              "regime": 1,
+              "quartet": 0,
+              "position": 2,
+              "arm": 1,
+              "ms": 0.641120017,
+              "launches": 182
+            },
+            {
+              "type": "sample",
+              "index": 75,
+              "descriptor": 1,
+              "pattern": 0,
+              "regime": 1,
+              "quartet": 0,
+              "position": 3,
+              "arm": 0,
+              "ms": 0.641279995,
+              "launches": 184
+            },
+            {
+              "type": "sample",
+              "index": 76,
+              "descriptor": 1,
+              "pattern": 0,
+              "regime": 1,
+              "quartet": 1,
+              "position": 0,
+              "arm": 0,
+              "ms": 0.65583998,
+              "launches": 186
+            },
+            {
+              "type": "sample",
+              "index": 77,
+              "descriptor": 1,
+              "pattern": 0,
+              "regime": 1,
+              "quartet": 1,
+              "position": 1,
+              "arm": 1,
+              "ms": 0.64064002,
+              "launches": 188
+            },
+            {
+              "type": "sample",
+              "index": 78,
+              "descriptor": 1,
+              "pattern": 0,
+              "regime": 1,
+              "quartet": 1,
+              "position": 2,
+              "arm": 1,
+              "ms": 0.640799999,
+              "launches": 190
+            },
+            {
+              "type": "sample",
+              "index": 79,
+              "descriptor": 1,
+              "pattern": 0,
+              "regime": 1,
+              "quartet": 1,
+              "position": 3,
+              "arm": 0,
+              "ms": 0.641120017,
+              "launches": 192
+            },
+            {
+              "type": "sample",
+              "index": 80,
+              "descriptor": 1,
+              "pattern": 0,
+              "regime": 1,
+              "quartet": 2,
+              "position": 0,
+              "arm": 0,
+              "ms": 0.641119003,
+              "launches": 194
+            },
+            {
+              "type": "sample",
+              "index": 81,
+              "descriptor": 1,
+              "pattern": 0,
+              "regime": 1,
+              "quartet": 2,
+              "position": 1,
+              "arm": 1,
+              "ms": 0.64064002,
+              "launches": 196
+            },
+            {
+              "type": "sample",
+              "index": 82,
+              "descriptor": 1,
+              "pattern": 0,
+              "regime": 1,
+              "quartet": 2,
+              "position": 2,
+              "arm": 1,
+              "ms": 0.64064002,
+              "launches": 198
+            },
+            {
+              "type": "sample",
+              "index": 83,
+              "descriptor": 1,
+              "pattern": 0,
+              "regime": 1,
+              "quartet": 2,
+              "position": 3,
+              "arm": 0,
+              "ms": 0.641120017,
+              "launches": 200
+            }
+          ],
+          "quartets": [
+            {
+              "baseline_ms": 0.644079983,
+              "candidate_ms": 0.642639995,
+              "signed_delta_ms": 0.0014399880000000032,
+              "baseline_over_candidate": 1.0022407382223386
+            },
+            {
+              "baseline_ms": 0.6484799985,
+              "candidate_ms": 0.6407200095,
+              "signed_delta_ms": 0.007759989000000078,
+              "baseline_over_candidate": 1.012111357355697
+            },
+            {
+              "baseline_ms": 0.64111951,
+              "candidate_ms": 0.64064002,
+              "signed_delta_ms": 0.00047949000000002684,
+              "baseline_over_candidate": 1.0007484546469638
+            }
+          ],
+          "median_paired_delta_ms": 0.0014399880000000032,
+          "median_baseline_ms": 0.644079983,
+          "median_candidate_ms": 0.6407200095,
+          "baseline_range_ms": [
+            0.641119003,
+            0.65583998
+          ],
+          "candidate_range_ms": [
+            0.64064002,
+            0.644159973
+          ]
+        },
+        {
+          "descriptor": 2,
+          "pattern": 0,
+          "regime": 1,
+          "calls": 54,
+          "raw_samples": [
+            {
+              "type": "sample",
+              "index": 84,
+              "descriptor": 2,
+              "pattern": 0,
+              "regime": 1,
+              "quartet": 0,
+              "position": 0,
+              "arm": 0,
+              "ms": 0.645280004,
+              "launches": 202
+            },
+            {
+              "type": "sample",
+              "index": 85,
+              "descriptor": 2,
+              "pattern": 0,
+              "regime": 1,
+              "quartet": 0,
+              "position": 1,
+              "arm": 1,
+              "ms": 0.643360019,
+              "launches": 204
+            },
+            {
+              "type": "sample",
+              "index": 86,
+              "descriptor": 2,
+              "pattern": 0,
+              "regime": 1,
+              "quartet": 0,
+              "position": 2,
+              "arm": 1,
+              "ms": 0.64064002,
+              "launches": 206
+            },
+            {
+              "type": "sample",
+              "index": 87,
+              "descriptor": 2,
+              "pattern": 0,
+              "regime": 1,
+              "quartet": 0,
+              "position": 3,
+              "arm": 0,
+              "ms": 0.656159997,
+              "launches": 208
+            },
+            {
+              "type": "sample",
+              "index": 88,
+              "descriptor": 2,
+              "pattern": 0,
+              "regime": 1,
+              "quartet": 1,
+              "position": 0,
+              "arm": 0,
+              "ms": 0.641120017,
+              "launches": 210
+            },
+            {
+              "type": "sample",
+              "index": 89,
+              "descriptor": 2,
+              "pattern": 0,
+              "regime": 1,
+              "quartet": 1,
+              "position": 1,
+              "arm": 1,
+              "ms": 0.640799999,
+              "launches": 212
+            },
+            {
+              "type": "sample",
+              "index": 90,
+              "descriptor": 2,
+              "pattern": 0,
+              "regime": 1,
+              "quartet": 1,
+              "position": 2,
+              "arm": 1,
+              "ms": 0.640479982,
+              "launches": 214
+            },
+            {
+              "type": "sample",
+              "index": 91,
+              "descriptor": 2,
+              "pattern": 0,
+              "regime": 1,
+              "quartet": 1,
+              "position": 3,
+              "arm": 0,
+              "ms": 0.641119003,
+              "launches": 216
+            },
+            {
+              "type": "sample",
+              "index": 92,
+              "descriptor": 2,
+              "pattern": 0,
+              "regime": 1,
+              "quartet": 2,
+              "position": 0,
+              "arm": 0,
+              "ms": 0.640959978,
+              "launches": 218
+            },
+            {
+              "type": "sample",
+              "index": 93,
+              "descriptor": 2,
+              "pattern": 0,
+              "regime": 1,
+              "quartet": 2,
+              "position": 1,
+              "arm": 1,
+              "ms": 0.64064002,
+              "launches": 220
+            },
+            {
+              "type": "sample",
+              "index": 94,
+              "descriptor": 2,
+              "pattern": 0,
+              "regime": 1,
+              "quartet": 2,
+              "position": 2,
+              "arm": 1,
+              "ms": 0.64064002,
+              "launches": 222
+            },
+            {
+              "type": "sample",
+              "index": 95,
+              "descriptor": 2,
+              "pattern": 0,
+              "regime": 1,
+              "quartet": 2,
+              "position": 3,
+              "arm": 0,
+              "ms": 0.641120017,
+              "launches": 224
+            }
+          ],
+          "quartets": [
+            {
+              "baseline_ms": 0.6507200005,
+              "candidate_ms": 0.6420000195,
+              "signed_delta_ms": 0.008719981000000043,
+              "baseline_over_candidate": 1.013582524509565
+            },
+            {
+              "baseline_ms": 0.64111951,
+              "candidate_ms": 0.6406399905,
+              "signed_delta_ms": 0.0004795195000000252,
+              "baseline_over_candidate": 1.0007485007291315
+            },
+            {
+              "baseline_ms": 0.6410399975000001,
+              "candidate_ms": 0.64064002,
+              "signed_delta_ms": 0.0003999775000000927,
+              "baseline_over_candidate": 1.0006243404837558
+            }
+          ],
+          "median_paired_delta_ms": 0.0004795195000000252,
+          "median_baseline_ms": 0.64111951,
+          "median_candidate_ms": 0.64064002,
+          "baseline_range_ms": [
+            0.640959978,
+            0.656159997
+          ],
+          "candidate_range_ms": [
+            0.640479982,
+            0.643360019
+          ]
+        },
+        {
+          "descriptor": 3,
+          "pattern": 0,
+          "regime": 1,
+          "calls": 810,
+          "raw_samples": [
+            {
+              "type": "sample",
+              "index": 96,
+              "descriptor": 3,
+              "pattern": 0,
+              "regime": 1,
+              "quartet": 0,
+              "position": 0,
+              "arm": 0,
+              "ms": 0.0307199992,
+              "launches": 226
+            },
+            {
+              "type": "sample",
+              "index": 97,
+              "descriptor": 3,
+              "pattern": 0,
+              "regime": 1,
+              "quartet": 0,
+              "position": 1,
+              "arm": 1,
+              "ms": 0.0300799999,
+              "launches": 228
+            },
+            {
+              "type": "sample",
+              "index": 98,
+              "descriptor": 3,
+              "pattern": 0,
+              "regime": 1,
+              "quartet": 0,
+              "position": 2,
+              "arm": 1,
+              "ms": 0.0291200001,
+              "launches": 230
+            },
+            {
+              "type": "sample",
+              "index": 99,
+              "descriptor": 3,
+              "pattern": 0,
+              "regime": 1,
+              "quartet": 0,
+              "position": 3,
+              "arm": 0,
+              "ms": 0.0291200001,
+              "launches": 232
+            },
+            {
+              "type": "sample",
+              "index": 100,
+              "descriptor": 3,
+              "pattern": 0,
+              "regime": 1,
+              "quartet": 1,
+              "position": 0,
+              "arm": 0,
+              "ms": 0.0287999995,
+              "launches": 234
+            },
+            {
+              "type": "sample",
+              "index": 101,
+              "descriptor": 3,
+              "pattern": 0,
+              "regime": 1,
+              "quartet": 1,
+              "position": 1,
+              "arm": 1,
+              "ms": 0.0289600007,
+              "launches": 236
+            },
+            {
+              "type": "sample",
+              "index": 102,
+              "descriptor": 3,
+              "pattern": 0,
+              "regime": 1,
+              "quartet": 1,
+              "position": 2,
+              "arm": 1,
+              "ms": 0.0289600007,
+              "launches": 238
+            },
+            {
+              "type": "sample",
+              "index": 103,
+              "descriptor": 3,
+              "pattern": 0,
+              "regime": 1,
+              "quartet": 1,
+              "position": 3,
+              "arm": 0,
+              "ms": 0.0289600007,
+              "launches": 240
+            },
+            {
+              "type": "sample",
+              "index": 104,
+              "descriptor": 3,
+              "pattern": 0,
+              "regime": 1,
+              "quartet": 2,
+              "position": 0,
+              "arm": 0,
+              "ms": 0.0287999995,
+              "launches": 242
+            },
+            {
+              "type": "sample",
+              "index": 105,
+              "descriptor": 3,
+              "pattern": 0,
+              "regime": 1,
+              "quartet": 2,
+              "position": 1,
+              "arm": 1,
+              "ms": 0.0289600007,
+              "launches": 244
+            },
+            {
+              "type": "sample",
+              "index": 106,
+              "descriptor": 3,
+              "pattern": 0,
+              "regime": 1,
+              "quartet": 2,
+              "position": 2,
+              "arm": 1,
+              "ms": 0.0291200001,
+              "launches": 246
+            },
+            {
+              "type": "sample",
+              "index": 107,
+              "descriptor": 3,
+              "pattern": 0,
+              "regime": 1,
+              "quartet": 2,
+              "position": 3,
+              "arm": 0,
+              "ms": 0.0287999995,
+              "launches": 248
+            }
+          ],
+          "quartets": [
+            {
+              "baseline_ms": 0.02991999965,
+              "candidate_ms": 0.0296,
+              "signed_delta_ms": 0.00031999964999999964,
+              "baseline_over_candidate": 1.0108107989864865
+            },
+            {
+              "baseline_ms": 0.028880000099999997,
+              "candidate_ms": 0.0289600007,
+              "signed_delta_ms": -8.000060000000128e-05,
+              "baseline_over_candidate": 0.9972375484093133
+            },
+            {
+              "baseline_ms": 0.0287999995,
+              "candidate_ms": 0.0290400004,
+              "signed_delta_ms": -0.00024000090000000224,
+              "baseline_over_candidate": 0.991735506312183
+            }
+          ],
+          "median_paired_delta_ms": -8.000060000000128e-05,
+          "median_baseline_ms": 0.028880000099999997,
+          "median_candidate_ms": 0.0290400004,
+          "baseline_range_ms": [
+            0.0287999995,
+            0.0307199992
+          ],
+          "candidate_range_ms": [
+            0.0289600007,
+            0.0300799999
+          ]
+        },
+        {
+          "descriptor": 4,
+          "pattern": 0,
+          "regime": 1,
+          "calls": 54,
+          "raw_samples": [
+            {
+              "type": "sample",
+              "index": 108,
+              "descriptor": 4,
+              "pattern": 0,
+              "regime": 1,
+              "quartet": 0,
+              "position": 0,
+              "arm": 0,
+              "ms": 0.0289600007,
+              "launches": 250
+            },
+            {
+              "type": "sample",
+              "index": 109,
+              "descriptor": 4,
+              "pattern": 0,
+              "regime": 1,
+              "quartet": 0,
+              "position": 1,
+              "arm": 1,
+              "ms": 0.0291200001,
+              "launches": 252
+            },
+            {
+              "type": "sample",
+              "index": 110,
+              "descriptor": 4,
+              "pattern": 0,
+              "regime": 1,
+              "quartet": 0,
+              "position": 2,
+              "arm": 1,
+              "ms": 0.0289600007,
+              "launches": 254
+            },
+            {
+              "type": "sample",
+              "index": 111,
+              "descriptor": 4,
+              "pattern": 0,
+              "regime": 1,
+              "quartet": 0,
+              "position": 3,
+              "arm": 0,
+              "ms": 0.0287999995,
+              "launches": 256
+            },
+            {
+              "type": "sample",
+              "index": 112,
+              "descriptor": 4,
+              "pattern": 0,
+              "regime": 1,
+              "quartet": 1,
+              "position": 0,
+              "arm": 0,
+              "ms": 0.0287999995,
+              "launches": 258
+            },
+            {
+              "type": "sample",
+              "index": 113,
+              "descriptor": 4,
+              "pattern": 0,
+              "regime": 1,
+              "quartet": 1,
+              "position": 1,
+              "arm": 1,
+              "ms": 0.0433599986,
+              "launches": 260
+            },
+            {
+              "type": "sample",
+              "index": 114,
+              "descriptor": 4,
+              "pattern": 0,
+              "regime": 1,
+              "quartet": 1,
+              "position": 2,
+              "arm": 1,
+              "ms": 0.0287999995,
+              "launches": 262
+            },
+            {
+              "type": "sample",
+              "index": 115,
+              "descriptor": 4,
+              "pattern": 0,
+              "regime": 1,
+              "quartet": 1,
+              "position": 3,
+              "arm": 0,
+              "ms": 0.0289600007,
+              "launches": 264
+            },
+            {
+              "type": "sample",
+              "index": 116,
+              "descriptor": 4,
+              "pattern": 0,
+              "regime": 1,
+              "quartet": 2,
+              "position": 0,
+              "arm": 0,
+              "ms": 0.0287999995,
+              "launches": 266
+            },
+            {
+              "type": "sample",
+              "index": 117,
+              "descriptor": 4,
+              "pattern": 0,
+              "regime": 1,
+              "quartet": 2,
+              "position": 1,
+              "arm": 1,
+              "ms": 0.0287999995,
+              "launches": 268
+            },
+            {
+              "type": "sample",
+              "index": 118,
+              "descriptor": 4,
+              "pattern": 0,
+              "regime": 1,
+              "quartet": 2,
+              "position": 2,
+              "arm": 1,
+              "ms": 0.0289600007,
+              "launches": 270
+            },
+            {
+              "type": "sample",
+              "index": 119,
+              "descriptor": 4,
+              "pattern": 0,
+              "regime": 1,
+              "quartet": 2,
+              "position": 3,
+              "arm": 0,
+              "ms": 0.0287999995,
+              "launches": 272
+            }
+          ],
+          "quartets": [
+            {
+              "baseline_ms": 0.028880000099999997,
+              "candidate_ms": 0.0290400004,
+              "signed_delta_ms": -0.00016000030000000443,
+              "baseline_over_candidate": 0.9944903478720336
+            },
+            {
+              "baseline_ms": 0.028880000099999997,
+              "candidate_ms": 0.03607999905,
+              "signed_delta_ms": -0.007199998950000001,
+              "baseline_over_candidate": 0.8004434828276416
+            },
+            {
+              "baseline_ms": 0.0287999995,
+              "candidate_ms": 0.028880000099999997,
+              "signed_delta_ms": -8.000059999999781e-05,
+              "baseline_over_candidate": 0.9972298961314755
+            }
+          ],
+          "median_paired_delta_ms": -0.00016000030000000443,
+          "median_baseline_ms": 0.028880000099999997,
+          "median_candidate_ms": 0.0290400004,
+          "baseline_range_ms": [
+            0.0287999995,
+            0.0289600007
+          ],
+          "candidate_range_ms": [
+            0.0287999995,
+            0.0433599986
+          ]
+        },
+        {
+          "descriptor": 0,
+          "pattern": 1,
+          "regime": 0,
+          "calls": 1728,
+          "raw_samples": [
+            {
+              "type": "sample",
+              "index": 120,
+              "descriptor": 0,
+              "pattern": 1,
+              "regime": 0,
+              "quartet": 0,
+              "position": 0,
+              "arm": 0,
+              "ms": 0.0595199987,
+              "launches": 274
+            },
+            {
+              "type": "sample",
+              "index": 121,
+              "descriptor": 0,
+              "pattern": 1,
+              "regime": 0,
+              "quartet": 0,
+              "position": 1,
+              "arm": 1,
+              "ms": 0.0588800013,
+              "launches": 276
+            },
+            {
+              "type": "sample",
+              "index": 122,
+              "descriptor": 0,
+              "pattern": 1,
+              "regime": 0,
+              "quartet": 0,
+              "position": 2,
+              "arm": 1,
+              "ms": 0.0585599989,
+              "launches": 278
+            },
+            {
+              "type": "sample",
+              "index": 123,
+              "descriptor": 0,
+              "pattern": 1,
+              "regime": 0,
+              "quartet": 0,
+              "position": 3,
+              "arm": 0,
+              "ms": 0.0590399988,
+              "launches": 280
+            },
+            {
+              "type": "sample",
+              "index": 124,
+              "descriptor": 0,
+              "pattern": 1,
+              "regime": 0,
+              "quartet": 1,
+              "position": 0,
+              "arm": 0,
+              "ms": 0.0590399988,
+              "launches": 282
+            },
+            {
+              "type": "sample",
+              "index": 125,
+              "descriptor": 0,
+              "pattern": 1,
+              "regime": 0,
+              "quartet": 1,
+              "position": 1,
+              "arm": 1,
+              "ms": 0.0587200001,
+              "launches": 284
+            },
+            {
+              "type": "sample",
+              "index": 126,
+              "descriptor": 0,
+              "pattern": 1,
+              "regime": 0,
+              "quartet": 1,
+              "position": 2,
+              "arm": 1,
+              "ms": 0.0587200001,
+              "launches": 286
+            },
+            {
+              "type": "sample",
+              "index": 127,
+              "descriptor": 0,
+              "pattern": 1,
+              "regime": 0,
+              "quartet": 1,
+              "position": 3,
+              "arm": 0,
+              "ms": 0.0592,
+              "launches": 288
+            },
+            {
+              "type": "sample",
+              "index": 128,
+              "descriptor": 0,
+              "pattern": 1,
+              "regime": 0,
+              "quartet": 2,
+              "position": 0,
+              "arm": 0,
+              "ms": 0.0590399988,
+              "launches": 290
+            },
+            {
+              "type": "sample",
+              "index": 129,
+              "descriptor": 0,
+              "pattern": 1,
+              "regime": 0,
+              "quartet": 2,
+              "position": 1,
+              "arm": 1,
+              "ms": 0.0587200001,
+              "launches": 292
+            },
+            {
+              "type": "sample",
+              "index": 130,
+              "descriptor": 0,
+              "pattern": 1,
+              "regime": 0,
+              "quartet": 2,
+              "position": 2,
+              "arm": 1,
+              "ms": 0.0588800013,
+              "launches": 294
+            },
+            {
+              "type": "sample",
+              "index": 131,
+              "descriptor": 0,
+              "pattern": 1,
+              "regime": 0,
+              "quartet": 2,
+              "position": 3,
+              "arm": 0,
+              "ms": 0.0592,
+              "launches": 296
+            }
+          ],
+          "quartets": [
+            {
+              "baseline_ms": 0.05927999875,
+              "candidate_ms": 0.0587200001,
+              "signed_delta_ms": 0.0005599986499999973,
+              "baseline_over_candidate": 1.0095367617344402
+            },
+            {
+              "baseline_ms": 0.0591199994,
+              "candidate_ms": 0.0587200001,
+              "signed_delta_ms": 0.00039999929999999517,
+              "baseline_over_candidate": 1.0068119771682356
+            },
+            {
+              "baseline_ms": 0.0591199994,
+              "candidate_ms": 0.0588000007,
+              "signed_delta_ms": 0.00031999869999999736,
+              "baseline_over_candidate": 1.005442154697117
+            }
+          ],
+          "median_paired_delta_ms": 0.00039999929999999517,
+          "median_baseline_ms": 0.0591199994,
+          "median_candidate_ms": 0.0587200001,
+          "baseline_range_ms": [
+            0.0590399988,
+            0.0595199987
+          ],
+          "candidate_range_ms": [
+            0.0585599989,
+            0.0588800013
+          ]
+        },
+        {
+          "descriptor": 1,
+          "pattern": 1,
+          "regime": 0,
+          "calls": 810,
+          "raw_samples": [
+            {
+              "type": "sample",
+              "index": 132,
+              "descriptor": 1,
+              "pattern": 1,
+              "regime": 0,
+              "quartet": 0,
+              "position": 0,
+              "arm": 0,
+              "ms": 0.641919971,
+              "launches": 298
+            },
+            {
+              "type": "sample",
+              "index": 133,
+              "descriptor": 1,
+              "pattern": 1,
+              "regime": 0,
+              "quartet": 0,
+              "position": 1,
+              "arm": 1,
+              "ms": 0.640799999,
+              "launches": 300
+            },
+            {
+              "type": "sample",
+              "index": 134,
+              "descriptor": 1,
+              "pattern": 1,
+              "regime": 0,
+              "quartet": 0,
+              "position": 2,
+              "arm": 1,
+              "ms": 0.640959978,
+              "launches": 302
+            },
+            {
+              "type": "sample",
+              "index": 135,
+              "descriptor": 1,
+              "pattern": 1,
+              "regime": 0,
+              "quartet": 0,
+              "position": 3,
+              "arm": 0,
+              "ms": 0.641279995,
+              "launches": 304
+            },
+            {
+              "type": "sample",
+              "index": 136,
+              "descriptor": 1,
+              "pattern": 1,
+              "regime": 0,
+              "quartet": 1,
+              "position": 0,
+              "arm": 0,
+              "ms": 0.641279995,
+              "launches": 306
+            },
+            {
+              "type": "sample",
+              "index": 137,
+              "descriptor": 1,
+              "pattern": 1,
+              "regime": 0,
+              "quartet": 1,
+              "position": 1,
+              "arm": 1,
+              "ms": 0.640799999,
+              "launches": 308
+            },
+            {
+              "type": "sample",
+              "index": 138,
+              "descriptor": 1,
+              "pattern": 1,
+              "regime": 0,
+              "quartet": 1,
+              "position": 2,
+              "arm": 1,
+              "ms": 0.640798986,
+              "launches": 310
+            },
+            {
+              "type": "sample",
+              "index": 139,
+              "descriptor": 1,
+              "pattern": 1,
+              "regime": 0,
+              "quartet": 1,
+              "position": 3,
+              "arm": 0,
+              "ms": 0.641279995,
+              "launches": 312
+            },
+            {
+              "type": "sample",
+              "index": 140,
+              "descriptor": 1,
+              "pattern": 1,
+              "regime": 0,
+              "quartet": 2,
+              "position": 0,
+              "arm": 0,
+              "ms": 0.641439974,
+              "launches": 314
+            },
+            {
+              "type": "sample",
+              "index": 141,
+              "descriptor": 1,
+              "pattern": 1,
+              "regime": 0,
+              "quartet": 2,
+              "position": 1,
+              "arm": 1,
+              "ms": 0.644320011,
+              "launches": 316
+            },
+            {
+              "type": "sample",
+              "index": 142,
+              "descriptor": 1,
+              "pattern": 1,
+              "regime": 0,
+              "quartet": 2,
+              "position": 2,
+              "arm": 1,
+              "ms": 0.640799999,
+              "launches": 318
+            },
+            {
+              "type": "sample",
+              "index": 143,
+              "descriptor": 1,
+              "pattern": 1,
+              "regime": 0,
+              "quartet": 2,
+              "position": 3,
+              "arm": 0,
+              "ms": 0.641919971,
+              "launches": 320
+            }
+          ],
+          "quartets": [
+            {
+              "baseline_ms": 0.641599983,
+              "candidate_ms": 0.6408799885,
+              "signed_delta_ms": 0.0007199944999999319,
+              "baseline_over_candidate": 1.0011234466872418
+            },
+            {
+              "baseline_ms": 0.641279995,
+              "candidate_ms": 0.6407994925,
+              "signed_delta_ms": 0.0004805024999999796,
+              "baseline_over_candidate": 1.000749848440306
+            },
+            {
+              "baseline_ms": 0.6416799725,
+              "candidate_ms": 0.642560005,
+              "signed_delta_ms": -0.0008800325000000164,
+              "baseline_over_candidate": 0.9986304275193723
+            }
+          ],
+          "median_paired_delta_ms": 0.0004805024999999796,
+          "median_baseline_ms": 0.641599983,
+          "median_candidate_ms": 0.6408799885,
+          "baseline_range_ms": [
+            0.641279995,
+            0.641919971
+          ],
+          "candidate_range_ms": [
+            0.640798986,
+            0.644320011
+          ]
+        },
+        {
+          "descriptor": 2,
+          "pattern": 1,
+          "regime": 0,
+          "calls": 54,
+          "raw_samples": [
+            {
+              "type": "sample",
+              "index": 144,
+              "descriptor": 2,
+              "pattern": 1,
+              "regime": 0,
+              "quartet": 0,
+              "position": 0,
+              "arm": 0,
+              "ms": 0.641600013,
+              "launches": 322
+            },
+            {
+              "type": "sample",
+              "index": 145,
+              "descriptor": 2,
+              "pattern": 1,
+              "regime": 0,
+              "quartet": 0,
+              "position": 1,
+              "arm": 1,
+              "ms": 0.640799999,
+              "launches": 324
+            },
+            {
+              "type": "sample",
+              "index": 146,
+              "descriptor": 2,
+              "pattern": 1,
+              "regime": 0,
+              "quartet": 0,
+              "position": 2,
+              "arm": 1,
+              "ms": 0.640959978,
+              "launches": 326
+            },
+            {
+              "type": "sample",
+              "index": 147,
+              "descriptor": 2,
+              "pattern": 1,
+              "regime": 0,
+              "quartet": 0,
+              "position": 3,
+              "arm": 0,
+              "ms": 0.641439974,
+              "launches": 328
+            },
+            {
+              "type": "sample",
+              "index": 148,
+              "descriptor": 2,
+              "pattern": 1,
+              "regime": 0,
+              "quartet": 1,
+              "position": 0,
+              "arm": 0,
+              "ms": 0.641120017,
+              "launches": 330
+            },
+            {
+              "type": "sample",
+              "index": 149,
+              "descriptor": 2,
+              "pattern": 1,
+              "regime": 0,
+              "quartet": 1,
+              "position": 1,
+              "arm": 1,
+              "ms": 0.640959024,
+              "launches": 332
+            },
+            {
+              "type": "sample",
+              "index": 150,
+              "descriptor": 2,
+              "pattern": 1,
+              "regime": 0,
+              "quartet": 1,
+              "position": 2,
+              "arm": 1,
+              "ms": 0.64064002,
+              "launches": 334
+            },
+            {
+              "type": "sample",
+              "index": 151,
+              "descriptor": 2,
+              "pattern": 1,
+              "regime": 0,
+              "quartet": 1,
+              "position": 3,
+              "arm": 0,
+              "ms": 0.641120017,
+              "launches": 336
+            },
+            {
+              "type": "sample",
+              "index": 152,
+              "descriptor": 2,
+              "pattern": 1,
+              "regime": 0,
+              "quartet": 2,
+              "position": 0,
+              "arm": 0,
+              "ms": 0.641120017,
+              "launches": 338
+            },
+            {
+              "type": "sample",
+              "index": 153,
+              "descriptor": 2,
+              "pattern": 1,
+              "regime": 0,
+              "quartet": 2,
+              "position": 1,
+              "arm": 1,
+              "ms": 0.640799999,
+              "launches": 340
+            },
+            {
+              "type": "sample",
+              "index": 154,
+              "descriptor": 2,
+              "pattern": 1,
+              "regime": 0,
+              "quartet": 2,
+              "position": 2,
+              "arm": 1,
+              "ms": 0.640798986,
+              "launches": 342
+            },
+            {
+              "type": "sample",
+              "index": 155,
+              "descriptor": 2,
+              "pattern": 1,
+              "regime": 0,
+              "quartet": 2,
+              "position": 3,
+              "arm": 0,
+              "ms": 0.641120017,
+              "launches": 344
+            }
+          ],
+          "quartets": [
+            {
+              "baseline_ms": 0.6415199935,
+              "candidate_ms": 0.6408799885,
+              "signed_delta_ms": 0.0006400049999999435,
+              "baseline_over_candidate": 1.000998634707721
+            },
+            {
+              "baseline_ms": 0.641120017,
+              "candidate_ms": 0.640799522,
+              "signed_delta_ms": 0.0003204949999999762,
+              "baseline_over_candidate": 1.000500148625267
+            },
+            {
+              "baseline_ms": 0.641120017,
+              "candidate_ms": 0.6407994925,
+              "signed_delta_ms": 0.00032052449999997457,
+              "baseline_over_candidate": 1.000500194684533
+            }
+          ],
+          "median_paired_delta_ms": 0.00032052449999997457,
+          "median_baseline_ms": 0.641120017,
+          "median_candidate_ms": 0.640799522,
+          "baseline_range_ms": [
+            0.641120017,
+            0.641600013
+          ],
+          "candidate_range_ms": [
+            0.64064002,
+            0.640959978
+          ]
+        },
+        {
+          "descriptor": 3,
+          "pattern": 1,
+          "regime": 0,
+          "calls": 810,
+          "raw_samples": [
+            {
+              "type": "sample",
+              "index": 156,
+              "descriptor": 3,
+              "pattern": 1,
+              "regime": 0,
+              "quartet": 0,
+              "position": 0,
+              "arm": 0,
+              "ms": 0.0292799994,
+              "launches": 346
+            },
+            {
+              "type": "sample",
+              "index": 157,
+              "descriptor": 3,
+              "pattern": 1,
+              "regime": 0,
+              "quartet": 0,
+              "position": 1,
+              "arm": 1,
+              "ms": 0.0291200001,
+              "launches": 348
+            },
+            {
+              "type": "sample",
+              "index": 158,
+              "descriptor": 3,
+              "pattern": 1,
+              "regime": 0,
+              "quartet": 0,
+              "position": 2,
+              "arm": 1,
+              "ms": 0.0289600007,
+              "launches": 350
+            },
+            {
+              "type": "sample",
+              "index": 159,
+              "descriptor": 3,
+              "pattern": 1,
+              "regime": 0,
+              "quartet": 0,
+              "position": 3,
+              "arm": 0,
+              "ms": 0.0289600007,
+              "launches": 352
+            },
+            {
+              "type": "sample",
+              "index": 160,
+              "descriptor": 3,
+              "pattern": 1,
+              "regime": 0,
+              "quartet": 1,
+              "position": 0,
+              "arm": 0,
+              "ms": 0.0289600007,
+              "launches": 354
+            },
+            {
+              "type": "sample",
+              "index": 161,
+              "descriptor": 3,
+              "pattern": 1,
+              "regime": 0,
+              "quartet": 1,
+              "position": 1,
+              "arm": 1,
+              "ms": 0.0291200001,
+              "launches": 356
+            },
+            {
+              "type": "sample",
+              "index": 162,
+              "descriptor": 3,
+              "pattern": 1,
+              "regime": 0,
+              "quartet": 1,
+              "position": 2,
+              "arm": 1,
+              "ms": 0.0291200001,
+              "launches": 358
+            },
+            {
+              "type": "sample",
+              "index": 163,
+              "descriptor": 3,
+              "pattern": 1,
+              "regime": 0,
+              "quartet": 1,
+              "position": 3,
+              "arm": 0,
+              "ms": 0.0291200001,
+              "launches": 360
+            },
+            {
+              "type": "sample",
+              "index": 164,
+              "descriptor": 3,
+              "pattern": 1,
+              "regime": 0,
+              "quartet": 2,
+              "position": 0,
+              "arm": 0,
+              "ms": 0.0291200001,
+              "launches": 362
+            },
+            {
+              "type": "sample",
+              "index": 165,
+              "descriptor": 3,
+              "pattern": 1,
+              "regime": 0,
+              "quartet": 2,
+              "position": 1,
+              "arm": 1,
+              "ms": 0.0289600007,
+              "launches": 364
+            },
+            {
+              "type": "sample",
+              "index": 166,
+              "descriptor": 3,
+              "pattern": 1,
+              "regime": 0,
+              "quartet": 2,
+              "position": 2,
+              "arm": 1,
+              "ms": 0.0291200001,
+              "launches": 366
+            },
+            {
+              "type": "sample",
+              "index": 167,
+              "descriptor": 3,
+              "pattern": 1,
+              "regime": 0,
+              "quartet": 2,
+              "position": 3,
+              "arm": 0,
+              "ms": 0.0291200001,
+              "launches": 368
+            }
+          ],
+          "quartets": [
+            {
+              "baseline_ms": 0.029120000049999997,
+              "candidate_ms": 0.0290400004,
+              "signed_delta_ms": 7.999964999999554e-05,
+              "baseline_over_candidate": 1.0027548088463523
+            },
+            {
+              "baseline_ms": 0.0290400004,
+              "candidate_ms": 0.0291200001,
+              "signed_delta_ms": -7.999969999999967e-05,
+              "baseline_over_candidate": 0.9972527575643793
+            },
+            {
+              "baseline_ms": 0.0291200001,
+              "candidate_ms": 0.0290400004,
+              "signed_delta_ms": 7.999969999999967e-05,
+              "baseline_over_candidate": 1.0027548105681154
+            }
+          ],
+          "median_paired_delta_ms": 7.999964999999554e-05,
+          "median_baseline_ms": 0.029120000049999997,
+          "median_candidate_ms": 0.0290400004,
+          "baseline_range_ms": [
+            0.0289600007,
+            0.0292799994
+          ],
+          "candidate_range_ms": [
+            0.0289600007,
+            0.0291200001
+          ]
+        },
+        {
+          "descriptor": 4,
+          "pattern": 1,
+          "regime": 0,
+          "calls": 54,
+          "raw_samples": [
+            {
+              "type": "sample",
+              "index": 168,
+              "descriptor": 4,
+              "pattern": 1,
+              "regime": 0,
+              "quartet": 0,
+              "position": 0,
+              "arm": 0,
+              "ms": 0.0289590005,
+              "launches": 370
+            },
+            {
+              "type": "sample",
+              "index": 169,
+              "descriptor": 4,
+              "pattern": 1,
+              "regime": 0,
+              "quartet": 0,
+              "position": 1,
+              "arm": 1,
+              "ms": 0.0292799994,
+              "launches": 372
+            },
+            {
+              "type": "sample",
+              "index": 170,
+              "descriptor": 4,
+              "pattern": 1,
+              "regime": 0,
+              "quartet": 0,
+              "position": 2,
+              "arm": 1,
+              "ms": 0.0291200001,
+              "launches": 374
+            },
+            {
+              "type": "sample",
+              "index": 171,
+              "descriptor": 4,
+              "pattern": 1,
+              "regime": 0,
+              "quartet": 0,
+              "position": 3,
+              "arm": 0,
+              "ms": 0.0289600007,
+              "launches": 376
+            },
+            {
+              "type": "sample",
+              "index": 172,
+              "descriptor": 4,
+              "pattern": 1,
+              "regime": 0,
+              "quartet": 1,
+              "position": 0,
+              "arm": 0,
+              "ms": 0.0287999995,
+              "launches": 378
+            },
+            {
+              "type": "sample",
+              "index": 173,
+              "descriptor": 4,
+              "pattern": 1,
+              "regime": 0,
+              "quartet": 1,
+              "position": 1,
+              "arm": 1,
+              "ms": 0.0292799994,
+              "launches": 380
+            },
+            {
+              "type": "sample",
+              "index": 174,
+              "descriptor": 4,
+              "pattern": 1,
+              "regime": 0,
+              "quartet": 1,
+              "position": 2,
+              "arm": 1,
+              "ms": 0.0291200001,
+              "launches": 382
+            },
+            {
+              "type": "sample",
+              "index": 175,
+              "descriptor": 4,
+              "pattern": 1,
+              "regime": 0,
+              "quartet": 1,
+              "position": 3,
+              "arm": 0,
+              "ms": 0.0291200001,
+              "launches": 384
+            },
+            {
+              "type": "sample",
+              "index": 176,
+              "descriptor": 4,
+              "pattern": 1,
+              "regime": 0,
+              "quartet": 2,
+              "position": 0,
+              "arm": 0,
+              "ms": 0.0291200001,
+              "launches": 386
+            },
+            {
+              "type": "sample",
+              "index": 177,
+              "descriptor": 4,
+              "pattern": 1,
+              "regime": 0,
+              "quartet": 2,
+              "position": 1,
+              "arm": 1,
+              "ms": 0.0291200001,
+              "launches": 388
+            },
+            {
+              "type": "sample",
+              "index": 178,
+              "descriptor": 4,
+              "pattern": 1,
+              "regime": 0,
+              "quartet": 2,
+              "position": 2,
+              "arm": 1,
+              "ms": 0.0291200001,
+              "launches": 390
+            },
+            {
+              "type": "sample",
+              "index": 179,
+              "descriptor": 4,
+              "pattern": 1,
+              "regime": 0,
+              "quartet": 2,
+              "position": 3,
+              "arm": 0,
+              "ms": 0.0291200001,
+              "launches": 392
+            }
+          ],
+          "quartets": [
+            {
+              "baseline_ms": 0.0289595006,
+              "candidate_ms": 0.02919999975,
+              "signed_delta_ms": -0.0002404991500000002,
+              "baseline_over_candidate": 0.99176372766921
+            },
+            {
+              "baseline_ms": 0.0289599998,
+              "candidate_ms": 0.02919999975,
+              "signed_delta_ms": -0.00023999994999999996,
+              "baseline_over_candidate": 0.9917808235597674
+            },
+            {
+              "baseline_ms": 0.0291200001,
+              "candidate_ms": 0.0291200001,
+              "signed_delta_ms": 0.0,
+              "baseline_over_candidate": 1.0
+            }
+          ],
+          "median_paired_delta_ms": -0.00023999994999999996,
+          "median_baseline_ms": 0.0289599998,
+          "median_candidate_ms": 0.02919999975,
+          "baseline_range_ms": [
+            0.0287999995,
+            0.0291200001
+          ],
+          "candidate_range_ms": [
+            0.0291200001,
+            0.0292799994
+          ]
+        },
+        {
+          "descriptor": 0,
+          "pattern": 1,
+          "regime": 1,
+          "calls": 1728,
+          "raw_samples": [
+            {
+              "type": "sample",
+              "index": 180,
+              "descriptor": 0,
+              "pattern": 1,
+              "regime": 1,
+              "quartet": 0,
+              "position": 0,
+              "arm": 0,
+              "ms": 0.0595199987,
+              "launches": 394
+            },
+            {
+              "type": "sample",
+              "index": 181,
+              "descriptor": 0,
+              "pattern": 1,
+              "regime": 1,
+              "quartet": 0,
+              "position": 1,
+              "arm": 1,
+              "ms": 0.0592,
+              "launches": 396
+            },
+            {
+              "type": "sample",
+              "index": 182,
+              "descriptor": 0,
+              "pattern": 1,
+              "regime": 1,
+              "quartet": 0,
+              "position": 2,
+              "arm": 1,
+              "ms": 0.0585599989,
+              "launches": 398
+            },
+            {
+              "type": "sample",
+              "index": 183,
+              "descriptor": 0,
+              "pattern": 1,
+              "regime": 1,
+              "quartet": 0,
+              "position": 3,
+              "arm": 0,
+              "ms": 0.0595199987,
+              "launches": 400
+            },
+            {
+              "type": "sample",
+              "index": 184,
+              "descriptor": 0,
+              "pattern": 1,
+              "regime": 1,
+              "quartet": 1,
+              "position": 0,
+              "arm": 0,
+              "ms": 0.0592,
+              "launches": 402
+            },
+            {
+              "type": "sample",
+              "index": 185,
+              "descriptor": 0,
+              "pattern": 1,
+              "regime": 1,
+              "quartet": 1,
+              "position": 1,
+              "arm": 1,
+              "ms": 0.0584000014,
+              "launches": 404
+            },
+            {
+              "type": "sample",
+              "index": 186,
+              "descriptor": 0,
+              "pattern": 1,
+              "regime": 1,
+              "quartet": 1,
+              "position": 2,
+              "arm": 1,
+              "ms": 0.0585599989,
+              "launches": 406
+            },
+            {
+              "type": "sample",
+              "index": 187,
+              "descriptor": 0,
+              "pattern": 1,
+              "regime": 1,
+              "quartet": 1,
+              "position": 3,
+              "arm": 0,
+              "ms": 0.0592,
+              "launches": 408
+            },
+            {
+              "type": "sample",
+              "index": 188,
+              "descriptor": 0,
+              "pattern": 1,
+              "regime": 1,
+              "quartet": 2,
+              "position": 0,
+              "arm": 0,
+              "ms": 0.0592,
+              "launches": 410
+            },
+            {
+              "type": "sample",
+              "index": 189,
+              "descriptor": 0,
+              "pattern": 1,
+              "regime": 1,
+              "quartet": 2,
+              "position": 1,
+              "arm": 1,
+              "ms": 0.0584000014,
+              "launches": 412
+            },
+            {
+              "type": "sample",
+              "index": 190,
+              "descriptor": 0,
+              "pattern": 1,
+              "regime": 1,
+              "quartet": 2,
+              "position": 2,
+              "arm": 1,
+              "ms": 0.0584000014,
+              "launches": 414
+            },
+            {
+              "type": "sample",
+              "index": 191,
+              "descriptor": 0,
+              "pattern": 1,
+              "regime": 1,
+              "quartet": 2,
+              "position": 3,
+              "arm": 0,
+              "ms": 0.0592,
+              "launches": 416
+            }
+          ],
+          "quartets": [
+            {
+              "baseline_ms": 0.0595199987,
+              "candidate_ms": 0.05887999945,
+              "signed_delta_ms": 0.0006399992500000021,
+              "baseline_over_candidate": 1.0108695525811524
+            },
+            {
+              "baseline_ms": 0.0592,
+              "candidate_ms": 0.05848000015,
+              "signed_delta_ms": 0.0007199998499999999,
+              "baseline_over_candidate": 1.0123118989082287
+            },
+            {
+              "baseline_ms": 0.0592,
+              "candidate_ms": 0.0584000014,
+              "signed_delta_ms": 0.0007999986000000042,
+              "baseline_over_candidate": 1.0136986058359925
+            }
+          ],
+          "median_paired_delta_ms": 0.0007199998499999999,
+          "median_baseline_ms": 0.0592,
+          "median_candidate_ms": 0.05848000015,
+          "baseline_range_ms": [
+            0.0592,
+            0.0595199987
+          ],
+          "candidate_range_ms": [
+            0.0584000014,
+            0.0592
+          ]
+        },
+        {
+          "descriptor": 1,
+          "pattern": 1,
+          "regime": 1,
+          "calls": 810,
+          "raw_samples": [
+            {
+              "type": "sample",
+              "index": 192,
+              "descriptor": 1,
+              "pattern": 1,
+              "regime": 1,
+              "quartet": 0,
+              "position": 0,
+              "arm": 0,
+              "ms": 0.646080017,
+              "launches": 418
+            },
+            {
+              "type": "sample",
+              "index": 193,
+              "descriptor": 1,
+              "pattern": 1,
+              "regime": 1,
+              "quartet": 0,
+              "position": 1,
+              "arm": 1,
+              "ms": 0.643679976,
+              "launches": 420
+            },
+            {
+              "type": "sample",
+              "index": 194,
+              "descriptor": 1,
+              "pattern": 1,
+              "regime": 1,
+              "quartet": 0,
+              "position": 2,
+              "arm": 1,
+              "ms": 0.640799999,
+              "launches": 422
+            },
+            {
+              "type": "sample",
+              "index": 195,
+              "descriptor": 1,
+              "pattern": 1,
+              "regime": 1,
+              "quartet": 0,
+              "position": 3,
+              "arm": 0,
+              "ms": 0.656639993,
+              "launches": 424
+            },
+            {
+              "type": "sample",
+              "index": 196,
+              "descriptor": 1,
+              "pattern": 1,
+              "regime": 1,
+              "quartet": 1,
+              "position": 0,
+              "arm": 0,
+              "ms": 0.642239988,
+              "launches": 426
+            },
+            {
+              "type": "sample",
+              "index": 197,
+              "descriptor": 1,
+              "pattern": 1,
+              "regime": 1,
+              "quartet": 1,
+              "position": 1,
+              "arm": 1,
+              "ms": 0.64064002,
+              "launches": 428
+            },
+            {
+              "type": "sample",
+              "index": 198,
+              "descriptor": 1,
+              "pattern": 1,
+              "regime": 1,
+              "quartet": 1,
+              "position": 2,
+              "arm": 1,
+              "ms": 0.640799999,
+              "launches": 430
+            },
+            {
+              "type": "sample",
+              "index": 199,
+              "descriptor": 1,
+              "pattern": 1,
+              "regime": 1,
+              "quartet": 1,
+              "position": 3,
+              "arm": 0,
+              "ms": 0.642078996,
+              "launches": 432
+            },
+            {
+              "type": "sample",
+              "index": 200,
+              "descriptor": 1,
+              "pattern": 1,
+              "regime": 1,
+              "quartet": 2,
+              "position": 0,
+              "arm": 0,
+              "ms": 0.641919971,
+              "launches": 434
+            },
+            {
+              "type": "sample",
+              "index": 201,
+              "descriptor": 1,
+              "pattern": 1,
+              "regime": 1,
+              "quartet": 2,
+              "position": 1,
+              "arm": 1,
+              "ms": 0.64064002,
+              "launches": 436
+            },
+            {
+              "type": "sample",
+              "index": 202,
+              "descriptor": 1,
+              "pattern": 1,
+              "regime": 1,
+              "quartet": 2,
+              "position": 2,
+              "arm": 1,
+              "ms": 0.640799999,
+              "launches": 438
+            },
+            {
+              "type": "sample",
+              "index": 203,
+              "descriptor": 1,
+              "pattern": 1,
+              "regime": 1,
+              "quartet": 2,
+              "position": 3,
+              "arm": 0,
+              "ms": 0.642239988,
+              "launches": 440
+            }
+          ],
+          "quartets": [
+            {
+              "baseline_ms": 0.6513600049999999,
+              "candidate_ms": 0.6422399875,
+              "signed_delta_ms": 0.00912001749999991,
+              "baseline_over_candidate": 1.0142003264784254
+            },
+            {
+              "baseline_ms": 0.642159492,
+              "candidate_ms": 0.6407200095,
+              "signed_delta_ms": 0.0014394825000000333,
+              "baseline_over_candidate": 1.0022466638760406
+            },
+            {
+              "baseline_ms": 0.6420799795000001,
+              "candidate_ms": 0.6407200095,
+              "signed_delta_ms": 0.0013599700000000992,
+              "baseline_over_candidate": 1.0021225652076347
+            }
+          ],
+          "median_paired_delta_ms": 0.0014394825000000333,
+          "median_baseline_ms": 0.642159492,
+          "median_candidate_ms": 0.6407200095,
+          "baseline_range_ms": [
+            0.641919971,
+            0.656639993
+          ],
+          "candidate_range_ms": [
+            0.64064002,
+            0.643679976
+          ]
+        },
+        {
+          "descriptor": 2,
+          "pattern": 1,
+          "regime": 1,
+          "calls": 54,
+          "raw_samples": [
+            {
+              "type": "sample",
+              "index": 204,
+              "descriptor": 2,
+              "pattern": 1,
+              "regime": 1,
+              "quartet": 0,
+              "position": 0,
+              "arm": 0,
+              "ms": 0.644959986,
+              "launches": 442
+            },
+            {
+              "type": "sample",
+              "index": 205,
+              "descriptor": 2,
+              "pattern": 1,
+              "regime": 1,
+              "quartet": 0,
+              "position": 1,
+              "arm": 1,
+              "ms": 0.643519998,
+              "launches": 444
+            },
+            {
+              "type": "sample",
+              "index": 206,
+              "descriptor": 2,
+              "pattern": 1,
+              "regime": 1,
+              "quartet": 0,
+              "position": 2,
+              "arm": 1,
+              "ms": 0.640959978,
+              "launches": 446
+            },
+            {
+              "type": "sample",
+              "index": 207,
+              "descriptor": 2,
+              "pattern": 1,
+              "regime": 1,
+              "quartet": 0,
+              "position": 3,
+              "arm": 0,
+              "ms": 0.641279995,
+              "launches": 448
+            },
+            {
+              "type": "sample",
+              "index": 208,
+              "descriptor": 2,
+              "pattern": 1,
+              "regime": 1,
+              "quartet": 1,
+              "position": 0,
+              "arm": 0,
+              "ms": 0.641120017,
+              "launches": 450
+            },
+            {
+              "type": "sample",
+              "index": 209,
+              "descriptor": 2,
+              "pattern": 1,
+              "regime": 1,
+              "quartet": 1,
+              "position": 1,
+              "arm": 1,
+              "ms": 0.64064002,
+              "launches": 452
+            },
+            {
+              "type": "sample",
+              "index": 210,
+              "descriptor": 2,
+              "pattern": 1,
+              "regime": 1,
+              "quartet": 1,
+              "position": 2,
+              "arm": 1,
+              "ms": 0.640959978,
+              "launches": 454
+            },
+            {
+              "type": "sample",
+              "index": 211,
+              "descriptor": 2,
+              "pattern": 1,
+              "regime": 1,
+              "quartet": 1,
+              "position": 3,
+              "arm": 0,
+              "ms": 0.641120017,
+              "launches": 456
+            },
+            {
+              "type": "sample",
+              "index": 212,
+              "descriptor": 2,
+              "pattern": 1,
+              "regime": 1,
+              "quartet": 2,
+              "position": 0,
+              "arm": 0,
+              "ms": 0.641279995,
+              "launches": 458
+            },
+            {
+              "type": "sample",
+              "index": 213,
+              "descriptor": 2,
+              "pattern": 1,
+              "regime": 1,
+              "quartet": 2,
+              "position": 1,
+              "arm": 1,
+              "ms": 0.640799999,
+              "launches": 460
+            },
+            {
+              "type": "sample",
+              "index": 214,
+              "descriptor": 2,
+              "pattern": 1,
+              "regime": 1,
+              "quartet": 2,
+              "position": 2,
+              "arm": 1,
+              "ms": 0.640799999,
+              "launches": 462
+            },
+            {
+              "type": "sample",
+              "index": 215,
+              "descriptor": 2,
+              "pattern": 1,
+              "regime": 1,
+              "quartet": 2,
+              "position": 3,
+              "arm": 0,
+              "ms": 0.641279995,
+              "launches": 464
+            }
+          ],
+          "quartets": [
+            {
+              "baseline_ms": 0.6431199905,
+              "candidate_ms": 0.642239988,
+              "signed_delta_ms": 0.0008800024999999767,
+              "baseline_over_candidate": 1.00137020820323
+            },
+            {
+              "baseline_ms": 0.641120017,
+              "candidate_ms": 0.640799999,
+              "signed_delta_ms": 0.000320018000000033,
+              "baseline_over_candidate": 1.0004994038709416
+            },
+            {
+              "baseline_ms": 0.641279995,
+              "candidate_ms": 0.640799999,
+              "signed_delta_ms": 0.00047999600000003806,
+              "baseline_over_candidate": 1.0007490574293838
+            }
+          ],
+          "median_paired_delta_ms": 0.00047999600000003806,
+          "median_baseline_ms": 0.641279995,
+          "median_candidate_ms": 0.640799999,
+          "baseline_range_ms": [
+            0.641120017,
+            0.644959986
+          ],
+          "candidate_range_ms": [
+            0.64064002,
+            0.643519998
+          ]
+        },
+        {
+          "descriptor": 3,
+          "pattern": 1,
+          "regime": 1,
+          "calls": 810,
+          "raw_samples": [
+            {
+              "type": "sample",
+              "index": 216,
+              "descriptor": 3,
+              "pattern": 1,
+              "regime": 1,
+              "quartet": 0,
+              "position": 0,
+              "arm": 0,
+              "ms": 0.0305599999,
+              "launches": 466
+            },
+            {
+              "type": "sample",
+              "index": 217,
+              "descriptor": 3,
+              "pattern": 1,
+              "regime": 1,
+              "quartet": 0,
+              "position": 1,
+              "arm": 1,
+              "ms": 0.0302399993,
+              "launches": 468
+            },
+            {
+              "type": "sample",
+              "index": 218,
+              "descriptor": 3,
+              "pattern": 1,
+              "regime": 1,
+              "quartet": 0,
+              "position": 2,
+              "arm": 1,
+              "ms": 0.0289600007,
+              "launches": 470
+            },
+            {
+              "type": "sample",
+              "index": 219,
+              "descriptor": 3,
+              "pattern": 1,
+              "regime": 1,
+              "quartet": 0,
+              "position": 3,
+              "arm": 0,
+              "ms": 0.0289600007,
+              "launches": 472
+            },
+            {
+              "type": "sample",
+              "index": 220,
+              "descriptor": 3,
+              "pattern": 1,
+              "regime": 1,
+              "quartet": 1,
+              "position": 0,
+              "arm": 0,
+              "ms": 0.0289600007,
+              "launches": 474
+            },
+            {
+              "type": "sample",
+              "index": 221,
+              "descriptor": 3,
+              "pattern": 1,
+              "regime": 1,
+              "quartet": 1,
+              "position": 1,
+              "arm": 1,
+              "ms": 0.0291200001,
+              "launches": 476
+            },
+            {
+              "type": "sample",
+              "index": 222,
+              "descriptor": 3,
+              "pattern": 1,
+              "regime": 1,
+              "quartet": 1,
+              "position": 2,
+              "arm": 1,
+              "ms": 0.0291200001,
+              "launches": 478
+            },
+            {
+              "type": "sample",
+              "index": 223,
+              "descriptor": 3,
+              "pattern": 1,
+              "regime": 1,
+              "quartet": 1,
+              "position": 3,
+              "arm": 0,
+              "ms": 0.0291200001,
+              "launches": 480
+            },
+            {
+              "type": "sample",
+              "index": 224,
+              "descriptor": 3,
+              "pattern": 1,
+              "regime": 1,
+              "quartet": 2,
+              "position": 0,
+              "arm": 0,
+              "ms": 0.0291200001,
+              "launches": 482
+            },
+            {
+              "type": "sample",
+              "index": 225,
+              "descriptor": 3,
+              "pattern": 1,
+              "regime": 1,
+              "quartet": 2,
+              "position": 1,
+              "arm": 1,
+              "ms": 0.0287999995,
+              "launches": 484
+            },
+            {
+              "type": "sample",
+              "index": 226,
+              "descriptor": 3,
+              "pattern": 1,
+              "regime": 1,
+              "quartet": 2,
+              "position": 2,
+              "arm": 1,
+              "ms": 0.0289600007,
+              "launches": 486
+            },
+            {
+              "type": "sample",
+              "index": 227,
+              "descriptor": 3,
+              "pattern": 1,
+              "regime": 1,
+              "quartet": 2,
+              "position": 3,
+              "arm": 0,
+              "ms": 0.0291200001,
+              "launches": 488
+            }
+          ],
+          "quartets": [
+            {
+              "baseline_ms": 0.0297600003,
+              "candidate_ms": 0.0296,
+              "signed_delta_ms": 0.00016000029999999749,
+              "baseline_over_candidate": 1.0054054155405405
+            },
+            {
+              "baseline_ms": 0.0290400004,
+              "candidate_ms": 0.0291200001,
+              "signed_delta_ms": -7.999969999999967e-05,
+              "baseline_over_candidate": 0.9972527575643793
+            },
+            {
+              "baseline_ms": 0.0291200001,
+              "candidate_ms": 0.028880000099999997,
+              "signed_delta_ms": 0.0002400000000000041,
+              "baseline_over_candidate": 1.0083102492787042
+            }
+          ],
+          "median_paired_delta_ms": 0.00016000029999999749,
+          "median_baseline_ms": 0.0291200001,
+          "median_candidate_ms": 0.0291200001,
+          "baseline_range_ms": [
+            0.0289600007,
+            0.0305599999
+          ],
+          "candidate_range_ms": [
+            0.0287999995,
+            0.0302399993
+          ]
+        },
+        {
+          "descriptor": 4,
+          "pattern": 1,
+          "regime": 1,
+          "calls": 54,
+          "raw_samples": [
+            {
+              "type": "sample",
+              "index": 228,
+              "descriptor": 4,
+              "pattern": 1,
+              "regime": 1,
+              "quartet": 0,
+              "position": 0,
+              "arm": 0,
+              "ms": 0.0291200001,
+              "launches": 490
+            },
+            {
+              "type": "sample",
+              "index": 229,
+              "descriptor": 4,
+              "pattern": 1,
+              "regime": 1,
+              "quartet": 0,
+              "position": 1,
+              "arm": 1,
+              "ms": 0.0287999995,
+              "launches": 492
+            },
+            {
+              "type": "sample",
+              "index": 230,
+              "descriptor": 4,
+              "pattern": 1,
+              "regime": 1,
+              "quartet": 0,
+              "position": 2,
+              "arm": 1,
+              "ms": 0.0291200001,
+              "launches": 494
+            },
+            {
+              "type": "sample",
+              "index": 231,
+              "descriptor": 4,
+              "pattern": 1,
+              "regime": 1,
+              "quartet": 0,
+              "position": 3,
+              "arm": 0,
+              "ms": 0.0291200001,
+              "launches": 496
+            },
+            {
+              "type": "sample",
+              "index": 232,
+              "descriptor": 4,
+              "pattern": 1,
+              "regime": 1,
+              "quartet": 1,
+              "position": 0,
+              "arm": 0,
+              "ms": 0.0292799994,
+              "launches": 498
+            },
+            {
+              "type": "sample",
+              "index": 233,
+              "descriptor": 4,
+              "pattern": 1,
+              "regime": 1,
+              "quartet": 1,
+              "position": 1,
+              "arm": 1,
+              "ms": 0.0292799994,
+              "launches": 500
+            },
+            {
+              "type": "sample",
+              "index": 234,
+              "descriptor": 4,
+              "pattern": 1,
+              "regime": 1,
+              "quartet": 1,
+              "position": 2,
+              "arm": 1,
+              "ms": 0.0289600007,
+              "launches": 502
+            },
+            {
+              "type": "sample",
+              "index": 235,
+              "descriptor": 4,
+              "pattern": 1,
+              "regime": 1,
+              "quartet": 1,
+              "position": 3,
+              "arm": 0,
+              "ms": 0.0287999995,
+              "launches": 504
+            },
+            {
+              "type": "sample",
+              "index": 236,
+              "descriptor": 4,
+              "pattern": 1,
+              "regime": 1,
+              "quartet": 2,
+              "position": 0,
+              "arm": 0,
+              "ms": 0.0289600007,
+              "launches": 506
+            },
+            {
+              "type": "sample",
+              "index": 237,
+              "descriptor": 4,
+              "pattern": 1,
+              "regime": 1,
+              "quartet": 2,
+              "position": 1,
+              "arm": 1,
+              "ms": 0.0289600007,
+              "launches": 508
+            },
+            {
+              "type": "sample",
+              "index": 238,
+              "descriptor": 4,
+              "pattern": 1,
+              "regime": 1,
+              "quartet": 2,
+              "position": 2,
+              "arm": 1,
+              "ms": 0.0289600007,
+              "launches": 510
+            },
+            {
+              "type": "sample",
+              "index": 239,
+              "descriptor": 4,
+              "pattern": 1,
+              "regime": 1,
+              "quartet": 2,
+              "position": 3,
+              "arm": 0,
+              "ms": 0.0287999995,
+              "launches": 512
+            }
+          ],
+          "quartets": [
+            {
+              "baseline_ms": 0.0291200001,
+              "candidate_ms": 0.0289599998,
+              "signed_delta_ms": 0.00016000030000000096,
+              "baseline_over_candidate": 1.0055248722757242
+            },
+            {
+              "baseline_ms": 0.02903999945,
+              "candidate_ms": 0.029120000049999997,
+              "signed_delta_ms": -8.000059999999781e-05,
+              "baseline_over_candidate": 0.9972527266530689
+            },
+            {
+              "baseline_ms": 0.028880000099999997,
+              "candidate_ms": 0.0289600007,
+              "signed_delta_ms": -8.000060000000128e-05,
+              "baseline_over_candidate": 0.9972375484093133
+            }
+          ],
+          "median_paired_delta_ms": -8.000059999999781e-05,
+          "median_baseline_ms": 0.02903999945,
+          "median_candidate_ms": 0.0289600007,
+          "baseline_range_ms": [
+            0.0287999995,
+            0.0292799994
+          ],
+          "candidate_range_ms": [
+            0.0287999995,
+            0.0292799994
+          ]
+        },
+        {
+          "descriptor": 0,
+          "pattern": 2,
+          "regime": 0,
+          "calls": 1728,
+          "raw_samples": [
+            {
+              "type": "sample",
+              "index": 240,
+              "descriptor": 0,
+              "pattern": 2,
+              "regime": 0,
+              "quartet": 0,
+              "position": 0,
+              "arm": 0,
+              "ms": 0.161599994,
+              "launches": 514
+            },
+            {
+              "type": "sample",
+              "index": 241,
+              "descriptor": 0,
+              "pattern": 2,
+              "regime": 0,
+              "quartet": 0,
+              "position": 1,
+              "arm": 1,
+              "ms": 0.160799995,
+              "launches": 516
+            },
+            {
+              "type": "sample",
+              "index": 242,
+              "descriptor": 0,
+              "pattern": 2,
+              "regime": 0,
+              "quartet": 0,
+              "position": 2,
+              "arm": 1,
+              "ms": 0.160640001,
+              "launches": 518
+            },
+            {
+              "type": "sample",
+              "index": 243,
+              "descriptor": 0,
+              "pattern": 2,
+              "regime": 0,
+              "quartet": 0,
+              "position": 3,
+              "arm": 0,
+              "ms": 0.161280006,
+              "launches": 520
+            },
+            {
+              "type": "sample",
+              "index": 244,
+              "descriptor": 0,
+              "pattern": 2,
+              "regime": 0,
+              "quartet": 1,
+              "position": 0,
+              "arm": 0,
+              "ms": 0.161280006,
+              "launches": 522
+            },
+            {
+              "type": "sample",
+              "index": 245,
+              "descriptor": 0,
+              "pattern": 2,
+              "regime": 0,
+              "quartet": 1,
+              "position": 1,
+              "arm": 1,
+              "ms": 0.160799995,
+              "launches": 524
+            },
+            {
+              "type": "sample",
+              "index": 246,
+              "descriptor": 0,
+              "pattern": 2,
+              "regime": 0,
+              "quartet": 1,
+              "position": 2,
+              "arm": 1,
+              "ms": 0.160479993,
+              "launches": 526
+            },
+            {
+              "type": "sample",
+              "index": 247,
+              "descriptor": 0,
+              "pattern": 2,
+              "regime": 0,
+              "quartet": 1,
+              "position": 3,
+              "arm": 0,
+              "ms": 0.16144,
+              "launches": 528
+            },
+            {
+              "type": "sample",
+              "index": 248,
+              "descriptor": 0,
+              "pattern": 2,
+              "regime": 0,
+              "quartet": 2,
+              "position": 0,
+              "arm": 0,
+              "ms": 0.160319999,
+              "launches": 530
+            },
+            {
+              "type": "sample",
+              "index": 249,
+              "descriptor": 0,
+              "pattern": 2,
+              "regime": 0,
+              "quartet": 2,
+              "position": 1,
+              "arm": 1,
+              "ms": 0.160799995,
+              "launches": 532
+            },
+            {
+              "type": "sample",
+              "index": 250,
+              "descriptor": 0,
+              "pattern": 2,
+              "regime": 0,
+              "quartet": 2,
+              "position": 2,
+              "arm": 1,
+              "ms": 0.16144,
+              "launches": 534
+            },
+            {
+              "type": "sample",
+              "index": 251,
+              "descriptor": 0,
+              "pattern": 2,
+              "regime": 0,
+              "quartet": 2,
+              "position": 3,
+              "arm": 0,
+              "ms": 0.159679994,
+              "launches": 536
+            }
+          ],
+          "quartets": [
+            {
+              "baseline_ms": 0.16144,
+              "candidate_ms": 0.160719998,
+              "signed_delta_ms": 0.0007200019999999974,
+              "baseline_over_candidate": 1.0044798532165238
+            },
+            {
+              "baseline_ms": 0.161360003,
+              "candidate_ms": 0.160639994,
+              "signed_delta_ms": 0.0007200089999999937,
+              "baseline_over_candidate": 1.004482127906454
+            },
+            {
+              "baseline_ms": 0.1599999965,
+              "candidate_ms": 0.1611199975,
+              "signed_delta_ms": -0.0011200010000000094,
+              "baseline_over_candidate": 0.9930486530698959
+            }
+          ],
+          "median_paired_delta_ms": 0.0007200019999999974,
+          "median_baseline_ms": 0.161360003,
+          "median_candidate_ms": 0.160719998,
+          "baseline_range_ms": [
+            0.159679994,
+            0.161599994
+          ],
+          "candidate_range_ms": [
+            0.160479993,
+            0.16144
+          ]
+        },
+        {
+          "descriptor": 1,
+          "pattern": 2,
+          "regime": 0,
+          "calls": 810,
+          "raw_samples": [
+            {
+              "type": "sample",
+              "index": 252,
+              "descriptor": 1,
+              "pattern": 2,
+              "regime": 0,
+              "quartet": 0,
+              "position": 0,
+              "arm": 0,
+              "ms": 1.94511998,
+              "launches": 538
+            },
+            {
+              "type": "sample",
+              "index": 253,
+              "descriptor": 1,
+              "pattern": 2,
+              "regime": 0,
+              "quartet": 0,
+              "position": 1,
+              "arm": 1,
+              "ms": 1.94640005,
+              "launches": 540
+            },
+            {
+              "type": "sample",
+              "index": 254,
+              "descriptor": 1,
+              "pattern": 2,
+              "regime": 0,
+              "quartet": 0,
+              "position": 2,
+              "arm": 1,
+              "ms": 1.94815898,
+              "launches": 542
+            },
+            {
+              "type": "sample",
+              "index": 255,
+              "descriptor": 1,
+              "pattern": 2,
+              "regime": 0,
+              "quartet": 0,
+              "position": 3,
+              "arm": 0,
+              "ms": 1.94607997,
+              "launches": 544
+            },
+            {
+              "type": "sample",
+              "index": 256,
+              "descriptor": 1,
+              "pattern": 2,
+              "regime": 0,
+              "quartet": 1,
+              "position": 0,
+              "arm": 0,
+              "ms": 1.94607902,
+              "launches": 546
+            },
+            {
+              "type": "sample",
+              "index": 257,
+              "descriptor": 1,
+              "pattern": 2,
+              "regime": 0,
+              "quartet": 1,
+              "position": 1,
+              "arm": 1,
+              "ms": 1.94128001,
+              "launches": 548
+            },
+            {
+              "type": "sample",
+              "index": 258,
+              "descriptor": 1,
+              "pattern": 2,
+              "regime": 0,
+              "quartet": 1,
+              "position": 2,
+              "arm": 1,
+              "ms": 1.94544005,
+              "launches": 550
+            },
+            {
+              "type": "sample",
+              "index": 259,
+              "descriptor": 1,
+              "pattern": 2,
+              "regime": 0,
+              "quartet": 1,
+              "position": 3,
+              "arm": 0,
+              "ms": 1.94527996,
+              "launches": 552
+            },
+            {
+              "type": "sample",
+              "index": 260,
+              "descriptor": 1,
+              "pattern": 2,
+              "regime": 0,
+              "quartet": 2,
+              "position": 0,
+              "arm": 0,
+              "ms": 1.94783998,
+              "launches": 554
+            },
+            {
+              "type": "sample",
+              "index": 261,
+              "descriptor": 1,
+              "pattern": 2,
+              "regime": 0,
+              "quartet": 2,
+              "position": 1,
+              "arm": 1,
+              "ms": 2.00656009,
+              "launches": 556
+            },
+            {
+              "type": "sample",
+              "index": 262,
+              "descriptor": 1,
+              "pattern": 2,
+              "regime": 0,
+              "quartet": 2,
+              "position": 2,
+              "arm": 1,
+              "ms": 1.94623995,
+              "launches": 558
+            },
+            {
+              "type": "sample",
+              "index": 263,
+              "descriptor": 1,
+              "pattern": 2,
+              "regime": 0,
+              "quartet": 2,
+              "position": 3,
+              "arm": 0,
+              "ms": 1.94719899,
+              "launches": 560
+            }
+          ],
+          "quartets": [
+            {
+              "baseline_ms": 1.945599975,
+              "candidate_ms": 1.947279515,
+              "signed_delta_ms": -0.001679540000000035,
+              "baseline_over_candidate": 0.9991374941362745
+            },
+            {
+              "baseline_ms": 1.9456794899999998,
+              "candidate_ms": 1.94336003,
+              "signed_delta_ms": 0.002319459999999829,
+              "baseline_over_candidate": 1.0011935307736055
+            },
+            {
+              "baseline_ms": 1.947519485,
+              "candidate_ms": 1.9764000199999998,
+              "signed_delta_ms": -0.028880534999999874,
+              "baseline_over_candidate": 0.9853873028193959
+            }
+          ],
+          "median_paired_delta_ms": -0.001679540000000035,
+          "median_baseline_ms": 1.9456794899999998,
+          "median_candidate_ms": 1.947279515,
+          "baseline_range_ms": [
+            1.94511998,
+            1.94783998
+          ],
+          "candidate_range_ms": [
+            1.94128001,
+            2.00656009
+          ]
+        },
+        {
+          "descriptor": 2,
+          "pattern": 2,
+          "regime": 0,
+          "calls": 54,
+          "raw_samples": [
+            {
+              "type": "sample",
+              "index": 264,
+              "descriptor": 2,
+              "pattern": 2,
+              "regime": 0,
+              "quartet": 0,
+              "position": 0,
+              "arm": 0,
+              "ms": 1.94687998,
+              "launches": 562
+            },
+            {
+              "type": "sample",
+              "index": 265,
+              "descriptor": 2,
+              "pattern": 2,
+              "regime": 0,
+              "quartet": 0,
+              "position": 1,
+              "arm": 1,
+              "ms": 1.94239998,
+              "launches": 564
+            },
+            {
+              "type": "sample",
+              "index": 266,
+              "descriptor": 2,
+              "pattern": 2,
+              "regime": 0,
+              "quartet": 0,
+              "position": 2,
+              "arm": 1,
+              "ms": 1.94560003,
+              "launches": 566
+            },
+            {
+              "type": "sample",
+              "index": 267,
+              "descriptor": 2,
+              "pattern": 2,
+              "regime": 0,
+              "quartet": 0,
+              "position": 3,
+              "arm": 0,
+              "ms": 1.94560003,
+              "launches": 568
+            },
+            {
+              "type": "sample",
+              "index": 268,
+              "descriptor": 2,
+              "pattern": 2,
+              "regime": 0,
+              "quartet": 1,
+              "position": 0,
+              "arm": 0,
+              "ms": 1.94544005,
+              "launches": 570
+            },
+            {
+              "type": "sample",
+              "index": 269,
+              "descriptor": 2,
+              "pattern": 2,
+              "regime": 0,
+              "quartet": 1,
+              "position": 1,
+              "arm": 1,
+              "ms": 1.94335902,
+              "launches": 572
+            },
+            {
+              "type": "sample",
+              "index": 270,
+              "descriptor": 2,
+              "pattern": 2,
+              "regime": 0,
+              "quartet": 1,
+              "position": 2,
+              "arm": 1,
+              "ms": 1.94672,
+              "launches": 574
+            },
+            {
+              "type": "sample",
+              "index": 271,
+              "descriptor": 2,
+              "pattern": 2,
+              "regime": 0,
+              "quartet": 1,
+              "position": 3,
+              "arm": 0,
+              "ms": 1.94575894,
+              "launches": 576
+            },
+            {
+              "type": "sample",
+              "index": 272,
+              "descriptor": 2,
+              "pattern": 2,
+              "regime": 0,
+              "quartet": 2,
+              "position": 0,
+              "arm": 0,
+              "ms": 1.94719994,
+              "launches": 578
+            },
+            {
+              "type": "sample",
+              "index": 273,
+              "descriptor": 2,
+              "pattern": 2,
+              "regime": 0,
+              "quartet": 2,
+              "position": 1,
+              "arm": 1,
+              "ms": 1.94560003,
+              "launches": 580
+            },
+            {
+              "type": "sample",
+              "index": 274,
+              "descriptor": 2,
+              "pattern": 2,
+              "regime": 0,
+              "quartet": 2,
+              "position": 2,
+              "arm": 1,
+              "ms": 1.94351995,
+              "launches": 582
+            },
+            {
+              "type": "sample",
+              "index": 275,
+              "descriptor": 2,
+              "pattern": 2,
+              "regime": 0,
+              "quartet": 2,
+              "position": 3,
+              "arm": 0,
+              "ms": 1.94096005,
+              "launches": 584
+            }
+          ],
+          "quartets": [
+            {
+              "baseline_ms": 1.946240005,
+              "candidate_ms": 1.944000005,
+              "signed_delta_ms": 0.0022400000000000198,
+              "baseline_over_candidate": 1.001152263371522
+            },
+            {
+              "baseline_ms": 1.945599495,
+              "candidate_ms": 1.94503951,
+              "signed_delta_ms": 0.0005599849999999851,
+              "baseline_over_candidate": 1.0002879041773296
+            },
+            {
+              "baseline_ms": 1.944079995,
+              "candidate_ms": 1.9445599900000001,
+              "signed_delta_ms": -0.00047999500000006634,
+              "baseline_over_candidate": 0.9997531600966447
+            }
+          ],
+          "median_paired_delta_ms": 0.0005599849999999851,
+          "median_baseline_ms": 1.945599495,
+          "median_candidate_ms": 1.9445599900000001,
+          "baseline_range_ms": [
+            1.94096005,
+            1.94719994
+          ],
+          "candidate_range_ms": [
+            1.94239998,
+            1.94672
+          ]
+        },
+        {
+          "descriptor": 3,
+          "pattern": 2,
+          "regime": 0,
+          "calls": 810,
+          "raw_samples": [
+            {
+              "type": "sample",
+              "index": 276,
+              "descriptor": 3,
+              "pattern": 2,
+              "regime": 0,
+              "quartet": 0,
+              "position": 0,
+              "arm": 0,
+              "ms": 0.0705600008,
+              "launches": 586
+            },
+            {
+              "type": "sample",
+              "index": 277,
+              "descriptor": 3,
+              "pattern": 2,
+              "regime": 0,
+              "quartet": 0,
+              "position": 1,
+              "arm": 1,
+              "ms": 0.0699200034,
+              "launches": 588
+            },
+            {
+              "type": "sample",
+              "index": 278,
+              "descriptor": 3,
+              "pattern": 2,
+              "regime": 0,
+              "quartet": 0,
+              "position": 2,
+              "arm": 1,
+              "ms": 0.0708800033,
+              "launches": 590
+            },
+            {
+              "type": "sample",
+              "index": 279,
+              "descriptor": 3,
+              "pattern": 2,
+              "regime": 0,
+              "quartet": 0,
+              "position": 3,
+              "arm": 0,
+              "ms": 0.0694399998,
+              "launches": 592
+            },
+            {
+              "type": "sample",
+              "index": 280,
+              "descriptor": 3,
+              "pattern": 2,
+              "regime": 0,
+              "quartet": 1,
+              "position": 0,
+              "arm": 0,
+              "ms": 0.0703999996,
+              "launches": 594
+            },
+            {
+              "type": "sample",
+              "index": 281,
+              "descriptor": 3,
+              "pattern": 2,
+              "regime": 0,
+              "quartet": 1,
+              "position": 1,
+              "arm": 1,
+              "ms": 0.0707200021,
+              "launches": 596
+            },
+            {
+              "type": "sample",
+              "index": 282,
+              "descriptor": 3,
+              "pattern": 2,
+              "regime": 0,
+              "quartet": 1,
+              "position": 2,
+              "arm": 1,
+              "ms": 0.0705600008,
+              "launches": 598
+            },
+            {
+              "type": "sample",
+              "index": 283,
+              "descriptor": 3,
+              "pattern": 2,
+              "regime": 0,
+              "quartet": 1,
+              "position": 3,
+              "arm": 0,
+              "ms": 0.0699200034,
+              "launches": 600
+            },
+            {
+              "type": "sample",
+              "index": 284,
+              "descriptor": 3,
+              "pattern": 2,
+              "regime": 0,
+              "quartet": 2,
+              "position": 0,
+              "arm": 0,
+              "ms": 0.0700799972,
+              "launches": 602
+            },
+            {
+              "type": "sample",
+              "index": 285,
+              "descriptor": 3,
+              "pattern": 2,
+              "regime": 0,
+              "quartet": 2,
+              "position": 1,
+              "arm": 1,
+              "ms": 0.0705600008,
+              "launches": 604
+            },
+            {
+              "type": "sample",
+              "index": 286,
+              "descriptor": 3,
+              "pattern": 2,
+              "regime": 0,
+              "quartet": 2,
+              "position": 2,
+              "arm": 1,
+              "ms": 0.0700799972,
+              "launches": 606
+            },
+            {
+              "type": "sample",
+              "index": 287,
+              "descriptor": 3,
+              "pattern": 2,
+              "regime": 0,
+              "quartet": 2,
+              "position": 3,
+              "arm": 0,
+              "ms": 0.0785600021,
+              "launches": 608
+            }
+          ],
+          "quartets": [
+            {
+              "baseline_ms": 0.0700000003,
+              "candidate_ms": 0.07040000334999999,
+              "signed_delta_ms": -0.00040000304999998626,
+              "baseline_over_candidate": 0.994318138764691
+            },
+            {
+              "baseline_ms": 0.0701600015,
+              "candidate_ms": 0.07064000144999999,
+              "signed_delta_ms": -0.0004799999499999902,
+              "baseline_over_candidate": 0.9932049838597506
+            },
+            {
+              "baseline_ms": 0.07431999965,
+              "candidate_ms": 0.070319999,
+              "signed_delta_ms": 0.004000000650000002,
+              "baseline_over_candidate": 1.0568828314403134
+            }
+          ],
+          "median_paired_delta_ms": -0.00040000304999998626,
+          "median_baseline_ms": 0.0701600015,
+          "median_candidate_ms": 0.07040000334999999,
+          "baseline_range_ms": [
+            0.0694399998,
+            0.0785600021
+          ],
+          "candidate_range_ms": [
+            0.0699200034,
+            0.0708800033
+          ]
+        },
+        {
+          "descriptor": 4,
+          "pattern": 2,
+          "regime": 0,
+          "calls": 54,
+          "raw_samples": [
+            {
+              "type": "sample",
+              "index": 288,
+              "descriptor": 4,
+              "pattern": 2,
+              "regime": 0,
+              "quartet": 0,
+              "position": 0,
+              "arm": 0,
+              "ms": 0.0707200021,
+              "launches": 610
+            },
+            {
+              "type": "sample",
+              "index": 289,
+              "descriptor": 4,
+              "pattern": 2,
+              "regime": 0,
+              "quartet": 0,
+              "position": 1,
+              "arm": 1,
+              "ms": 0.0703999996,
+              "launches": 612
+            },
+            {
+              "type": "sample",
+              "index": 290,
+              "descriptor": 4,
+              "pattern": 2,
+              "regime": 0,
+              "quartet": 0,
+              "position": 2,
+              "arm": 1,
+              "ms": 0.0700799972,
+              "launches": 614
+            },
+            {
+              "type": "sample",
+              "index": 291,
+              "descriptor": 4,
+              "pattern": 2,
+              "regime": 0,
+              "quartet": 0,
+              "position": 3,
+              "arm": 0,
+              "ms": 0.0707200021,
+              "launches": 616
+            },
+            {
+              "type": "sample",
+              "index": 292,
+              "descriptor": 4,
+              "pattern": 2,
+              "regime": 0,
+              "quartet": 1,
+              "position": 0,
+              "arm": 0,
+              "ms": 0.071039997,
+              "launches": 618
+            },
+            {
+              "type": "sample",
+              "index": 293,
+              "descriptor": 4,
+              "pattern": 2,
+              "regime": 0,
+              "quartet": 1,
+              "position": 1,
+              "arm": 1,
+              "ms": 0.0702399984,
+              "launches": 620
+            },
+            {
+              "type": "sample",
+              "index": 294,
+              "descriptor": 4,
+              "pattern": 2,
+              "regime": 0,
+              "quartet": 1,
+              "position": 2,
+              "arm": 1,
+              "ms": 0.0705600008,
+              "launches": 622
+            },
+            {
+              "type": "sample",
+              "index": 295,
+              "descriptor": 4,
+              "pattern": 2,
+              "regime": 0,
+              "quartet": 1,
+              "position": 3,
+              "arm": 0,
+              "ms": 0.0708800033,
+              "launches": 624
+            },
+            {
+              "type": "sample",
+              "index": 296,
+              "descriptor": 4,
+              "pattern": 2,
+              "regime": 0,
+              "quartet": 2,
+              "position": 0,
+              "arm": 0,
+              "ms": 0.0703999996,
+              "launches": 626
+            },
+            {
+              "type": "sample",
+              "index": 297,
+              "descriptor": 4,
+              "pattern": 2,
+              "regime": 0,
+              "quartet": 2,
+              "position": 1,
+              "arm": 1,
+              "ms": 0.0707200021,
+              "launches": 628
+            },
+            {
+              "type": "sample",
+              "index": 298,
+              "descriptor": 4,
+              "pattern": 2,
+              "regime": 0,
+              "quartet": 2,
+              "position": 2,
+              "arm": 1,
+              "ms": 0.0711999983,
+              "launches": 630
+            },
+            {
+              "type": "sample",
+              "index": 299,
+              "descriptor": 4,
+              "pattern": 2,
+              "regime": 0,
+              "quartet": 2,
+              "position": 3,
+              "arm": 0,
+              "ms": 0.0703999996,
+              "launches": 632
+            }
+          ],
+          "quartets": [
+            {
+              "baseline_ms": 0.0707200021,
+              "candidate_ms": 0.0702399984,
+              "signed_delta_ms": 0.00048000369999999515,
+              "baseline_over_candidate": 1.006833765816259
+            },
+            {
+              "baseline_ms": 0.07096000015,
+              "candidate_ms": 0.0703999996,
+              "signed_delta_ms": 0.0005600005499999949,
+              "baseline_over_candidate": 1.0079545533122418
+            },
+            {
+              "baseline_ms": 0.0703999996,
+              "candidate_ms": 0.0709600002,
+              "signed_delta_ms": -0.0005600005999999991,
+              "baseline_over_candidate": 0.992108221555501
+            }
+          ],
+          "median_paired_delta_ms": 0.00048000369999999515,
+          "median_baseline_ms": 0.0707200021,
+          "median_candidate_ms": 0.0703999996,
+          "baseline_range_ms": [
+            0.0703999996,
+            0.071039997
+          ],
+          "candidate_range_ms": [
+            0.0700799972,
+            0.0711999983
+          ]
+        },
+        {
+          "descriptor": 0,
+          "pattern": 2,
+          "regime": 1,
+          "calls": 1728,
+          "raw_samples": [
+            {
+              "type": "sample",
+              "index": 300,
+              "descriptor": 0,
+              "pattern": 2,
+              "regime": 1,
+              "quartet": 0,
+              "position": 0,
+              "arm": 0,
+              "ms": 0.162080005,
+              "launches": 634
+            },
+            {
+              "type": "sample",
+              "index": 301,
+              "descriptor": 0,
+              "pattern": 2,
+              "regime": 1,
+              "quartet": 0,
+              "position": 1,
+              "arm": 1,
+              "ms": 0.161280006,
+              "launches": 636
+            },
+            {
+              "type": "sample",
+              "index": 302,
+              "descriptor": 0,
+              "pattern": 2,
+              "regime": 1,
+              "quartet": 0,
+              "position": 2,
+              "arm": 1,
+              "ms": 0.160319999,
+              "launches": 638
+            },
+            {
+              "type": "sample",
+              "index": 303,
+              "descriptor": 0,
+              "pattern": 2,
+              "regime": 1,
+              "quartet": 0,
+              "position": 3,
+              "arm": 0,
+              "ms": 0.161919996,
+              "launches": 640
+            },
+            {
+              "type": "sample",
+              "index": 304,
+              "descriptor": 0,
+              "pattern": 2,
+              "regime": 1,
+              "quartet": 1,
+              "position": 0,
+              "arm": 0,
+              "ms": 0.160160005,
+              "launches": 642
+            },
+            {
+              "type": "sample",
+              "index": 305,
+              "descriptor": 0,
+              "pattern": 2,
+              "regime": 1,
+              "quartet": 1,
+              "position": 1,
+              "arm": 1,
+              "ms": 0.160319999,
+              "launches": 644
+            },
+            {
+              "type": "sample",
+              "index": 306,
+              "descriptor": 0,
+              "pattern": 2,
+              "regime": 1,
+              "quartet": 1,
+              "position": 2,
+              "arm": 1,
+              "ms": 0.161280006,
+              "launches": 646
+            },
+            {
+              "type": "sample",
+              "index": 307,
+              "descriptor": 0,
+              "pattern": 2,
+              "regime": 1,
+              "quartet": 1,
+              "position": 3,
+              "arm": 0,
+              "ms": 0.161280006,
+              "launches": 648
+            },
+            {
+              "type": "sample",
+              "index": 308,
+              "descriptor": 0,
+              "pattern": 2,
+              "regime": 1,
+              "quartet": 2,
+              "position": 0,
+              "arm": 0,
+              "ms": 0.160319999,
+              "launches": 650
+            },
+            {
+              "type": "sample",
+              "index": 309,
+              "descriptor": 0,
+              "pattern": 2,
+              "regime": 1,
+              "quartet": 2,
+              "position": 1,
+              "arm": 1,
+              "ms": 0.160640001,
+              "launches": 652
+            },
+            {
+              "type": "sample",
+              "index": 310,
+              "descriptor": 0,
+              "pattern": 2,
+              "regime": 1,
+              "quartet": 2,
+              "position": 2,
+              "arm": 1,
+              "ms": 0.161280006,
+              "launches": 654
+            },
+            {
+              "type": "sample",
+              "index": 311,
+              "descriptor": 0,
+              "pattern": 2,
+              "regime": 1,
+              "quartet": 2,
+              "position": 3,
+              "arm": 0,
+              "ms": 0.175840005,
+              "launches": 656
+            }
+          ],
+          "quartets": [
+            {
+              "baseline_ms": 0.16200000050000002,
+              "candidate_ms": 0.16080000249999998,
+              "signed_delta_ms": 0.0011999980000000354,
+              "baseline_over_candidate": 1.0074626740133292
+            },
+            {
+              "baseline_ms": 0.16072000549999998,
+              "candidate_ms": 0.16080000249999998,
+              "signed_delta_ms": -7.999699999999832e-05,
+              "baseline_over_candidate": 0.9995025062266402
+            },
+            {
+              "baseline_ms": 0.168080002,
+              "candidate_ms": 0.1609600035,
+              "signed_delta_ms": 0.007119998500000002,
+              "baseline_over_candidate": 1.0442345821643821
+            }
+          ],
+          "median_paired_delta_ms": 0.0011999980000000354,
+          "median_baseline_ms": 0.16200000050000002,
+          "median_candidate_ms": 0.16080000249999998,
+          "baseline_range_ms": [
+            0.160160005,
+            0.175840005
+          ],
+          "candidate_range_ms": [
+            0.160319999,
+            0.161280006
+          ]
+        },
+        {
+          "descriptor": 1,
+          "pattern": 2,
+          "regime": 1,
+          "calls": 810,
+          "raw_samples": [
+            {
+              "type": "sample",
+              "index": 312,
+              "descriptor": 1,
+              "pattern": 2,
+              "regime": 1,
+              "quartet": 0,
+              "position": 0,
+              "arm": 0,
+              "ms": 1.94736004,
+              "launches": 658
+            },
+            {
+              "type": "sample",
+              "index": 313,
+              "descriptor": 1,
+              "pattern": 2,
+              "regime": 1,
+              "quartet": 0,
+              "position": 1,
+              "arm": 1,
+              "ms": 1.94623995,
+              "launches": 660
+            },
+            {
+              "type": "sample",
+              "index": 314,
+              "descriptor": 1,
+              "pattern": 2,
+              "regime": 1,
+              "quartet": 0,
+              "position": 2,
+              "arm": 1,
+              "ms": 1.94527996,
+              "launches": 662
+            },
+            {
+              "type": "sample",
+              "index": 315,
+              "descriptor": 1,
+              "pattern": 2,
+              "regime": 1,
+              "quartet": 0,
+              "position": 3,
+              "arm": 0,
+              "ms": 1.94351995,
+              "launches": 664
+            },
+            {
+              "type": "sample",
+              "index": 316,
+              "descriptor": 1,
+              "pattern": 2,
+              "regime": 1,
+              "quartet": 1,
+              "position": 0,
+              "arm": 0,
+              "ms": 1.95983994,
+              "launches": 666
+            },
+            {
+              "type": "sample",
+              "index": 317,
+              "descriptor": 1,
+              "pattern": 2,
+              "regime": 1,
+              "quartet": 1,
+              "position": 1,
+              "arm": 1,
+              "ms": 1.94288003,
+              "launches": 668
+            },
+            {
+              "type": "sample",
+              "index": 318,
+              "descriptor": 1,
+              "pattern": 2,
+              "regime": 1,
+              "quartet": 1,
+              "position": 2,
+              "arm": 1,
+              "ms": 1.94400001,
+              "launches": 670
+            },
+            {
+              "type": "sample",
+              "index": 319,
+              "descriptor": 1,
+              "pattern": 2,
+              "regime": 1,
+              "quartet": 1,
+              "position": 3,
+              "arm": 0,
+              "ms": 1.94544005,
+              "launches": 672
+            },
+            {
+              "type": "sample",
+              "index": 320,
+              "descriptor": 1,
+              "pattern": 2,
+              "regime": 1,
+              "quartet": 2,
+              "position": 0,
+              "arm": 0,
+              "ms": 1.94304001,
+              "launches": 674
+            },
+            {
+              "type": "sample",
+              "index": 321,
+              "descriptor": 1,
+              "pattern": 2,
+              "regime": 1,
+              "quartet": 2,
+              "position": 1,
+              "arm": 1,
+              "ms": 1.94208002,
+              "launches": 676
+            },
+            {
+              "type": "sample",
+              "index": 322,
+              "descriptor": 1,
+              "pattern": 2,
+              "regime": 1,
+              "quartet": 2,
+              "position": 2,
+              "arm": 1,
+              "ms": 1.95024002,
+              "launches": 678
+            },
+            {
+              "type": "sample",
+              "index": 323,
+              "descriptor": 1,
+              "pattern": 2,
+              "regime": 1,
+              "quartet": 2,
+              "position": 3,
+              "arm": 0,
+              "ms": 1.94783998,
+              "launches": 680
+            }
+          ],
+          "quartets": [
+            {
+              "baseline_ms": 1.945439995,
+              "candidate_ms": 1.945759955,
+              "signed_delta_ms": -0.000319959999999897,
+              "baseline_over_candidate": 0.9998355603941906
+            },
+            {
+              "baseline_ms": 1.952639995,
+              "candidate_ms": 1.94344002,
+              "signed_delta_ms": 0.009199975000000027,
+              "baseline_over_candidate": 1.0047338610429561
+            },
+            {
+              "baseline_ms": 1.945439995,
+              "candidate_ms": 1.94616002,
+              "signed_delta_ms": -0.000720024999999902,
+              "baseline_over_candidate": 0.9996300278535164
+            }
+          ],
+          "median_paired_delta_ms": -0.000319959999999897,
+          "median_baseline_ms": 1.945439995,
+          "median_candidate_ms": 1.945759955,
+          "baseline_range_ms": [
+            1.94304001,
+            1.95983994
+          ],
+          "candidate_range_ms": [
+            1.94208002,
+            1.95024002
+          ]
+        },
+        {
+          "descriptor": 2,
+          "pattern": 2,
+          "regime": 1,
+          "calls": 54,
+          "raw_samples": [
+            {
+              "type": "sample",
+              "index": 324,
+              "descriptor": 2,
+              "pattern": 2,
+              "regime": 1,
+              "quartet": 0,
+              "position": 0,
+              "arm": 0,
+              "ms": 1.94511998,
+              "launches": 682
+            },
+            {
+              "type": "sample",
+              "index": 325,
+              "descriptor": 2,
+              "pattern": 2,
+              "regime": 1,
+              "quartet": 0,
+              "position": 1,
+              "arm": 1,
+              "ms": 1.94640005,
+              "launches": 684
+            },
+            {
+              "type": "sample",
+              "index": 326,
+              "descriptor": 2,
+              "pattern": 2,
+              "regime": 1,
+              "quartet": 0,
+              "position": 2,
+              "arm": 1,
+              "ms": 1.94783998,
+              "launches": 686
+            },
+            {
+              "type": "sample",
+              "index": 327,
+              "descriptor": 2,
+              "pattern": 2,
+              "regime": 1,
+              "quartet": 0,
+              "position": 3,
+              "arm": 0,
+              "ms": 1.94319999,
+              "launches": 688
+            },
+            {
+              "type": "sample",
+              "index": 328,
+              "descriptor": 2,
+              "pattern": 2,
+              "regime": 1,
+              "quartet": 1,
+              "position": 0,
+              "arm": 0,
+              "ms": 1.96255994,
+              "launches": 690
+            },
+            {
+              "type": "sample",
+              "index": 329,
+              "descriptor": 2,
+              "pattern": 2,
+              "regime": 1,
+              "quartet": 1,
+              "position": 1,
+              "arm": 1,
+              "ms": 1.94623899,
+              "launches": 692
+            },
+            {
+              "type": "sample",
+              "index": 330,
+              "descriptor": 2,
+              "pattern": 2,
+              "regime": 1,
+              "quartet": 1,
+              "position": 2,
+              "arm": 1,
+              "ms": 1.94848001,
+              "launches": 694
+            },
+            {
+              "type": "sample",
+              "index": 331,
+              "descriptor": 2,
+              "pattern": 2,
+              "regime": 1,
+              "quartet": 1,
+              "position": 3,
+              "arm": 0,
+              "ms": 1.94640005,
+              "launches": 696
+            },
+            {
+              "type": "sample",
+              "index": 332,
+              "descriptor": 2,
+              "pattern": 2,
+              "regime": 1,
+              "quartet": 2,
+              "position": 0,
+              "arm": 0,
+              "ms": 1.94607902,
+              "launches": 698
+            },
+            {
+              "type": "sample",
+              "index": 333,
+              "descriptor": 2,
+              "pattern": 2,
+              "regime": 1,
+              "quartet": 2,
+              "position": 1,
+              "arm": 1,
+              "ms": 2.00575995,
+              "launches": 700
+            },
+            {
+              "type": "sample",
+              "index": 334,
+              "descriptor": 2,
+              "pattern": 2,
+              "regime": 1,
+              "quartet": 2,
+              "position": 2,
+              "arm": 1,
+              "ms": 1.94496,
+              "launches": 702
+            },
+            {
+              "type": "sample",
+              "index": 335,
+              "descriptor": 2,
+              "pattern": 2,
+              "regime": 1,
+              "quartet": 2,
+              "position": 3,
+              "arm": 0,
+              "ms": 1.94671905,
+              "launches": 704
+            }
+          ],
+          "quartets": [
+            {
+              "baseline_ms": 1.9441599850000002,
+              "candidate_ms": 1.9471200149999999,
+              "signed_delta_ms": -0.0029600299999996693,
+              "baseline_over_candidate": 0.998479790676899
+            },
+            {
+              "baseline_ms": 1.954479995,
+              "candidate_ms": 1.9473595,
+              "signed_delta_ms": 0.0071204950000001155,
+              "baseline_over_candidate": 1.0036564871560696
+            },
+            {
+              "baseline_ms": 1.946399035,
+              "candidate_ms": 1.975359975,
+              "signed_delta_ms": -0.028960939999999935,
+              "baseline_over_candidate": 0.9853389051279122
+            }
+          ],
+          "median_paired_delta_ms": -0.0029600299999996693,
+          "median_baseline_ms": 1.946399035,
+          "median_candidate_ms": 1.9473595,
+          "baseline_range_ms": [
+            1.94319999,
+            1.96255994
+          ],
+          "candidate_range_ms": [
+            1.94496,
+            2.00575995
+          ]
+        },
+        {
+          "descriptor": 3,
+          "pattern": 2,
+          "regime": 1,
+          "calls": 810,
+          "raw_samples": [
+            {
+              "type": "sample",
+              "index": 336,
+              "descriptor": 3,
+              "pattern": 2,
+              "regime": 1,
+              "quartet": 0,
+              "position": 0,
+              "arm": 0,
+              "ms": 0.0719999969,
+              "launches": 706
+            },
+            {
+              "type": "sample",
+              "index": 337,
+              "descriptor": 3,
+              "pattern": 2,
+              "regime": 1,
+              "quartet": 0,
+              "position": 1,
+              "arm": 1,
+              "ms": 0.071039997,
+              "launches": 708
+            },
+            {
+              "type": "sample",
+              "index": 338,
+              "descriptor": 3,
+              "pattern": 2,
+              "regime": 1,
+              "quartet": 0,
+              "position": 2,
+              "arm": 1,
+              "ms": 0.0711999983,
+              "launches": 710
+            },
+            {
+              "type": "sample",
+              "index": 339,
+              "descriptor": 3,
+              "pattern": 2,
+              "regime": 1,
+              "quartet": 0,
+              "position": 3,
+              "arm": 0,
+              "ms": 0.0707200021,
+              "launches": 712
+            },
+            {
+              "type": "sample",
+              "index": 340,
+              "descriptor": 3,
+              "pattern": 2,
+              "regime": 1,
+              "quartet": 1,
+              "position": 0,
+              "arm": 0,
+              "ms": 0.071039997,
+              "launches": 714
+            },
+            {
+              "type": "sample",
+              "index": 341,
+              "descriptor": 3,
+              "pattern": 2,
+              "regime": 1,
+              "quartet": 1,
+              "position": 1,
+              "arm": 1,
+              "ms": 0.0700799972,
+              "launches": 716
+            },
+            {
+              "type": "sample",
+              "index": 342,
+              "descriptor": 3,
+              "pattern": 2,
+              "regime": 1,
+              "quartet": 1,
+              "position": 2,
+              "arm": 1,
+              "ms": 0.0703999996,
+              "launches": 718
+            },
+            {
+              "type": "sample",
+              "index": 343,
+              "descriptor": 3,
+              "pattern": 2,
+              "regime": 1,
+              "quartet": 1,
+              "position": 3,
+              "arm": 0,
+              "ms": 0.0705600008,
+              "launches": 720
+            },
+            {
+              "type": "sample",
+              "index": 344,
+              "descriptor": 3,
+              "pattern": 2,
+              "regime": 1,
+              "quartet": 2,
+              "position": 0,
+              "arm": 0,
+              "ms": 0.0700799972,
+              "launches": 722
+            },
+            {
+              "type": "sample",
+              "index": 345,
+              "descriptor": 3,
+              "pattern": 2,
+              "regime": 1,
+              "quartet": 2,
+              "position": 1,
+              "arm": 1,
+              "ms": 0.0700799972,
+              "launches": 724
+            },
+            {
+              "type": "sample",
+              "index": 346,
+              "descriptor": 3,
+              "pattern": 2,
+              "regime": 1,
+              "quartet": 2,
+              "position": 2,
+              "arm": 1,
+              "ms": 0.0705600008,
+              "launches": 726
+            },
+            {
+              "type": "sample",
+              "index": 347,
+              "descriptor": 3,
+              "pattern": 2,
+              "regime": 1,
+              "quartet": 2,
+              "position": 3,
+              "arm": 0,
+              "ms": 0.0703999996,
+              "launches": 728
+            }
+          ],
+          "quartets": [
+            {
+              "baseline_ms": 0.0713599995,
+              "candidate_ms": 0.07111999764999999,
+              "signed_delta_ms": 0.0002400018500000045,
+              "baseline_over_candidate": 1.0033746043016074
+            },
+            {
+              "baseline_ms": 0.0707999989,
+              "candidate_ms": 0.0702399984,
+              "signed_delta_ms": 0.0005600004999999908,
+              "baseline_over_candidate": 1.0079726724481246
+            },
+            {
+              "baseline_ms": 0.0702399984,
+              "candidate_ms": 0.070319999,
+              "signed_delta_ms": -8.000059999999087e-05,
+              "baseline_over_candidate": 0.9988623350236397
+            }
+          ],
+          "median_paired_delta_ms": 0.0002400018500000045,
+          "median_baseline_ms": 0.0707999989,
+          "median_candidate_ms": 0.070319999,
+          "baseline_range_ms": [
+            0.0700799972,
+            0.0719999969
+          ],
+          "candidate_range_ms": [
+            0.0700799972,
+            0.0711999983
+          ]
+        },
+        {
+          "descriptor": 4,
+          "pattern": 2,
+          "regime": 1,
+          "calls": 54,
+          "raw_samples": [
+            {
+              "type": "sample",
+              "index": 348,
+              "descriptor": 4,
+              "pattern": 2,
+              "regime": 1,
+              "quartet": 0,
+              "position": 0,
+              "arm": 0,
+              "ms": 0.0703999996,
+              "launches": 730
+            },
+            {
+              "type": "sample",
+              "index": 349,
+              "descriptor": 4,
+              "pattern": 2,
+              "regime": 1,
+              "quartet": 0,
+              "position": 1,
+              "arm": 1,
+              "ms": 0.0703999996,
+              "launches": 732
+            },
+            {
+              "type": "sample",
+              "index": 350,
+              "descriptor": 4,
+              "pattern": 2,
+              "regime": 1,
+              "quartet": 0,
+              "position": 2,
+              "arm": 1,
+              "ms": 0.0702399984,
+              "launches": 734
+            },
+            {
+              "type": "sample",
+              "index": 351,
+              "descriptor": 4,
+              "pattern": 2,
+              "regime": 1,
+              "quartet": 0,
+              "position": 3,
+              "arm": 0,
+              "ms": 0.0705600008,
+              "launches": 736
+            },
+            {
+              "type": "sample",
+              "index": 352,
+              "descriptor": 4,
+              "pattern": 2,
+              "regime": 1,
+              "quartet": 1,
+              "position": 0,
+              "arm": 0,
+              "ms": 0.0707200021,
+              "launches": 738
+            },
+            {
+              "type": "sample",
+              "index": 353,
+              "descriptor": 4,
+              "pattern": 2,
+              "regime": 1,
+              "quartet": 1,
+              "position": 1,
+              "arm": 1,
+              "ms": 0.0702399984,
+              "launches": 740
+            },
+            {
+              "type": "sample",
+              "index": 354,
+              "descriptor": 4,
+              "pattern": 2,
+              "regime": 1,
+              "quartet": 1,
+              "position": 2,
+              "arm": 1,
+              "ms": 0.0707200021,
+              "launches": 742
+            },
+            {
+              "type": "sample",
+              "index": 355,
+              "descriptor": 4,
+              "pattern": 2,
+              "regime": 1,
+              "quartet": 1,
+              "position": 3,
+              "arm": 0,
+              "ms": 0.0708800033,
+              "launches": 744
+            },
+            {
+              "type": "sample",
+              "index": 356,
+              "descriptor": 4,
+              "pattern": 2,
+              "regime": 1,
+              "quartet": 2,
+              "position": 0,
+              "arm": 0,
+              "ms": 0.0705600008,
+              "launches": 746
+            },
+            {
+              "type": "sample",
+              "index": 357,
+              "descriptor": 4,
+              "pattern": 2,
+              "regime": 1,
+              "quartet": 2,
+              "position": 1,
+              "arm": 1,
+              "ms": 0.0700799972,
+              "launches": 748
+            },
+            {
+              "type": "sample",
+              "index": 358,
+              "descriptor": 4,
+              "pattern": 2,
+              "regime": 1,
+              "quartet": 2,
+              "position": 2,
+              "arm": 1,
+              "ms": 0.0700799972,
+              "launches": 750
+            },
+            {
+              "type": "sample",
+              "index": 359,
+              "descriptor": 4,
+              "pattern": 2,
+              "regime": 1,
+              "quartet": 2,
+              "position": 3,
+              "arm": 0,
+              "ms": 0.0707200021,
+              "launches": 752
+            }
+          ],
+          "quartets": [
+            {
+              "baseline_ms": 0.0704800002,
+              "candidate_ms": 0.070319999,
+              "signed_delta_ms": 0.0001600012000000095,
+              "baseline_over_candidate": 1.002275329952721
+            },
+            {
+              "baseline_ms": 0.0708000027,
+              "candidate_ms": 0.07048000025000001,
+              "signed_delta_ms": 0.0003200024499999954,
+              "baseline_over_candidate": 1.0045403298647122
+            },
+            {
+              "baseline_ms": 0.07064000144999999,
+              "candidate_ms": 0.0700799972,
+              "signed_delta_ms": 0.0005600042499999958,
+              "baseline_over_candidate": 1.007990928544158
+            }
+          ],
+          "median_paired_delta_ms": 0.0003200024499999954,
+          "median_baseline_ms": 0.07064000144999999,
+          "median_candidate_ms": 0.070319999,
+          "baseline_range_ms": [
+            0.0703999996,
+            0.0708800033
+          ],
+          "candidate_range_ms": [
+            0.0700799972,
+            0.0707200021
+          ]
+        }
+      ],
+      "scenarios": [
+        {
+          "pattern": 0,
+          "regime": 0,
+          "signed_weighted_delta_ms": 0.7560165726000281,
+          "optimistic_clipped_weighted_delta_ms": 0.825137042400029
+        },
+        {
+          "pattern": 0,
+          "regime": 1,
+          "signed_weighted_delta_ms": 1.6718047811999988,
+          "optimistic_clipped_weighted_delta_ms": 1.7452452834
+        },
+        {
+          "pattern": 1,
+          "regime": 0,
+          "signed_weighted_delta_ms": 1.1495538575999702,
+          "optimistic_clipped_weighted_delta_ms": 1.16251385489997
+        },
+        {
+          "pattern": 1,
+          "regime": 1,
+          "signed_weighted_delta_ms": 2.5613405604000268,
+          "optimistic_clipped_weighted_delta_ms": 2.5656605928000267
+        },
+        {
+          "pattern": 2,
+          "regime": 0,
+          "signed_weighted_delta_ms": -0.3841070247000228,
+          "optimistic_clipped_weighted_delta_ms": 1.3003228457999945
+        },
+        {
+          "pattern": 2,
+          "regime": 1,
+          "signed_weighted_delta_ms": 1.8662689548001659,
+          "optimistic_clipped_weighted_delta_ms": 2.2852781748000646
+        }
+      ],
+      "target_ms": 1003.739604,
+      "largest_scenario_optimistic_ms": 2.5656605928000267,
+      "gate": "PARK_WITHOUT_MODEL_QUALIFICATION",
+      "estimator": "Median of three within-ABBA paired mean differences per descriptor; maximum callcounts; negatives clipped only for optimistic sums; no cross-scenario mixing",
+      "scope": "Synthetic single-kernel screening estimate, not whole-model gain or bound",
+      "cache_caveat": "Warm or scrub-conditioned; scrub-conditioned is not guaranteed cold",
+      "timing_caveat": "Single-launch HIP event brackets can include host submission gaps",
+      "passed": true,
+      "launches": 752,
+      "samples": 360,
+      "preflight_pairs": 16,
+      "raw_hashes": {
+        "preflight-d0-p0-a0.bin": "80743ad38e8578290e00783ed63efcf74d92988d956359133ad2aed7233be335",
+        "preflight-d0-p0-a1.bin": "0a6cd3f5b74c98f7f09090d7c6acf52c272496ee2183a95b171db072f9a18c9e",
+        "preflight-d0-p1-a0.bin": "ffe9dd7896442e03a9d7ad34dac06eefa30061ceb43bec2900296ef629c40f66",
+        "preflight-d0-p1-a1.bin": "5b10b88437a9d70f1e62c54b9fb2f08ea63d258b510331fc831a96c1369431e6",
+        "preflight-d0-p2-a0.bin": "b886e3c51a92a0b63abebd45911d7f23190d90f3f4b212d4136688f3507930be",
+        "preflight-d0-p2-a1.bin": "91274efb126a7db2f293b461e87f4e50e8822915203aa14480e14e612731acef",
+        "preflight-d1-p0-a0.bin": "359b270d3e9e8bd570460661d5375e33847a5374ea488ea4802bb6fcc62a6a8d",
+        "preflight-d1-p0-a1.bin": "4002eafa5dfef7ce6b41ae9753823f4055c9db073f1e96d6e90dfd6b94e7d53a",
+        "preflight-d1-p1-a0.bin": "708d2c2968c0d42c6251dee477c44be5e0ff5461b54e18b2b7dff8a3a2eea01c",
+        "preflight-d1-p1-a1.bin": "9906d1564f5c73390aa2c09a7ced323d348f660f2cc75dc329b1f5d922edbeb3",
+        "preflight-d1-p2-a0.bin": "77f22d321f75101b4b4703d8ac31b8e03e264173b975c3451c23e034392af63f",
+        "preflight-d1-p2-a1.bin": "5743d3d6e69b1100417fb878fe416eb048217e8c419af51d535c30e65df76daa",
+        "preflight-d2-p0-a0.bin": "c133a5b6d96b81192c13c0a9a321448f69f12c53779afa80bb0a4c996ce66d66",
+        "preflight-d2-p0-a1.bin": "b101aba36f74d427f703f0fbe653cd775659d92d8a955f8241c9391df2050efb",
+        "preflight-d2-p1-a0.bin": "ccfc99dcffd43f41f2fce0e4e69a3c76b3f24403cc77104b351d032a287a436c",
+        "preflight-d2-p1-a1.bin": "b9f94fcd9b9b8b0170341dfdf401f631116223fd638c83f45ebc07a10fc6c7f7",
+        "preflight-d2-p2-a0.bin": "a9354fed85b98131ed69a388b5c3f719521cb3abf403088ca1baab01cfba82c8",
+        "preflight-d2-p2-a1.bin": "aefb579abacf8fe040c8c57824f594a96b01d6b8bddc74391755c0f2efbf39e6",
+        "preflight-d3-p0-a0.bin": "a446820508fe6815d7b766e4414adc2e99c8d1316d6b07c90bc9d47461fe90c0",
+        "preflight-d3-p0-a1.bin": "32d9a299fe3b7afbb73d138e9fc4340c0b036f930ede85b057e506de4f9c5d0f",
+        "preflight-d3-p1-a0.bin": "408c3304d94254448bd2d1932e745f038117052ca0b7885b5e37ff815df8bafe",
+        "preflight-d3-p1-a1.bin": "8f518f4e7c2d38602b4bd08cabc9ca30b36a8a19cb7dab80b511bc96eeab95c9",
+        "preflight-d3-p2-a0.bin": "b6742bdb9492886f6042257e72537d852ce15e06f0d4eb0a59c1ebf8334bc02a",
+        "preflight-d3-p2-a1.bin": "da109f87e715f7244e8a2f2b7e1d130803d980b3d113512f234f5d5cbc2c7691",
+        "preflight-d4-p0-a0.bin": "ca0d5af988bc96412ade285a70c399f82d9c267b779c7540060b8694cc3cc1af",
+        "preflight-d4-p0-a1.bin": "f0a2c23ddd5b10d47618baae928332535edeb0746586447149e1e8fee64a77a8",
+        "preflight-d4-p1-a0.bin": "e7965c7204500c581cce880a02c87b2170c819c0899f739656fdcd58b2335aba",
+        "preflight-d4-p1-a1.bin": "01c96de789aa537ab0e09ad17a82930b84620a4eb171efb9e2cf17465c9d6970",
+        "preflight-d4-p2-a0.bin": "ee0a1bb90ab7beaf225b6ab69afd4c772d9456e9dac1c37bf6429e0393663aac",
+        "preflight-d4-p2-a1.bin": "035e36bb6cea7e2cfa7934db1eeaad492e142c90edd3b2559fa0b1ef0e635c11",
+        "preflight-d5-p0-a0.bin": "694124efa692e822caaf059179cd20cdf0df16e0ab4c96dec106131fb4d7e3f8",
+        "preflight-d5-p0-a1.bin": "ff121a1736fede1e66427a5b62074c072769c937416210b8f73d0116556e2f8a"
+      },
+      "raw_jsonl_sha256": "d1b6d91117bde3aacc8eedf9ff97fb8a678930c15480fdf42a718b8a6df93f55"
+    },
+    "independent_audit_sha256": "b557218c14df443d7d3d38e291cda7b85b2d3d4675091326c35896a8710e51cc",
+    "independent_audit": {
+      "status": "PASS_SCREEN_RAW_PARITY_TIMING_AND_GATE_AUDIT",
+      "created_utc": "2026-10-09T21:25:02.997860+00:00",
+      "archive_sha256": "dae2be775c122a35ad14d27eb29eb8fab85ce07387b06929adac1aab34edf0bc",
+      "manifests": {
+        "hc-scale-screen-results": {
+          "files_verified": 37,
+          "manifest_sha256": "8f01a72f156e3b1153b91db100d139f9cbf36669516cef18a757afc46d1b3e6b"
+        },
+        "hc-scale-screen-build": {
+          "files_verified": 4,
+          "manifest_sha256": "3e38c123891019d317e0b663c74cde82109487c75c1890d72e05ccaa621720c8"
+        }
+      },
+      "summary_sha256": "0bbe4c365f8a941fdabb39057123c13621e0a60d11352658a5ce32edfa4fa8f1",
+      "analysis_sha256": "105f0f2620cd24e85b25985791af5e0321c7e2e839d9b2ff6d44bd54dea7f43d",
+      "analysis_rerun_sha256": "105f0f2620cd24e85b25985791af5e0321c7e2e839d9b2ff6d44bd54dea7f43d",
+      "analysis_rerun_exactly_matches": true,
+      "driver_sha256": "d18e13f99994738ef0341f01e647e3baba364b58ee7c5b28b78e4dab857c1502",
+      "full_preflight_pairs": 16,
+      "full_preflight_bytes_checked": 2288792064,
+      "all_inputs_generator_verified": true,
+      "all_output_stats_canaries_verified": true,
+      "launches": 752,
+      "timed_samples": 360,
+      "all_event_bits_sample_agree": true,
+      "all_hip_return_codes_zero": 4525,
+      "raw_record_counts": {
+        "hip_rc": 4525,
+        "preflight_begin": 16,
+        "preflight_complete": 16,
+        "all_preflights_complete": 1,
+        "cell_begin": 30,
+        "event_result": 360,
+        "sample_stats": 360,
+        "sample": 360,
+        "cell_complete": 30,
+        "complete": 1
+      },
+      "scenarios_recomputed": [
+        {
+          "pattern": 0,
+          "regime": 0,
+          "signed_weighted_delta_ms": 0.7560165726000281,
+          "optimistic_clipped_weighted_delta_ms": 0.825137042400029,
+          "weighted_baseline_screen_ms": 680.9659227702001
+        },
+        {
+          "pattern": 0,
+          "regime": 1,
+          "signed_weighted_delta_ms": 1.6718047811999988,
+          "optimistic_clipped_weighted_delta_ms": 1.7452452834,
+          "weighted_baseline_screen_ms": 683.1604399427999
+        },
+        {
+          "pattern": 1,
+          "regime": 0,
+          "signed_weighted_delta_ms": 1.1495538575999702,
+          "optimistic_clipped_weighted_delta_ms": 1.16251385489997,
+          "weighted_baseline_screen_ms": 681.6268661409
+        },
+        {
+          "pattern": 1,
+          "regime": 1,
+          "signed_weighted_delta_ms": 2.5613405604000268,
+          "optimistic_clipped_weighted_delta_ms": 2.5656605928000267,
+          "weighted_baseline_screen_ms": 682.2312683013
+        },
+        {
+          "pattern": 2,
+          "regime": 0,
+          "signed_weighted_delta_ms": -0.3841070247000228,
+          "optimistic_clipped_weighted_delta_ms": 1.3003228457999945,
+          "weighted_baseline_screen_ms": 2020.5413261423998
+        },
+        {
+          "pattern": 2,
+          "regime": 1,
+          "signed_weighted_delta_ms": 1.8662689548001659,
+          "optimistic_clipped_weighted_delta_ms": 2.2852781748000646,
+          "weighted_baseline_screen_ms": 2022.0105038913
+        }
+      ],
+      "largest_optimistic_scenario_ms": 2.5656605928000267,
+      "screen_target_ms": 1003.739604,
+      "gate": "PARK_WITHOUT_MODEL_QUALIFICATION",
+      "native_wrapper_exit": 0,
+      "cleanup_passed": true,
+      "no_gpu_rerun": true,
+      "limits": "Synthetic single-launch event screen at maximum supplied callcounts; no whole-model gain or bound. Scrub-conditioned is not guaranteed cold; event durations may include submission gaps. Three ABBA quartets per cell."
+    }
+  },
+  "unchanged_c183_control": {
+    "prompt_tokens": 65536,
+    "generated_tokens": 1024,
+    "pp_tokens_per_second": 646.4538059,
+    "tg_tokens_per_second": 53.807512,
+    "candidate_measurement": false
+  },
+  "publication": "Sanitized report, numeric samples, metrics and index only; no private paths, raw logs, model or capture payloads, credentials or binaries."
+}

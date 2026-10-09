@@ -120,3 +120,8 @@ Offline consistency validation passed, including 18 rejected corruption cases. F
 ## Current c183: diagnostic profile refresh
 
 [Report](results/2026-10-09-gfx906-c183-profile/README.md) and [numeric metrics](results/2026-10-09-gfx906-c183-profile/metrics.json): one fresh control/profile pair retained exact 1,024-ID parity. Control measured **646.453806 PP / 53.807512 TG tokens/s**. Profiling also disables the main shared fork, so observed phase-time increases and counter drift do not isolate profiler overhead or qualify an optimization. Timestamp ISA and both runtime clock rates were verified. PP views, GPU stages and nested CPU timers are non-additive; HC labels include bundled work. No optimization patch or promotion resulted.
+
+
+## HC fixed-scale: parked after synthetic component screening
+
+[Report](results/2026-10-09-gfx906-hc-fixed-scale/README.md) and [numeric metrics](results/2026-10-09-gfx906-hc-fixed-scale/metrics.json): fixed-scale specialization removes generic division and reduces VGPR 7 to 5, with exhaustive actual-GPU output/stats/guard equivalence at both scales. The original tiny wrapper serialization failure and separate strict raw recovery remain disclosed. A fixed 752-launch / 360-sample synthetic screen gives a largest within-scenario optimistic weighted saving of **2.5656605928 ms**, below the **1,003.739604 ms** gate; **PARK_WITHOUT_MODEL_QUALIFICATION**. Maximum call counts and synthetic stress distributions are not a measured model gain or bound. No candidate model build, promotion or TG improvement is claimed.
