@@ -105,3 +105,8 @@ Offline consistency validation passed, including 18 rejected corruption cases. F
 ## Complete c183 stack versus optimized stable ce
 
 [Direct benchmark report](results/2026-10-09-gfx906-direct-c183-vs-ce/README.md): fresh-process 64K/1,024-output A1/B1/B2/A2 gives **+8.147793% PP / +6.509285% TG** against already optimized stable ce. Both pairs are positive; all complete IDs, topology and available aggregate counters match. Unavailable optional counters stay null. Timing-trained adaptive policy means observed counter equality is not proof of constant work. This is a direct whole-stack comparison, separate from ff34-versus-ce; no gains were summed and no stock-upstream or isolated-selector attribution is made. The receipt validator passed 14 corruption tests. Earlier artifacts remain unchanged.
+
+
+## WIDE51: parked isolated real-200K selector experiment
+
+[Report](results/2026-10-09-gfx906-wide51/README.md) and [numeric metrics](results/2026-10-09-gfx906-wide51/metrics.json): one fresh-process ABBA per physical gfx906 GPU measured **1.654291% / 0.588942% lower isolated selector latency** on the two actual 200K captures. All 12 correctness/timing processes passed parity and safety checks. WIDE51 is parked as an engineering prioritization decision; there was no predeclared speed threshold. One ABBA per device does not establish statistical significance or broad repeatability. No model-throughput or tokens-per-second gain is claimed; capture payloads remain private.

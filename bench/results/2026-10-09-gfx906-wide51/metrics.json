@@ -1,0 +1,78 @@
+{
+  "experiment": "WIDE51 isolated real-200K selector replay",
+  "date": "2026-10-09",
+  "decision": "park; do not prioritize model integration",
+  "decision_type": "engineering prioritization; no predeclared speed threshold",
+  "hardware_scope": "two physical gfx906 GPUs",
+  "correctness_processes": 4,
+  "latency_processes": 8,
+  "schedule_per_gpu": [
+    "baseline",
+    "candidate",
+    "candidate",
+    "baseline"
+  ],
+  "timing_batch": 64,
+  "timing_samples_per_process": 7,
+  "total_latency_samples": 56,
+  "all_correctness_passed": true,
+  "cleanup_passed": true,
+  "baseline_source_sha256": "5fc5d78c6155fa0987dee751a875ab714516c88209b0938db17699061cc7de1a",
+  "candidate_source_sha256": "98f30cd9fb2fd80619a8caf70c6c1d74bb5c7c14d50ca312b36158cd9518ae08",
+  "unchanged_consumer_source_sha256": "0eac4ceb11f783e14977f35afdbe0bf6c39fbddaa0fe8c39675e4a0f346a667e",
+  "resource": {
+    "original_kernels_byte_identical": 13,
+    "baseline_scratch_bytes_per_lane": 1048,
+    "candidate_scratch_bytes_per_lane": 852,
+    "waves_per_simd_before_and_after": 4
+  },
+  "prior_boundary_processes": 42,
+  "prior_boundary_graph_cases": 1212,
+  "actual_200k_capture_cpu_exact_ids_passed": true,
+  "capture_payloads_public": false,
+  "measurements": [
+    {
+      "device": 0,
+      "baseline_run_medians_ms": [
+        "0.476874709",
+        "0.475347251"
+      ],
+      "candidate_run_medians_ms": [
+        "0.468842179",
+        "0.467627257"
+      ],
+      "baseline_mean_of_medians_ms": "0.476110980",
+      "candidate_mean_of_medians_ms": "0.468234718",
+      "latency_reduction_pct": "1.654291190679954492962964220",
+      "absolute_reduction_us": "7.876262000",
+      "all_candidate_medians_below_all_baseline_medians": true
+    },
+    {
+      "device": 1,
+      "baseline_run_medians_ms": [
+        "0.465157598",
+        "0.463202566"
+      ],
+      "candidate_run_medians_ms": [
+        "0.461810172",
+        "0.461082488"
+      ],
+      "baseline_mean_of_medians_ms": "0.464180082",
+      "candidate_mean_of_medians_ms": "0.461446330",
+      "latency_reduction_pct": "0.5889421166503219325985641900",
+      "absolute_reduction_us": "2.733752000",
+      "all_candidate_medians_below_all_baseline_medians": true
+    }
+  ],
+  "model_gain_claim": false,
+  "tokens_per_second_gain_claim": false,
+  "route_observed": false,
+  "limits": [
+    "one ABBA per device",
+    "two captures from one observed window",
+    "no all-width or all-layer coverage",
+    "warm-cache isolated selector only",
+    "no scorer, model, prompt-processing or token-generation timing",
+    "no statistical significance claim"
+  ]
+}
