@@ -1,0 +1,166 @@
+diff --git a/include/strata/core/verify.hpp b/include/strata/core/verify.hpp
+index a85100cb..99a3f78e 100644
+--- a/include/strata/core/verify.hpp
++++ b/include/strata/core/verify.hpp
+@@ -250,3 +250,5 @@ public:
+     void set_pcie_mode(int mode) { sink_.pcie_mode = mode; }
+-    /// the pool never plans a PCIe share (--pcie-frac 0): the window skips that path.  Before the first run.
++    /// Ordinary serial serve only, set at a quiescent request boundary from the dispatch's rounded numerator.
++    /// -1 means unknown/ineligible (batch, pipeline, or a caller that has not supplied the effective stage value).
++    void set_effective_pcie_num(int n) { effective_pcie_num_ = n; }
+ 
+@@ -261,2 +263,4 @@ private:
+     bool capture(int T, std::string& err);
++    bool skip_empty_pcie_grouped() const;
++    cudaGraphExec_t& window_exec(int T);
+     // batch windows (see init_slots)
+@@ -380,2 +384,5 @@ private:
+     cudaGraphExec_t exec_nr_[9] = {};   // #871: the doorbell variant of a stage that is all-resident otherwise
++    cudaGraphExec_t exec_no_pcie_[9] = {};   // same doorbell graph, only proven no-write PCIe grouped calls omitted
++    int effective_pcie_num_ = -1;
++    unsigned char empty_pcie_trace_key_[9] = {};   // presence-gated trace: last selected variant per T
+     cudaGraphExec_t commit_exec_ = nullptr;
+diff --git a/include/strata/kernels/iq_kernels.hpp b/include/strata/kernels/iq_kernels.hpp
+index 2c38f6f9..066a622c 100644
+--- a/include/strata/kernels/iq_kernels.hpp
++++ b/include/strata/kernels/iq_kernels.hpp
+@@ -69,2 +69,6 @@ void native_expert_grouped(const NativeExpertLayout& L, const unsigned long long
+ void native_grouped_set_v1(bool v1);
++/// Conservative gfx906 mode16 no-write contract for a grouped call whose device group count is zero.
++/// The route getter reads the launcher's actual cached flags; the layout getter also checks its geometry/types.
++bool native_grouped_zero_noop_route();
++bool native_expert_grouped_zero_is_noop(const NativeExpertLayout& L);
+ 
+diff --git a/src/core/verify.cpp b/src/core/verify.cpp
+index 2811c9cf..1b5ea6d2 100644
+--- a/src/core/verify.cpp
++++ b/src/core/verify.cpp
+@@ -86,2 +86,6 @@ bool env_on(const char* name) {
+ }
++bool empty_pcie_trace_on() {
++    static const bool on = std::getenv("STRATA_EMPTY_PCIE_TRACE") != nullptr;
++    return on;
++}
+ #if defined(STRATA_USE_HIP)
+@@ -340,2 +344,4 @@ Verifier::~Verifier() {
+         if (e) cudaGraphExecDestroy(e);
++    for (auto& e : exec_no_pcie_)
++        if (e) cudaGraphExecDestroy(e);
+     if (commit_exec_) cudaGraphExecDestroy(commit_exec_);
+@@ -663,2 +669,3 @@ bool Verifier::record_window(int T, cudaStream_t cs, std::string& err) {
+     bool sg_gated_[2] = {false, false};   // per group: the combine applies the shared gate
++    int pcie_calls_elided = 0;   // capture-time path evidence, not a per-window counter
+     if (!batch_rec_) groups_[T] = G;
+@@ -1273,3 +1280,10 @@ bool Verifier::record_window(int T, cudaStream_t cs, std::string& err) {
+             // pcie_frac 0), so its launch is kPcieGroupRows block rows striding over the groups, not cap of them
+-            grouped(p_ptr2, p_start2, p_counts + 2, kPcieGroupRows, hit_out);
++            bool elide_pcie = false;
++            if (skip_empty_pcie_grouped()) {
++                const auto& f = lay.fmt[(size_t) l];
++                const NativeExpertLayout L = native_expert_layout(f.gu_type, f.d_type, f.n_embd, f.n_ff);
++                elide_pcie = native_expert_grouped_zero_is_noop(L);
++            }
++            if (elide_pcie) ++pcie_calls_elided;
++            else grouped(p_ptr2, p_start2, p_counts + 2, kPcieGroupRows, hit_out);
+             stamp(l, 22, grp);
+@@ -1334,2 +1348,5 @@ bool Verifier::record_window(int T, cudaStream_t cs, std::string& err) {
+         }
++    if (pcie_calls_elided > 0 && empty_pcie_trace_on())
++        std::fprintf(stderr, "strata verify: empty PCIe grouped elision: layers [%lld,%lld), T=%d, calls=%d; "
++                             "waitB and waitCPU retained\n", (long long) lb_, (long long) le_, T, pcie_calls_elided);
+     if (le_ < g.n_layers) {   // a layer split's earlier stage: hand the residual on, no head
+@@ -1478,4 +1495,24 @@ void Verifier::refresh_ar() {
+ 
++bool Verifier::skip_empty_pcie_grouped() const {
++    static const bool on = env_on("STRATA_VERIFY_SKIP_EMPTY_PCIE");
++    return on && effective_pcie_num_ == 0 && !all_resident_ && !batch_rec_ && !always_publish_ &&
++           ext_stream_ == nullptr && slots_.empty() && strata::kernels::cpu::expert_layout().native &&
++           strata::kernels::native_grouped_zero_noop_route();
++}
++
++cudaGraphExec_t& Verifier::window_exec(int T) {
++    const bool skip = skip_empty_pcie_grouped();
++    cudaGraphExec_t& ex = skip ? exec_no_pcie_[T] : (ar_off_ ? exec_nr_[T] : exec_[T]);
++    const unsigned char key = skip ? 2 : ar_off_ ? 3 : 1;
++    if (empty_pcie_trace_on() && empty_pcie_trace_key_[T] != key) {
++        std::fprintf(stderr, "strata verify: empty PCIe route: layers [%lld,%lld), T=%d, pcie_num=%d, "
++                             "graph=%s, cached=%d\n", (long long) lb_, (long long) le_, T, effective_pcie_num_,
++                     skip ? "no-pcie" : ar_off_ ? "resident-fallback" : "full", ex != nullptr ? 1 : 0);
++        empty_pcie_trace_key_[T] = key;   // first selection or a transition per T, never every layer/window
++    }
++    return ex;
++}
++
+ bool Verifier::capture(int T, std::string& err) {
+-    cudaGraphExec_t& exec_t = ar_off_ ? exec_nr_[T] : exec_[T];
++    cudaGraphExec_t& exec_t = window_exec(T);
+     if (exec_t != nullptr) return true;
+@@ -1711,3 +1748,3 @@ bool Verifier::run(int T, const int32_t* tokens, int64_t pos0, PoolMultiFn pool,
+     if (ar_on() && h_plan_err_ != nullptr) *(volatile uint32_t*) h_plan_err_ = 0;
+-    const cudaError_t le = cudaGraphLaunch(ar_off_ ? exec_nr_[T] : exec_[T], cs_);
++    const cudaError_t le = cudaGraphLaunch(window_exec(T), cs_);
+     trace_ev("LAUNCHED", -1, -1, (int64_t) le);
+diff --git a/src/kernels/cuda/iq_kernels.cu b/src/kernels/cuda/iq_kernels.cu
+index 2c672f9f..73dfc4f3 100644
+--- a/src/kernels/cuda/iq_kernels.cu
++++ b/src/kernels/cuda/iq_kernels.cu
+@@ -3475,2 +3475,14 @@ namespace {
+ bool g_grouped_v1 = env_on("STRATA_GROUPED_V1");
++bool grouped_v2() {
++    static const bool on = [] { const char* v = std::getenv("STRATA_EXPERT_V2"); return v && v[0] == '1'; }();
++    return on;
++}
++bool grouped_v2k() {
++    static const bool on = [] { const char* v = std::getenv("STRATA_EXPERT_V2K"); return v && v[0] == '1'; }();
++    return on;
++}
++bool grouped_swiglu_fused() {
++    static const bool on = env_on("STRATA_HIP_SWIGLU_FUSED");
++    return on;
++}
+ }  // namespace
+@@ -3479,2 +3491,17 @@ void native_grouped_set_v1(bool v1) { g_grouped_v1 = v1; }
+ 
++bool native_grouped_zero_noop_route() {
++#if defined(STRATA_HIP_GFX906)
++    return exp_mode() == 16 && g_exp_phase == 0 && !g_grouped_v1 && grouped_swiglu_fused() &&
++           !grouped_v2() && !grouped_v2k();
++#else
++    return false;
++#endif
++}
++
++bool native_expert_grouped_zero_is_noop(const NativeExpertLayout& L) {
++    return native_grouped_zero_noop_route() && L.n_embd == 2560 && L.n_ff == 640 &&
++           (L.gu_type == 18 || L.gu_type == 21 || L.gu_type == 22 || L.gu_type == 23 || L.gu_type == 42) &&
++           (L.d_type == 20 || L.d_type == 42);
++}
++
+ void native_expert_grouped(const NativeExpertLayout& L, const unsigned long long* grp_ptr, const int32_t* grp_start,
+@@ -3492,3 +3519,3 @@ void native_expert_grouped(const NativeExpertLayout& L, const unsigned long long
+     const auto* X = (const block_q8_1*) x_q8_1;
+-    static const bool v2 = [] { const char* v = std::getenv("STRATA_EXPERT_V2"); return v && v[0] == '1'; }();
++    const bool v2 = grouped_v2();
+     if (v2 && L.gu_type == 21 && L.d_type == 20 && L.n_embd == 2560 && L.n_ff == 640) {   // S26: see s26_gu_l_kernel
+@@ -3506,3 +3533,3 @@ void native_expert_grouped(const NativeExpertLayout& L, const unsigned long long
+     // stream B: UD-Q4_K_XL's Q4_K / Q5_K gate/up and Q5_1 / Q8_0 down (see S27 above)
+-    static const bool v2k = [] { const char* v = std::getenv("STRATA_EXPERT_V2K"); return v && v[0] == '1'; }();
++    const bool v2k = grouped_v2k();
+     if (v2k && (L.gu_type == 12 || L.gu_type == 13) && (L.d_type == 7 || L.d_type == 8) && L.n_embd == 2560 &&
+@@ -3595,3 +3622,3 @@ void native_expert_grouped(const NativeExpertLayout& L, const unsigned long long
+     // kernel (bitwise the same) with STRATA_HIP_SWIGLU_FUSED=1
+-    static const bool sw_fused = env_on("STRATA_HIP_SWIGLU_FUSED");
++    const bool sw_fused = grouped_swiglu_fused();
+     const bool sw_v1 = v1 || !sw_fused;
+diff --git a/src/program/generate.cpp b/src/program/generate.cpp
+index 97e95dd5..7b71b7f9 100644
+--- a/src/program/generate.cpp
++++ b/src/program/generate.cpp
+@@ -8894,2 +8894,7 @@ int main(int argc, char** argv) {
+             if (pipe) for (int st = 0; st < split_drive.n; ++st) split_drive_b.pcie_num[st] = split_drive.pcie_num[st];
++            // Graph specialization follows the effective integer share for THIS request and THIS stage.
++            // Batch/pipeline keep their existing graph keys and launches; other callers default to unknown (-1).
++            for (int st = 0; st < n_stages; ++st)
++                stage_ver(st).set_effective_pcie_num(o.batch == 0 && o.pipeline_windows == 0
++                    ? (n_stages > 1 ? split_drive.pcie_num[st] : drive.d.pcie_num) : -1);
+             const int hist_n = std::min(req_sp.penalty_last_n, kPenaltyWindowCap);

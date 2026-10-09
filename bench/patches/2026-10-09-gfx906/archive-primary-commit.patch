@@ -1,0 +1,198 @@
+--- a/include/strata/core/verify.hpp
++++ b/include/strata/core/verify.hpp
+@@ -126,7 +126,10 @@
+     static int64_t handoff_floats(const ModelGeometry& g) { return (int64_t) g.hc * g.n_embd + g.n_embd + g.hc; }
+ 
+     /// Keep the first `n_keep` (1..T) tokens of the last window; advances `ss.ple_prev` by them.
+-    bool commit(int n_keep, std::string& err);
++    /// defer_primary is reserved for serial two-device MTP decode: only this earlier stage may return pending;
++    /// the caller MUST wait_commit immediately after drafting, including skipped drafts and every error exit.
++    /// The next stage retains its normal synchronous commit. Other callers leave this false.
++    bool commit(int n_keep, std::string& err, bool defer_primary = false);
+ 
+     // ================================ SEVERAL SEQUENCES IN ONE WINDOW ================================
+     //
+@@ -403,6 +406,7 @@
+     uint32_t* h_flagB_ = nullptr; uint32_t* m_flagB_ = nullptr;  // the PCIe share's DMA copies have landed
+     cudaEvent_t commit_done_ = nullptr;   // recorded after an async commit (set_commit_async); see wait_commit
+     bool commit_pending_ = false;
++    bool primary_commit_live_ = false;   // deferred primary owns its buffers; no event means drain cs_ directly
+     cudaStream_t copy_ = nullptr;                                 // the copy engine's stream (DMA of missed experts)
+     struct FlagSet { uint32_t* flag; uint32_t value; };
+     FlagSet flag_sets_[2 * 64 * 2] = {};                          // host-function arguments, one per (layer, group)
+--- a/src/core/verify.cpp
++++ b/src/core/verify.cpp
+@@ -1717,6 +1717,7 @@
+                    std::string& err) {
+     using namespace strata::kernels;
+     const OnDevice on_device(device_);
++    if (primary_commit_live_) { err = "verify: primary commit must drain before the next run"; return false; }
+     last_batch_ = false;
+     if (T < 1 || T > max_t_) { err = "verify: window size out of range"; return false; }
+     if (released_.load()) { err = "verify: an earlier window never finished on the GPU (#267); restart the engine"; return false; }
+@@ -2044,8 +2045,16 @@
+ namespace { bool g_commit_async = false; }
+ void Verifier::set_commit_async(bool on) { g_commit_async = on && std::getenv("STRATA_COMMIT_SYNC") == nullptr; }
+ 
+-bool Verifier::commit(int n_keep, std::string& err) {
++bool Verifier::commit(int n_keep, std::string& err, bool defer_primary) {
+     const OnDevice on_device(device_);
++    // The opt-in belongs to this call, never to the recursively committed last stage. The serving caller
++    // additionally restricts it to two gfx906 devices, serial MTP decode, and drains before the next iteration.
++    const bool defer_this = defer_primary && next_ != nullptr && next_->next_ == nullptr &&
++                            device_ != next_->device_ && std::getenv("STRATA_COMMIT_SYNC") == nullptr;
++    if (primary_commit_live_ || (defer_this && commit_pending_)) {
++        err = "verify: deferred primary commit was not drained before parameter reuse";
++        return false;   // do not overwrite mapped h_commit_ while its previous graph may still read it
++    }
+     if (n_keep < 1 || n_keep > last_t_) { err = "verify: commit count out of range"; return false; }
+     const Clock::time_point t0 = Clock::now();
+     h_commit_[0] = n_keep;
+@@ -2057,17 +2066,28 @@
+         std::atomic_thread_fence(std::memory_order_seq_cst);
+         const cudaError_t le = cudaGraphLaunch(commit_exec_, cs_);
+         if (le != cudaSuccess) { err = std::string("verify: commit launch: ") + cudaGetErrorString(le); return false; }
++        if (defer_this) primary_commit_live_ = true;   // remains live even if recording its event fails
+         // set_commit_async: no wait here - the next window runs on the same stream after it, and the drafter (its own
+         // stream) reads only this window's final rows and its own K/V. h_commit_ is next written after the next window's
+         // results are read, i.e. after this graph has run.  Everything else waits on commit_done_ (wait_commit).
+-        if (!g_commit_async || next_ != nullptr) {
++        if (!defer_this && (!g_commit_async || next_ != nullptr)) {
+             const cudaError_t se = cudaStreamSynchronize(cs_);
+             if (se != cudaSuccess) { err = std::string("verify: commit: ") + cudaGetErrorString(se); return false; }
+         } else {
+             const cudaError_t re = cudaEventRecord(commit_done_, cs_);
+-            if (re != cudaSuccess) { err = std::string("verify: commit event: ") + cudaGetErrorString(re); return false; }
++            if (re != cudaSuccess) {
++                err = std::string("verify: commit event: ") + cudaGetErrorString(re);
++                // A successful launch already owns the mapped parameters and saved window buffers. If its
++                // event could not be recorded, drain the stream directly; retain the original event error.
++                if (defer_this && cudaStreamSynchronize(cs_) == cudaSuccess) primary_commit_live_ = false;
++                return false;
++            }
+             (void) cudaStreamQuery(cs_);
+             commit_pending_ = true;
++            if (defer_this) {
++                static const bool trace = std::getenv("STRATA_PRIMARY_COMMIT_TRACE") != nullptr;
++                if (trace) std::fprintf(stderr, "strata primary commit: queued device %d keep %d\n", device_, n_keep);
++            }
+         }
+     }
+     if (ple_stage())   // stages that share one session must advance it once
+@@ -2080,6 +2100,22 @@
+ }
+ 
+ bool Verifier::wait_commit(std::string& err) {
++    if (primary_commit_live_) {
++        const OnDevice on_device(device_);
++        // No event after an event-record failure: the stream itself is the completion fence. Never forget
++        // ownership on a failed wait. An event-sync error gets a stream fallback, retaining the first error.
++        const cudaError_t se = commit_pending_ ? cudaEventSynchronize(commit_done_) : cudaStreamSynchronize(cs_);
++        if (se != cudaSuccess) {
++            err = std::string("verify: primary commit: ") + cudaGetErrorString(se);
++            if (commit_pending_ && cudaStreamSynchronize(cs_) == cudaSuccess) {
++                commit_pending_ = false;
++                primary_commit_live_ = false;
++            }
++            return false;
++        }
++        commit_pending_ = false;
++        primary_commit_live_ = false;
++    }
+     if (commit_pending_) {
+         const OnDevice on_device(device_);
+         commit_pending_ = false;
+--- a/src/program/generate.cpp
++++ b/src/program/generate.cpp
+@@ -15,6 +15,7 @@
+ // (`phase-2-correct-engine.md:5-9`).  What it is FOR is the honest tok/s figure and the logit dump.
+ 
+ #include "strata/core/arch_defaults.hpp"
++#include "strata/kernels/gfx_arch.hpp"
+ #include "strata/core/dma_batch.hpp"
+ #include "strata/core/device.hpp"
+ #include "strata/core/remote_expert_opt.hpp"
+@@ -9639,6 +9640,35 @@
+                     std::fprintf(stderr, "strata pipeline calibration (p_on decile: on/scored):%s\n", cal.c_str());
+                 }
+             }
++            // Primary-only host-wait deferral: no verify handoff change and no same-device commit/draft overlap.
++            // Compute eligibility once per request; prompts, batch/pipeline, other devices and non-MTP keep baseline.
++            bool defer_primary_commit = false;
++#if defined(STRATA_USE_HIP) || defined(STRATA_HIP_GFX906)
++            if (std::getenv("STRATA_PRIMARY_COMMIT_OVERLAP") != nullptr &&
++                std::getenv("STRATA_COMMIT_SYNC") == nullptr && use_mtp && o.batch == 0 &&
++                o.pipeline_windows == 0 && !pipe && !pl_ran && multi_gpu && !split_same && n_stages == 2 &&
++                stage_ver(0).device() != stage_ver(1).device()) {
++                cudaDeviceProp p0{}, p1{};
++                const cudaError_t e0 = cudaGetDeviceProperties(&p0, stage_ver(0).device());
++                const cudaError_t e1 = cudaGetDeviceProperties(&p1, stage_ver(1).device());
++                defer_primary_commit = e0 == cudaSuccess && e1 == cudaSuccess &&
++                    strata::kernels::gfx_arch_is(p0.gcnArchName, "gfx906") &&
++                    strata::kernels::gfx_arch_is(p1.gcnArchName, "gfx906");
++                if (e0 != cudaSuccess || e1 != cudaSuccess) (void) cudaGetLastError();
++            }
++#endif
++            struct PrimaryCommitScope {
++                strata::core::Verifier& v;
++                bool active;
++                ~PrimaryCommitScope() {
++                    // Also covers throwing host work after commit (history/vector updates). The explicit drains
++                    // below report errors; this final attempt never erases tracked work on a failed wait.
++                    if (active) { std::string ignored; (void) v.wait_commit(ignored); }
++                }
++            };
++            static const bool primary_commit_trace = std::getenv("STRATA_PRIMARY_COMMIT_TRACE") != nullptr;
++            if (primary_commit_trace)
++                std::fprintf(stderr, "strata primary commit: serial decode enabled=%d\n", (int) defer_primary_commit);
+             while (!pl_ran && !cancelled && produced_n < max_new) {
+                 int T = use_mtp ? S_mtp : 1;   // no --mtp: one token a round unless a lookup draft fires
+                 if (use_mtp && req_spec_min_p > 0.0) {
+@@ -9757,12 +9787,17 @@
+                 // (--adapt-async 1: the asynchronous tier above instead, ticked before the window)
+                 if (!drive.d.usage.empty() && !ajob && ((rounds + 1) % o.adapt_every) == 0)
+                     adapt_thr = std::thread([&] { adapt_ok = adapt(); });
+-                if (!ver.commit(a + 1, err)) {
++                PrimaryCommitScope primary_scope{ver, defer_primary_commit};
++                if (!ver.commit(a + 1, err, defer_primary_commit)) {
++                    // The secondary can fail after the primary has launched. Drain before unwinding; preserve
++                    // the original commit error even if cleanup reports another failure.
++                    if (defer_primary_commit) { std::string drain_err; primary_scope.active = !ver.wait_commit(drain_err); }
+                     if (adapt_thr.joinable()) adapt_thr.join();
+                     std::printf("ERR %s\n", err.c_str());
+                     return 1;
+                 }
+-                // the window's first a + 1 tokens are in the session now (the last output is not: it is next x)
++                // The accepted count and host PLE history are committed; primary GPU state may still be pending.
++                // Nothing below reads that state until the mandatory post-draft drain.
+                 for (int i = 0; i <= a; ++i) consumed.push_back(window[(size_t) i]);
+                 draft_offered += T - 1;
+                 draft_accepted += a;
+@@ -9785,6 +9820,18 @@
+                     mtp.set_draft_history(consumed.data(), (int64_t) consumed.size(), outv[(size_t) a]);
+                 const bool drafted = !use_mtp || eos || produced_n >= max_new ||
+                                      mtp.draft(T, outv.data(), p, a, drafts.data(), err, dprob.data(), (float) req_spec_min_p);
++                // Always drain, even after a skipped or failed draft. No pending primary work may reach the next
++                // capture/staging/run, cancellation, parking, checkpoint, restore, or buffer destruction.
++                bool primary_drained = true;
++                if (defer_primary_commit) {
++                    std::string drain_err;
++                    primary_drained = ver.wait_commit(drain_err);
++                    primary_scope.active = !primary_drained;
++                    if (!primary_drained && drafted) err = drain_err;   // preserve an earlier draft error
++                    if (primary_commit_trace)
++                        std::fprintf(stderr, "strata primary commit: drained=%d drafted=%d\n",
++                                     (int) primary_drained, (int) drafted);
++                }
+                 {
+                     const Clock::time_point tw3 = Clock::now();
+                     auto msd = [](Clock::time_point a0, Clock::time_point b0) { return std::chrono::duration<double, std::milli>(b0 - a0).count(); };
+@@ -9796,7 +9843,7 @@
+                     std::printf("ERR an adaptive refill failed\n");
+                     return 1;
+                 }
+-                if (!drafted) {
++                if (!drafted || !primary_drained) {
+                     std::printf("ERR %s\n", err.c_str());
+                     return 1;
+                 }
