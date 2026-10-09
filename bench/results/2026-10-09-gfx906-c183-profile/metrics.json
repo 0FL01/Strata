@@ -1,0 +1,290 @@
+{
+  "schema_version": 1,
+  "date_utc": "2026-10-09",
+  "status": "COMPLETED_DIAGNOSTIC_ONLY",
+  "target": "gfx906",
+  "scope": "same frozen c183 executable; one ordered control/profile pair; altered scheduling under profiling",
+  "workload": {
+    "prompt_tokens": 65536,
+    "output_tokens": 1024,
+    "processes": 2,
+    "requests_per_fresh_process": 1,
+    "automatic_retries": 0,
+    "sampling": "greedy",
+    "seed": 12345,
+    "prompt_reused": 0
+  },
+  "instrumentation": {
+    "added_flags": [
+      "STRATA_PREFILL_TIMING",
+      "STRATA_DECODE_TIMING",
+      "STRATA_SPLIT_TIMING",
+      "STRATA_VERIFY_PROFILE"
+    ],
+    "native_arguments_unchanged": true,
+    "baseline_environment_values_unchanged": true,
+    "unexpected_inherited_strata_flags": 0,
+    "main_shared_fork": {
+      "control": true,
+      "profile": false
+    },
+    "scope": "instrumented main-fork-serialized stream intervals; not exclusive kernel costs"
+  },
+  "provenance": {
+    "binary_sha256": "c18316d678a669c309cb95e2f5de9af03fa5573256fd0e093aafc4b41000d049",
+    "image_sha256": "bccb7ee7e7a78274519db9a43ba63c34ddd2e74bb60f8764a8f50aaee1f2c646",
+    "fixture_sha256": "63ce3d4042027a00b2193feab143f1d9443b5c31a863a962ec9543ccb54d9695",
+    "summary_sha256": "2bfc57c73bef4f0294f2b001e03b340876422827a7dcb6e9424af3a8d0005eb7",
+    "export_manifest_sha256": "87e4644914316bb4a8e9bbf43881b9235d746e12c3faf5cbcc6146e910508120",
+    "verified_export_files": 22,
+    "runner_package_sha256": "f78b1253f12328e65f882e981c7ff90183ab73341fc3e179db2dd224b3ed36bf",
+    "runner_manifest_sha256": "916b2319d5f08ee1e01bf7b1442325f65639662f852c2f2472abda7f4a9c357c",
+    "runner_source_sha256": "06ff93caf72b8cf9637940e7120c27813db619d6a4585cf14e06ceedb5410963",
+    "native_arm_source_sha256": "3f2c1225a327eea6e7a882464a5ca6865a849ea6f64018fbd4f3b86a1b95dd80",
+    "attribution_receipt_sha256": "dd634d888d44b5671fbac37e423673a6363237b7d87699b171d1062b09cf90fc"
+  },
+  "timestamp_validation": {
+    "receipt_sha256": "e5cb8fc4ffaf7f686a06551cd716cb2c135b70e7cd8eec32fed51ed636447cf8",
+    "query_source_sha256": "ccfbaac7f3542cc3391aa4f6a9db34c6edd6a28a4531bc547bf68b6baf09d2fe",
+    "producer_source_sha256": "1f7a650452510af9892b9636534c8086fd80578ddee1733022e926f3285ae15c",
+    "producer_object_sha256": "50a3e527914aa51e6c85a6b6aa358625b4398bd1a9fb9ab06742c735194486c5",
+    "kernel_archive_sha256": "135bfd9e51c94d9596db56d69db956f0397ff088097b28950002b98c3b97af9b",
+    "device_elf_sha256": "b8db10515879d4a39bda90a429c908abc03e0f67cee5d6fb9ab9983397531287",
+    "stamp_disassembly_sha256": "f0cab488418604b5446ae8a4b56f007022cdc016a9db46795809800f1a2add34",
+    "complete_timestamp_function_bytes_verified": 84,
+    "isa_verified": true,
+    "producer_ns_per_tick": 40,
+    "queried_wall_clock_rate_khz": [
+      25000,
+      25000
+    ],
+    "all_query_return_codes_zero": true
+  },
+  "correctness": {
+    "control_profile_full_ids_equal": true,
+    "control_historical_full_ids_equal": true,
+    "complete_output_ids": 1024,
+    "output_id_file_sha256": "333d09c6516beeb6ae8925cc0dec1959ad5a5555f196dec94c3be551ad24e17a",
+    "engine_configuration_equal": true,
+    "control_and_profile_used_same_binary": true
+  },
+  "arms": [
+    {
+      "tag": "control",
+      "native_exit_code": 0,
+      "native_completed": true,
+      "native_prompt_ms": 101377.7,
+      "native_decode_ms": 19030.8,
+      "native_prompt_tokens_per_s": 646.4538059158967,
+      "native_decode_tokens_per_s": 53.80751203312525,
+      "request_wall_s": 120.43678350601112,
+      "load_wall_s": 26.755112432001624,
+      "counters": {
+        "accepted": 648,
+        "offered": 872,
+        "cache_hits": 582049,
+        "lookups": 600000,
+        "ram_blobs": 0,
+        "file_blobs": 0,
+        "file_read_mb": 0.0,
+        "offloaded_experts": 0,
+        "lookup_chain_accepted": null,
+        "lookup_chain_offered": null,
+        "native_suffix_accepted": null,
+        "native_suffix_offered": null,
+        "decode_windows": null,
+        "native_done_field_count": 16,
+        "suffix_drafts": {
+          "present": true,
+          "windows": 5,
+          "accepted": 9,
+          "offered": 16
+        }
+      },
+      "evidence": {
+        "result_sha256": "fe18ff85e4e51c48fc26ffb0ae3c353acdb3715b312ce66397de8014dd0902db",
+        "manifest_sha256": "75f4d96e33bbab0691f4b9bbcb977aba196d38c6ddccd6f9b867f7fb7d5ee9b0",
+        "raw_stdout_sha256": "66899247e3e7bf76fe44692b9f245020a0f3f4eaf9740e248180c09c0fca945f",
+        "raw_done_sha256": "d1f19356d2cc34abc86f19de3a1ebd0784540500485f3661887b8273ee550ae2",
+        "termination_sha256": "cc80b340f03c07e68495ed5cd4c35f0abd2c786fe2bd8d510635ede934019ca1",
+        "stderr_sha256": "79cb2cfbcd4a3c5ec7d5972b0d2476b3387045f889e43392cf261bb78092a801",
+        "complete_stdout_lines": 1045,
+        "stdout_reader_finished": true,
+        "stdout_reader_errors": 0
+      }
+    },
+    {
+      "tag": "profile",
+      "native_exit_code": 0,
+      "native_completed": true,
+      "native_prompt_ms": 102900.9,
+      "native_decode_ms": 20176.8,
+      "native_prompt_tokens_per_s": 636.8846142259204,
+      "native_decode_tokens_per_s": 50.751357995321364,
+      "request_wall_s": 123.10647972699371,
+      "load_wall_s": 25.616857025015634,
+      "counters": {
+        "accepted": 648,
+        "offered": 873,
+        "cache_hits": 582512,
+        "lookups": 600480,
+        "ram_blobs": 0,
+        "file_blobs": 0,
+        "file_read_mb": 0.0,
+        "offloaded_experts": 0,
+        "lookup_chain_accepted": null,
+        "lookup_chain_offered": null,
+        "native_suffix_accepted": null,
+        "native_suffix_offered": null,
+        "decode_windows": null,
+        "native_done_field_count": 16,
+        "suffix_drafts": {
+          "present": true,
+          "windows": 5,
+          "accepted": 9,
+          "offered": 17
+        }
+      },
+      "evidence": {
+        "result_sha256": "4fc260a0552fdcc23d1cf66d65c6d9b445d9ca5497241081cdceb9694cecc58b",
+        "manifest_sha256": "43749e73a571e23c845e138f6f0c6079f72af34ef630e25387d1a0e6477110be",
+        "raw_stdout_sha256": "55b112f6344b6d576eeccac1f67f088d7018a6bf22c0ecd0539aff3f319eab4f",
+        "raw_done_sha256": "f32c4d2f8df09d0a816d18d1aa1f927744247627e80d09eb1cd7568c354bbb44",
+        "termination_sha256": "0d824dec71ecb4a7a2ed86dfb898e77df5ef2e556d755387176f1816d8596ad2",
+        "stderr_sha256": "fba9c85054d61b7abd54b8718ba857922245b0223361bae40d0f8211c1d094a3",
+        "complete_stdout_lines": 1045,
+        "stdout_reader_finished": true,
+        "stdout_reader_errors": 0
+      }
+    }
+  ],
+  "diagnostic_phase_time_change_pct": {
+    "prompt_ms": 1.502500056718592,
+    "decode_ms": 6.02181726464468,
+    "request_wall_s": 2.216678445957787
+  },
+  "one_percent_throughput_time_saving_budget_ms": {
+    "prompt_ms": 1003.739603960396,
+    "decode_ms": 188.42376237623762
+  },
+  "budget_definition": "control phase time divided by 101; whole-phase saving required for 1% throughput gain; not an attributed or achievable saving; control window count is unavailable, so no control-per-window budget is asserted",
+  "claims": {
+    "optimization_patch": false,
+    "optimization_gain": false,
+    "pure_instrumentation_overhead_established": false,
+    "constant_work_established": false,
+    "statistical_significance_established": false,
+    "exclusive_kernel_attribution": false,
+    "cross_stage_times_additive": false,
+    "promotion_or_deployment": false
+  },
+  "cleanup": {
+    "passed": true,
+    "api_left_stopped": true,
+    "api_actions": false,
+    "power_changes": false,
+    "cleanup_errors": 0
+  },
+  "profile_prefill": {
+    "aggregate_tokens": 65535,
+    "aggregate_gpu_timeline_ms": 97345,
+    "aggregate_wall_ms": 97358,
+    "host_staging_ms": 441,
+    "selected_reported_intervals": {
+      "hc read": {
+        "ms": 18261,
+        "reported_pct": 18.8
+      },
+      "gdn": {
+        "ms": 13987,
+        "reported_pct": 14.4
+      },
+      "gemm gate/up": {
+        "ms": 18193,
+        "reported_pct": 18.7
+      },
+      "gemm down": {
+        "ms": 10965,
+        "reported_pct": 11.3
+      },
+      "qsa proj": {
+        "ms": 5079,
+        "reported_pct": 5.2
+      },
+      "qsa select": {
+        "ms": 3691,
+        "reported_pct": 3.8
+      },
+      "qsa attn": {
+        "ms": 9424,
+        "reported_pct": 9.7
+      },
+      "dequant": {
+        "ms": 2234,
+        "reported_pct": 2.3
+      }
+    },
+    "additional_chunk_reports": 16,
+    "chunk_report_tokens_total": 65535,
+    "chunk_timelines_additive_to_aggregate": false,
+    "scope": "reported stream-timeline intervals; overlapping views are not whole-model exclusive costs",
+    "aggregate_view": "primary",
+    "secondary_chunk_timeline_sum_ms": 78145,
+    "secondary_chunk_wall_sum_ms": 79484,
+    "host_staging_ms_is_cumulative": true,
+    "reported_label_scope_notes": {
+      "gdn": "native QKV and gate projections, including small alpha/beta work; not all GDN work",
+      "gemm gate/up": "includes tails and SwiGLU",
+      "gemm down": "includes activation quantization",
+      "qsa proj": "input projections and post-attention gate/output projection",
+      "qsa attn": "ends before post-attention gate/output projection"
+    }
+  },
+  "profile_decode": {
+    "diagnostic_windows": 378,
+    "native_done_decode_windows": null,
+    "host_timed_decode_envelope_ms_per_window": {
+      "total": 53.38,
+      "verify": 48.38,
+      "commit_emit": 0.46,
+      "draft": 4.54
+    },
+    "host_timed_decode_envelope_values_are_rounded": true,
+    "gpu_stage_interval_ms_per_window": [
+      {
+        "stage": 0,
+        "reported_total": 25.21,
+        "selected_intervals": {
+          "gdn_hc_read1_router": 3.1,
+          "qsa_hc_read1_router": 0.92,
+          "gdn_hc0_norm": 0.56,
+          "qsa_hc0_norm": 0.07,
+          "qsa_scores_topk": 1.42,
+          "qsa_attention": 0.93
+        }
+      },
+      {
+        "stage": 1,
+        "reported_total": 22.29,
+        "selected_intervals": {
+          "gdn_hc_read1_router": 2.19,
+          "qsa_hc_read1_router": 0.91,
+          "gdn_hc0_norm": 0.17,
+          "qsa_hc0_norm": 0.07,
+          "qsa_scores_topk": 1.39,
+          "qsa_attention": 0.93
+        },
+        "rounded_label_sum_ms": 22.27
+      }
+    ],
+    "scope_caveats": [
+      "GPU stage intervals and nested CPU timers do not form an additive whole-model budget.",
+      "HC0 norm can include a preceding PLE block; stage-0 GDN 0.56 ms is not an isolated normalization kernel.",
+      "HC1 plus router includes resident-plan and doorbell-publication work.",
+      "Scores plus top-k is a bundled interval, not isolated top-k cost.",
+      "Timing instrumentation also disables the main shared fork; control/profile differences do not isolate profiler overhead."
+    ],
+    "means_are_per_full_window_not_per_layer": true,
+    "stage_totals_are_independently_rounded": true
+  }
+}

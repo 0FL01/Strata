@@ -115,3 +115,8 @@ Offline consistency validation passed, including 18 rejected corruption cases. F
 ## Radix-stop: parked before GPU qualification
 
 [Report](results/2026-10-09-gfx906-radix-stop/README.md) and [numeric metrics](results/2026-10-09-gfx906-radix-stop/metrics.json): original radix-stop and its single lower-live-state repair both compiled, then failed the unchanged scratch/spill resource gate (wrapper exit 14). All 13 old functions retained exact machine bytes, metadata and remarks. CPU exact-output proofs and all 16 captured-row replays passed for both; 13 modeled early stops are not a measured time fraction or speedup. No candidate GPU test, paired timing or model qualification ran. Both failures are preserved; the line is parked without promotion.
+
+
+## Current c183: diagnostic profile refresh
+
+[Report](results/2026-10-09-gfx906-c183-profile/README.md) and [numeric metrics](results/2026-10-09-gfx906-c183-profile/metrics.json): one fresh control/profile pair retained exact 1,024-ID parity. Control measured **646.453806 PP / 53.807512 TG tokens/s**. Profiling also disables the main shared fork, so observed phase-time increases and counter drift do not isolate profiler overhead or qualify an optimization. Timestamp ISA and both runtime clock rates were verified. PP views, GPU stages and nested CPU timers are non-additive; HC labels include bundled work. No optimization patch or promotion resulted.
