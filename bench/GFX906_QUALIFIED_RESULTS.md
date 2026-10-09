@@ -95,3 +95,8 @@ python3 bench/results/2026-10-09-gfx906-qsa-fit17/check_qsa_topk_fit17_benchmark
 ```
 
 Offline consistency validation passed, including 18 rejected corruption cases. Full numeric IDs, source hashes and failure evidence are retained; private host paths, configuration contents and raw logs are excluded.
+
+
+### FIT17 public selector component follow-up
+
+[Separate public component report](results/2026-10-09-gfx906-qsa-fit17/PUBLIC-COMPONENT.md): 54 processes completed on both gfx906 devices, with 46 correctness and 8 ABBA timing processes. Direct public selector TU/headers, no support archive. Captured-layer selector latency reduction is **25.7331752864% / 26.0592091451%**; the original 30% discovery gate remains failed. Exact public/private selector ISA comparison and scratch/spill caveats are documented. This advances component qualification only, not a full public-tree build or public-port model result. Existing numerical model receipts remain unchanged.

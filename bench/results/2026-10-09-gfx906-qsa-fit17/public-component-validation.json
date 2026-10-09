@@ -1,0 +1,10 @@
+{
+  "passed": true,
+  "processes": 54,
+  "latency_reduction_pct": [
+    25.73317528644722,
+    26.059209145051298
+  ],
+  "scope": "offline sanitized receipt consistency only",
+  "negative_cases_rejected": 16
+}

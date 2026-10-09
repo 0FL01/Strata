@@ -71,3 +71,8 @@ Sanitized deliverables: `qsa-topk-fit17-benchmark-results.json` and `check_qsa_t
     python3 check_qsa_topk_fit17_benchmark_results.py qsa-topk-fit17-benchmark-results.json --selftest
 
 Validation passed; **18 intentional corruption cases rejected**. No public push was performed while preparing these artifacts.
+
+
+## Subsequent public-selector component validation
+
+The separate [public component report](PUBLIC-COMPONENT.md) and [numeric receipt](public-component-results.json) now record 54 completed processes on both gfx906 devices and selector latency reductions of 25.7331752864% / 26.0592091451%. This subsequent result uses the direct public selector translation unit and headers without a support archive. It does not change this report's frozen c183 model measurements, preserved failures, or numerical receipt; it is not a full public-tree build or public-port model benchmark.
