@@ -599,7 +599,7 @@ __device__ __forceinline__ int block_excl_scan(int v, int* s_warp, int& total) {
     return r;
 }
 
-template <int PER, bool LONG_ONLY = false>
+template <int PER, bool LONG_ONLY = false, int WINDOW_GUARD = 0>
 __global__ void __launch_bounds__(TK_T) block_topk_reg_kernel(const float* __restrict__ scores,
                                                               const int32_t* __restrict__ steps, int64_t max_blocks,
                                                               int64_t cap, int32_t* __restrict__ ids) {
@@ -611,6 +611,23 @@ __global__ void __launch_bounds__(TK_T) block_topk_reg_kernel(const float* __res
     const int64_t n_kv = st[kStepNKv], n_bid = st[kStepNBid], width = st[kStepWidth];
     if constexpr (LONG_ONLY) {
         if (steps[((int64_t) gridDim.x - 1) * kStepCount + kStepNKv] <= GFX906_TOPK_SHORT_CELLS) return;
+    }
+    if constexpr (WINDOW_GUARD != 0) {
+        static_assert(LONG_ONLY && (WINDOW_GUARD == 1 || WINDOW_GUARD == 2), "fit17/wide need LONG_ONLY");
+        static_assert((WINDOW_GUARD == 1 && PER == 17) || (WINDOW_GUARD == 2 && PER == TK_PER_MAX), "guard/PER mismatch");
+        // Exact actual-capacity specialization: max(n_bid)+1 <= 1024*17.
+        // Device rows may be unsorted. This CTA-uniform guard precedes barriers.
+        int32_t max_bid = 0;
+#pragma unroll
+        for (int q = 0; q < 8; ++q) {
+            if (q < (int) gridDim.x) {
+                const int32_t bid = steps[(int64_t) q * kStepCount + kStepNBid];
+                max_bid = bid > max_bid ? bid : max_bid;
+            }
+        }
+        const bool fits17 = (int64_t) max_bid + 1 <= (int64_t) TK_T * 17;
+        if constexpr (WINDOW_GUARD == 1) { if (!fits17) return; }
+        else { if (fits17) return; }
     }
     int32_t* out = ids + qi * cap;
     const int t = threadIdx.x, lane = t & 31, warp = t >> 5;
@@ -1367,7 +1384,29 @@ void qsa_block_topk(const float* scores, const int32_t* steps, int64_t nq, int64
     // Each guard precedes every barrier. Exactly one arm writes all rows.
     if (extended_decode && reach > (int64_t) TK_T * TK_PER) {
         block_topk_kernel<true><<<(unsigned) nq, TOPK_T, 0, (cudaStream_t) stream>>>(scores, steps, max_blocks, cap, ids);
-        block_topk_reg_kernel<TK_PER_MAX, true><<<(unsigned) nq, TK_T, 0, (cudaStream_t) stream>>>(scores, steps, max_blocks, cap, ids);
+        // Opt-in exact-fit path; keep the existing register66 route by default.
+        static const bool fit17 = [] {
+            const char* v = std::getenv("STRATA_GFX906_TOPK_FIT17");
+            return v && std::strcmp(v, "1") == 0;
+        }();
+        if (fit17) {
+            static const bool trace_fit17 = [] {
+                const char* v = std::getenv("STRATA_GFX906_TOPK_FIT17_TRACE");
+                return v && std::strcmp(v, "1") == 0;
+            }();
+            static thread_local bool traced_fit17 = false;
+            if (trace_fit17 && !traced_fit17) {
+                traced_fit17 = true;
+                std::fprintf(stderr, "strata gfx906 topk fit17: enabled=1 topology=guarded-ref256/reg17/reg66 "
+                                     "max_blocks=17408 nq=%lld capacity_blocks=%lld cap=%lld "
+                                     "(device steps select the per-window arm)\n",
+                             (long long) nq, (long long) max_blocks, (long long) cap);
+            }
+            block_topk_reg_kernel<17, true, 1><<<(unsigned) nq, TK_T, 0, (cudaStream_t) stream>>>(scores, steps, max_blocks, cap, ids);
+            block_topk_reg_kernel<TK_PER_MAX, true, 2><<<(unsigned) nq, TK_T, 0, (cudaStream_t) stream>>>(scores, steps, max_blocks, cap, ids);
+        } else {
+            block_topk_reg_kernel<TK_PER_MAX, true><<<(unsigned) nq, TK_T, 0, (cudaStream_t) stream>>>(scores, steps, max_blocks, cap, ids);
+        }
         const cudaError_t e = cudaGetLastError();
         if (e != cudaSuccess) { std::fprintf(stderr, "qsa_block_topk guarded: %s\n", cudaGetErrorString(e)); std::exit(1); }
         return;
