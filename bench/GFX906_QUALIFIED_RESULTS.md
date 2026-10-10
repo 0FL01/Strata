@@ -145,3 +145,8 @@ Offline consistency validation passed, including 18 rejected corruption cases. F
 ## Q2_0 K640 MMQ tail: parked after synthetic timing screen
 
 [Report](results/2026-10-10-gfx906-mmq-q2-k640-tail/README.md) and [numeric metrics](results/2026-10-10-gfx906-mmq-q2-k640-tail/metrics.json): both-device full raw-bit synthetic replay and isolated component timing passed. Core median latency savings **10.993426–11.033575%** missed the separate frozen 12% campaign gate in both regimes/devices, despite full-grouped savings **12.118388–12.250872%**. K768 control slowed **0.226946–0.544809%**, within tolerance, not zero regression. **PARK_NO_MODEL_QUALIFICATION**. Original macro-OFF and compile-scope failures remain disclosed beside separate reproduction, static-admission and actual raw audits. No model gain, rerun, promotion or deployment.
+
+
+## CPU pool spin: parked after a fixed 64K ABBA regression
+
+[Report](results/2026-10-10-gfx906-cpu-pool-spin/README.md) and [numeric metrics](results/2026-10-10-gfx906-cpu-pool-spin/metrics.json): changing only the frozen c183 CPU pool spin setting from 20,000 to 100 us gives **+0.018434% PP / -2.085543% TG**, with both TG pairs negative. All five full 1,024-ID arrays and all clean-arm available counters/checked affinity matched; five optional counters remain unavailable. **PARK_POOL_SPIN_100US**. Separate baseline-only CPU observations do not establish useful work, candidate CPU savings or wakeup-latency causality. One ABBA is descriptive; no tuning, rerun, promotion or deployment.
