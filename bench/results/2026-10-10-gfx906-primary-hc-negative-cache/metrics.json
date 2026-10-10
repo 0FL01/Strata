@@ -1,0 +1,4586 @@
+{
+  "schema_version": 1,
+  "experiment": "primary-only HC W-negative cache",
+  "decision": "PARK",
+  "source_date_utc": "2026-10-10",
+  "scope": "One descriptive frozen combined-stack 65536-input/1024-output fresh-process ABBA, primary cache only; no deployment or peer expansion.",
+  "bindings": {
+    "binary_sha256": "f19065bc82cb55d30375c51ffed8bd828e4165b5c5ffb69bcc313677103b6fb2",
+    "build_receipt_sha256": "5cad0f78375c5b52247fa9ebfe1023bfc478c627143b5833a43cad45094594e7",
+    "inner_receipt_sha256": "54e7940d59e1b51fefb47bd3c9c2a786d324246828d548946c65889ed32271d5",
+    "device_gate_sha256": "d90ced8219bac93746412aa3697cf3ecc155b1ed1cb63a324a03c4b95284049d",
+    "runner_sha256": "d73508f4a7d51a953b33c297e37f7ccc126f5538584910241ecd5ccfc4c5ce66",
+    "input_pins_sha256": "9eb7c55b748deb142ff3c1543d5d0e785cf920bea57839cdba9f50830c910b4f",
+    "qualification_receipt_sha256": "9de086ba6a30b97bd1f27f3fc9adf3fab72b5330e85d51518c5e77c73d670ade",
+    "benchmark_runner_sha256": "94aa0de283dbd85ec3779a9d2d4391aaf4053f6325de6d4e1d8ea28cedc66310",
+    "benchmark_input_pins_sha256": "4c27f77f0c11455a0dc1e456d2dca7fc9a9976e69545498c591bae7452a52df6",
+    "baseline_sha256": "c18316d678a669c309cb95e2f5de9af03fa5573256fd0e093aafc4b41000d049",
+    "fixture_sha256": "63ce3d4042027a00b2193feab143f1d9443b5c31a863a962ec9543ccb54d9695",
+    "baseline_flags": {
+      "STRATA_Q2_AVX2_SPREAD": "1",
+      "STRATA_GDN_NOY": "1",
+      "STRATA_GDN_CONVL2": "1",
+      "STRATA_GR_UP_EXACT": "0",
+      "STRATA_TSUM": "0",
+      "STRATA_HIP_SWIGLU_FUSED": "1",
+      "STRATA_GDN_PP": "2",
+      "STRATA_ARENA_MMAP": "1",
+      "STRATA_GDN_HEAD": "1",
+      "STRATA_GFX906_TOPK_REG": "2",
+      "STRATA_MMVF_ROWS": "1",
+      "STRATA_MMVF_RPB": "4",
+      "STRATA_EXP_MODE": "16",
+      "STRATA_STAGE_TRIM": "1",
+      "STRATA_GFX906_HC_F16": "1",
+      "STRATA_HC_F16_SCALE_PROBE": "1",
+      "STRATA_HC_F16_EXACT_INPUT": "1",
+      "STRATA_HC_F16_AUDIT": "0",
+      "STRATA_HC_F16_TRACE": "1",
+      "STRATA_GFX906_MMQ_OPT_CAP": "32",
+      "STRATA_GFX906_ATTN_QUERY_SWIZZLE": "1",
+      "STRATA_ATTN_LANECELL": "0",
+      "STRATA_GFX906_ATTN_QUERY_SWIZZLE_TRACE": "1",
+      "STRATA_VERIFY_SKIP_EMPTY_PCIE": "1",
+      "STRATA_PRIMARY_COMMIT_OVERLAP": "1",
+      "STRATA_GFX906_ATTN_REDUCE12": "1",
+      "HIP_VISIBLE_DEVICES": "0,1",
+      "DO_NOT_TRACK": "1",
+      "HF_HUB_DISABLE_TELEMETRY": "1",
+      "STRATA_GFX906_TOPK_FIT17": "1"
+    },
+    "candidate_flags": {
+      "STRATA_Q2_AVX2_SPREAD": "1",
+      "STRATA_GDN_NOY": "1",
+      "STRATA_GDN_CONVL2": "1",
+      "STRATA_GR_UP_EXACT": "0",
+      "STRATA_TSUM": "0",
+      "STRATA_HIP_SWIGLU_FUSED": "1",
+      "STRATA_GDN_PP": "2",
+      "STRATA_ARENA_MMAP": "1",
+      "STRATA_GDN_HEAD": "1",
+      "STRATA_GFX906_TOPK_REG": "2",
+      "STRATA_MMVF_ROWS": "1",
+      "STRATA_MMVF_RPB": "4",
+      "STRATA_EXP_MODE": "16",
+      "STRATA_STAGE_TRIM": "1",
+      "STRATA_GFX906_HC_F16": "1",
+      "STRATA_HC_F16_SCALE_PROBE": "1",
+      "STRATA_HC_F16_EXACT_INPUT": "1",
+      "STRATA_HC_F16_AUDIT": "0",
+      "STRATA_HC_F16_TRACE": "1",
+      "STRATA_GFX906_MMQ_OPT_CAP": "32",
+      "STRATA_GFX906_ATTN_QUERY_SWIZZLE": "1",
+      "STRATA_ATTN_LANECELL": "0",
+      "STRATA_GFX906_ATTN_QUERY_SWIZZLE_TRACE": "1",
+      "STRATA_VERIFY_SKIP_EMPTY_PCIE": "1",
+      "STRATA_PRIMARY_COMMIT_OVERLAP": "1",
+      "STRATA_GFX906_ATTN_REDUCE12": "1",
+      "HIP_VISIBLE_DEVICES": "0,1",
+      "DO_NOT_TRACK": "1",
+      "HF_HUB_DISABLE_TELEMETRY": "1",
+      "STRATA_GFX906_TOPK_FIT17": "1",
+      "STRATA_HC_WNEG_PRIMARY": "1"
+    },
+    "native_args": [
+      "--pack",
+      "<private artifact>",
+      "--native",
+      "<private artifact>",
+      "--ple-gguf",
+      "<private artifact>",
+      "--expert-profile",
+      "<private artifact>",
+      "--expert-cache",
+      "9900",
+      "--prefill",
+      "4096",
+      "--spec",
+      "4",
+      "--spec-min-p",
+      "0.5",
+      "--mtp",
+      "<private artifact>",
+      "--max-context",
+      "204800",
+      "--kv",
+      "int8",
+      "--kv-resident",
+      "32768",
+      "--vram-reserve-mib",
+      "600",
+      "--pcie-frac",
+      "0",
+      "--ple-io",
+      "ram",
+      "--conversation-cache-mib",
+      "4096",
+      "--conversation-cache-slots",
+      "4",
+      "--conversation-cache-min-free-mib",
+      "8192",
+      "--mtp-window",
+      "16384",
+      "--vram-reserve-later-mib",
+      "623",
+      "--adapt-every",
+      "0",
+      "--layer-split",
+      "27",
+      "--prompt-cache",
+      "0",
+      "--prompt-cache-every",
+      "0",
+      "--eos-ids",
+      "2147483647"
+    ],
+    "policy": {
+      "order": [
+        "A1",
+        "B1",
+        "B2",
+        "A2"
+      ],
+      "outputs": 1024,
+      "prompt_tokens": 65536,
+      "seed": 12345,
+      "arm_deadline_seconds": 600,
+      "shutdown_deadline_seconds": 60,
+      "cooldown_deadline_seconds": 900,
+      "overall_schedule_deadline_seconds": 7200,
+      "pp_mean_target_pct": 1.0,
+      "pp_both_pairs_positive": true,
+      "tg_min_mean_gain_pct": 0.0,
+      "tg_min_pair_gain_pct": 0.0,
+      "automatic_retries": 0,
+      "promoted": false
+    }
+  },
+  "source_pins": {
+    "baseline_sha256": {
+      "src/prefill/gemm.cu": "6f73546e4b654a9cc81f4b333a09530c7425e13f6ce33ac16ecb88a05b07fabd",
+      "src/prefill/prefill.cpp": "1a8855dd4e1d6116f10060f2be2110014ecc2afb9e80c9164fc0689c8f175b42",
+      "include/strata/prefill/gemm.hpp": "a46c76cad934f4c4114a0f984aee2a7145c8549fc7b1efee16b09d62aab2cfaf"
+    },
+    "candidate_sha256": {
+      "include/strata/prefill/gemm.hpp": "a46c76cad934f4c4114a0f984aee2a7145c8549fc7b1efee16b09d62aab2cfaf",
+      "include/strata/prefill/hc_negative_cache.hpp": "973aa1dd196c578d52bb2107e2826f2aae271400a036abefda3c8ca3135e59a2",
+      "src/prefill/gemm.cu": "34d9eebdb4a43691bec0af73512dd1104c62be2a3586a435f007bba2dc18d774",
+      "src/prefill/prefill.cpp": "6993ea906198364e8bca514bcb8df42bfe8fe3f7531fff96522903e00197b6cb"
+    },
+    "context_tar_sha256": "bba374c2479ae51d28b832dead10165e0ba6d5d9e063b086315220f18d5a3869",
+    "patch_sha256": "652da8573cd570f996857ebcb5fc61c5c004f57c1873d9868b42662dd7a22b50"
+  },
+  "policy": {
+    "order": [
+      "A1",
+      "B1",
+      "B2",
+      "A2"
+    ],
+    "outputs": 1024,
+    "prompt_tokens": 65536,
+    "seed": 12345,
+    "arm_deadline_seconds": 600,
+    "shutdown_deadline_seconds": 60,
+    "cooldown_deadline_seconds": 900,
+    "overall_schedule_deadline_seconds": 7200,
+    "pp_mean_target_pct": 1.0,
+    "pp_both_pairs_positive": true,
+    "tg_min_mean_gain_pct": 0.0,
+    "tg_min_pair_gain_pct": 0.0,
+    "automatic_retries": 0,
+    "promoted": false
+  },
+  "image_sha256": "sha256:bccb7ee7e7a78274519db9a43ba63c34ddd2e74bb60f8764a8f50aaee1f2c646",
+  "image_inherited_flags": {},
+  "started_utc": "2026-10-10T06:57:08.178883+00:00",
+  "finished_utc": "2026-10-10T07:07:14.863359+00:00",
+  "completed": true,
+  "comparison": {
+    "all1024_ids_equal": true,
+    "all_topology_equal": true,
+    "all_counters_equal": true,
+    "constant_workload_claim": false,
+    "counter_equality_scope": "available numeric fields only; null optional fields are unavailable, not measured zeros",
+    "unavailable_counter_fields": [
+      "decode_windows",
+      "lookup_chain_accepted",
+      "lookup_chain_offered",
+      "native_suffix_accepted",
+      "native_suffix_offered"
+    ],
+    "method": "one fixed 64K/1024 baseline/candidate/candidate/baseline sequence; PP hypothesis, TG control; descriptive only",
+    "paired_counter_deltas": [
+      {
+        "pair": "B1/A1",
+        "candidate_minus_control": {
+          "accepted": 0,
+          "offered": 0,
+          "cache_hits": 0,
+          "lookups": 0,
+          "prompt_reused": 0,
+          "prompt_read": 0,
+          "ram_blobs": 0,
+          "file_blobs": 0,
+          "file_read_mb": 0.0,
+          "offloaded_experts": 0,
+          "lookup_chain_accepted": null,
+          "lookup_chain_offered": null,
+          "native_suffix_accepted": null,
+          "native_suffix_offered": null,
+          "decode_windows": null,
+          "suffix_windows": 0,
+          "suffix_accepted": 0,
+          "suffix_offered": 0
+        }
+      },
+      {
+        "pair": "B2/A2",
+        "candidate_minus_control": {
+          "accepted": 0,
+          "offered": 0,
+          "cache_hits": 0,
+          "lookups": 0,
+          "prompt_reused": 0,
+          "prompt_read": 0,
+          "ram_blobs": 0,
+          "file_blobs": 0,
+          "file_read_mb": 0.0,
+          "offloaded_experts": 0,
+          "lookup_chain_accepted": null,
+          "lookup_chain_offered": null,
+          "native_suffix_accepted": null,
+          "native_suffix_offered": null,
+          "decode_windows": null,
+          "suffix_windows": 0,
+          "suffix_accepted": 0,
+          "suffix_offered": 0
+        }
+      }
+    ],
+    "PP": {
+      "stable_mean": 646.7266070239052,
+      "candidate_mean": 648.0859181500836,
+      "gain_pct": 0.21018326931585563,
+      "paired_gain_pct": [
+        0.19733093832592363,
+        0.2230447987850992
+      ],
+      "baseline_range": [
+        646.4952570355289,
+        646.9579570122816
+      ],
+      "candidate_range": [
+        647.937231080739,
+        648.2346052194281
+      ]
+    },
+    "TG": {
+      "stable_mean": 53.86073108491694,
+      "candidate_mean": 53.85165802129143,
+      "gain_pct": -0.01684541491130398,
+      "paired_gain_pct": [
+        -0.08465085465815259,
+        0.05102282350837317
+      ],
+      "baseline_range": [
+        53.83580080753701,
+        53.88566136229687
+      ],
+      "candidate_range": [
+        53.84004668941549,
+        53.86326935316736
+      ]
+    },
+    "counter_values": {
+      "A1": {
+        "accepted": 648,
+        "offered": 872,
+        "cache_hits": 582049,
+        "lookups": 600000,
+        "prompt_reused": 0,
+        "prompt_read": 65536,
+        "ram_blobs": 0,
+        "file_blobs": 0,
+        "file_read_mb": 0.0,
+        "offloaded_experts": 0,
+        "lookup_chain_accepted": null,
+        "lookup_chain_offered": null,
+        "native_suffix_accepted": null,
+        "native_suffix_offered": null,
+        "decode_windows": null,
+        "native_done_field_count": 16,
+        "suffix_drafts": {
+          "present": true,
+          "windows": 5,
+          "accepted": 9,
+          "offered": 16
+        }
+      },
+      "B1": {
+        "accepted": 648,
+        "offered": 872,
+        "cache_hits": 582049,
+        "lookups": 600000,
+        "prompt_reused": 0,
+        "prompt_read": 65536,
+        "ram_blobs": 0,
+        "file_blobs": 0,
+        "file_read_mb": 0.0,
+        "offloaded_experts": 0,
+        "lookup_chain_accepted": null,
+        "lookup_chain_offered": null,
+        "native_suffix_accepted": null,
+        "native_suffix_offered": null,
+        "decode_windows": null,
+        "native_done_field_count": 16,
+        "suffix_drafts": {
+          "present": true,
+          "windows": 5,
+          "accepted": 9,
+          "offered": 16
+        }
+      },
+      "B2": {
+        "accepted": 648,
+        "offered": 872,
+        "cache_hits": 582049,
+        "lookups": 600000,
+        "prompt_reused": 0,
+        "prompt_read": 65536,
+        "ram_blobs": 0,
+        "file_blobs": 0,
+        "file_read_mb": 0.0,
+        "offloaded_experts": 0,
+        "lookup_chain_accepted": null,
+        "lookup_chain_offered": null,
+        "native_suffix_accepted": null,
+        "native_suffix_offered": null,
+        "decode_windows": null,
+        "native_done_field_count": 16,
+        "suffix_drafts": {
+          "present": true,
+          "windows": 5,
+          "accepted": 9,
+          "offered": 16
+        }
+      },
+      "A2": {
+        "accepted": 648,
+        "offered": 872,
+        "cache_hits": 582049,
+        "lookups": 600000,
+        "prompt_reused": 0,
+        "prompt_read": 65536,
+        "ram_blobs": 0,
+        "file_blobs": 0,
+        "file_read_mb": 0.0,
+        "offloaded_experts": 0,
+        "lookup_chain_accepted": null,
+        "lookup_chain_offered": null,
+        "native_suffix_accepted": null,
+        "native_suffix_offered": null,
+        "decode_windows": null,
+        "native_done_field_count": 16,
+        "suffix_drafts": {
+          "present": true,
+          "windows": 5,
+          "accepted": 9,
+          "offered": 16
+        }
+      }
+    },
+    "work_matched_speed_claim": false,
+    "pp_screen_passed": false,
+    "tg_control_passed": false,
+    "counter_drift": false,
+    "screen_passed": false,
+    "interpretation": "ID-matched practical endpoint only; adaptive work differences are retained; four runs do not establish statistical significance or isolated guard-cost savings",
+    "promoted": false
+  },
+  "results": [
+    {
+      "tag": "A1",
+      "passed": true,
+      "prompt_tokens": 65536,
+      "actual_outputs": 1024,
+      "prompt_ms": 101298.7,
+      "decode_ms": 19003.2,
+      "accepted": 648,
+      "offered": 872,
+      "cache_hits": 582049,
+      "lookups": 600000,
+      "prompt_reused": 0,
+      "prompt_read": 65536,
+      "ram_blobs": 0,
+      "file_blobs": 0,
+      "offloaded_experts": 0,
+      "file_read_mb": 0.0,
+      "lookup_chain_accepted": null,
+      "lookup_chain_offered": null,
+      "native_suffix_accepted": null,
+      "native_suffix_offered": null,
+      "decode_windows": null,
+      "optional_chain_counters_available": false,
+      "native_done_field_count": 16,
+      "engine_info": {
+        "context": "204800",
+        "kv": "int8",
+        "kv_resident": "32768",
+        "expert_slots": "19078",
+        "expert_cache_mib": "25150",
+        "expert_slots_primary": "9900",
+        "expert_cache_primary_mib": "13051",
+        "spec": "6",
+        "mtp_max": "4",
+        "lookup": "3",
+        "vram_free_mib": "504",
+        "cvec": "0",
+        "arena_mib": "32400",
+        "pool_workers": "15",
+        "pcie_frac": "0.00",
+        "spec_min_p": "0.50",
+        "conversation_cache_mib": "4096",
+        "conversation_cache_slots": "4",
+        "conversation_cache_min_free_mib": "8192",
+        "tail_role_token": "-1",
+        "vram_elastic": "0",
+        "engine": "0.1.40"
+      },
+      "suffix_drafts": {
+        "present": true,
+        "windows": 5,
+        "accepted": 9,
+        "offered": 16
+      },
+      "fit17_host_topology": [],
+      "timing_scope": "fixed ABBA native phase timing; adaptive counters reported separately",
+      "request_wall_s": 120.3284986820072,
+      "load_wall_s": 25.856235554005252,
+      "PP": 646.9579570122816,
+      "TG": 53.88566136229687,
+      "started_utc": "2026-10-10T06:57:08.366279+00:00",
+      "finished_utc": "2026-10-10T06:59:39.781362+00:00",
+      "elapsed_s": 151.4147187480121,
+      "native_exit": 0,
+      "fresh_process": true,
+      "release_binary_sha256": "c18316d678a669c309cb95e2f5de9af03fa5573256fd0e093aafc4b41000d049",
+      "sampling": {
+        "temperature": 0,
+        "top_p": 1,
+        "top_k": 1,
+        "seed": 12345
+      },
+      "gpu_before": [
+        {
+          "pci": "0000:05:00.0",
+          "mode": "high",
+          "temp1_input": 34000,
+          "temp2_input": 38000,
+          "temp3_input": 35000,
+          "power1_input": 28000000,
+          "power1_cap": 190000000,
+          "freq1_input": 1299000000,
+          "freq2_input": 1000000000
+        },
+        {
+          "pci": "0000:08:00.0",
+          "mode": "high",
+          "temp1_input": 33000,
+          "temp2_input": 37000,
+          "temp3_input": 42000,
+          "power1_input": 29000000,
+          "power1_cap": 190000000,
+          "freq1_input": 1299000000,
+          "freq2_input": 1000000000
+        }
+      ],
+      "flags": {
+        "STRATA_Q2_AVX2_SPREAD": "1",
+        "STRATA_GDN_NOY": "1",
+        "STRATA_GDN_CONVL2": "1",
+        "STRATA_GR_UP_EXACT": "0",
+        "STRATA_TSUM": "0",
+        "STRATA_HIP_SWIGLU_FUSED": "1",
+        "STRATA_GDN_PP": "2",
+        "STRATA_ARENA_MMAP": "1",
+        "STRATA_GDN_HEAD": "1",
+        "STRATA_GFX906_TOPK_REG": "2",
+        "STRATA_MMVF_ROWS": "1",
+        "STRATA_MMVF_RPB": "4",
+        "STRATA_EXP_MODE": "16",
+        "STRATA_STAGE_TRIM": "1",
+        "STRATA_GFX906_HC_F16": "1",
+        "STRATA_HC_F16_SCALE_PROBE": "1",
+        "STRATA_HC_F16_EXACT_INPUT": "1",
+        "STRATA_HC_F16_AUDIT": "0",
+        "STRATA_HC_F16_TRACE": "1",
+        "STRATA_GFX906_MMQ_OPT_CAP": "32",
+        "STRATA_GFX906_ATTN_QUERY_SWIZZLE": "1",
+        "STRATA_ATTN_LANECELL": "0",
+        "STRATA_GFX906_ATTN_QUERY_SWIZZLE_TRACE": "1",
+        "STRATA_VERIFY_SKIP_EMPTY_PCIE": "1",
+        "STRATA_PRIMARY_COMMIT_OVERLAP": "1",
+        "STRATA_GFX906_ATTN_REDUCE12": "1",
+        "HIP_VISIBLE_DEVICES": "0,1",
+        "DO_NOT_TRACK": "1",
+        "HF_HUB_DISABLE_TELEMETRY": "1",
+        "STRATA_GFX906_TOPK_FIT17": "1"
+      },
+      "raw_receipt_hashes": {
+        "A1.done.txt": "20a25a250980325dc34edc311bf91670a3943750e49b441714965094e1aaec3b",
+        "A1.output-ids.json": "333d09c6516beeb6ae8925cc0dec1959ad5a5555f196dec94c3be551ad24e17a",
+        "A1.partial-output-ids.json": "333d09c6516beeb6ae8925cc0dec1959ad5a5555f196dec94c3be551ad24e17a",
+        "A1.stderr": "d04c2b7ac8d4531e7c573003eac4a37928f35b17fd952501c5c96c706f13ef6d",
+        "A1.stdout": "74e632790b69e1e5252d0d55644968dd185ca2026b620cc85f2f724a720aec95",
+        "A1.termination.json": "b7f2cf5d4681143a74c0b4bdaa6af11a44e5c9709cd69f8396e4345a68013905"
+      },
+      "gpu_samples": [
+        {
+          "elapsed_s": 0.001040331000695005,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 34000,
+              "temp2_input": 38000,
+              "temp3_input": 35000,
+              "power1_input": 28000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1299000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 33000,
+              "temp2_input": 37000,
+              "temp3_input": 42000,
+              "power1_input": 29000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1298000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 5.002696161012864,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 34000,
+              "temp2_input": 38000,
+              "temp3_input": 35000,
+              "power1_input": 25000000,
+              "power1_cap": 190000000,
+              "freq1_input": 856000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 33000,
+              "temp2_input": 37000,
+              "temp3_input": 42000,
+              "power1_input": 29000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1305000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 10.005009877000703,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 34000,
+              "temp2_input": 38000,
+              "temp3_input": 35000,
+              "power1_input": 24000000,
+              "power1_cap": 190000000,
+              "freq1_input": 856000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 33000,
+              "temp2_input": 37000,
+              "temp3_input": 42000,
+              "power1_input": 25000000,
+              "power1_cap": 190000000,
+              "freq1_input": 857000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 15.007044102996588,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 34000,
+              "temp2_input": 38000,
+              "temp3_input": 35000,
+              "power1_input": 25000000,
+              "power1_cap": 190000000,
+              "freq1_input": 858000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 33000,
+              "temp2_input": 37000,
+              "temp3_input": 42000,
+              "power1_input": 25000000,
+              "power1_cap": 190000000,
+              "freq1_input": 858000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 20.009934406989487,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 34000,
+              "temp2_input": 38000,
+              "temp3_input": 35000,
+              "power1_input": 24000000,
+              "power1_cap": 190000000,
+              "freq1_input": 856000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 33000,
+              "temp2_input": 37000,
+              "temp3_input": 42000,
+              "power1_input": 25000000,
+              "power1_cap": 190000000,
+              "freq1_input": 856000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 25.012096082995413,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 35000,
+              "temp2_input": 38000,
+              "temp3_input": 35000,
+              "power1_input": 24000000,
+              "power1_cap": 190000000,
+              "freq1_input": 866000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 33000,
+              "temp2_input": 38000,
+              "temp3_input": 42000,
+              "power1_input": 26000000,
+              "power1_cap": 190000000,
+              "freq1_input": 872000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 30.87780085700797,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 41000,
+              "temp2_input": 58000,
+              "temp3_input": 42000,
+              "power1_input": 114000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1297000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 33000,
+              "temp2_input": 37000,
+              "temp3_input": 42000,
+              "power1_input": 26000000,
+              "power1_cap": 190000000,
+              "freq1_input": 857000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 35.88097689099959,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 43000,
+              "temp2_input": 63000,
+              "temp3_input": 44000,
+              "power1_input": 136000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1264000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 40000,
+              "temp2_input": 60000,
+              "temp3_input": 48000,
+              "power1_input": 155000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1266000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 41.21835186399403,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 45000,
+              "temp2_input": 61000,
+              "temp3_input": 45000,
+              "power1_input": 112000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1278000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 42000,
+              "temp2_input": 60000,
+              "temp3_input": 49000,
+              "power1_input": 119000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1278000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 47.15397726499941,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 47000,
+              "temp2_input": 66000,
+              "temp3_input": 49000,
+              "power1_input": 194000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1270000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 43000,
+              "temp2_input": 58000,
+              "temp3_input": 50000,
+              "power1_input": 134000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1266000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 53.0078507399885,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 48000,
+              "temp2_input": 67000,
+              "temp3_input": 48000,
+              "power1_input": 196000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1246000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 44000,
+              "temp2_input": 64000,
+              "temp3_input": 50000,
+              "power1_input": 193000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1252000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 58.80481802098802,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 49000,
+              "temp2_input": 66000,
+              "temp3_input": 49000,
+              "power1_input": 112000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1274000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 45000,
+              "temp2_input": 65000,
+              "temp3_input": 53000,
+              "power1_input": 205000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1256000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 64.77102519301116,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 50000,
+              "temp2_input": 66000,
+              "temp3_input": 51000,
+              "power1_input": 137000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1249000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 46000,
+              "temp2_input": 64000,
+              "temp3_input": 53000,
+              "power1_input": 120000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1279000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 70.71586152899545,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 52000,
+              "temp2_input": 67000,
+              "temp3_input": 51000,
+              "power1_input": 113000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1274000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 47000,
+              "temp2_input": 65000,
+              "temp3_input": 53000,
+              "power1_input": 121000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1282000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 76.66980846598744,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 52000,
+              "temp2_input": 69000,
+              "temp3_input": 53000,
+              "power1_input": 115000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1279000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 48000,
+              "temp2_input": 66000,
+              "temp3_input": 54000,
+              "power1_input": 119000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1281000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 82.60918763899826,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 53000,
+              "temp2_input": 72000,
+              "temp3_input": 54000,
+              "power1_input": 110000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1278000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 48000,
+              "temp2_input": 67000,
+              "temp3_input": 55000,
+              "power1_input": 139000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1274000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 88.68255329600652,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 54000,
+              "temp2_input": 72000,
+              "temp3_input": 55000,
+              "power1_input": 143000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1273000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 49000,
+              "temp2_input": 67000,
+              "temp3_input": 55000,
+              "power1_input": 140000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1274000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 94.74599743899307,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 54000,
+              "temp2_input": 73000,
+              "temp3_input": 55000,
+              "power1_input": 144000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1267000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 50000,
+              "temp2_input": 68000,
+              "temp3_input": 56000,
+              "power1_input": 138000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1274000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 100.82446789101232,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 55000,
+              "temp2_input": 75000,
+              "temp3_input": 56000,
+              "power1_input": 192000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1248000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 50000,
+              "temp2_input": 71000,
+              "temp3_input": 60000,
+              "power1_input": 200000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1159000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 107.02805032901233,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 56000,
+              "temp2_input": 73000,
+              "temp3_input": 56000,
+              "power1_input": 111000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1275000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 50000,
+              "temp2_input": 69000,
+              "temp3_input": 58000,
+              "power1_input": 140000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1274000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 113.44481168501079,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 55000,
+              "temp2_input": 72000,
+              "temp3_input": 56000,
+              "power1_input": 114000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1270000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 51000,
+              "temp2_input": 72000,
+              "temp3_input": 57000,
+              "power1_input": 183000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1252000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 119.61245982800028,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 56000,
+              "temp2_input": 75000,
+              "temp3_input": 57000,
+              "power1_input": 113000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1276000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 51000,
+              "temp2_input": 68000,
+              "temp3_input": 57000,
+              "power1_input": 126000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1283000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 125.81971897301264,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 49000,
+              "temp2_input": 53000,
+              "temp3_input": 50000,
+              "power1_input": 27000000,
+              "power1_cap": 190000000,
+              "freq1_input": 857000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 51000,
+              "temp2_input": 72000,
+              "temp3_input": 57000,
+              "power1_input": 186000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1259000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 130.8421217930154,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 49000,
+              "temp2_input": 55000,
+              "temp3_input": 50000,
+              "power1_input": 29000000,
+              "power1_cap": 190000000,
+              "freq1_input": 952000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 47000,
+              "temp2_input": 58000,
+              "temp3_input": 55000,
+              "power1_input": 115000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1284000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 135.88259790700977,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 48000,
+              "temp2_input": 53000,
+              "temp3_input": 49000,
+              "power1_input": 27000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1046000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 46000,
+              "temp2_input": 56000,
+              "temp3_input": 54000,
+              "power1_input": 134000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1281000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 140.89918251501513,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 47000,
+              "temp2_input": 52000,
+              "temp3_input": 48000,
+              "power1_input": 28000000,
+              "power1_cap": 190000000,
+              "freq1_input": 911000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 45000,
+              "temp2_input": 56000,
+              "temp3_input": 54000,
+              "power1_input": 125000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1281000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 145.90257088301587,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 45000,
+              "temp2_input": 51000,
+              "temp3_input": 47000,
+              "power1_input": 29000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1051000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 45000,
+              "temp2_input": 54000,
+              "temp3_input": 53000,
+              "power1_input": 132000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1282000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 146.1848072920111,
+          "phase": "shutdown",
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 45000,
+              "temp2_input": 51000,
+              "temp3_input": 46000,
+              "power1_input": 33000000,
+              "power1_cap": 190000000,
+              "freq1_input": 953000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 45000,
+              "temp2_input": 55000,
+              "temp3_input": 53000,
+              "power1_input": 39000000,
+              "power1_cap": 190000000,
+              "freq1_input": 915000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 148.18701347100432,
+          "phase": "shutdown",
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 44000,
+              "temp2_input": 48000,
+              "temp3_input": 45000,
+              "power1_input": 31000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1231000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 42000,
+              "temp2_input": 46000,
+              "temp3_input": 50000,
+              "power1_input": 28000000,
+              "power1_cap": 190000000,
+              "freq1_input": 916000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 150.1901119640097,
+          "phase": "shutdown",
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 43000,
+              "temp2_input": 47000,
+              "temp3_input": 43000,
+              "power1_input": 32000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1294000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 42000,
+              "temp2_input": 45000,
+              "temp3_input": 49000,
+              "power1_input": 28000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1132000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        }
+      ],
+      "output_count": 1024,
+      "output_ids_match_historical": true
+    },
+    {
+      "tag": "B1",
+      "passed": true,
+      "prompt_tokens": 65536,
+      "actual_outputs": 1024,
+      "prompt_ms": 101099.2,
+      "decode_ms": 19019.3,
+      "accepted": 648,
+      "offered": 872,
+      "cache_hits": 582049,
+      "lookups": 600000,
+      "prompt_reused": 0,
+      "prompt_read": 65536,
+      "ram_blobs": 0,
+      "file_blobs": 0,
+      "offloaded_experts": 0,
+      "file_read_mb": 0.0,
+      "lookup_chain_accepted": null,
+      "lookup_chain_offered": null,
+      "native_suffix_accepted": null,
+      "native_suffix_offered": null,
+      "decode_windows": null,
+      "optional_chain_counters_available": false,
+      "native_done_field_count": 16,
+      "engine_info": {
+        "context": "204800",
+        "kv": "int8",
+        "kv_resident": "32768",
+        "expert_slots": "19078",
+        "expert_cache_mib": "25150",
+        "expert_slots_primary": "9900",
+        "expert_cache_primary_mib": "13051",
+        "spec": "6",
+        "mtp_max": "4",
+        "lookup": "3",
+        "vram_free_mib": "504",
+        "cvec": "0",
+        "arena_mib": "32400",
+        "pool_workers": "15",
+        "pcie_frac": "0.00",
+        "spec_min_p": "0.50",
+        "conversation_cache_mib": "4096",
+        "conversation_cache_slots": "4",
+        "conversation_cache_min_free_mib": "8192",
+        "tail_role_token": "-1",
+        "vram_elastic": "0",
+        "engine": "0.1.40"
+      },
+      "suffix_drafts": {
+        "present": true,
+        "windows": 5,
+        "accepted": 9,
+        "offered": 16
+      },
+      "fit17_host_topology": [],
+      "timing_scope": "fixed ABBA native phase timing; adaptive counters reported separately",
+      "request_wall_s": 120.14442672897712,
+      "load_wall_s": 25.812023887992837,
+      "PP": 648.2346052194281,
+      "TG": 53.84004668941549,
+      "started_utc": "2026-10-10T06:59:40.024074+00:00",
+      "finished_utc": "2026-10-10T07:02:11.261041+00:00",
+      "elapsed_s": 151.2366674039804,
+      "native_exit": 0,
+      "fresh_process": true,
+      "release_binary_sha256": "f19065bc82cb55d30375c51ffed8bd828e4165b5c5ffb69bcc313677103b6fb2",
+      "sampling": {
+        "temperature": 0,
+        "top_p": 1,
+        "top_k": 1,
+        "seed": 12345
+      },
+      "gpu_before": [
+        {
+          "pci": "0000:05:00.0",
+          "mode": "high",
+          "temp1_input": 42000,
+          "temp2_input": 46000,
+          "temp3_input": 44000,
+          "power1_input": 30000000,
+          "power1_cap": 190000000,
+          "freq1_input": 1303000000,
+          "freq2_input": 1000000000
+        },
+        {
+          "pci": "0000:08:00.0",
+          "mode": "high",
+          "temp1_input": 41000,
+          "temp2_input": 45000,
+          "temp3_input": 49000,
+          "power1_input": 29000000,
+          "power1_cap": 190000000,
+          "freq1_input": 1299000000,
+          "freq2_input": 1000000000
+        }
+      ],
+      "flags": {
+        "STRATA_Q2_AVX2_SPREAD": "1",
+        "STRATA_GDN_NOY": "1",
+        "STRATA_GDN_CONVL2": "1",
+        "STRATA_GR_UP_EXACT": "0",
+        "STRATA_TSUM": "0",
+        "STRATA_HIP_SWIGLU_FUSED": "1",
+        "STRATA_GDN_PP": "2",
+        "STRATA_ARENA_MMAP": "1",
+        "STRATA_GDN_HEAD": "1",
+        "STRATA_GFX906_TOPK_REG": "2",
+        "STRATA_MMVF_ROWS": "1",
+        "STRATA_MMVF_RPB": "4",
+        "STRATA_EXP_MODE": "16",
+        "STRATA_STAGE_TRIM": "1",
+        "STRATA_GFX906_HC_F16": "1",
+        "STRATA_HC_F16_SCALE_PROBE": "1",
+        "STRATA_HC_F16_EXACT_INPUT": "1",
+        "STRATA_HC_F16_AUDIT": "0",
+        "STRATA_HC_F16_TRACE": "1",
+        "STRATA_GFX906_MMQ_OPT_CAP": "32",
+        "STRATA_GFX906_ATTN_QUERY_SWIZZLE": "1",
+        "STRATA_ATTN_LANECELL": "0",
+        "STRATA_GFX906_ATTN_QUERY_SWIZZLE_TRACE": "1",
+        "STRATA_VERIFY_SKIP_EMPTY_PCIE": "1",
+        "STRATA_PRIMARY_COMMIT_OVERLAP": "1",
+        "STRATA_GFX906_ATTN_REDUCE12": "1",
+        "HIP_VISIBLE_DEVICES": "0,1",
+        "DO_NOT_TRACK": "1",
+        "HF_HUB_DISABLE_TELEMETRY": "1",
+        "STRATA_GFX906_TOPK_FIT17": "1",
+        "STRATA_HC_WNEG_PRIMARY": "1"
+      },
+      "raw_receipt_hashes": {
+        "B1.done.txt": "1ff91b6fe0cbdb3979f6904941d008a62b141a91024f4f7d42cde13cf318436f",
+        "B1.output-ids.json": "333d09c6516beeb6ae8925cc0dec1959ad5a5555f196dec94c3be551ad24e17a",
+        "B1.partial-output-ids.json": "333d09c6516beeb6ae8925cc0dec1959ad5a5555f196dec94c3be551ad24e17a",
+        "B1.stderr": "dac0793ddf6a11c1b26cc0f2151b0b2951ac66760b5efce6a7838515aa0ba59d",
+        "B1.stdout": "2d9096bb3d88c415fa01ae5f8224c4af50285c86c1221721d6ba391fd074de0b",
+        "B1.termination.json": "82873155dd655235ffecf06b30a941cb53e44993880ae06dcbba67aaba3c906c"
+      },
+      "gpu_samples": [
+        {
+          "elapsed_s": 0.0009590789850335568,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 42000,
+              "temp2_input": 46000,
+              "temp3_input": 43000,
+              "power1_input": 30000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1298000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 41000,
+              "temp2_input": 45000,
+              "temp3_input": 49000,
+              "power1_input": 29000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1298000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 5.002493956999388,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 42000,
+              "temp2_input": 45000,
+              "temp3_input": 42000,
+              "power1_input": 27000000,
+              "power1_cap": 190000000,
+              "freq1_input": 857000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 40000,
+              "temp2_input": 44000,
+              "temp3_input": 48000,
+              "power1_input": 26000000,
+              "power1_cap": 190000000,
+              "freq1_input": 857000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 10.004519123991486,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 41000,
+              "temp2_input": 44000,
+              "temp3_input": 42000,
+              "power1_input": 31000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1299000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 40000,
+              "temp2_input": 43000,
+              "temp3_input": 47000,
+              "power1_input": 26000000,
+              "power1_cap": 190000000,
+              "freq1_input": 857000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 15.006671797978925,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 40000,
+              "temp2_input": 44000,
+              "temp3_input": 41000,
+              "power1_input": 27000000,
+              "power1_cap": 190000000,
+              "freq1_input": 857000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 39000,
+              "temp2_input": 43000,
+              "temp3_input": 47000,
+              "power1_input": 26000000,
+              "power1_cap": 190000000,
+              "freq1_input": 856000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 20.008965272980276,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 40000,
+              "temp2_input": 44000,
+              "temp3_input": 41000,
+              "power1_input": 27000000,
+              "power1_cap": 190000000,
+              "freq1_input": 858000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 38000,
+              "temp2_input": 42000,
+              "temp3_input": 46000,
+              "power1_input": 26000000,
+              "power1_cap": 190000000,
+              "freq1_input": 858000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 25.012065924005583,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 39000,
+              "temp2_input": 43000,
+              "temp3_input": 40000,
+              "power1_input": 27000000,
+              "power1_cap": 190000000,
+              "freq1_input": 857000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 37000,
+              "temp2_input": 42000,
+              "temp3_input": 46000,
+              "power1_input": 26000000,
+              "power1_cap": 190000000,
+              "freq1_input": 857000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 30.832220719981706,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 46000,
+              "temp2_input": 64000,
+              "temp3_input": 47000,
+              "power1_input": 112000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1274000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 37000,
+              "temp2_input": 41000,
+              "temp3_input": 45000,
+              "power1_input": 25000000,
+              "power1_cap": 190000000,
+              "freq1_input": 857000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 35.835419013979845,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 48000,
+              "temp2_input": 66000,
+              "temp3_input": 48000,
+              "power1_input": 134000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1271000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 43000,
+              "temp2_input": 65000,
+              "temp3_input": 49000,
+              "power1_input": 123000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1283000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 41.21861311799148,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 49000,
+              "temp2_input": 69000,
+              "temp3_input": 49000,
+              "power1_input": 128000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1276000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 44000,
+              "temp2_input": 61000,
+              "temp3_input": 51000,
+              "power1_input": 119000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1267000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 47.06380335599533,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 50000,
+              "temp2_input": 69000,
+              "temp3_input": 51000,
+              "power1_input": 113000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1274000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 45000,
+              "temp2_input": 62000,
+              "temp3_input": 52000,
+              "power1_input": 106000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1289000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 52.91143630899023,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 51000,
+              "temp2_input": 71000,
+              "temp3_input": 52000,
+              "power1_input": 113000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1283000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 46000,
+              "temp2_input": 67000,
+              "temp3_input": 53000,
+              "power1_input": 185000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1264000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 58.722163459984586,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 52000,
+              "temp2_input": 68000,
+              "temp3_input": 53000,
+              "power1_input": 115000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1275000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 47000,
+              "temp2_input": 67000,
+              "temp3_input": 54000,
+              "power1_input": 123000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1276000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 64.68514071998652,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 53000,
+              "temp2_input": 74000,
+              "temp3_input": 54000,
+              "power1_input": 177000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1256000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 48000,
+              "temp2_input": 65000,
+              "temp3_input": 53000,
+              "power1_input": 115000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1281000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 70.57816681498662,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 54000,
+              "temp2_input": 70000,
+              "temp3_input": 55000,
+              "power1_input": 83000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1249000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 49000,
+              "temp2_input": 67000,
+              "temp3_input": 55000,
+              "power1_input": 120000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1278000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 76.52982225699816,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 54000,
+              "temp2_input": 71000,
+              "temp3_input": 55000,
+              "power1_input": 116000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1275000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 49000,
+              "temp2_input": 67000,
+              "temp3_input": 55000,
+              "power1_input": 120000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1280000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 82.45405117198243,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 55000,
+              "temp2_input": 73000,
+              "temp3_input": 55000,
+              "power1_input": 116000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1277000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 49000,
+              "temp2_input": 68000,
+              "temp3_input": 56000,
+              "power1_input": 141000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1276000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 88.4958201549889,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 56000,
+              "temp2_input": 74000,
+              "temp3_input": 56000,
+              "power1_input": 115000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1274000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 50000,
+              "temp2_input": 68000,
+              "temp3_input": 56000,
+              "power1_input": 139000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1275000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 94.55235312998411,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 55000,
+              "temp2_input": 74000,
+              "temp3_input": 55000,
+              "power1_input": 111000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1276000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 50000,
+              "temp2_input": 69000,
+              "temp3_input": 57000,
+              "power1_input": 140000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1274000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 100.62323123498936,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 56000,
+              "temp2_input": 75000,
+              "temp3_input": 55000,
+              "power1_input": 93000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1181000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 50000,
+              "temp2_input": 70000,
+              "temp3_input": 58000,
+              "power1_input": 141000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1275000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 106.80323068398866,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 56000,
+              "temp2_input": 73000,
+              "temp3_input": 56000,
+              "power1_input": 115000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1274000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 50000,
+              "temp2_input": 69000,
+              "temp3_input": 58000,
+              "power1_input": 139000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1275000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 113.18984539998928,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 56000,
+              "temp2_input": 73000,
+              "temp3_input": 56000,
+              "power1_input": 115000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1275000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 50000,
+              "temp2_input": 70000,
+              "temp3_input": 57000,
+              "power1_input": 191000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1249000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 119.36660531398957,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 56000,
+              "temp2_input": 74000,
+              "temp3_input": 57000,
+              "power1_input": 115000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1273000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 51000,
+              "temp2_input": 68000,
+              "temp3_input": 56000,
+              "power1_input": 124000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1285000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 125.58051675398019,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 50000,
+              "temp2_input": 53000,
+              "temp3_input": 51000,
+              "power1_input": 26000000,
+              "power1_cap": 190000000,
+              "freq1_input": 856000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 51000,
+              "temp2_input": 73000,
+              "temp3_input": 56000,
+              "power1_input": 124000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1282000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 130.61374544299906,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 50000,
+              "temp2_input": 55000,
+              "temp3_input": 51000,
+              "power1_input": 27000000,
+              "power1_cap": 190000000,
+              "freq1_input": 993000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 48000,
+              "temp2_input": 58000,
+              "temp3_input": 55000,
+              "power1_input": 114000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1281000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 135.65438387100585,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 48000,
+              "temp2_input": 54000,
+              "temp3_input": 50000,
+              "power1_input": 29000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1056000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 47000,
+              "temp2_input": 58000,
+              "temp3_input": 55000,
+              "power1_input": 129000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1283000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 140.66965481400257,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 47000,
+              "temp2_input": 53000,
+              "temp3_input": 48000,
+              "power1_input": 25000000,
+              "power1_cap": 190000000,
+              "freq1_input": 989000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 46000,
+              "temp2_input": 56000,
+              "temp3_input": 54000,
+              "power1_input": 140000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1282000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 145.67375042798813,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 46000,
+              "temp2_input": 52000,
+              "temp3_input": 48000,
+              "power1_input": 29000000,
+              "power1_cap": 190000000,
+              "freq1_input": 994000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 45000,
+              "temp2_input": 56000,
+              "temp3_input": 52000,
+              "power1_input": 139000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1282000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 145.95651772400015,
+          "phase": "shutdown",
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 46000,
+              "temp2_input": 52000,
+              "temp3_input": 47000,
+              "power1_input": 31000000,
+              "power1_cap": 190000000,
+              "freq1_input": 938000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 45000,
+              "temp2_input": 54000,
+              "temp3_input": 53000,
+              "power1_input": 34000000,
+              "power1_cap": 190000000,
+              "freq1_input": 886000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 147.95886910599074,
+          "phase": "shutdown",
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 44000,
+              "temp2_input": 48000,
+              "temp3_input": 45000,
+              "power1_input": 33000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1289000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 42000,
+              "temp2_input": 47000,
+              "temp3_input": 50000,
+              "power1_input": 27000000,
+              "power1_cap": 190000000,
+              "freq1_input": 915000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 149.9620284199773,
+          "phase": "shutdown",
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 43000,
+              "temp2_input": 47000,
+              "temp3_input": 44000,
+              "power1_input": 33000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1299000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 42000,
+              "temp2_input": 46000,
+              "temp3_input": 50000,
+              "power1_input": 27000000,
+              "power1_cap": 190000000,
+              "freq1_input": 860000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        }
+      ],
+      "output_count": 1024,
+      "output_ids_match_historical": true
+    },
+    {
+      "tag": "B2",
+      "passed": true,
+      "prompt_tokens": 65536,
+      "actual_outputs": 1024,
+      "prompt_ms": 101145.6,
+      "decode_ms": 19011.1,
+      "accepted": 648,
+      "offered": 872,
+      "cache_hits": 582049,
+      "lookups": 600000,
+      "prompt_reused": 0,
+      "prompt_read": 65536,
+      "ram_blobs": 0,
+      "file_blobs": 0,
+      "offloaded_experts": 0,
+      "file_read_mb": 0.0,
+      "lookup_chain_accepted": null,
+      "lookup_chain_offered": null,
+      "native_suffix_accepted": null,
+      "native_suffix_offered": null,
+      "decode_windows": null,
+      "optional_chain_counters_available": false,
+      "native_done_field_count": 16,
+      "engine_info": {
+        "context": "204800",
+        "kv": "int8",
+        "kv_resident": "32768",
+        "expert_slots": "19078",
+        "expert_cache_mib": "25150",
+        "expert_slots_primary": "9900",
+        "expert_cache_primary_mib": "13051",
+        "spec": "6",
+        "mtp_max": "4",
+        "lookup": "3",
+        "vram_free_mib": "504",
+        "cvec": "0",
+        "arena_mib": "32400",
+        "pool_workers": "15",
+        "pcie_frac": "0.00",
+        "spec_min_p": "0.50",
+        "conversation_cache_mib": "4096",
+        "conversation_cache_slots": "4",
+        "conversation_cache_min_free_mib": "8192",
+        "tail_role_token": "-1",
+        "vram_elastic": "0",
+        "engine": "0.1.40"
+      },
+      "suffix_drafts": {
+        "present": true,
+        "windows": 5,
+        "accepted": 9,
+        "offered": 16
+      },
+      "fit17_host_topology": [],
+      "timing_scope": "fixed ABBA native phase timing; adaptive counters reported separately",
+      "request_wall_s": 120.18233861899353,
+      "load_wall_s": 25.767032760981238,
+      "PP": 647.937231080739,
+      "TG": 53.86326935316736,
+      "started_utc": "2026-10-10T07:02:11.568729+00:00",
+      "finished_utc": "2026-10-10T07:04:42.748888+00:00",
+      "elapsed_s": 151.17972276397632,
+      "native_exit": 0,
+      "fresh_process": true,
+      "release_binary_sha256": "f19065bc82cb55d30375c51ffed8bd828e4165b5c5ffb69bcc313677103b6fb2",
+      "sampling": {
+        "temperature": 0,
+        "top_p": 1,
+        "top_k": 1,
+        "seed": 12345
+      },
+      "gpu_before": [
+        {
+          "pci": "0000:05:00.0",
+          "mode": "high",
+          "temp1_input": 43000,
+          "temp2_input": 47000,
+          "temp3_input": 44000,
+          "power1_input": 30000000,
+          "power1_cap": 190000000,
+          "freq1_input": 1299000000,
+          "freq2_input": 1000000000
+        },
+        {
+          "pci": "0000:08:00.0",
+          "mode": "high",
+          "temp1_input": 42000,
+          "temp2_input": 45000,
+          "temp3_input": 49000,
+          "power1_input": 30000000,
+          "power1_cap": 190000000,
+          "freq1_input": 1299000000,
+          "freq2_input": 1000000000
+        }
+      ],
+      "flags": {
+        "STRATA_Q2_AVX2_SPREAD": "1",
+        "STRATA_GDN_NOY": "1",
+        "STRATA_GDN_CONVL2": "1",
+        "STRATA_GR_UP_EXACT": "0",
+        "STRATA_TSUM": "0",
+        "STRATA_HIP_SWIGLU_FUSED": "1",
+        "STRATA_GDN_PP": "2",
+        "STRATA_ARENA_MMAP": "1",
+        "STRATA_GDN_HEAD": "1",
+        "STRATA_GFX906_TOPK_REG": "2",
+        "STRATA_MMVF_ROWS": "1",
+        "STRATA_MMVF_RPB": "4",
+        "STRATA_EXP_MODE": "16",
+        "STRATA_STAGE_TRIM": "1",
+        "STRATA_GFX906_HC_F16": "1",
+        "STRATA_HC_F16_SCALE_PROBE": "1",
+        "STRATA_HC_F16_EXACT_INPUT": "1",
+        "STRATA_HC_F16_AUDIT": "0",
+        "STRATA_HC_F16_TRACE": "1",
+        "STRATA_GFX906_MMQ_OPT_CAP": "32",
+        "STRATA_GFX906_ATTN_QUERY_SWIZZLE": "1",
+        "STRATA_ATTN_LANECELL": "0",
+        "STRATA_GFX906_ATTN_QUERY_SWIZZLE_TRACE": "1",
+        "STRATA_VERIFY_SKIP_EMPTY_PCIE": "1",
+        "STRATA_PRIMARY_COMMIT_OVERLAP": "1",
+        "STRATA_GFX906_ATTN_REDUCE12": "1",
+        "HIP_VISIBLE_DEVICES": "0,1",
+        "DO_NOT_TRACK": "1",
+        "HF_HUB_DISABLE_TELEMETRY": "1",
+        "STRATA_GFX906_TOPK_FIT17": "1",
+        "STRATA_HC_WNEG_PRIMARY": "1"
+      },
+      "raw_receipt_hashes": {
+        "B2.done.txt": "fd2991676e301b58984413a4014d89f9c39aa882390736c4905a7961caf4a68b",
+        "B2.output-ids.json": "333d09c6516beeb6ae8925cc0dec1959ad5a5555f196dec94c3be551ad24e17a",
+        "B2.partial-output-ids.json": "333d09c6516beeb6ae8925cc0dec1959ad5a5555f196dec94c3be551ad24e17a",
+        "B2.stderr": "de5abb1ac25875d91f17bf75c9088ff398353fdf7d74c861a6751a214efd80a7",
+        "B2.stdout": "753a99412e5788fcf3dbb34061e79f4fdd3b3e640f592c0da62cde21d2587cad",
+        "B2.termination.json": "79971d99c9fd947a70bca430b348b7b0a96672c5924176862dd42b344ea33937"
+      },
+      "gpu_samples": [
+        {
+          "elapsed_s": 0.001084235991584137,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 43000,
+              "temp2_input": 47000,
+              "temp3_input": 44000,
+              "power1_input": 30000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1299000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 42000,
+              "temp2_input": 45000,
+              "temp3_input": 49000,
+              "power1_input": 30000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1298000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 5.003328091988806,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 42000,
+              "temp2_input": 45000,
+              "temp3_input": 43000,
+              "power1_input": 27000000,
+              "power1_cap": 190000000,
+              "freq1_input": 857000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 41000,
+              "temp2_input": 44000,
+              "temp3_input": 48000,
+              "power1_input": 27000000,
+              "power1_cap": 190000000,
+              "freq1_input": 856000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 10.005475996993482,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 42000,
+              "temp2_input": 45000,
+              "temp3_input": 42000,
+              "power1_input": 27000000,
+              "power1_cap": 190000000,
+              "freq1_input": 857000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 39000,
+              "temp2_input": 44000,
+              "temp3_input": 48000,
+              "power1_input": 27000000,
+              "power1_cap": 190000000,
+              "freq1_input": 857000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 15.007778710976709,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 41000,
+              "temp2_input": 45000,
+              "temp3_input": 43000,
+              "power1_input": 27000000,
+              "power1_cap": 190000000,
+              "freq1_input": 857000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 39000,
+              "temp2_input": 43000,
+              "temp3_input": 47000,
+              "power1_input": 27000000,
+              "power1_cap": 190000000,
+              "freq1_input": 856000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 20.01047858200036,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 40000,
+              "temp2_input": 44000,
+              "temp3_input": 41000,
+              "power1_input": 27000000,
+              "power1_cap": 190000000,
+              "freq1_input": 856000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 38000,
+              "temp2_input": 42000,
+              "temp3_input": 47000,
+              "power1_input": 27000000,
+              "power1_cap": 190000000,
+              "freq1_input": 857000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 25.013706753001316,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 40000,
+              "temp2_input": 44000,
+              "temp3_input": 41000,
+              "power1_input": 27000000,
+              "power1_cap": 190000000,
+              "freq1_input": 858000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 38000,
+              "temp2_input": 42000,
+              "temp3_input": 47000,
+              "power1_input": 27000000,
+              "power1_cap": 190000000,
+              "freq1_input": 857000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 30.787573027977487,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 47000,
+              "temp2_input": 65000,
+              "temp3_input": 47000,
+              "power1_input": 113000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1302000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 37000,
+              "temp2_input": 41000,
+              "temp3_input": 46000,
+              "power1_input": 25000000,
+              "power1_cap": 190000000,
+              "freq1_input": 856000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 35.790832441998646,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 48000,
+              "temp2_input": 67000,
+              "temp3_input": 49000,
+              "power1_input": 134000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1271000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 44000,
+              "temp2_input": 65000,
+              "temp3_input": 51000,
+              "power1_input": 206000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1263000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 41.149500273982994,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 50000,
+              "temp2_input": 65000,
+              "temp3_input": 50000,
+              "power1_input": 135000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1215000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 45000,
+              "temp2_input": 62000,
+              "temp3_input": 50000,
+              "power1_input": 117000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1276000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 47.0484471230011,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 51000,
+              "temp2_input": 70000,
+              "temp3_input": 52000,
+              "power1_input": 193000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1248000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 46000,
+              "temp2_input": 61000,
+              "temp3_input": 53000,
+              "power1_input": 135000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1262000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 52.89062187698437,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 52000,
+              "temp2_input": 72000,
+              "temp3_input": 53000,
+              "power1_input": 196000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1253000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 47000,
+              "temp2_input": 67000,
+              "temp3_input": 52000,
+              "power1_input": 198000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1253000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 58.68031316998531,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 53000,
+              "temp2_input": 70000,
+              "temp3_input": 53000,
+              "power1_input": 116000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1304000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 48000,
+              "temp2_input": 68000,
+              "temp3_input": 54000,
+              "power1_input": 89000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1239000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 64.6473399369861,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 54000,
+              "temp2_input": 73000,
+              "temp3_input": 55000,
+              "power1_input": 185000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1250000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 48000,
+              "temp2_input": 66000,
+              "temp3_input": 55000,
+              "power1_input": 116000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1272000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 70.56695362000028,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 55000,
+              "temp2_input": 71000,
+              "temp3_input": 55000,
+              "power1_input": 113000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1274000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 49000,
+              "temp2_input": 69000,
+              "temp3_input": 56000,
+              "power1_input": 139000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1277000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 76.53766071397695,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 55000,
+              "temp2_input": 71000,
+              "temp3_input": 55000,
+              "power1_input": 112000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1260000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 50000,
+              "temp2_input": 67000,
+              "temp3_input": 55000,
+              "power1_input": 119000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1281000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 82.4549122559838,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 55000,
+              "temp2_input": 74000,
+              "temp3_input": 57000,
+              "power1_input": 116000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1261000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 50000,
+              "temp2_input": 68000,
+              "temp3_input": 57000,
+              "power1_input": 140000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1274000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 88.4782637989847,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 56000,
+              "temp2_input": 75000,
+              "temp3_input": 56000,
+              "power1_input": 128000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1273000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 50000,
+              "temp2_input": 68000,
+              "temp3_input": 57000,
+              "power1_input": 142000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1275000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 94.52692793100141,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 56000,
+              "temp2_input": 74000,
+              "temp3_input": 56000,
+              "power1_input": 115000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1275000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 51000,
+              "temp2_input": 69000,
+              "temp3_input": 58000,
+              "power1_input": 142000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1275000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 100.59793347099912,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 56000,
+              "temp2_input": 76000,
+              "temp3_input": 56000,
+              "power1_input": 124000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1284000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 51000,
+              "temp2_input": 70000,
+              "temp3_input": 58000,
+              "power1_input": 141000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1275000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 106.77151951598353,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 56000,
+              "temp2_input": 74000,
+              "temp3_input": 57000,
+              "power1_input": 115000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1273000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 51000,
+              "temp2_input": 69000,
+              "temp3_input": 58000,
+              "power1_input": 140000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1275000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 113.17500013299286,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 57000,
+              "temp2_input": 74000,
+              "temp3_input": 57000,
+              "power1_input": 114000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1275000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 51000,
+              "temp2_input": 72000,
+              "temp3_input": 57000,
+              "power1_input": 197000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1263000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 119.35799595998833,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 57000,
+              "temp2_input": 76000,
+              "temp3_input": 58000,
+              "power1_input": 114000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1273000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 51000,
+              "temp2_input": 68000,
+              "temp3_input": 57000,
+              "power1_input": 125000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1286000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 125.58701552997809,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 50000,
+              "temp2_input": 54000,
+              "temp3_input": 51000,
+              "power1_input": 27000000,
+              "power1_cap": 190000000,
+              "freq1_input": 857000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 52000,
+              "temp2_input": 72000,
+              "temp3_input": 58000,
+              "power1_input": 155000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1260000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 130.59595587599324,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 50000,
+              "temp2_input": 56000,
+              "temp3_input": 52000,
+              "power1_input": 31000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1096000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 48000,
+              "temp2_input": 59000,
+              "temp3_input": 55000,
+              "power1_input": 117000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1284000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 135.64109291997738,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 49000,
+              "temp2_input": 55000,
+              "temp3_input": 51000,
+              "power1_input": 30000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1058000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 47000,
+              "temp2_input": 58000,
+              "temp3_input": 54000,
+              "power1_input": 123000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1283000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 140.66134234998026,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 48000,
+              "temp2_input": 54000,
+              "temp3_input": 49000,
+              "power1_input": 28000000,
+              "power1_cap": 190000000,
+              "freq1_input": 997000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 46000,
+              "temp2_input": 57000,
+              "temp3_input": 54000,
+              "power1_input": 137000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1282000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 145.66692104598042,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 47000,
+              "temp2_input": 52000,
+              "temp3_input": 48000,
+              "power1_input": 27000000,
+              "power1_cap": 190000000,
+              "freq1_input": 902000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 45000,
+              "temp2_input": 55000,
+              "temp3_input": 52000,
+              "power1_input": 122000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1284000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 145.94944873798522,
+          "phase": "shutdown",
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 46000,
+              "temp2_input": 52000,
+              "temp3_input": 48000,
+              "power1_input": 32000000,
+              "power1_cap": 190000000,
+              "freq1_input": 950000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 45000,
+              "temp2_input": 55000,
+              "temp3_input": 53000,
+              "power1_input": 40000000,
+              "power1_cap": 190000000,
+              "freq1_input": 915000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 147.95170989999315,
+          "phase": "shutdown",
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 45000,
+              "temp2_input": 49000,
+              "temp3_input": 46000,
+              "power1_input": 27000000,
+              "power1_cap": 190000000,
+              "freq1_input": 890000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 43000,
+              "temp2_input": 47000,
+              "temp3_input": 51000,
+              "power1_input": 34000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1299000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 149.95489716000156,
+          "phase": "shutdown",
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 44000,
+              "temp2_input": 48000,
+              "temp3_input": 45000,
+              "power1_input": 26000000,
+              "power1_cap": 190000000,
+              "freq1_input": 873000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 42000,
+              "temp2_input": 46000,
+              "temp3_input": 50000,
+              "power1_input": 34000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1299000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        }
+      ],
+      "output_count": 1024,
+      "output_ids_match_historical": true
+    },
+    {
+      "tag": "A2",
+      "passed": true,
+      "prompt_tokens": 65536,
+      "actual_outputs": 1024,
+      "prompt_ms": 101371.2,
+      "decode_ms": 19020.8,
+      "accepted": 648,
+      "offered": 872,
+      "cache_hits": 582049,
+      "lookups": 600000,
+      "prompt_reused": 0,
+      "prompt_read": 65536,
+      "ram_blobs": 0,
+      "file_blobs": 0,
+      "offloaded_experts": 0,
+      "file_read_mb": 0.0,
+      "lookup_chain_accepted": null,
+      "lookup_chain_offered": null,
+      "native_suffix_accepted": null,
+      "native_suffix_offered": null,
+      "decode_windows": null,
+      "optional_chain_counters_available": false,
+      "native_done_field_count": 16,
+      "engine_info": {
+        "context": "204800",
+        "kv": "int8",
+        "kv_resident": "32768",
+        "expert_slots": "19078",
+        "expert_cache_mib": "25150",
+        "expert_slots_primary": "9900",
+        "expert_cache_primary_mib": "13051",
+        "spec": "6",
+        "mtp_max": "4",
+        "lookup": "3",
+        "vram_free_mib": "504",
+        "cvec": "0",
+        "arena_mib": "32400",
+        "pool_workers": "15",
+        "pcie_frac": "0.00",
+        "spec_min_p": "0.50",
+        "conversation_cache_mib": "4096",
+        "conversation_cache_slots": "4",
+        "conversation_cache_min_free_mib": "8192",
+        "tail_role_token": "-1",
+        "vram_elastic": "0",
+        "engine": "0.1.40"
+      },
+      "suffix_drafts": {
+        "present": true,
+        "windows": 5,
+        "accepted": 9,
+        "offered": 16
+      },
+      "fit17_host_topology": [],
+      "timing_scope": "fixed ABBA native phase timing; adaptive counters reported separately",
+      "request_wall_s": 120.41780317400116,
+      "load_wall_s": 25.882090030994732,
+      "PP": 646.4952570355289,
+      "TG": 53.83580080753701,
+      "started_utc": "2026-10-10T07:04:43.023759+00:00",
+      "finished_utc": "2026-10-10T07:07:14.703773+00:00",
+      "elapsed_s": 151.67970168200554,
+      "native_exit": 0,
+      "fresh_process": true,
+      "release_binary_sha256": "c18316d678a669c309cb95e2f5de9af03fa5573256fd0e093aafc4b41000d049",
+      "sampling": {
+        "temperature": 0,
+        "top_p": 1,
+        "top_k": 1,
+        "seed": 12345
+      },
+      "gpu_before": [
+        {
+          "pci": "0000:05:00.0",
+          "mode": "high",
+          "temp1_input": 43000,
+          "temp2_input": 47000,
+          "temp3_input": 44000,
+          "power1_input": 28000000,
+          "power1_cap": 190000000,
+          "freq1_input": 1299000000,
+          "freq2_input": 1000000000
+        },
+        {
+          "pci": "0000:08:00.0",
+          "mode": "high",
+          "temp1_input": 42000,
+          "temp2_input": 45000,
+          "temp3_input": 49000,
+          "power1_input": 30000000,
+          "power1_cap": 190000000,
+          "freq1_input": 1299000000,
+          "freq2_input": 1000000000
+        }
+      ],
+      "flags": {
+        "STRATA_Q2_AVX2_SPREAD": "1",
+        "STRATA_GDN_NOY": "1",
+        "STRATA_GDN_CONVL2": "1",
+        "STRATA_GR_UP_EXACT": "0",
+        "STRATA_TSUM": "0",
+        "STRATA_HIP_SWIGLU_FUSED": "1",
+        "STRATA_GDN_PP": "2",
+        "STRATA_ARENA_MMAP": "1",
+        "STRATA_GDN_HEAD": "1",
+        "STRATA_GFX906_TOPK_REG": "2",
+        "STRATA_MMVF_ROWS": "1",
+        "STRATA_MMVF_RPB": "4",
+        "STRATA_EXP_MODE": "16",
+        "STRATA_STAGE_TRIM": "1",
+        "STRATA_GFX906_HC_F16": "1",
+        "STRATA_HC_F16_SCALE_PROBE": "1",
+        "STRATA_HC_F16_EXACT_INPUT": "1",
+        "STRATA_HC_F16_AUDIT": "0",
+        "STRATA_HC_F16_TRACE": "1",
+        "STRATA_GFX906_MMQ_OPT_CAP": "32",
+        "STRATA_GFX906_ATTN_QUERY_SWIZZLE": "1",
+        "STRATA_ATTN_LANECELL": "0",
+        "STRATA_GFX906_ATTN_QUERY_SWIZZLE_TRACE": "1",
+        "STRATA_VERIFY_SKIP_EMPTY_PCIE": "1",
+        "STRATA_PRIMARY_COMMIT_OVERLAP": "1",
+        "STRATA_GFX906_ATTN_REDUCE12": "1",
+        "HIP_VISIBLE_DEVICES": "0,1",
+        "DO_NOT_TRACK": "1",
+        "HF_HUB_DISABLE_TELEMETRY": "1",
+        "STRATA_GFX906_TOPK_FIT17": "1"
+      },
+      "raw_receipt_hashes": {
+        "A2.done.txt": "76a8ffcc6f6d5c7d88dc3c10c7d15d17d110fbdf52f02dca9e53772c2a48ff4c",
+        "A2.output-ids.json": "333d09c6516beeb6ae8925cc0dec1959ad5a5555f196dec94c3be551ad24e17a",
+        "A2.partial-output-ids.json": "333d09c6516beeb6ae8925cc0dec1959ad5a5555f196dec94c3be551ad24e17a",
+        "A2.stderr": "e86cc564ad37b65b8bd325eb5a99ea508b088838c6f2cb44708929952cd87888",
+        "A2.stdout": "0870b98d848c2a45735149005ea86ae6a8bfac2ea2d94d144c804b39706d5c15",
+        "A2.termination.json": "0adf09d60dcd12f773e4e690ebc63f29873636415fe1fe9555222c189ac6e60a"
+      },
+      "gpu_samples": [
+        {
+          "elapsed_s": 0.000977174990111962,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 44000,
+              "temp2_input": 47000,
+              "temp3_input": 44000,
+              "power1_input": 28000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1299000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 41000,
+              "temp2_input": 45000,
+              "temp3_input": 49000,
+              "power1_input": 30000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1297000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 5.002755544992397,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 42000,
+              "temp2_input": 46000,
+              "temp3_input": 43000,
+              "power1_input": 25000000,
+              "power1_cap": 190000000,
+              "freq1_input": 857000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 41000,
+              "temp2_input": 44000,
+              "temp3_input": 48000,
+              "power1_input": 29000000,
+              "power1_cap": 190000000,
+              "freq1_input": 857000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 10.00523218998569,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 42000,
+              "temp2_input": 45000,
+              "temp3_input": 43000,
+              "power1_input": 25000000,
+              "power1_cap": 190000000,
+              "freq1_input": 858000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 40000,
+              "temp2_input": 44000,
+              "temp3_input": 48000,
+              "power1_input": 29000000,
+              "power1_cap": 190000000,
+              "freq1_input": 857000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 15.007928087987239,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 42000,
+              "temp2_input": 45000,
+              "temp3_input": 42000,
+              "power1_input": 25000000,
+              "power1_cap": 190000000,
+              "freq1_input": 857000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 40000,
+              "temp2_input": 43000,
+              "temp3_input": 47000,
+              "power1_input": 29000000,
+              "power1_cap": 190000000,
+              "freq1_input": 857000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 20.01047700998606,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 41000,
+              "temp2_input": 44000,
+              "temp3_input": 42000,
+              "power1_input": 25000000,
+              "power1_cap": 190000000,
+              "freq1_input": 857000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 38000,
+              "temp2_input": 43000,
+              "temp3_input": 47000,
+              "power1_input": 29000000,
+              "power1_cap": 190000000,
+              "freq1_input": 857000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 25.013421632989775,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 41000,
+              "temp2_input": 44000,
+              "temp3_input": 41000,
+              "power1_input": 25000000,
+              "power1_cap": 190000000,
+              "freq1_input": 857000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 38000,
+              "temp2_input": 42000,
+              "temp3_input": 47000,
+              "power1_input": 28000000,
+              "power1_cap": 190000000,
+              "freq1_input": 858000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 30.90290315099992,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 47000,
+              "temp2_input": 65000,
+              "temp3_input": 47000,
+              "power1_input": 109000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1275000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 37000,
+              "temp2_input": 42000,
+              "temp3_input": 45000,
+              "power1_input": 29000000,
+              "power1_cap": 190000000,
+              "freq1_input": 856000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 35.9062499019783,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 49000,
+              "temp2_input": 69000,
+              "temp3_input": 50000,
+              "power1_input": 116000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1270000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 44000,
+              "temp2_input": 64000,
+              "temp3_input": 51000,
+              "power1_input": 121000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1289000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 41.27859641899704,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 50000,
+              "temp2_input": 66000,
+              "temp3_input": 51000,
+              "power1_input": 108000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1292000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 45000,
+              "temp2_input": 62000,
+              "temp3_input": 51000,
+              "power1_input": 119000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1281000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 47.171377263002796,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 51000,
+              "temp2_input": 70000,
+              "temp3_input": 52000,
+              "power1_input": 188000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1250000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 46000,
+              "temp2_input": 62000,
+              "temp3_input": 51000,
+              "power1_input": 140000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1267000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 53.02762165499735,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 52000,
+              "temp2_input": 72000,
+              "temp3_input": 53000,
+              "power1_input": 190000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1255000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 46000,
+              "temp2_input": 64000,
+              "temp3_input": 53000,
+              "power1_input": 192000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1251000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 58.86353763699299,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 53000,
+              "temp2_input": 70000,
+              "temp3_input": 54000,
+              "power1_input": 112000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1259000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 47000,
+              "temp2_input": 68000,
+              "temp3_input": 55000,
+              "power1_input": 155000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1266000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 64.81789949699305,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 54000,
+              "temp2_input": 71000,
+              "temp3_input": 55000,
+              "power1_input": 180000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1248000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 49000,
+              "temp2_input": 66000,
+              "temp3_input": 55000,
+              "power1_input": 119000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1282000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 70.74139498799923,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 55000,
+              "temp2_input": 71000,
+              "temp3_input": 54000,
+              "power1_input": 113000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1271000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 49000,
+              "temp2_input": 68000,
+              "temp3_input": 56000,
+              "power1_input": 126000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1281000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 76.70646533998661,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 55000,
+              "temp2_input": 73000,
+              "temp3_input": 55000,
+              "power1_input": 116000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1303000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 49000,
+              "temp2_input": 68000,
+              "temp3_input": 56000,
+              "power1_input": 116000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1295000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 82.6673961939814,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 56000,
+              "temp2_input": 76000,
+              "temp3_input": 57000,
+              "power1_input": 133000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1268000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 50000,
+              "temp2_input": 69000,
+              "temp3_input": 56000,
+              "power1_input": 141000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1275000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 88.74335550799151,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 56000,
+              "temp2_input": 74000,
+              "temp3_input": 56000,
+              "power1_input": 115000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1272000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 50000,
+              "temp2_input": 68000,
+              "temp3_input": 57000,
+              "power1_input": 142000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1275000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 94.79111553900293,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 56000,
+              "temp2_input": 75000,
+              "temp3_input": 57000,
+              "power1_input": 115000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1277000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 51000,
+              "temp2_input": 69000,
+              "temp3_input": 56000,
+              "power1_input": 140000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1274000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 100.84537263397942,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 56000,
+              "temp2_input": 77000,
+              "temp3_input": 57000,
+              "power1_input": 150000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1275000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 51000,
+              "temp2_input": 72000,
+              "temp3_input": 60000,
+              "power1_input": 164000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1235000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 107.05966618598904,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 57000,
+              "temp2_input": 75000,
+              "temp3_input": 58000,
+              "power1_input": 115000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1275000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 51000,
+              "temp2_input": 70000,
+              "temp3_input": 57000,
+              "power1_input": 142000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1274000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 113.45892638800433,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 56000,
+              "temp2_input": 75000,
+              "temp3_input": 57000,
+              "power1_input": 116000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1268000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 51000,
+              "temp2_input": 68000,
+              "temp3_input": 57000,
+              "power1_input": 160000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1280000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 119.66309851099504,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 57000,
+              "temp2_input": 78000,
+              "temp3_input": 58000,
+              "power1_input": 160000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1267000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 52000,
+              "temp2_input": 68000,
+              "temp3_input": 57000,
+              "power1_input": 119000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1275000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 125.88923049200093,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 50000,
+              "temp2_input": 54000,
+              "temp3_input": 52000,
+              "power1_input": 26000000,
+              "power1_cap": 190000000,
+              "freq1_input": 857000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 52000,
+              "temp2_input": 69000,
+              "temp3_input": 57000,
+              "power1_input": 191000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1251000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 130.89973331498913,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 50000,
+              "temp2_input": 56000,
+              "temp3_input": 52000,
+              "power1_input": 28000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1054000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 48000,
+              "temp2_input": 58000,
+              "temp3_input": 56000,
+              "power1_input": 116000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1284000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 135.94136192198494,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 49000,
+              "temp2_input": 54000,
+              "temp3_input": 50000,
+              "power1_input": 27000000,
+              "power1_cap": 190000000,
+              "freq1_input": 956000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 47000,
+              "temp2_input": 58000,
+              "temp3_input": 55000,
+              "power1_input": 139000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1281000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 140.95898192198365,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 48000,
+              "temp2_input": 54000,
+              "temp3_input": 49000,
+              "power1_input": 29000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1011000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 46000,
+              "temp2_input": 55000,
+              "temp3_input": 54000,
+              "power1_input": 112000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1279000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 145.9622790220019,
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 47000,
+              "temp2_input": 53000,
+              "temp3_input": 49000,
+              "power1_input": 29000000,
+              "power1_cap": 190000000,
+              "freq1_input": 964000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 46000,
+              "temp2_input": 54000,
+              "temp3_input": 54000,
+              "power1_input": 139000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1280000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 146.29995754000265,
+          "phase": "shutdown",
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 47000,
+              "temp2_input": 52000,
+              "temp3_input": 48000,
+              "power1_input": 32000000,
+              "power1_cap": 190000000,
+              "freq1_input": 998000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 45000,
+              "temp2_input": 56000,
+              "temp3_input": 53000,
+              "power1_input": 38000000,
+              "power1_cap": 190000000,
+              "freq1_input": 915000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 148.30248984898208,
+          "phase": "shutdown",
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 45000,
+              "temp2_input": 49000,
+              "temp3_input": 46000,
+              "power1_input": 31000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1291000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 43000,
+              "temp2_input": 47000,
+              "temp3_input": 51000,
+              "power1_input": 28000000,
+              "power1_cap": 190000000,
+              "freq1_input": 893000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        },
+        {
+          "elapsed_s": 150.30563809300656,
+          "phase": "shutdown",
+          "gpus": [
+            {
+              "pci": "0000:05:00.0",
+              "mode": "high",
+              "temp1_input": 44000,
+              "temp2_input": 48000,
+              "temp3_input": 46000,
+              "power1_input": 31000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1297000000,
+              "freq2_input": 1000000000
+            },
+            {
+              "pci": "0000:08:00.0",
+              "mode": "high",
+              "temp1_input": 42000,
+              "temp2_input": 46000,
+              "temp3_input": 50000,
+              "power1_input": 29000000,
+              "power1_cap": 190000000,
+              "freq1_input": 1000000000,
+              "freq2_input": 1000000000
+            }
+          ]
+        }
+      ],
+      "output_count": 1024,
+      "output_ids_match_historical": true
+    }
+  ],
+  "cleanup": {
+    "passed": true,
+    "api_left_stopped": true,
+    "gpu_after": [
+      {
+        "pci": "0000:05:00.0",
+        "mode": "high",
+        "temp1_input": 43000,
+        "temp2_input": 47000,
+        "temp3_input": 45000,
+        "power1_input": 28000000,
+        "power1_cap": 190000000,
+        "freq1_input": 1299000000,
+        "freq2_input": 1000000000
+      },
+      {
+        "pci": "0000:08:00.0",
+        "mode": "high",
+        "temp1_input": 42000,
+        "temp2_input": 45000,
+        "temp3_input": 49000,
+        "power1_input": 30000000,
+        "power1_cap": 190000000,
+        "freq1_input": 1299000000,
+        "freq2_input": 1000000000
+      }
+    ],
+    "errors": []
+  },
+  "promoted": false,
+  "performance_claim": false,
+  "api_actions": false,
+  "power_changes": false,
+  "receipt_archives": {
+    "build": {
+      "sha256": "30e9deb71209c3da40b7c635f1cf744d5f5ce1f211125c15153a509f17825df9",
+      "bytes": 6565204
+    },
+    "qualification": {
+      "sha256": "3c27937754b0b0e0e669e194b237c45443e94aa4891e02e6b9795cce09e2dce6",
+      "bytes": 7933
+    },
+    "abba": {
+      "sha256": "971fdeb3f114152e65549d86e35e7a175f8642ff991299e9a5cf328c09fcbf87",
+      "bytes": 51809
+    }
+  },
+  "audit_receipts": {
+    "actual-abba-review.json": {
+      "sha256": "c2d7f23f5c80eed11f50ec923fad7afb0b8c55e9bb234d25f58f43caca540cbc",
+      "status": "PASS_ACTUAL_ABBA_AUDIT_PARK_EXPERIMENT",
+      "passed": true
+    },
+    "actual-qualification-review.json": {
+      "sha256": "e43995dfc63c509fba89384c9c694c9883a41c3e85aab248c9bb776be2b8c9f4",
+      "status": "PASS_ACTUAL_PRIMARY_CACHE_QUALIFICATION",
+      "passed": true
+    },
+    "benchmark-runtime-review.json": {
+      "sha256": "1fbd6e44f731afe91babc68236c694f32539c7565a4723a6bdde7ab21b2754e7",
+      "status": "PASS_PRIMARY_CACHE_ABBA_RUNTIME_ADMISSION",
+      "passed": true
+    },
+    "benchmark-source-review.json": {
+      "sha256": "e1dd1b4917f4ba3d6630c2d8d08694ee8a351b2733b070c5e15b41ce995234b5",
+      "status": "PASS_PRIMARY_CACHE_ABBA_SOURCE_AND_CPU_REVIEW",
+      "passed": true
+    },
+    "build-harness-review.json": {
+      "sha256": "e4eb911da3eb564ea35e719d6a76b6aac90894aff7008998d4f17ceacd051ae3",
+      "status": "PASS_PRIMARY_CACHE_BUILD_HARNESS_SOURCE_AND_CPU_REVIEW",
+      "passed": true
+    },
+    "qualification-review.json": {
+      "sha256": "5a3bab07442adb2ce7aaf4835c604f83e54a0df1713d5da2f96814d703435193",
+      "status": "PASS_PRIMARY_CACHE_QUALIFICATION_SOURCE_AND_CPU_REVIEW",
+      "passed": true
+    },
+    "qualification-runtime-review.json": {
+      "sha256": "27035de036a8dc21cf92b57f10c35df170daec8afbce159d1dea3dd87ffa12ed",
+      "status": "PASS_ACTUAL_PRIMARY_CACHE_BUILD_DEVICE_AND_TLS_EQUALITY",
+      "passed": true
+    },
+    "source-review-v2.json": {
+      "sha256": "f46c48f0fb41a819d1fbe9d2c02783a185f8d16878c57363a5e928ca018ff4e6",
+      "status": "PASS_CONDITIONAL_PRIMARY_WNEG_V2_SOURCE_AND_CPU_REVIEW",
+      "passed": true
+    },
+    "source-review.json": {
+      "sha256": "247b86ccd2d8ea47bdb5976192806e09407952624a68225b4a31b13e2c429c84",
+      "status": "PASS_CONDITIONAL_PRIMARY_WNEG_SOURCE_AND_CPU_REVIEW",
+      "passed": true
+    }
+  },
+  "qualification": {
+    "status": "PASS_ACTUAL_PRIMARY_CACHE_QUALIFICATION",
+    "passed": true,
+    "archive_sha256": "3c27937754b0b0e0e669e194b237c45443e94aa4891e02e6b9795cce09e2dce6",
+    "summary_sha256": "9de086ba6a30b97bd1f27f3fc9adf3fab72b5330e85d51518c5e77c73d670ade",
+    "bindings": {
+      "binary_sha256": "f19065bc82cb55d30375c51ffed8bd828e4165b5c5ffb69bcc313677103b6fb2",
+      "build_receipt_sha256": "5cad0f78375c5b52247fa9ebfe1023bfc478c627143b5833a43cad45094594e7",
+      "inner_receipt_sha256": "54e7940d59e1b51fefb47bd3c9c2a786d324246828d548946c65889ed32271d5",
+      "device_gate_sha256": "d90ced8219bac93746412aa3697cf3ecc155b1ed1cb63a324a03c4b95284049d",
+      "runner_sha256": "d73508f4a7d51a953b33c297e37f7ccc126f5538584910241ecd5ccfc4c5ce66",
+      "input_pins_sha256": "9eb7c55b748deb142ff3c1543d5d0e785cf920bea57839cdba9f50830c910b4f"
+    },
+    "raw_stdout_sha256": "c78e1e3ba328d41dbdb4c563752333d1bc3793fc03d951a45327d4c6e27bb659",
+    "raw_stderr_sha256": "cdfff07b0e84c02ed2bcd1d290b5f6de1ef7cf2c3fdb2f36e88733d63ec7382a",
+    "native_and_wrapper_exit_zero": true,
+    "complete_raw_lifetime": true,
+    "cold_prefix_tokens": 12288,
+    "primary_candidates": 324,
+    "primary_learned": 11,
+    "primary_hits": 22,
+    "primary_physical_guards_inferred": 302,
+    "peer_attempts": 252,
+    "route_counts": [
+      [
+        324,
+        99
+      ],
+      [
+        252,
+        104
+      ]
+    ],
+    "cleanup_passed": true,
+    "gpu_sample_count": 13,
+    "max_temperature_millicelsius": 64000,
+    "performance_claim": false,
+    "scope": "Frozen-prefix one-token qualification in reviewed fixed-weight nonconcurrent generate flow only; not general model correctness or a performance measurement.",
+    "output_count": 1,
+    "output_ids_match_reference": true,
+    "negative_keys_count": 11,
+    "negative_mask_values": [
+      4
+    ],
+    "hits_per_negative_key": [
+      2
+    ]
+  },
+  "build_device_tls_audit": {
+    "status": "PASS_ACTUAL_PRIMARY_CACHE_BUILD_DEVICE_AND_TLS_EQUALITY",
+    "passed": true,
+    "source_and_cpu_review_passed": true,
+    "build_provenance_and_device_gate_passed": true,
+    "bindings": {
+      "binary_sha256": "f19065bc82cb55d30375c51ffed8bd828e4165b5c5ffb69bcc313677103b6fb2",
+      "build_receipt_sha256": "5cad0f78375c5b52247fa9ebfe1023bfc478c627143b5833a43cad45094594e7",
+      "inner_receipt_sha256": "54e7940d59e1b51fefb47bd3c9c2a786d324246828d548946c65889ed32271d5",
+      "device_gate_sha256": "d90ced8219bac93746412aa3697cf3ecc155b1ed1cb63a324a03c4b95284049d",
+      "runner_sha256": "d73508f4a7d51a953b33c297e37f7ccc126f5538584910241ecd5ccfc4c5ce66",
+      "input_pins_sha256": "9eb7c55b748deb142ff3c1543d5d0e785cf920bea57839cdba9f50830c910b4f"
+    },
+    "source_review_sha256": "f46c48f0fb41a819d1fbe9d2c02783a185f8d16878c57363a5e928ca018ff4e6",
+    "build_runner_review_sha256": "e4eb911da3eb564ea35e719d6a76b6aac90894aff7008998d4f17ceacd051ae3",
+    "transfer_archive_sha256": "30e9deb71209c3da40b7c635f1cf744d5f5ce1f211125c15153a509f17825df9",
+    "verified_available_artifact_entries": 99,
+    "omitted_artifacts": [
+      "kernels.hpp",
+      "moe_fused.hpp",
+      "gemm.hpp",
+      "prefill.hpp",
+      "moe_mmq.hpp",
+      "hc_negative_cache.hpp",
+      "moe_fused_iq.hpp",
+      "libstrata_core.a",
+      "libstrata_kernels_cpu.a",
+      "libstrata_engine.a",
+      "libstrata_kernels.a",
+      "libstrata_mmq.a",
+      "libstrata_spec.a",
+      "link.txt",
+      "flags.make",
+      "build.make",
+      "prefill.cpp.o.d",
+      "prefill.cpp.o",
+      "gemm.cu.o",
+      "generate.cpp.o",
+      "libggml-cpu.a",
+      "libggml-base.a"
+    ],
+    "all_step_returncodes_zero": true,
+    "cleanup_passed": true,
+    "v4_link_inputs_exact": true,
+    "only_changed_link_input": [
+      "libstrata_prefill.a"
+    ],
+    "prefill_members": [
+      {
+        "name": "gemm.cu.o",
+        "sha256": "f35a843a108688a27934b141d5c54f4903a5d08f6f52695ca3b0cee752f17a48"
+      },
+      {
+        "name": "kernels.cu.o",
+        "sha256": "044a94744940abaa1178ceb913461fa297a776e1466d4f6d8b4777b2bb16e475"
+      },
+      {
+        "name": "prefill.cpp.o",
+        "sha256": "afcfbe32667628c98e186589decfc81568ceff50d42a8db4c041e2fa401b1975"
+      }
+    ],
+    "device_equality_recomputed_exactly": true,
+    "module_count": 55,
+    "tls_independently_recomputed": true,
+    "tls_evidence": {
+      "passed": true,
+      "symbol": "_ZN6strata7prefill11hc_negative7currentE",
+      "objects": [
+        {
+          "object": "after-member-0.o",
+          "symbol": {
+            "value": "0000000000000000",
+            "size": 8,
+            "type": "TLS",
+            "bind": "WEAK",
+            "visibility": "DEFAULT",
+            "section": "24",
+            "name": "_ZN6strata7prefill11hc_negative7currentE"
+          }
+        },
+        {
+          "object": "after-member-2.o",
+          "symbol": {
+            "value": "0000000000000000",
+            "size": 8,
+            "type": "TLS",
+            "bind": "WEAK",
+            "visibility": "DEFAULT",
+            "section": "369",
+            "name": "_ZN6strata7prefill11hc_negative7currentE"
+          }
+        }
+      ],
+      "linked_symbol": {
+        "value": "0000000000000198",
+        "size": 8,
+        "type": "TLS",
+        "bind": "WEAK",
+        "visibility": "DEFAULT",
+        "section": "20",
+        "name": "_ZN6strata7prefill11hc_negative7currentE"
+      },
+      "policy": "same pinned inline definition; both TU COMDAT TLS definitions and references; one final symtab TLS symbol"
+    },
+    "qualification_source_review_sha256": "5a3bab07442adb2ce7aaf4835c604f83e54a0df1713d5da2f96814d703435193",
+    "scope": "Actual build provenance/device equality review only; no model run. One-shot root authorization and runner safety gates still required."
+  },
+  "independent_abba_audit": {
+    "status": "PASS_ACTUAL_ABBA_AUDIT_PARK_EXPERIMENT",
+    "passed": true,
+    "archive_sha256": "971fdeb3f114152e65549d86e35e7a175f8642ff991299e9a5cf328c09fcbf87",
+    "summary_sha256": "521c1f4a528bc8ac55d8276257d1971340eb9b96029feeb950a3cedaec65d3fa",
+    "runtime_review_sha256": "1fbd6e44f731afe91babc68236c694f32539c7565a4723a6bdde7ab21b2754e7",
+    "arms": [
+      {
+        "tag": "A1",
+        "prompt_ms": 101298.7,
+        "decode_ms": 19003.2,
+        "PP": 646.9579570122816,
+        "TG": 53.88566136229687,
+        "raw_stdout_sha256": "74e632790b69e1e5252d0d55644968dd185ca2026b620cc85f2f724a720aec95",
+        "raw_stderr_sha256": "d04c2b7ac8d4531e7c573003eac4a37928f35b17fd952501c5c96c706f13ef6d",
+        "output_ids_sha256": "333d09c6516beeb6ae8925cc0dec1959ad5a5555f196dec94c3be551ad24e17a",
+        "samples": 30,
+        "native_exit": 0,
+        "complete_raw_lifetime": true
+      },
+      {
+        "tag": "B1",
+        "prompt_ms": 101099.2,
+        "decode_ms": 19019.3,
+        "PP": 648.2346052194281,
+        "TG": 53.84004668941549,
+        "raw_stdout_sha256": "2d9096bb3d88c415fa01ae5f8224c4af50285c86c1221721d6ba391fd074de0b",
+        "raw_stderr_sha256": "dac0793ddf6a11c1b26cc0f2151b0b2951ac66760b5efce6a7838515aa0ba59d",
+        "output_ids_sha256": "333d09c6516beeb6ae8925cc0dec1959ad5a5555f196dec94c3be551ad24e17a",
+        "samples": 30,
+        "native_exit": 0,
+        "complete_raw_lifetime": true
+      },
+      {
+        "tag": "B2",
+        "prompt_ms": 101145.6,
+        "decode_ms": 19011.1,
+        "PP": 647.937231080739,
+        "TG": 53.86326935316736,
+        "raw_stdout_sha256": "753a99412e5788fcf3dbb34061e79f4fdd3b3e640f592c0da62cde21d2587cad",
+        "raw_stderr_sha256": "de5abb1ac25875d91f17bf75c9088ff398353fdf7d74c861a6751a214efd80a7",
+        "output_ids_sha256": "333d09c6516beeb6ae8925cc0dec1959ad5a5555f196dec94c3be551ad24e17a",
+        "samples": 30,
+        "native_exit": 0,
+        "complete_raw_lifetime": true
+      },
+      {
+        "tag": "A2",
+        "prompt_ms": 101371.2,
+        "decode_ms": 19020.8,
+        "PP": 646.4952570355289,
+        "TG": 53.83580080753701,
+        "raw_stdout_sha256": "0870b98d848c2a45735149005ea86ae6a8bfac2ea2d94d144c804b39706d5c15",
+        "raw_stderr_sha256": "e86cc564ad37b65b8bd325eb5a99ea508b088838c6f2cb44708929952cd87888",
+        "output_ids_sha256": "333d09c6516beeb6ae8925cc0dec1959ad5a5555f196dec94c3be551ad24e17a",
+        "samples": 30,
+        "native_exit": 0,
+        "complete_raw_lifetime": true
+      }
+    ],
+    "independent_arithmetic": {
+      "PP": {
+        "baseline_mean": 646.7266070239052,
+        "candidate_mean": 648.0859181500836,
+        "gain_pct": 0.21018326931585563,
+        "paired_gain_pct": [
+          0.19733093832592363,
+          0.2230447987850992
+        ]
+      },
+      "TG": {
+        "baseline_mean": 53.86073108491694,
+        "candidate_mean": 53.85165802129143,
+        "gain_pct": -0.01684541491130398,
+        "paired_gain_pct": [
+          -0.08465085465815259,
+          0.05102282350837317
+        ]
+      }
+    },
+    "complete_cold_65536_prefix_each": true,
+    "all_1024_ids_match_historical": true,
+    "all_available_counters_equal": true,
+    "unavailable_counter_fields": [
+      "decode_windows",
+      "lookup_chain_accepted",
+      "lookup_chain_offered",
+      "native_suffix_accepted",
+      "native_suffix_offered"
+    ],
+    "optional_nulls_not_zero": true,
+    "cleanup_passed": true,
+    "wrapper_exit_zero": true,
+    "max_temperature_millicelsius": 78000,
+    "screen_passed": false,
+    "decision": "PARK; no peer expansion, rerun or promotion",
+    "interpretation": "Descriptive four-run endpoint. PP is below the predefined 1 percent threshold; TG misses the conservative zero-percent floor. No significant TG regression, constant-work or isolated guard-savings claim."
+  },
+  "publication_exclusions": [
+    "model and prompt payloads",
+    "output token arrays",
+    "raw logs",
+    "host paths",
+    "pointer addresses",
+    "credentials"
+  ],
+  "limits": [
+    "Available aggregate counter equality does not prove constant work.",
+    "Unavailable optional counters remain null, not zero.",
+    "Four runs do not establish statistical significance, isolated guard savings or general correctness.",
+    "No full independently buildable public-source snapshot is provided."
+  ],
+  "wrapper_exit": {
+    "exit_code": 0,
+    "finished_utc": "2026-10-10T07:07:14.887515+00:00"
+  }
+}
