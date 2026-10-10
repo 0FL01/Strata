@@ -170,3 +170,9 @@ Offline consistency validation passed, including 18 rejected corruption cases. F
 ## Prefill CPU samples: HSA wait/event leaves, incomplete callers
 
 [Report](results/2026-10-10-gfx906-prefill-cpu-profile/README.md) and [numeric metrics](results/2026-10-10-gfx906-prefill-cpu-profile/metrics.json): 11,533 user-space CPU samples include 4,524/4,565 main-thread samples (**99.102%**) in HSA WaitRelaxed functions. All-thread wait/event leaf share is **98.500%**, with no recorded loss/throttling. These are sampled CPU-residency shares, not model wall-time or removable cost. All 6,968 nonmain callchains are empty; every stack reached the 4,096-byte capture cap. Caller attribution is incomplete and the interval can include initial decode. No speed qualification; retained capture/parser failures and privacy limits are documented.
+
+## 2026-10-10: HIP blocking synchronization screen
+
+[Report](results/2026-10-10-gfx906-hip-blocking-sync/README.md) · [Metrics](results/2026-10-10-gfx906-hip-blocking-sync/metrics.json). Technical execution and all seven arms' exact outputs/available work passed; performance qualification failed. Descriptive PP: +1.284241% ON/OFF and +1.327069% ON/frozen; companion TG: -0.006305% and -0.103285%. D0 CPU is full-request and lacks a matched OFF CPU trace. No promotion.
+
+The [CPU profile](results/2026-10-10-gfx906-prefill-cpu-profile/README.md#follow-on-offline-unwind-check-append-only-caveat) also adds the same-capture selective offline check: 509 selected samples recovered frames, mostly leaf-only; caller attribution remains incomplete and no speed evidence was added.

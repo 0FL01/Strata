@@ -37,3 +37,13 @@ Independent sanitized-report review SHA-256: af738328bca7644cc86bbf639116738bc5a
 V1 capture failed before GEN on ACK framing; a bounded failure index and cleanup evidence remain preserved, while the complete V1 failure archive was not independently audited. Local parser V1 rejected an unreviewed EVENT_UPDATE record (kind 78); V2 rejected 6,799 source-proven non-executable data mappings; V3 passed binary scope but failed leaf rendering because the IP field was omitted. V4 corrected that rendering format under independent review. The capture runner also corrected ACK framing and normal-stop handling before the accepted capture; these technical corrections do not turn the failed first capture into a pass. No capture was repeated for the postcapture parser adaptations; the same immutable capture and exact recovered ELF files were used.
 
 Machine-readable metrics include allowed function demangling and the vetted aggregate. Only the explicitly reviewed sanitized export was consumed. This report, metrics and index are the only proposed files; runtime code, PR bodies and earlier failed qualification outcomes are unchanged.
+
+## Follow-on offline unwind check (append-only caveat)
+
+The original full-capture result remains unchanged: 4,524 of 4,565 main-thread user-CPU leaf samples (99.10%) landed in ROCr BusyWaitSignal::WaitRelaxed or InterruptSignal::WaitRelaxed. This does not measure removable wall time.
+
+A read-only follow-on used the same capture, exact libraries and symbol policy, decoding two wait-heavy nonmain threads in separate perf processes. All 509 selected samples then produced frames (530 frames, 28 unresolved), whereas these threads had empty decoded callchains in the combined run. Both groups had already been shown to contain user registers and 4,096 captured stack bytes.
+
+This supports an offline unwinder-state limitation rather than missing captured registers/stack bytes. The recovered chains remain mostly leaf frames; they do not establish complete callers or identify these threads as peer-prefill workers. No new workload, profiling capture or performance comparison was run. The initial leaf findings and all earlier limitations are preserved.
+
+Receipt SHA-256: `4b06ce3d25d3506802a1e6a8f0cf9be0054e126514c24684263c57dfb69d4d6e`. The receipt verifier also prepared the selective helper; the separately bound independent source review is retained in the metrics.

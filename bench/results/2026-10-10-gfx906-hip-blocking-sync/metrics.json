@@ -1,0 +1,430 @@
+{
+  "D0": {
+    "diagnostic_samples": 24,
+    "main_cpu_seconds": 23.11,
+    "main_scheduler_deltas": {
+      "runqueue_wait_ns": 767791794,
+      "runtime_ns": 23108311131,
+      "timeslices": 21482
+    },
+    "other_thread_cpu_seconds_by_group_minus_main": 448.97999999999996,
+    "process_cpu_seconds": 472.09,
+    "request_wall_seconds": 120.30157356703421
+  },
+  "arms": [
+    {
+      "PP": 647.4724901252937,
+      "TG": 53.74115029153525,
+      "flags": {
+        "MapHost_evidence": "requested peer bit8; returned nonscheduling bits not required",
+        "early_devices": [
+          {
+            "device": 0,
+            "old": 1,
+            "readback": 4,
+            "requested": 4
+          },
+          {
+            "device": 1,
+            "old": 1,
+            "readback": 4,
+            "requested": 12
+          }
+        ],
+        "enabled": true,
+        "original_device": 0,
+        "peer": {
+          "device": 1,
+          "original_device": 0,
+          "readback": 4,
+          "restored_device": 0
+        },
+        "records": 4,
+        "restored_device": 0,
+        "success_evidence": "exact source-bound success records emitted only after checked calls and restoration"
+      },
+      "tag": "D0",
+      "tokens": 1024
+    },
+    {
+      "PP": 646.5137523269109,
+      "TG": 53.89388588601233,
+      "flags": {
+        "enabled": false,
+        "new_hip_call_absence": "source/mock proof; not inferred from logs",
+        "records": 0
+      },
+      "tag": "C1",
+      "tokens": 1024
+    },
+    {
+      "PP": 646.7996071987249,
+      "TG": 53.8140158183777,
+      "flags": {
+        "enabled": false,
+        "new_hip_call_absence": "source/mock proof; not inferred from logs",
+        "records": 0
+      },
+      "tag": "A1",
+      "tokens": 1024
+    },
+    {
+      "PP": 655.1477321347884,
+      "TG": 53.81656120582733,
+      "flags": {
+        "MapHost_evidence": "requested peer bit8; returned nonscheduling bits not required",
+        "early_devices": [
+          {
+            "device": 0,
+            "old": 1,
+            "readback": 4,
+            "requested": 4
+          },
+          {
+            "device": 1,
+            "old": 1,
+            "readback": 4,
+            "requested": 12
+          }
+        ],
+        "enabled": true,
+        "original_device": 0,
+        "peer": {
+          "device": 1,
+          "original_device": 0,
+          "readback": 4,
+          "restored_device": 0
+        },
+        "records": 4,
+        "restored_device": 0,
+        "success_evidence": "exact source-bound success records emitted only after checked calls and restoration"
+      },
+      "tag": "B1",
+      "tokens": 1024
+    },
+    {
+      "PP": 654.8976422645612,
+      "TG": 53.80411937788987,
+      "flags": {
+        "MapHost_evidence": "requested peer bit8; returned nonscheduling bits not required",
+        "early_devices": [
+          {
+            "device": 0,
+            "old": 1,
+            "readback": 4,
+            "requested": 4
+          },
+          {
+            "device": 1,
+            "old": 1,
+            "readback": 4,
+            "requested": 12
+          }
+        ],
+        "enabled": true,
+        "original_device": 0,
+        "peer": {
+          "device": 1,
+          "original_device": 0,
+          "readback": 4,
+          "restored_device": 0
+        },
+        "records": 4,
+        "restored_device": 0,
+        "success_evidence": "exact source-bound success records emitted only after checked calls and restoration"
+      },
+      "tag": "B2",
+      "tokens": 1024
+    },
+    {
+      "PP": 646.6349545581469,
+      "TG": 53.8134502094205,
+      "flags": {
+        "enabled": false,
+        "new_hip_call_absence": "source/mock proof; not inferred from logs",
+        "records": 0
+      },
+      "tag": "A2",
+      "tokens": 1024
+    },
+    {
+      "PP": 646.3741071622306,
+      "TG": 53.83806519453207,
+      "flags": {
+        "enabled": false,
+        "new_hip_call_absence": "source/mock proof; not inferred from logs",
+        "records": 0
+      },
+      "tag": "C2",
+      "tokens": 1024
+    }
+  ],
+  "baseline_history": {
+    "actual_reproduction_proven": true,
+    "all_17_engine_members_equal": true,
+    "all_55_device_modules_equal": true,
+    "failed_v1_preserved": {
+      "archive_replacement_ran": false,
+      "archive_sha256": "f293de0406b3430f5a59500e1fafe5e543409c6157a63bd2efbc4489cdfe9bdb",
+      "candidate_patch": false,
+      "cleanup_passed": true,
+      "code_mismatch_evidence": {
+        "original_commit_abi": "commit(int,string&,bool)",
+        "original_main_bytes": 200078,
+        "original_primary_scope_destructor_bytes": 78,
+        "original_verifier_constructor_bytes": 1075,
+        "rebuilt_commit_abi": "commit(int,string&)",
+        "rebuilt_main_bytes": 199400,
+        "rebuilt_primary_scope_destructor_present": false,
+        "rebuilt_verifier_constructor_bytes": 931
+      },
+      "exact_reproduction_after_restoration": "NOT_YET_TESTED",
+      "original_input_integrity_passed": true,
+      "original_object_sha256": "605e2b5290b66aa4f899c1f602c61f1b88ff53ad96bacb76bb4264faba0fe485",
+      "proposed_restoration": [
+        "src/program/generate.cpp",
+        "include/strata/core/verify.hpp",
+        "include/strata/kernels/iq_kernels.hpp"
+      ],
+      "rebuilt_object_sha256": "98a4f4ade53d0a75cb35f7b05acc104510f93bd4a1c9df88e5cf1163606e1467",
+      "relink_ran": false,
+      "remote_compile_ran": false,
+      "shim_preserved": "Actual d1ff header retained: differs from primary tree only by appended stream priority aliases; not a cause of missing primary-commit source/ABI",
+      "source_delta": [
+        {
+          "mounted_sha256": "2a1b3192b70fd56780fb6732c392abf54ff4f017279a6c3a463e0dac5b22d24e",
+          "path": "src/program/generate.cpp",
+          "primary_commit_sha256": "e7a5a754af2155c779aad5f2232ba1c0052ebbd2a4795d40885eff571b62221c"
+        },
+        {
+          "mounted_sha256": "270d3b62bc1de066a552fa48ea42251060058b4084821125cc5a31f02edb4a6e",
+          "path": "include/strata/core/verify.hpp",
+          "primary_commit_sha256": "5a959164cbaed0feee14463ea036c0002816993a21b2f987d6dc57566fceef13"
+        },
+        {
+          "mounted_sha256": "e3750f39de3957ff8bbd0ecc9d77d0e394f34984935f528c908d107aa62a62b3",
+          "path": "include/strata/kernels/iq_kernels.hpp",
+          "primary_commit_sha256": "00e41a0b6d841cf6c532e012b113f5f0e4e9aa6b9e0d59a077b0e0bce2f1897a"
+        },
+        {
+          "mounted_sha256": "d1ff8af3bbd1a3a53b89b105f0f0528c4a3685aa9415a02985c3789f1b0cb71d",
+          "path": "include/strata/platform/hip_compat/strata_hip.h",
+          "primary_commit_sha256": "e8942b1011979dfd760ea8ca7c7bf11c5767ae3f084299e41f47a83ca6e748b0"
+        }
+      ],
+      "status": "FAILED_REPRODUCTION_PRESERVED_CAUSE_IDENTIFIED"
+    },
+    "note": "The NOT_YET_TESTED field within the preserved V1 receipt records its historical state; the separate V2 audit establishes exact reproduction.",
+    "recovered_v2_audit_sha256": "3b1072162c3ba2bbbffdc0890deb09143b3bd7ecf506fd1705288c255c461976"
+  },
+  "build": {
+    "all_16_unrelated_engine_members_equal": true,
+    "all_55_device_modules_equal": true,
+    "archive_bytes": 16218186,
+    "archive_sha256": "5bddbd5fc27755ce8bfee8d1bb19d4fb30022959fa63697cebb656ced9a099d3",
+    "baseline_binary_sha256": "c18316d678a669c309cb95e2f5de9af03fa5573256fd0e093aafc4b41000d049",
+    "baseline_reproduction_audit_sha256": "3b1072162c3ba2bbbffdc0890deb09143b3bd7ecf506fd1705288c255c461976",
+    "baseline_reproduction_review_sha256": "3b1072162c3ba2bbbffdc0890deb09143b3bd7ecf506fd1705288c255c461976",
+    "blocking_source_sha256": {
+      "blocking_init.hpp": "f6be2474f48e2530fe4536c4cb4939073790f4a059fc61bdd1d90bd902bb810b",
+      "src/core/remote_experts.cpp": "b800c459b3b2b76786ae2c5adab3f0957aedc3e6b1039c985aa46183972fe1c2",
+      "src/program/generate.cpp": "81d9386044316becfd5f0663068289bb9659193a01123766aed868c1a0243b53"
+    },
+    "build_package_manifest_sha256": "d6aa2a10977c32f110d142e0dc9b1f8debc3591f7292af193576cbe91af356d6",
+    "candidate_binary_sha256": "ccf1dc7cd431ba1eb12b30095798ed1a88fc17865ad76de133d12e0439a14a6d",
+    "candidate_macro": "STRATA_HIP_BLOCKING_INIT=1",
+    "cleanup_passed": true,
+    "compiled_object_sha256": {
+      "off": {
+        "CMakeFiles/strata.dir/src/program/generate.cpp.o": "605e2b5290b66aa4f899c1f602c61f1b88ff53ad96bacb76bb4264faba0fe485",
+        "CMakeFiles/strata_engine.dir/src/core/remote_experts.cpp.o": "4d3c35736b543f64bbd2a1741dc9bc403accc54889d28863e423b2ee6d832b8e"
+      },
+      "on": {
+        "CMakeFiles/strata.dir/src/program/generate.cpp.o": "4aa37ac8002d9e1feb9f7fa34a098a2c197732b2024dcbaef8f4631e0781af38",
+        "CMakeFiles/strata_engine.dir/src/core/remote_experts.cpp.o": "2a1cb6bdab044cee84e84ff85b1890f5f2614f4f26953c5e6ca17d02fd2b5aac"
+      }
+    },
+    "decision": "PASS_HIP_BLOCKING_BUILD",
+    "device_equality": true,
+    "device_report_sha256": {
+      "off": "804a1388340277f3060287efa76b9efcbea97aec8588c22ef4a60e9c47fb82c8",
+      "on": "375ae890d34fe2f02bdf723a89a9db0693393a9a048c1f2c7b1b0256b0b68dda"
+    },
+    "host_receipt_sha256": "e08cce16150442d0ae36e6bb226972ca71c956a881f98446d332a63735f7267b",
+    "input_integrity_passed": true,
+    "limitations": [
+      "Scratch closures were deliberately not exported; their complete hash inventories and in-build identity checks are receipt-bound. Both resulting binaries and all17 before/after member bytes were independently checked."
+    ],
+    "macro_off_exact": true,
+    "off_receipt_sha256": "e4bf93ff1bf8e6b9409d21e3399172d946b5d8493d4716c806e10547fbbba7b8",
+    "on_receipt_sha256": "cdb207ff314e62709ef90acda28f1090d0e574f86432a9e5165c802831e853d2",
+    "package_manifest_sha256": "d6aa2a10977c32f110d142e0dc9b1f8debc3591f7292af193576cbe91af356d6",
+    "package_review_sha256": "11f710babe96a9976ca89bbf5d418f57fb6bc7f8968aff2b314561b856aac85a",
+    "passed": true,
+    "patched_source_sha256": {
+      "blocking_init.hpp": "f6be2474f48e2530fe4536c4cb4939073790f4a059fc61bdd1d90bd902bb810b",
+      "src/core/remote_experts.cpp": "b800c459b3b2b76786ae2c5adab3f0957aedc3e6b1039c985aa46183972fe1c2",
+      "src/program/generate.cpp": "81d9386044316becfd5f0663068289bb9659193a01123766aed868c1a0243b53"
+    },
+    "performance_claim": false,
+    "pinned_image": "sha256:bccb7ee7e7a78274519db9a43ba63c34ddd2e74bb60f8764a8f50aaee1f2c646",
+    "raw_files": 182,
+    "retained_binary_executable": true,
+    "runtime_executed": false,
+    "scope": "Build foundation only; runtime admission remains separate.",
+    "source_manifest_sha256": "62ea5845e3e8728a23d752a2c4e15392706adc8c538cd4813aa117861981b79c",
+    "source_review_sha256": "87b6f7ec2a06a3acdcab5bf2386417cea9cb0d42c758019139a43489cffa0763"
+  },
+  "comparisons": {
+    "OFF_vs_frozen_overhead": {
+      "PP": {
+        "candidate_mean": 646.7172808784359,
+        "control_mean": 646.4439297445708,
+        "gain_pct": 0.04228535860379967,
+        "paired_gain_pct": [
+          0.04421481689833584,
+          0.04035548346164042
+        ]
+      },
+      "TG": {
+        "candidate_mean": 53.813733013899096,
+        "control_mean": 53.8659755402722,
+        "gain_pct": -0.09698613243168674,
+        "paired_gain_pct": [
+          -0.14819875449982867,
+          -0.045720411799032856
+        ]
+      }
+    },
+    "ON_vs_OFF": {
+      "PP": {
+        "candidate_mean": 655.0226871996748,
+        "control_mean": 646.7172808784359,
+        "gain_pct": 1.2842406669507422,
+        "paired_gain_pct": [
+          1.2906818190906222,
+          1.2777978747004592
+        ]
+      },
+      "TG": {
+        "candidate_mean": 53.810340291858594,
+        "control_mean": 53.813733013899096,
+        "gain_pct": -0.0063045654900451,
+        "paired_gain_pct": [
+          0.004729971199735061,
+          -0.01733921815888495
+        ]
+      }
+    },
+    "ON_vs_frozen": {
+      "PP": {
+        "candidate_mean": 655.0226871996748,
+        "control_mean": 646.4439297445708,
+        "gain_pct": 1.3270690713259148,
+        "paired_gain_pct": [
+          1.33546730859202,
+          1.3186690196721251
+        ]
+      },
+      "TG": {
+        "candidate_mean": 53.810340291858594,
+        "control_mean": 53.8659755402722,
+        "gain_pct": -0.10328458336750224,
+        "paired_gain_pct": [
+          -0.14347579305850067,
+          -0.06305170239596647
+        ]
+      }
+    }
+  },
+  "decision": "NO_QUALIFICATION_COMPANION_TG_REGRESSION",
+  "experiment": "gfx906 HIP blocking synchronization screen",
+  "finish_utc": "2026-10-10T17:03:27.590128+00:00",
+  "limitations": [
+    "PP improvement is descriptive; the frozen companion TG condition fails, so no performance qualification or promotion.",
+    "D0 CPU measures READY-to-DONE full request PP plus TG, not pure prefill. Main23.11 CPU seconds and process472.09 CPU seconds have the same observed request interval.",
+    "Group CPU minus main equals448.98 CPU seconds across other threads; no exact peer/backend role or useful-work attribution follows.",
+    "No matched CPU-telemetry OFF control exists in this screen, so main CPU relief versus earlier diagnostics is unpaired and not a quantified causal effect.",
+    "Initial audit expected all manifest environment entries in the relevant-prefix snapshot; corrected to compare the explicitly captured STRATA/HIP/ROCR/HSA domain and retain full manifest flags separately. Raw evidence unchanged."
+  ],
+  "method": {
+    "A": "candidate runtime OFF",
+    "B": "same candidate runtime ON",
+    "C": "frozen c183",
+    "D0_excluded_from_performance": true,
+    "gate": "At least 1% PP or TG in both ON/OFF and ON/frozen; both forward/reverse pairs positive; companion metric nonregressive in mean and both pairs for both contrasts.",
+    "order": [
+      "D0",
+      "C1",
+      "A1",
+      "B1",
+      "B2",
+      "A2",
+      "C2"
+    ],
+    "output_tokens": 1024,
+    "prompt_tokens": 65536,
+    "seed": 12345
+  },
+  "performance_qualified": false,
+  "promoted": false,
+  "provenance": {
+    "actual_audit_sha256": "bc56a0355b02fc577f54e8e1dc7cc5697d5c88edac4e487f1d9761b9da211ecc",
+    "audit_script_sha256": "17592eb7d360d4c45874819e5bc36ed189641bd485b27b42b7f67a7102b8afed",
+    "baseline_binary_sha256": "c18316d678a669c309cb95e2f5de9af03fa5573256fd0e093aafc4b41000d049",
+    "build_admission_sha256": "7dea2bfef0fe94c78a724c49cb8a269261dcd3d379fe8ef173e5737e2588a235",
+    "candidate_binary_sha256": "ccf1dc7cd431ba1eb12b30095798ed1a88fc17865ad76de133d12e0439a14a6d",
+    "raw_archive_bytes": 248455,
+    "raw_archive_sha256": "04ceb8b813a9c0f0b87431e95726f4f064d14f16a34b09b7126afe7baa96e761",
+    "recomputed_sha256": "b4d44a2b37d22bfe2e053d9114c0a59e9ef4ccee7fc056aa65380839636ba60b",
+    "runner_manifest_sha256": "d625271e85219087f8eaaf4e8728669ff2bb09f6d35a67c16a4dfcce4b806508",
+    "runner_review_sha256": "0538a23cf6ab75663a9c78b710332eea5780124c5a980900f016fbf7a61487c6",
+    "seal_script_sha256": "0b6923e91de7f6f3838fddc30787c683305e971e83f834a9b0a59274c8609d3f"
+  },
+  "screen_passed": false,
+  "source": {
+    "archive_sha256": "3152befccbd2dc0584df64fef1a576ffd104fb51332548f7861b0175d13a9bcb",
+    "cpu_tests": {
+      "count": 15,
+      "independent_rerun": true,
+      "passed": true
+    },
+    "limitations": [
+      "Static runtime initialization may precede main; API acceptance/readback does not prove interrupt-backed wait behavior.",
+      "Partially set process-local flags are not rolled back on failure; process must exit before model work.",
+      "Runtime qualification and performance remain unadmitted.",
+      "Compile package must independently gate exact OFF objects/c183 and complete ON 55-device equality."
+    ],
+    "reviewed_semantics": [
+      "Compile OFF excludes added header/state/hooks; actual OFF object and binary identity still required.",
+      "Runtime OFF performs no new HIP API calls.",
+      "Both-device early main hook precedes first explicit runtime query and allocations/streams.",
+      "Preserves requested non-schedule bits; peer retains MapHost; scheduling readback requires mask4 only.",
+      "Every API failure stops; caller device restoration and actual readback checked before initialized publication.",
+      "ON peer requires initialized state and device1, checks scheduling drift and bypasses original Spin request.",
+      "No mathematical/kernel/work-order change in reviewed source delta."
+    ],
+    "source_manifest_sha256": "62ea5845e3e8728a23d752a2c4e15392706adc8c538cd4813aa117861981b79c",
+    "source_sha256": {
+      "blocking_init.hpp": "f6be2474f48e2530fe4536c4cb4939073790f4a059fc61bdd1d90bd902bb810b",
+      "src/core/remote_experts.cpp": "b800c459b3b2b76786ae2c5adab3f0957aedc3e6b1039c985aa46183972fe1c2",
+      "src/program/generate.cpp": "81d9386044316becfd5f0663068289bb9659193a01123766aed868c1a0243b53"
+    }
+  },
+  "start_utc": "2026-10-10T16:45:38.541810+00:00",
+  "technical_execution_passed": true,
+  "thermal": {
+    "final_max_sensor_celsius": 51,
+    "mode": "high",
+    "peak_gpu_sensor_celsius": 82.0,
+    "power_cap_watts_per_device": 190
+  },
+  "validation": {
+    "all_seven_arms_1024_ids_exact": true,
+    "api_left_stopped": true,
+    "available_work_counters_exact": true,
+    "cleanup_passed": true,
+    "raw_regular_files": 80,
+    "ready_done_identity_and_affinity": true
+  }
+}
