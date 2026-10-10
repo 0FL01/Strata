@@ -1,0 +1,250 @@
+{
+  "schema_version": 1,
+  "date_utc": "2026-10-10",
+  "status": "DIAGNOSTIC_ATTRIBUTION_ONLY_NO_PERFORMANCE_QUALIFICATION",
+  "archive_base_commit": "ba7ff827218adb88e818ebfc25be2852ac211f11",
+  "actual_audit": {
+    "admission_counts": {
+      "attempt": 1,
+      "command": 11,
+      "cpu_topology": 1,
+      "device_access": 6,
+      "host_user": 2,
+      "idle_sample": 4,
+      "raw_gpu": 33
+    },
+    "all1024_ids_exact": true,
+    "all_available_historical_work_exact": true,
+    "archive_sha256": "b6ed34057118ce95d48402e8fceab977ece0e37814e00e3869ae3751a1ac9e1c",
+    "audit_script_sha256": "66fe5fff1f84b9bd3d402f3aa55886ffbdacfe5481509e6536b0f611c4b5650c",
+    "build_admission_sha256": "14703469c7e3d8156c2dcc6bb96a4dbdffa7da28cf1fe1d338e45b491737abfd",
+    "cleanup_passed": true,
+    "decision": "PASS_INDEPENDENT_SYNC_ATTRIBUTION_RAW_AUDIT",
+    "default_spin_us": 20000,
+    "device_cpu_totals": {
+      "0": {
+        "bucket_cpu_ns": 9838013219,
+        "scope_cpu_ns": 93490604484,
+        "unattributed_cpu_ns": 83652591265
+      },
+      "1": {
+        "bucket_cpu_ns": 7736077334,
+        "scope_cpu_ns": 76525333473,
+        "unattributed_cpu_ns": 68789256139
+      }
+    },
+    "diagnostic_decode_ms": 19034.8,
+    "diagnostic_prompt_includes_flush": true,
+    "diagnostic_prompt_ms": 99939.5,
+    "distinct_scope_threads": 17,
+    "final_max_sensor_c": 51.0,
+    "final_peer_after_main_s": 5.26550173,
+    "full_pipeline_scope_span_s": 99.740547885,
+    "gpu_executed_by_reviewer": false,
+    "limitations": [
+      "Diagnostic-only; no speed or GPU critical-path claim.",
+      "Buckets are host CPU/wall inside existing wait sites; disjointness is enforced by source depth guard plus per-scope totals, aggregate logs do not retain every individual interval.",
+      "Residual includes instrumentation and unmeasured work; it does not identify useful compute, launch overhead or hidden waits.",
+      "Wall scopes on different threads overlap; sums are not elapsed pipeline time.",
+      "Prompt_ms includes buffered flush; main scope ends before final peer completes.",
+      "Sparse placement samples only; unsampled intervals remain unknown.",
+      "Prior failed CPU1 screen remains rejected and is not repaired by this diagnostic."
+    ],
+    "main_scope_wall_s": 94.475046155,
+    "mapped_scope_samples_by_device": {
+      "0": 16,
+      "1": 16
+    },
+    "marker_sha256": "55789f2416699db218e09fb8f3d3ae9e63b150976d9d2abcf6b08949fb88f337",
+    "measured_existing_wait_cpu_fraction": 0.10336731228953837,
+    "measured_existing_wait_cpu_s": 17.574090553,
+    "observer_wall_s": 0.2950817770906724,
+    "passed": true,
+    "peak_captured_sensor_c": 79.0,
+    "performance_qualified": false,
+    "raw_bucket_rows": 130,
+    "raw_regular_files": 19,
+    "ready_done_28_thread_identity_and_affinity_unchanged": true,
+    "residual_cpu_s": 152.441847404,
+    "runner_manifest_sha256": "614484746a3d741934768bef88bba182a1fde8060df682cfe8a3c38fc8ac40c4",
+    "runner_review_sha256": "40df77b25a39b8198e3d037fed5024cb87724dbf6a9b88a52907d6ef9d1109b5",
+    "sample_count": 24,
+    "sampled_placement_passed": true,
+    "sampled_scope_count": 17,
+    "scope_count": 17,
+    "site_totals": {
+      "0:0": {
+        "calls": 76415,
+        "cpu_ns": 50302109,
+        "wall_ns": 385846096
+      },
+      "0:1": {
+        "calls": 432,
+        "cpu_ns": 8436753695,
+        "wall_ns": 8441827488
+      },
+      "0:2": {
+        "calls": 16,
+        "cpu_ns": 1350948356,
+        "wall_ns": 1351162247
+      },
+      "0:4": {
+        "calls": 1,
+        "cpu_ns": 4441,
+        "wall_ns": 29465
+      },
+      "0:5": {
+        "calls": 1,
+        "cpu_ns": 4618,
+        "wall_ns": 4587
+      },
+      "1:0": {
+        "calls": 37712,
+        "cpu_ns": 26236992,
+        "wall_ns": 204542485
+      },
+      "1:1": {
+        "calls": 336,
+        "cpu_ns": 6566260110,
+        "wall_ns": 6569782951
+      },
+      "1:3": {
+        "calls": 16,
+        "cpu_ns": 1143501391,
+        "wall_ns": 1143550788
+      },
+      "1:4": {
+        "calls": 16,
+        "cpu_ns": 24090,
+        "wall_ns": 28166
+      },
+      "1:5": {
+        "calls": 16,
+        "cpu_ns": 54751,
+        "wall_ns": 54498
+      }
+    },
+    "stage_cpu_s": 170.015937957,
+    "suffix_drafts": {
+      "accepted": 9,
+      "offered": 16,
+      "present": true,
+      "windows": 5
+    },
+    "unavailable_optional_counters": [
+      "lookup_chain_accepted",
+      "lookup_chain_offered",
+      "native_suffix_accepted",
+      "native_suffix_offered",
+      "decode_windows"
+    ],
+    "unsampled_scope_count": 0,
+    "work": {
+      "accepted": 648,
+      "cache_hits": 582049,
+      "file_blobs": 0,
+      "file_read_mb": 0.0,
+      "lookups": 600000,
+      "offered": 872,
+      "offloaded_experts": 0,
+      "ram_blobs": 0
+    }
+  },
+  "actual_audit_sha256": "f6e8df517140aad10429b4d9c94fd12745d4fd3ab452129fcda2bcbb1939f521",
+  "build_audit": {
+    "decision": "PASS_PREFILL_SYNC_ATTRIBUTION_BUILD",
+    "passed": true,
+    "source_manifest_sha256": "79fb05f2234e978669a2c8adf20cfc99a81a4249dd28d055b407ab1d1a87af8b",
+    "source_review_sha256": "cb065230ce76382a6a105f94f0c801a3a055043ad3ba30967e3116e4e099db7b",
+    "baseline_binary_sha256": "c18316d678a669c309cb95e2f5de9af03fa5573256fd0e093aafc4b41000d049",
+    "candidate_binary_sha256": "19522cc6460c2d33d56ef3b44d17bd5db46a3c7889a427d5c3854bb1642ed275",
+    "candidate_object_sha256": "4c61a7b88959c0e0ccc44f36e637935d24e4cf96d3ca0eb4c4af13f8868d1943",
+    "device_equality": true,
+    "repaired_baseline_reproduced": true,
+    "package_manifest_sha256": "5901cb1ff22a73cac2936d5b3cd5c1f6c4cc3c6d4642696f05159c48f4356ef6",
+    "host_receipt_sha256": "ad91a058921fb2d013986b06e735191ae66b6dcf92ae8a9bd1587fb48b7ef5ce",
+    "off_receipt_sha256": "83cdb22cf6e5366d57911257350ea81104d29a2cc535a9ab40557905c2eeec40",
+    "on_receipt_sha256": "8472c60c9f38ba411d400082ff17b8d97e8170809e325e903e47875d4eb37398",
+    "sync_source_sha256": {
+      "include/strata/prefill/sync_attribution.hpp": "87a2c3d560fb1b726a7ec89b08c5a4a4c64c6c0508cfa64f89245e78cd356203",
+      "include/strata/prefill/peer_placement.hpp": "accaf5e5b9741d0cbf15c77e111a8174b612e6263ea8adcfb8bb013cd55fc0fe",
+      "include/strata/prefill/role_trace.hpp": "096734d699a06b2872137dec10b4b58ad32f7327c94c3addefbcb2971448c2d6",
+      "src/prefill/prefill.cpp": "23aa930c8d6b7337ebc0266834edc0a773d2da53694a289d96a6f597429d4d0c"
+    },
+    "placement_control_binary_sha256": "79ba570f5eead6095e5f1033c461b0653d1cd177440bb08ffa30b38902ad53c0",
+    "placement_only_exact": true,
+    "placement_receipt_sha256": "e13d659562c849f99c56944d8e7586706c1a0e74ca0cc5d21ddb2403ed81b09c",
+    "macro_off_exact": true,
+    "candidate_macro": "STRATA_PREFILL_SYNC_ATTRIBUTION=1",
+    "candidate_macros": [
+      "STRATA_PREFILL_PEER_PLACEMENT=1",
+      "STRATA_PREFILL_SYNC_ATTRIBUTION=1"
+    ],
+    "retained_binary_executable": true,
+    "pinned_image": "sha256:bccb7ee7e7a78274519db9a43ba63c34ddd2e74bb60f8764a8f50aaee1f2c646",
+    "build_archive_sha256": "5bea55cff974720ddb7c45766ee8d983643ae01e954c7e4c4971d233c0df56d9",
+    "complete_device_modules": 55,
+    "independent_device_comparison_sha256": "547005aa2d7cbfe99474828d4085788a6cb1907e92b9d2936bdf510daa20ec33",
+    "verified_retained_artifacts": 156,
+    "audit_script_sha256": "19d93948a355a661d9732c1620c472c506551e4662064e1e1f48be41e712e53f",
+    "cleanup_passed": true,
+    "limitations": [
+      "Build admission only; role diagnostic execution requires reviewed runner and root authorization.",
+      "Header overlay omitted from transferred archive; all three scratch closures retained and hashed; their final integrity is recorded by sealed wrapper, while full OFF/ON binaries, compiled objects, extracted archive members and command outputs were independently hashed.",
+      "No performance or runtime correctness claim."
+    ],
+    "gpu_executed_by_reviewer": false
+  },
+  "build_audit_sha256": "14703469c7e3d8156c2dcc6bb96a4dbdffa7da28cf1fe1d338e45b491737abfd",
+  "site_id_names": {
+    "0": "issuer-ready yield loop",
+    "1": "router-ready compute-stream sync",
+    "2": "primary handoff sync",
+    "3": "terminal peer chunk callback sync",
+    "4": "run-tail compute-stream drain",
+    "5": "run-tail copy-stream drain"
+  },
+  "raw_archive_bytes": 60717,
+  "method": {
+    "placement_on": true,
+    "sync_attribution_on": true,
+    "role_decode_split_timing_off": true,
+    "default_pool_spin_us": 20000,
+    "prompt_tokens": 65536,
+    "batched_prefill_tokens": 65535,
+    "output_tokens": 1024,
+    "seed": 12345,
+    "residency": [
+      9900,
+      9178
+    ],
+    "adapt_every": 0,
+    "added_device_waits": false,
+    "expected_scopes": 17,
+    "bucket_rows": 130,
+    "thread_clock": "CLOCK_THREAD_CPUTIME_ID",
+    "wall_clock": "CLOCK_MONOTONIC",
+    "same_thread_depth_guard": true,
+    "max_scopes": 32,
+    "max_buckets_per_scope": 128,
+    "flush_after_existing_pipeline_drain": true,
+    "prompt_ms_includes_flush": true
+  },
+  "previous_CPU1_screen_failure_unchanged": true,
+  "promoted": false,
+  "publication_scope": {
+    "files": 3,
+    "raw_logs": false,
+    "private_paths": false,
+    "process_identities": false,
+    "credentials": false,
+    "model_payloads": false
+  },
+  "coverage_caveat": {
+    "instrumented": "six prefill.cpp sites",
+    "unmeasured_nested_calls": "gemm.cu guard:40-byte pageable-stack cudaMemcpyAsync then cudaStreamSynchronize under SCALE_PROBE+EXACT_INPUT",
+    "residual_is_non_synchronization_time": false,
+    "nested_guard_current_CPU_fraction": null,
+    "historical_different_build_API_trace_used_for_current_attribution": false
+  }
+}

@@ -160,3 +160,8 @@ Offline consistency validation passed, including 18 rejected corruption cases. F
 ## Peer-prefill CPU1: counter-gate failure, no qualification
 
 [Report](results/2026-10-10-gfx906-peer-prefill-cpu1/README.md) and [numeric metrics](results/2026-10-10-gfx906-peer-prefill-cpu1/metrics.json): baseline CPU0 role diagnosis led to a fixed C,A,B,B,A,C placement screen. All seven full 1,024-ID arrays and placement/restoration checks passed, but frozen-control C2 changed offered/lookups/hits/suffix work and the runner exited one. Descriptive PP differences **+2.086100% ON/OFF / +2.093669% ON/frozen** do not qualify the result; ON/OFF TG **-0.009673%** and its negative first pair independently fail the strict gate. **NO_QUALIFICATION**. Unpaired CPU/runqueue diagnostics are not causal speed or removable-wait estimates. No exclusion, rerun, promotion or deployment.
+
+
+## Prefill existing-wait attribution: diagnostic only
+
+[Report](results/2026-10-10-gfx906-prefill-sync-attribution/README.md) and [numeric metrics](results/2026-10-10-gfx906-prefill-sync-attribution/metrics.json): one independently audited diagnostic attributes **17.574090553 CPU-s / 10.336731%** of **170.015937957 stage-thread CPU-s** to six existing wait sites. The **152.441847404 CPU-s residual is unclassified**, not useful compute, launch or GPU time. All 1,024 IDs/work and 17 scopes/130 buckets passed. Main wall 94.475046155 s excludes the final peer tail; full span is 99.740547885 s. **DIAGNOSTIC_ONLY**: no speed, critical-path or performance qualification claim, and the rejected CPU1 screen remains unchanged.
