@@ -1,10 +1,10 @@
 # Dedicated Q2_0 K640 MMQ: resource and scheduling experiments
 
-**PARK_NO_MODEL_QUALIFICATION.** This separate dedicated-entrypoint follow-on to the [earlier runtime-tail experiment](../2026-10-10-gfx906-mmq-q2-k640-tail/README.md) tested three versions. V1 parked before GPU testing at 104 allocated VGPRs. V2 reached 64 VGPRs/zero spills and exact semantic replay, but increased eligible-cell latency by **26.195647–27.955291%**. V3 restored the original dot schedule with literal stride ten, reached 80 VGPRs/zero spills and exact semantic replay, but **14 of 16 eligible timing cells missed the frozen 5% component threshold**. Core savings were only **3.594554–4.471563%**, also below the separate 12% campaign threshold. No model build, model-throughput claim, promotion or deployment follows.
+**PARK_NO_MODEL_QUALIFICATION.** This separate dedicated-entrypoint follow-on to the [earlier runtime-tail experiment](../2026-10-10-gfx906-mmq-q2-k640-tail/README.md) tested four versions. V1 parked before GPU testing at 104 allocated VGPRs. V2 reached 64 VGPRs/zero spills and exact semantic replay, but increased eligible-cell latency by **26.195647–27.955291%**. V3 restored the original dot schedule with literal stride ten, reached 80 VGPRs/zero spills and exact semantic replay, but **14 of 16 eligible timing cells missed the frozen 5% component threshold**. Core savings were only **3.594554–4.471563%**, also below the separate 12% campaign threshold. V4 restored a shared loader and passed the isolated timing gate, but core savings **11.308692–11.600070%** still missed 12% everywhere. No model build, model-throughput claim, promotion or deployment follows.
 
 ## Dedicated entrypoint and scope
 
-The prior runtime-tail version modified the existing J32 kernel, including its compiled behavior on ineligible K values. This experiment instead adds one separately named Q2_0/J32/nonfallback kernel and one descriptor while preserving the original supported kernels. A separate helper executes a two-iteration populated prefix, then a peeled final populated half and the exact ordered scale-only padded half. The prefix is a loop; actual v1 ISA shows it was not unrolled. There is no runtime K/tail-choice branch in the dedicated tail.
+The prior runtime-tail version modified the existing J32 kernel, including its compiled behavior on ineligible K values. This experiment instead adds one separately named Q2_0/J32/nonfallback kernel and one descriptor while preserving the original supported kernels. In v1–v3, a separate helper executes a two-iteration populated prefix, then a peeled final populated half and the exact ordered scale-only padded half. The prefix is a loop; actual v1 ISA shows it was not unrolled. Those versions have no runtime K/tail-choice branch in the dedicated tail. V4 instead restores one shared loader loop and a uniform runtime tail guard, as detailed below.
 
 Host routing is restricted to gfx906, Q2_0, J32, nonfallback, non-stream-K, actual K640, M2560, row stride ten Q2 blocks, and non-null MoE IDs/expert bounds. Existing J/fallback selection remains authoritative. Other shapes and K values retain original symbols. Original K768 device code is byte/resource-identical; this does not prove zero host-dispatch or end-to-end overhead. The actual model's eligible launch histogram remains unknown.
 
@@ -82,13 +82,45 @@ Independent audit recomputed all statistics and verified full parity, route sele
 
 V2 and v3 each have their own paired comparison against the frozen baseline. They were separate runs, not a paired v2-versus-v3 trial. Likewise, the earlier runtime-tail core saving near 11% is historical context, not a contemporaneous head-to-head result. The resource counts and these timings do not isolate a causal register-count effect or prove which scheduling/loader difference explains the gap. No eligible model-frequency distribution, model-weighted savings or PP/TG extrapolation is established.
 
+## Dedicated v4: restored shared loader
+
+Source/ISA comparison of historical runtime-tail and peeled v3 found a concrete scheduling difference: the shared historical loader batches scalar scale loads, whereas v3's twice-executed prefix issues repeated scalar-load/wait pairs. The compared K640 bodies had identical counted arithmetic and loaded-byte operations but different issue/wait scheduling and code footprint. This supported a scheduling hypothesis, not a measured causal breakdown of the earlier timing gap.
+
+V4 keeps the separate dedicated entrypoint and unchanged narrow host predicate, but restores the historical shared-loop process helper with literal row stride ten. Actual ISA proves one machine loader shared by kb0=0,4,8, real scalar-load batching and the expected waits, without re-peeling. The uniform runtime tail guard is deliberately retained. Original dot ordering, real scale producers, ordered zero-tail updates and ten dynamic phase barriers are preserved. Scheduling diagnostics are not measured outstanding-memory counts or cycle savings.
+
+Actual v4 resources are **80 allocated VGPRs**, 40 SGPRs, **6,752 code bytes**, zero private bytes/spills and unchanged 24,000-byte LDS. Exact OFF object/module reproduction passed. All 46 original supported functions and 64 original descriptors, apart from entry displacement, remain unchanged. The raw scope failure and 21 separately proved same-callee stub relocations remain distinct, unmodified receipts. Independent admission required the shared-loader scheduling proof in addition to ABI, arithmetic, scale provenance, mode, barrier and read-bound checks; acceptable register count alone was insufficient.
+
+V4 then passed its fresh 28-case/140-launch-per-device raw-bit semantic replay, with 10,536,732 valid output words per compared arm across devices, exact cross-device outputs/quantizer and all route, guard/padding and cleanup checks. Its reused driver was bound to the new module and fresh admission; previous candidate correctness was not assumed. Finite-fixture, direct-symbol/host-wrapper, static-read-bound and sampled-admission limitations remain unchanged.
+
+### V4 timing: isolated pass, campaign still parked
+
+The fixed screen ran **2026-10-10T12:53:15.596746+00:00–2026-10-10T12:53:33.930614+00:00**. It used the unchanged v2 timing driver with new v4 module, shared-loader proof, semantic and harness bindings. The same five shapes, separate devices, hot/rotate4 regimes and 24 AB/BA pairs of 32-launch batches were retained; each device completed 15,725 launches. No calibration subtraction or selective rerun occurred.
+
+Median paired latency **saving**, percent (positive means faster):
+
+| Shape | GPU0 hot | GPU0 rotate4 | GPU1 hot | GPU1 rotate4 |
+| --- | ---: | ---: | ---: | ---: |
+| Core | 11.522192 | 11.353792 | 11.600070 | 11.308692 |
+| Sparse partial | 11.551792 | 11.578383 | 11.631979 | 11.574181 |
+| Full grouped | 12.493601 | 12.546483 | 12.655115 | 12.649421 |
+| Multi-tile | 12.043064 | 11.966537 | 12.075258 | 11.995501 |
+| K768 original-symbol control | -0.039299 | -0.033717 | 0.014778 | -0.038715 |
+
+All 20 cells passed unchanged stability/timer gates. All 16 eligible cells passed the >=5% median / >=2% bootstrap lower-endpoint component rule, and all four original-K768 controls passed their tolerance: **ISOLATED_SCREEN_PASS**. However, core medians were 11.308692–11.600070%, below the required 12% on both devices/regimes. Full-grouped savings of 12.493601–12.655115% do not compensate for that failure. The unchanged campaign rule therefore gives **PARK_NO_MODEL_QUALIFICATION**. No model qualification, promotion, deployment or further tuning is justified by this screen.
+
+The independent read-only actual audit derived its verdict dynamically from the unchanged thresholds and compared it with the raw summary. Its freshly persisted receipt records recomputation of all 20 medians and bootstrap intervals; the computed-output hash and raw-summary hash are also preserved. No raw or previous receipt was modified, and no expected outcome was used as a substitute for recomputation. Exported sample arrays and statistics in this report were checked against that receipt.
+
+Full raw parity, routes, quantizer/guards, cross-device equality, shared-loader and reused-driver bindings, admission and cleanup passed. The audit compared 693,273,600 output bytes, hashed 478 runtime files and checked 160 admission events; maximum observed temperature was 53 C. Small negative K768 savings remain visible. Source/ISA evidence verifies restored batching, but separate v3/v4 and historical runtime-tail runs do not provide paired cross-version timing or a quantitative causal attribution to that batching change. Unknown model frequency/coverage and all existing synthetic-suite/read-bound limitations remain.
+
 ## Provenance and public scope
 
-[metrics.json](metrics.json) preserves resource, scope, semantic and audit seals, plus all 40 v2/v3 timing cells with raw samples, calibration, intervals and unchanged gate definitions. The 478 timing-file counts describe runtime audit scope, not total archive membership. Stage-specific historical review decisions are retained as issued; later semantic/timing admission does not rewrite earlier failed raw scope receipts.
+[metrics.json](metrics.json) preserves resource, scope, semantic and audit seals, plus all 60 v2/v3/v4 timing cells with raw samples, calibration, intervals and unchanged gate definitions. The 478 timing-file counts describe runtime audit scope, not total archive membership. Stage-specific historical review decisions are retained as issued; later semantic/timing admission does not rewrite earlier failed raw scope receipts.
 
 - V2 timing archive: 68,316,094 bytes, SHA-256 eb75f47ff407eeedd225b8eda5f5e844872bffc116421b4730ce60a4c157215f
 - V3 timing archive: 68,316,510 bytes, SHA-256 553d8551eb047ef5ebadf13cfb71f6d5f159a7bf6f0b59e04307b543273b6e45
 - V2 independent actual timing audit: 1a46abdabb5ecdb42a5d8a4c6891074142019c14883bd73aa0179fb7346d858a
 - V3 independent actual timing audit: fe85db819212fc9d512cdc2d8e47e6b8c8990e44e502b538a7d84e3b775b2010
+- V4 timing archive: 68,315,844 bytes, SHA-256 b20ac8190734add4d1f6ccd3303e1bad99c2bc426cfc1903932229530d50e467
+- V4 independent read-only actual timing receipt: 88b360906924835738f209a2a8db5ac1d4d627ce263e9fce8b0b1c0d02b3e314
 
  Private host paths, credentials, model payloads and raw logs are excluded. Hashes identify retained private evidence, not a standalone public reproduction package. Only this report, numeric metrics and archive index are proposed for publication; runtime source, PR bodies, c183 model binary and stable ce deployment remain unchanged.
