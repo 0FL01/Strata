@@ -184,3 +184,7 @@ The [CPU profile](results/2026-10-10-gfx906-prefill-cpu-profile/README.md#follow
 ## 2026-10-10: release-local top-k REG2/FIT1 stack
 
 [Report](results/2026-10-10-gfx906-v0142-topk-stack/README.md) · [Metrics](results/2026-10-10-gfx906-v0142-topk-stack/metrics.json). Technical build/ISA/component/full-model checks PASS; strict performance screen FAIL. TG +2.564108% with positive pairs, but first PP companion pair -0.053470% violates the frozen rule (PP mean +0.113856%). All diagnostic and clean full IDs/work/capacity matched. The 56 internally checked component processes and isolated FIT17 latency reductions of 26.035077%/26.291777% are separate evidence. No promotion, retry, per-PR attribution or cross-release gain claim.
+
+## 2026-10-10: release-local primary-commit overlap
+
+[Report](results/2026-10-10-gfx906-v0142-primary-commit/README.md) · [Metrics](results/2026-10-10-gfx906-v0142-primary-commit/metrics.json). Technical validation PASS across eight processes / twelve exact requests; scientific performance FAIL. TG +1.242043% with positive pairs, but first PP companion pair -0.186609% violates the unchanged rule (PP mean +0.293981%). QON recorded 39 queues / 44 drains, then zero queues / one drain on the second cold request. Raw ELF equality remains false; a separate strict CUID structural proof passed. No rerun, promotion, top-k treatment or cross-release gain claim.

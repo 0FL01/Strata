@@ -1,0 +1,775 @@
+{
+  "OFF_flags": {
+    "DO_NOT_TRACK": "1",
+    "HF_HUB_DISABLE_TELEMETRY": "1",
+    "HIP_VISIBLE_DEVICES": "0,1",
+    "STRATA_ARENA_MMAP": "1",
+    "STRATA_ATTN_LANECELL": "0",
+    "STRATA_GDN_CONVL2": "1",
+    "STRATA_GDN_HEAD": "1",
+    "STRATA_GDN_NOY": "1",
+    "STRATA_GDN_PP": "2",
+    "STRATA_GFX906_ATTN_QUERY_SWIZZLE": "1",
+    "STRATA_GFX906_ATTN_REDUCE12": "1",
+    "STRATA_HIP_SWIGLU_FUSED": "1",
+    "STRATA_MMVF_ROWS": "1",
+    "STRATA_STAGE_TRIM": "1",
+    "STRATA_TSUM": "0"
+  },
+  "ON_flags": {
+    "DO_NOT_TRACK": "1",
+    "HF_HUB_DISABLE_TELEMETRY": "1",
+    "HIP_VISIBLE_DEVICES": "0,1",
+    "STRATA_ARENA_MMAP": "1",
+    "STRATA_ATTN_LANECELL": "0",
+    "STRATA_GDN_CONVL2": "1",
+    "STRATA_GDN_HEAD": "1",
+    "STRATA_GDN_NOY": "1",
+    "STRATA_GDN_PP": "2",
+    "STRATA_GFX906_ATTN_QUERY_SWIZZLE": "1",
+    "STRATA_GFX906_ATTN_REDUCE12": "1",
+    "STRATA_HIP_SWIGLU_FUSED": "1",
+    "STRATA_MMVF_ROWS": "1",
+    "STRATA_PRIMARY_COMMIT_OVERLAP": "1",
+    "STRATA_STAGE_TRIM": "1",
+    "STRATA_TSUM": "0"
+  },
+  "QSYNC_flags": {
+    "DO_NOT_TRACK": "1",
+    "HF_HUB_DISABLE_TELEMETRY": "1",
+    "HIP_VISIBLE_DEVICES": "0,1",
+    "STRATA_ARENA_MMAP": "1",
+    "STRATA_ATTN_LANECELL": "0",
+    "STRATA_COMMIT_SYNC": "0",
+    "STRATA_GDN_CONVL2": "1",
+    "STRATA_GDN_HEAD": "1",
+    "STRATA_GDN_NOY": "1",
+    "STRATA_GDN_PP": "2",
+    "STRATA_GFX906_ATTN_QUERY_SWIZZLE": "1",
+    "STRATA_GFX906_ATTN_REDUCE12": "1",
+    "STRATA_HIP_SWIGLU_FUSED": "1",
+    "STRATA_MMVF_ROWS": "1",
+    "STRATA_PRIMARY_COMMIT_OVERLAP": "1",
+    "STRATA_PRIMARY_COMMIT_TRACE": "1",
+    "STRATA_STAGE_TRIM": "1",
+    "STRATA_TSUM": "0"
+  },
+  "build": {
+    "admission_limits": [
+      "Build/static source admission only; separately reviewed runtime guard and native correctness controls required.",
+      "No throughput or overlap-correctness claim from compilation.",
+      "Raw ELF identity failed; structural ISA/ABI/resource equality is separately established without rewriting binaries.",
+      "CUID path hashing is supported by official Clang documentation; exact patched compiler source revision reproduction is not asserted."
+    ],
+    "all_device_payloads_isa_abi_resources_equal": true,
+    "baseline_binary_sha256": "572c7fb33c95d8b5c16803a8550abeab13eeccb9314136ae101ce61ecd605171",
+    "binaries": {
+      "gfx906_qsa_query_swizzle_probe": {
+        "bytes": 284752,
+        "mode": "0o755",
+        "path": "build/gfx906_qsa_query_swizzle_probe",
+        "sha256": "234ae3a8d7a9e5f88aca30759ee23c7f3ee9c40c8b0b8f1c7183744ead8843d1"
+      },
+      "strata": {
+        "bytes": 21905008,
+        "mode": "0o755",
+        "path": "build/strata",
+        "sha256": "3f96e7dc01728e49723ac3a6e91567d77557c65f59b05cea6083d98d464e3996"
+      },
+      "strata-device": {
+        "bytes": 53800,
+        "mode": "0o755",
+        "path": "build/strata-device",
+        "sha256": "61939fc690d425d0350bd72f3584acebbd4f4ad3e38b40f49b4e8663ba8abaf6"
+      }
+    },
+    "binary_sha256": "3f96e7dc01728e49723ac3a6e91567d77557c65f59b05cea6083d98d464e3996",
+    "build_host_receipt_sha256": "97822cf2d10cb9bfb2ee790f04294a95a7eaf7e52426222e097c2e0704a5577a",
+    "candidate_binary_sha256": "3f96e7dc01728e49723ac3a6e91567d77557c65f59b05cea6083d98d464e3996",
+    "candidate_inventory_sha256": "e194e7306307f1dfc3746ff6d9bbaf6175d15282cb79fd6482d3517a1c62b51e",
+    "cleanup_passed": true,
+    "collection_archive_bytes": 15302619,
+    "collection_archive_sha256": "d6e96896f1ac74f246ab948fce1cc8fbd464d50847d4441c22119f9649dc8097",
+    "collection_member_bytes": 60154347,
+    "collection_regular_members": 175,
+    "compile_commands": 191,
+    "compile_seconds": 394.72932839393616,
+    "decision": "PASS_RELEASE_PRIMARY_COMMIT_BUILD_AUDIT",
+    "device_difference_scope": "Only explicitly proven per-translation-unit CUID naming and corresponding string/symbol/hash bookkeeping; every other byte and relocation symbol relationship exact.",
+    "device_mutation_rejections": 1299,
+    "device_object_module_count": 61,
+    "device_proof_script_sha256": "e5bd3f4d64dd0c3e10495690d18c0d6bd52717f072ff06fca7307545d6b7944c",
+    "device_proof_sha256": "e1f5df122cc78b68cc80bd29eb2bb4361eeed478ee82dd976e61d61292294198",
+    "guard_sha256": "e0dd48649f3b73ee888e8cd828cec681d5ca8dfaf94248d68ce3b99fab783fe0",
+    "host_proof_sha256": "d409f4a4fff5cc4d8f70abcd0a6b4230ef5a4db6b46617720ad97584b44b6eee",
+    "host_receipt_sha256": "97822cf2d10cb9bfb2ee790f04294a95a7eaf7e52426222e097c2e0704a5577a",
+    "image": "sha256:bccb7ee7e7a78274519db9a43ba63c34ddd2e74bb60f8764a8f50aaee1f2c646",
+    "independent_device_proof_review_sha256": "2f7dbeedd95539fe3e6923e50a4a2e7e57277a32917c575afe6cbfbd613b6baa",
+    "kernel_descriptor_count": 1901,
+    "linked_engine_module_count": 56,
+    "linked_probe_module_count": 3,
+    "linked_runtime_dependencies_sha256": "54014c9ace671d139b9caaefaf874d3452eb9d1d4da9576d97e24273a94611ff",
+    "llama_commit": "3cf03257f219afbe7334045ff7c6a06ac68c627d",
+    "no_gpu_execution": true,
+    "passed": true,
+    "pinned_image": "sha256:bccb7ee7e7a78274519db9a43ba63c34ddd2e74bb60f8764a8f50aaee1f2c646",
+    "raw_byte_mismatch_preserved": true,
+    "raw_device_payload_bytes_equal": false,
+    "recipe_sha256": "11dbdee3e8fb0a941a305f8e7f6bcc78b0e0026ba0c14ff3b64f3dc963db7489",
+    "release_commit": "61b3fb5dd3f1e8ec09cf7e4e05208bc6d3c46406",
+    "release_source_archive_sha256": "fd23af35cf2d74111dfb8d70f3c4306b2a8479ec2121dcba3dc3b86e4b57dc0b",
+    "schema": "strata.release.primary.commit.actual.build.audit.v1",
+    "source_archive_sha256": "ad02be2d693e7491ee89bc5f914acda56e52b534c9fdf08da3e6e9e7e89ac8db",
+    "source_integrity_passed": true,
+    "source_manifest_sha256": "8ea01a8e9ed6f7b25797d1e733f3d2e91a9d09ff1a452cf41a437049bd7dba31",
+    "source_reference": "https://clang.llvm.org/docs/ClangCommandLineReference.html#cmdoption-clang-fuse-cuid",
+    "source_review_sha256": "ae69d2a5ece465d66277db5c5f59419eccb55a6b1efb6440115bd89cb3457add"
+  },
+  "build_audit_sha256": "dce3f9e1fc106b3d7bea16d4ed36c073433a662092b3dfc82ae19c410c671abd",
+  "common_environment": {
+    "DO_NOT_TRACK": "1",
+    "HF_HUB_DISABLE_TELEMETRY": "1",
+    "HIP_VISIBLE_DEVICES": "0,1",
+    "STRATA_ARENA_MMAP": "1",
+    "STRATA_ATTN_LANECELL": "0",
+    "STRATA_GDN_CONVL2": "1",
+    "STRATA_GDN_HEAD": "1",
+    "STRATA_GDN_NOY": "1",
+    "STRATA_GDN_PP": "2",
+    "STRATA_GFX906_ATTN_QUERY_SWIZZLE": "1",
+    "STRATA_GFX906_ATTN_REDUCE12": "1",
+    "STRATA_HIP_SWIGLU_FUSED": "1",
+    "STRATA_MMVF_ROWS": "1",
+    "STRATA_STAGE_TRIM": "1",
+    "STRATA_TSUM": "0"
+  },
+  "core": {
+    "available_work_exact": true,
+    "cold_requests": true,
+    "diagnostic_work": [
+      {
+        "accepted": 85,
+        "cache_hits": 70645,
+        "decode_windows": null,
+        "file_blobs": 0,
+        "file_read_mb": 0.0,
+        "lookup_chain_accepted": null,
+        "lookup_chain_offered": null,
+        "lookups": 73641,
+        "native_done_field_count": 16,
+        "native_suffix_accepted": null,
+        "native_suffix_offered": null,
+        "offered": 112,
+        "offloaded_experts": 0,
+        "optional_chain_counters_available": false,
+        "prompt_read": 4096,
+        "prompt_reused": 0,
+        "ram_blobs": 0,
+        "suffix_drafts": {
+          "accepted": 17,
+          "offered": 24,
+          "present": true,
+          "windows": 8
+        }
+      },
+      {
+        "accepted": 0,
+        "cache_hits": 324,
+        "decode_windows": null,
+        "file_blobs": 0,
+        "file_read_mb": 0.0,
+        "lookup_chain_accepted": null,
+        "lookup_chain_offered": null,
+        "lookups": 431,
+        "native_done_field_count": 16,
+        "native_suffix_accepted": null,
+        "native_suffix_offered": null,
+        "offered": 0,
+        "offloaded_experts": 0,
+        "optional_chain_counters_available": false,
+        "prompt_read": 4096,
+        "prompt_reused": 0,
+        "ram_blobs": 0,
+        "suffix_drafts": {
+          "accepted": 0,
+          "offered": 0,
+          "present": false,
+          "windows": 0
+        }
+      }
+    ],
+    "distinct_processes": 8,
+    "full_ids_exact": true,
+    "metrics": {
+      "PP": {
+        "gain_pct": 0.293980621652179,
+        "off_mean": 621.81699634498,
+        "on_mean": 623.6450178163739,
+        "paired_gain_pct": [
+          -0.18660921918023377,
+          0.7787195067380015
+        ],
+        "rates": {
+          "A1": 624.4896053392641,
+          "A2": 619.1443873506958,
+          "B1": 623.3242501628788,
+          "B2": 623.965785469869
+        }
+      },
+      "TG": {
+        "gain_pct": 1.242042898803386,
+        "off_mean": 51.088791205575234,
+        "on_mean": 51.723335908828574,
+        "paired_gain_pct": [
+          1.226761289539935,
+          1.257350528733303
+        ],
+        "rates": {
+          "A1": 51.132249769056,
+          "A2": 51.04533264209446,
+          "B1": 51.75952041569365,
+          "B2": 51.687151401963504
+        }
+      }
+    },
+    "no_pending_at_done_or_next_request": true,
+    "passed": true,
+    "raw_requests": 12,
+    "rejection": "TG mean and both TG pairs pass; first PP companion pair is negative.",
+    "scientific_screen_passed": false,
+    "stable_capacity_exact": true,
+    "stable_info": {
+      "arena_mib": "32400",
+      "context": "204800",
+      "conversation_cache_mib": "4096",
+      "conversation_cache_min_free_mib": "8192",
+      "conversation_cache_min_tokens": "0",
+      "conversation_cache_slots": "4",
+      "cvec": "0",
+      "engine": "0.1.42",
+      "expert_cache_mib": "25150",
+      "expert_cache_primary_mib": "13051",
+      "expert_slots": "19078",
+      "expert_slots_primary": "9900",
+      "kv": "int8",
+      "kv_resident": "32768",
+      "logit_bias": "1",
+      "lookup": "3",
+      "mtp_max": "4",
+      "pcie_frac": "0.00",
+      "pool_workers": "15",
+      "spec": "6",
+      "spec_min_p": "0.50",
+      "tail_role_token": "-1",
+      "vram_elastic": "0"
+    },
+    "timing_work": {
+      "accepted": 678,
+      "cache_hits": 548429,
+      "decode_windows": null,
+      "file_blobs": 0,
+      "file_read_mb": 0.0,
+      "lookup_chain_accepted": null,
+      "lookup_chain_offered": null,
+      "lookups": 569246,
+      "native_done_field_count": 16,
+      "native_suffix_accepted": null,
+      "native_suffix_offered": null,
+      "offered": 862,
+      "offloaded_experts": 0,
+      "optional_chain_counters_available": false,
+      "prompt_read": 65536,
+      "prompt_reused": 0,
+      "ram_blobs": 0,
+      "suffix_drafts": {
+        "accepted": 3,
+        "offered": 8,
+        "present": true,
+        "windows": 2
+      }
+    },
+    "trace_counts": {
+      "A1": [],
+      "A2": [],
+      "B1": [],
+      "B2": [],
+      "QBASE": [],
+      "QOFF": [
+        {
+          "drained": 0,
+          "kept": 0,
+          "queued": 0,
+          "self_commit_drains": 0
+        },
+        {
+          "drained": 0,
+          "kept": 0,
+          "queued": 0,
+          "self_commit_drains": 0
+        }
+      ],
+      "QON": [
+        {
+          "drained": 44,
+          "kept": 124,
+          "queued": 39,
+          "self_commit_drains": 5
+        },
+        {
+          "drained": 1,
+          "kept": 0,
+          "queued": 0,
+          "self_commit_drains": 1
+        }
+      ],
+      "QSYNC": [
+        {
+          "drained": 0,
+          "kept": 0,
+          "queued": 0,
+          "self_commit_drains": 0
+        },
+        {
+          "drained": 0,
+          "kept": 0,
+          "queued": 0,
+          "self_commit_drains": 0
+        }
+      ]
+    },
+    "trace_prefixes_exact": true
+  },
+  "core_metrics_sha256": "e7e9d656766a862a80b3ad37fb98c5f82b1855c7a610c3241106a1e2b23dc0c0",
+  "decision": "TECHNICAL_PASS_SCIENTIFIC_FAIL",
+  "experiment": "v0.1.42 primary-commit overlap release-local screen",
+  "method": {
+    "affinity_changes": false,
+    "arm_timeout_s": 600,
+    "automatic_retries": 0,
+    "cooldown_timeout_s": 900,
+    "diagnostic_outputs": [
+      128,
+      1
+    ],
+    "diagnostic_prompt": 4096,
+    "gate": ">=1pct mean PP or TG; winning metric bothpairs positive; companion mean and bothpairs nonnegative",
+    "historical_c183_expected_data": false,
+    "order": [
+      "QBASE",
+      "QOFF",
+      "QON",
+      "QSYNC",
+      "A1",
+      "B1",
+      "B2",
+      "A2"
+    ],
+    "overall_timeout_s": 10800,
+    "profiling": false,
+    "promoted": false,
+    "seed": 12345,
+    "shutdown_timeout_s": 60,
+    "timing_outputs": 1024,
+    "timing_prompt": 65536
+  },
+  "minimum_thermal_margin_celsius": 9,
+  "peak_sensor_celsius": 81,
+  "performance_qualified": false,
+  "promoted": false,
+  "runtime": {
+    "api_left_stopped": true,
+    "archive": {
+      "all_member_hashes_verified": true,
+      "bytes": 244736,
+      "name": "v0142-primary-commit-screen-v1-receipts-20261010.tar.gz",
+      "regular_members": 121,
+      "safe_manual_extraction": true,
+      "sha256": "a24f5cceb4aae9ae01dd4c13bcec96972c5adb01fde9706e4875d6642d3f1983",
+      "uncompressed_bytes": 1866956
+    },
+    "automatic_retry": false,
+    "available_work_exact": true,
+    "baseline_binary_sha256": "572c7fb33c95d8b5c16803a8550abeab13eeccb9314136ae101ce61ecd605171",
+    "build_admission_sha256": "dce3f9e1fc106b3d7bea16d4ed36c073433a662092b3dfc82ae19c410c671abd",
+    "candidate_binary_sha256": "3f96e7dc01728e49723ac3a6e91567d77557c65f59b05cea6083d98d464e3996",
+    "clean_timing_trace_free": true,
+    "cleanup_passed": true,
+    "cold_requests": true,
+    "collection_receipt_sha256": "637338042a48029e6a2368e17cb0dcab3bf048d539fb22f6198e9906d6d0f07c",
+    "collector_sha256": "07ff51e4f161a85c04d3a51bb60a3df7394b4604227ffdca1a37dd9e6f49e95d",
+    "completed": true,
+    "controller_only": true,
+    "cpu0_and_thread_identity_preserved": true,
+    "decision": "PASS_ACTUAL_PRIMARY_COMMIT_EVIDENCE_AUDIT_SCIENTIFIC_FAIL",
+    "diagnostic_outputs_per_process": [
+      128,
+      1
+    ],
+    "diagnostic_prompt_tokens": 4096,
+    "diagnostic_work": [
+      {
+        "accepted": 85,
+        "cache_hits": 70645,
+        "decode_windows": null,
+        "file_blobs": 0,
+        "file_read_mb": 0.0,
+        "lookup_chain_accepted": null,
+        "lookup_chain_offered": null,
+        "lookups": 73641,
+        "native_done_field_count": 16,
+        "native_suffix_accepted": null,
+        "native_suffix_offered": null,
+        "offered": 112,
+        "offloaded_experts": 0,
+        "optional_chain_counters_available": false,
+        "prompt_read": 4096,
+        "prompt_reused": 0,
+        "ram_blobs": 0,
+        "suffix_drafts": {
+          "accepted": 17,
+          "offered": 24,
+          "present": true,
+          "windows": 8
+        }
+      },
+      {
+        "accepted": 0,
+        "cache_hits": 324,
+        "decode_windows": null,
+        "file_blobs": 0,
+        "file_read_mb": 0.0,
+        "lookup_chain_accepted": null,
+        "lookup_chain_offered": null,
+        "lookups": 431,
+        "native_done_field_count": 16,
+        "native_suffix_accepted": null,
+        "native_suffix_offered": null,
+        "offered": 0,
+        "offloaded_experts": 0,
+        "optional_chain_counters_available": false,
+        "prompt_read": 4096,
+        "prompt_reused": 0,
+        "ram_blobs": 0,
+        "suffix_drafts": {
+          "accepted": 0,
+          "offered": 0,
+          "present": false,
+          "windows": 0
+        }
+      }
+    ],
+    "distinct_native_processes": 8,
+    "exact_native_flags": true,
+    "exit_code": 0,
+    "files": {
+      "audit_actual.py": {
+        "bytes": 11499,
+        "sha256": "8b2842296c94a9d9002caac1b0df60e28cdaf2fdbd58022d2ab69be069afddde"
+      },
+      "audit_safety.py": {
+        "bytes": 7561,
+        "sha256": "c35ca6cde5aaa99d275578f81fef89f1a5b1412241ca9941a66460aff2862e5f"
+      },
+      "core-audit.json": {
+        "bytes": 4606,
+        "sha256": "e7e9d656766a862a80b3ad37fb98c5f82b1855c7a610c3241106a1e2b23dc0c0"
+      },
+      "core-audit.stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "core-audit.stdout": {
+        "bytes": 1157,
+        "sha256": "21cdaab5a0515a06d55275d08ccae316c2fe2d33c950dd98049a16db45df2831"
+      },
+      "extraction.json": {
+        "bytes": 301,
+        "sha256": "16f06a1a281e683c2aba433ebdca4134d493ee38fb07367951aaf6188aa39ca4"
+      },
+      "safety-audit.json": {
+        "bytes": 2108,
+        "sha256": "2c05172066a76dec750a40626148be9f7af5292c8803c88112d61206af00312d"
+      },
+      "safety-audit.stderr": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "safety-audit.stdout": {
+        "bytes": 3283,
+        "sha256": "517ce3ae3b51f9c3e5b3cb104d729272b0dde9c5fcacde7ac6b84db7f06131a5"
+      }
+    },
+    "final_all_container_query_empty": true,
+    "final_gpu": [
+      {
+        "freq1_input": 1299000000,
+        "freq2_input": 1000000000,
+        "mode": "high",
+        "power1_cap": 190000000,
+        "power1_input": 28000000,
+        "temp1_input": 46000,
+        "temp2_input": 50000,
+        "temp3_input": 47000
+      },
+      {
+        "freq1_input": 1298000000,
+        "freq2_input": 1000000000,
+        "mode": "high",
+        "power1_cap": 190000000,
+        "power1_input": 29000000,
+        "temp1_input": 45000,
+        "temp2_input": 49000,
+        "temp3_input": 51000
+      }
+    ],
+    "final_gpu_busy_zero": true,
+    "finished_utc": "2026-10-10T20:46:58.165142+00:00",
+    "fixed_order": [
+      "QBASE",
+      "QOFF",
+      "QON",
+      "QSYNC",
+      "A1",
+      "B1",
+      "B2",
+      "A2"
+    ],
+    "force_sync_presence_override_verified": true,
+    "full_output_ids_exact": true,
+    "lane_cell_zero": true,
+    "limitations": [
+      "Host trace proves source-bound queue and successful drain observations, not a per-device kernel branch counter or measured overlap duration.",
+      "drafted1 includes skipped drafts; no actual EOS, GPU fault-injection or failure-path runtime claim.",
+      "The two diagnostic requests reuse engine/verifier resources with cold prompts; this is not conversation-cache reuse or production restore coverage.",
+      "Stderr-prefix snapshots and source program order establish the admission boundary; no precise cross-stream stdout/stderr timestamp ordering is inferred.",
+      "Only one fixed64K1024 ABBA screen was run; no significance, broader workload or production-readiness claim.",
+      "Raw full device-ELF byte equality remains false; the admitted independent build proof establishes exact ISA/global-data/ABI/resource content with CUID bookkeeping differences."
+    ],
+    "metrics": {
+      "PP": {
+        "gain_pct": 0.293980621652179,
+        "off_mean": 621.81699634498,
+        "on_mean": 623.6450178163739,
+        "paired_gain_pct": [
+          -0.18660921918023377,
+          0.7787195067380015
+        ],
+        "rates": {
+          "A1": 624.4896053392641,
+          "A2": 619.1443873506958,
+          "B1": 623.3242501628788,
+          "B2": 623.965785469869
+        }
+      },
+      "TG": {
+        "gain_pct": 1.242042898803386,
+        "off_mean": 51.088791205575234,
+        "on_mean": 51.723335908828574,
+        "paired_gain_pct": [
+          1.226761289539935,
+          1.257350528733303
+        ],
+        "rates": {
+          "A1": 51.132249769056,
+          "A2": 51.04533264209446,
+          "B1": 51.75952041569365,
+          "B2": 51.687151401963504
+        }
+      }
+    },
+    "mi50_contact_by_reviewer": false,
+    "minimum_margin_to_reviewed_stop_limit_millidegrees": 9000,
+    "no_pending_at_DONE_or_next_request": true,
+    "other_topk_or_c183_flags_absent": true,
+    "passed": true,
+    "post_DONE_suffix_summaries_reconciled": true,
+    "power_settings_unchanged": true,
+    "profiling_absent": true,
+    "promotion_eligible": false,
+    "query_swizzle_and_reduce12_enabled": true,
+    "raw_requests": 12,
+    "reviewed_utc": "2026-10-10T20:54:53.667950+00:00",
+    "runner_review_sha256": "9bd1f7a4183f6e31375bfe53f132b1e937e669be43c3283eaa367e162f462548",
+    "runtime_manifest_sha256": "3c16ac0d95f8cea5b7c04479eda58e73f94630d03f346cb6747d4ffbd39f9433",
+    "schema": "strata.release.primary.commit.actual.screen.audit.v1",
+    "scientific_rejection": "TG improves1.242042898803386 percent with both matched TG pairs positive; the first PP companion pair regresses0.18660921918023377 percent, violating the prespecified nonnegative companion-pair condition. PP mean is below1 percent. No rerun, exclusion, tolerance change or promotion.",
+    "scientific_screen_passed": false,
+    "source_review_sha256": "ae69d2a5ece465d66277db5c5f59419eccb55a6b1efb6440115bd89cb3457add",
+    "stable_capacity_exact": true,
+    "stable_info": {
+      "arena_mib": "32400",
+      "context": "204800",
+      "conversation_cache_mib": "4096",
+      "conversation_cache_min_free_mib": "8192",
+      "conversation_cache_min_tokens": "0",
+      "conversation_cache_slots": "4",
+      "cvec": "0",
+      "engine": "0.1.42",
+      "expert_cache_mib": "25150",
+      "expert_cache_primary_mib": "13051",
+      "expert_slots": "19078",
+      "expert_slots_primary": "9900",
+      "kv": "int8",
+      "kv_resident": "32768",
+      "logit_bias": "1",
+      "lookup": "3",
+      "mtp_max": "4",
+      "pcie_frac": "0.00",
+      "pool_workers": "15",
+      "spec": "6",
+      "spec_min_p": "0.50",
+      "tail_role_token": "-1",
+      "vram_elastic": "0"
+    },
+    "staging_helper_sha256": "82e8a0cfb410d62e8ef1ebcaee64488052a69bc10bebb9cd5e8295ab5d2ff79e",
+    "started_utc": "2026-10-10T20:32:38.383954+00:00",
+    "technical_validation_passed": true,
+    "timing_ms": {
+      "A1": {
+        "decode_ms": 20026.5,
+        "prompt_ms": 104943.3
+      },
+      "A2": {
+        "decode_ms": 20060.6,
+        "prompt_ms": 105849.3
+      },
+      "B1": {
+        "decode_ms": 19783.8,
+        "prompt_ms": 105139.5
+      },
+      "B2": {
+        "decode_ms": 19811.5,
+        "prompt_ms": 105031.4
+      }
+    },
+    "timing_outputs_per_process": 1024,
+    "timing_prompt_tokens": 65536,
+    "timing_work": {
+      "accepted": 678,
+      "cache_hits": 548429,
+      "decode_windows": null,
+      "file_blobs": 0,
+      "file_read_mb": 0.0,
+      "lookup_chain_accepted": null,
+      "lookup_chain_offered": null,
+      "lookups": 569246,
+      "native_done_field_count": 16,
+      "native_suffix_accepted": null,
+      "native_suffix_offered": null,
+      "offered": 862,
+      "offloaded_experts": 0,
+      "optional_chain_counters_available": false,
+      "prompt_read": 65536,
+      "prompt_reused": 0,
+      "ram_blobs": 0,
+      "suffix_drafts": {
+        "accepted": 3,
+        "offered": 8,
+        "present": true,
+        "windows": 2
+      }
+    },
+    "total_output_tokens_verified": 4612,
+    "trace_counts": {
+      "A1": [],
+      "A2": [],
+      "B1": [],
+      "B2": [],
+      "QBASE": [],
+      "QOFF": [
+        {
+          "drained": 0,
+          "kept": 0,
+          "queued": 0,
+          "self_commit_drains": 0
+        },
+        {
+          "drained": 0,
+          "kept": 0,
+          "queued": 0,
+          "self_commit_drains": 0
+        }
+      ],
+      "QON": [
+        {
+          "drained": 44,
+          "kept": 124,
+          "queued": 39,
+          "self_commit_drains": 5
+        },
+        {
+          "drained": 1,
+          "kept": 0,
+          "queued": 0,
+          "self_commit_drains": 1
+        }
+      ],
+      "QSYNC": [
+        {
+          "drained": 0,
+          "kept": 0,
+          "queued": 0,
+          "self_commit_drains": 0
+        },
+        {
+          "drained": 0,
+          "kept": 0,
+          "queued": 0,
+          "self_commit_drains": 0
+        }
+      ]
+    },
+    "trace_prefixes_verified": 12
+  },
+  "runtime_audit_sha256": "b4dfa2cf0d9af4d825af19b7d219f738879e94be83bdb09a45c0302ed9b9e8bf",
+  "source": {
+    "abstract_fault_model_cases": 16,
+    "baseline_build_audit_sha256": "0ceb6319bc6632c9f56ed2aba96564655fc3e8de59df3739f13736ac08e30030",
+    "baseline_engine_sha256": "572c7fb33c95d8b5c16803a8550abeab13eeccb9314136ae101ce61ecd605171",
+    "candidate_inventory_sha256": "e194e7306307f1dfc3746ff6d9bbaf6175d15282cb79fd6482d3517a1c62b51e",
+    "checks": [
+      "Exact27regular-member archive, inventory and2959candidate files verified; three-file delta only.",
+      "Every added/removed source line matches donor, context-only changes preserve release memory header and auxiliary-thread pinning.",
+      "Default unset flag preserves baseline semantics; overlap and trace are presence-based; COMMIT_SYNC presence overrides.",
+      "Eligibility requires HIP/gfx906 exact architecture match on two distinct devices, serial serving MTP, no batch/pipeline/shared-device mode; query errors fail closed.",
+      "Actual release sets commit_async(!multi_gpu), so eligible two-device secondary commit remains synchronous; defer flag is not recursively propagated.",
+      "MTP is loaded under last-stage device context and reads final-stage residual/session; primary host PLE history advances before draft.",
+      "Live ownership starts after successful graph launch; reuse rejected before mapped parameter writes and before next run/capture; failed event record has stream fallback.",
+      "Failed wait retains live ownership unless confirmed fallback fence; original error is preserved even if fallback succeeds.",
+      "Explicit postdraft drain covers skipped/EOS/maximum-token/failed draft before release PCIe-auto work, joins and exits; commit failure and scope unwinding attempt drain.",
+      "Capture, staging, memory fence, arithmetic and all GPU-source files unchanged; nonserve caller unchanged.",
+      "Recipe preserves release configuration and three targets,2jobs,offline dependency and compile-only scope."
+    ],
+    "compiled_mock_eligibility_cases": 66,
+    "conditions": [
+      "Separately reviewed outer guard before root build: UID1000,noGPU/noNetwork,read-only inputs,fresh output,sharedlock,60min/4CPU/16GiB/2jobs,preflight before permanent marker,ownedcleanup.",
+      "Actual host object/link/source provenance and all GPU instructions/global data/ABI/resources compare against pristine release; unexplained changes stop.",
+      "Fresh release default-OFF equivalence, ON/force-sync eligibility and drain-count/lifecycle runtime checks before trace-free timing.",
+      "One unchanged strict1pct ABBA gate; no historical gain used as release admission."
+    ],
+    "decision": "PASS_PRIMARY_COMMIT_SOURCE_AND_RECIPE_FOR_ROOT_COMPILE_ONLY",
+    "donor_patch_sha256": "3c87611bd665e3cd4a3525d1536977e2c7a7b8ce22730fc8fa4c8ea36f532d90",
+    "engine_compile": false,
+    "gpu_execution": false,
+    "limits": [
+      "CPU mocks and abstract models are not GPU fault injection or actual runtime correctness.",
+      "RAII and inherited destructor attempt drains; fatal GPU errors or host termination do not guarantee successful cleanup/recovery.",
+      "Host ABI/layout changes, added checks and timings are not byte-identical or proven zero-overhead.",
+      "Presence0 enables overlap; runtime OFF must unset variable.",
+      "No current release performance/promotion/API admission."
+    ],
+    "mi50_contact": false,
+    "passed": true,
+    "patch_sha256": "6fbc2b73f985e3a5d5f735ec2b724c14dd314392f96c99e65468dfa6d832ff40",
+    "pinned_image": "sha256:bccb7ee7e7a78274519db9a43ba63c34ddd2e74bb60f8764a8f50aaee1f2c646",
+    "recipe_sha256": "11dbdee3e8fb0a941a305f8e7f6bcc78b0e0026ba0c14ff3b64f3dc963db7489",
+    "release_commit": "61b3fb5dd3f1e8ec09cf7e4e05208bc6d3c46406",
+    "release_context_tests": 9,
+    "release_source_archive_sha256": "fd23af35cf2d74111dfb8d70f3c4306b2a8479ec2121dcba3dc3b86e4b57dc0b",
+    "source_archive_bytes": 459355,
+    "source_archive_sha256": "ad02be2d693e7491ee89bc5f914acda56e52b534c9fdf08da3e6e9e7e89ac8db",
+    "source_manifest_sha256": "8ea01a8e9ed6f7b25797d1e733f3d2e91a9d09ff1a452cf41a437049bd7dba31",
+    "source_sha256sums_sha256": "2a58d8b807093466eef97c16fa5f1f04faab8c5b7f39e98b718e10d4ef78b876"
+  },
+  "source_audit_sha256": "ae69d2a5ece465d66277db5c5f59419eccb55a6b1efb6440115bd89cb3457add"
+}
