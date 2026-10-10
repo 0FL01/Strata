@@ -180,3 +180,7 @@ The [CPU profile](results/2026-10-10-gfx906-prefill-cpu-profile/README.md#follow
 ## 2026-10-10: clean v0.1.42 release validation
 
 [Report](results/2026-10-10-gfx906-v0142-release-validation/README.md) · [Metrics](results/2026-10-10-gfx906-v0142-release-validation/metrics.json). Pristine release 61b3fb5, same-binary combined query-swizzle/reduce12 OFF/ON: 4K/128 trace parity and cold 64K/1024 ABBA exact full IDs/available work; both fixed gates PASS. PP +4.593492%, TG +1.816550%, both pairs positive. Separate two-GPU component parity covers 26 full dumps and 36.186048%/36.131370% component latency reduction. Release-local validation only; no c183 speed comparison, individual-flag model attribution, service promotion or 200K qualification.
+
+## 2026-10-10: release-local top-k REG2/FIT1 stack
+
+[Report](results/2026-10-10-gfx906-v0142-topk-stack/README.md) · [Metrics](results/2026-10-10-gfx906-v0142-topk-stack/metrics.json). Technical build/ISA/component/full-model checks PASS; strict performance screen FAIL. TG +2.564108% with positive pairs, but first PP companion pair -0.053470% violates the frozen rule (PP mean +0.113856%). All diagnostic and clean full IDs/work/capacity matched. The 56 internally checked component processes and isolated FIT17 latency reductions of 26.035077%/26.291777% are separate evidence. No promotion, retry, per-PR attribution or cross-release gain claim.
