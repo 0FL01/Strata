@@ -176,3 +176,7 @@ Offline consistency validation passed, including 18 rejected corruption cases. F
 [Report](results/2026-10-10-gfx906-hip-blocking-sync/README.md) · [Metrics](results/2026-10-10-gfx906-hip-blocking-sync/metrics.json). Technical execution and all seven arms' exact outputs/available work passed; performance qualification failed. Descriptive PP: +1.284241% ON/OFF and +1.327069% ON/frozen; companion TG: -0.006305% and -0.103285%. D0 CPU is full-request and lacks a matched OFF CPU trace. No promotion.
 
 The [CPU profile](results/2026-10-10-gfx906-prefill-cpu-profile/README.md#follow-on-offline-unwind-check-append-only-caveat) also adds the same-capture selective offline check: 509 selected samples recovered frames, mostly leaf-only; caller attribution remains incomplete and no speed evidence was added.
+
+## 2026-10-10: clean v0.1.42 release validation
+
+[Report](results/2026-10-10-gfx906-v0142-release-validation/README.md) · [Metrics](results/2026-10-10-gfx906-v0142-release-validation/metrics.json). Pristine release 61b3fb5, same-binary combined query-swizzle/reduce12 OFF/ON: 4K/128 trace parity and cold 64K/1024 ABBA exact full IDs/available work; both fixed gates PASS. PP +4.593492%, TG +1.816550%, both pairs positive. Separate two-GPU component parity covers 26 full dumps and 36.186048%/36.131370% component latency reduction. Release-local validation only; no c183 speed comparison, individual-flag model attribution, service promotion or 200K qualification.

@@ -1,0 +1,1283 @@
+{
+  "OFF_flags": {
+    "DO_NOT_TRACK": "1",
+    "HF_HUB_DISABLE_TELEMETRY": "1",
+    "HIP_VISIBLE_DEVICES": "0,1",
+    "STRATA_ARENA_MMAP": "1",
+    "STRATA_ATTN_LANECELL": "0",
+    "STRATA_GDN_CONVL2": "1",
+    "STRATA_GDN_HEAD": "1",
+    "STRATA_GDN_NOY": "1",
+    "STRATA_GDN_PP": "2",
+    "STRATA_GFX906_ATTN_QUERY_SWIZZLE": "0",
+    "STRATA_GFX906_ATTN_REDUCE12": "0",
+    "STRATA_HIP_SWIGLU_FUSED": "1",
+    "STRATA_MMVF_ROWS": "1",
+    "STRATA_STAGE_TRIM": "1",
+    "STRATA_TSUM": "0"
+  },
+  "ON_flags": {
+    "DO_NOT_TRACK": "1",
+    "HF_HUB_DISABLE_TELEMETRY": "1",
+    "HIP_VISIBLE_DEVICES": "0,1",
+    "STRATA_ARENA_MMAP": "1",
+    "STRATA_ATTN_LANECELL": "0",
+    "STRATA_GDN_CONVL2": "1",
+    "STRATA_GDN_HEAD": "1",
+    "STRATA_GDN_NOY": "1",
+    "STRATA_GDN_PP": "2",
+    "STRATA_GFX906_ATTN_QUERY_SWIZZLE": "1",
+    "STRATA_GFX906_ATTN_REDUCE12": "1",
+    "STRATA_HIP_SWIGLU_FUSED": "1",
+    "STRATA_MMVF_ROWS": "1",
+    "STRATA_STAGE_TRIM": "1",
+    "STRATA_TSUM": "0"
+  },
+  "build": {
+    "archive_bytes": 6799192,
+    "archive_sha256": "fb29806384ba8e7c3d6acbdd72365c1c2a9a3839cbe870e6f0ede6cf98097c4a",
+    "binaries": {
+      "gfx906_qsa_query_swizzle_probe": {
+        "bytes": 284752,
+        "mode": "0o755",
+        "path": "build/gfx906_qsa_query_swizzle_probe",
+        "sha256": "194be0198a8006e89b0f8f88fd4d93d56db7c0f2b6cd5087bda04862284650a1"
+      },
+      "strata": {
+        "bytes": 21902416,
+        "mode": "0o755",
+        "path": "build/strata",
+        "sha256": "572c7fb33c95d8b5c16803a8550abeab13eeccb9314136ae101ce61ecd605171"
+      },
+      "strata-device": {
+        "bytes": 53800,
+        "mode": "0o755",
+        "path": "build/strata-device",
+        "sha256": "75c689f4e52482df5b3be8dd821d4a6aa9b223e1738391979d5dea0ca9930809"
+      }
+    },
+    "build_duration_seconds": 400.81139087677,
+    "build_host_receipt_sha256": "c74c145f12c8e51c682469da1dd8b1a5de52e124d52960a001008de802a74d0b",
+    "cleanup_passed": true,
+    "compile_commands_count": 191,
+    "configured": {
+      "CMAKE_BUILD_TYPE": "Release",
+      "CMAKE_GENERATOR": "Unix Makefiles",
+      "CMAKE_HIP_ARCHITECTURES": "gfx906",
+      "FETCHCONTENT_FULLY_DISCONNECTED": "ON",
+      "GGML_AMX_TILE": "OFF",
+      "GGML_AVX2": "ON",
+      "GGML_AVX512": "OFF",
+      "GGML_BMI2": "ON",
+      "GGML_F16C": "ON",
+      "GGML_FMA": "ON",
+      "GGML_NATIVE": "OFF",
+      "STRATA_BUILD_TESTS": "OFF",
+      "STRATA_ENABLE_CUDA": "ON",
+      "STRATA_ENABLE_HIP": "OFF",
+      "STRATA_ENABLE_SYCL": "OFF",
+      "STRATA_HIP_GFX906": "ON",
+      "STRATA_MMQ_KQUANTS": "OFF",
+      "STRATA_NATIVE_EXPERTS": "ON",
+      "STRATA_ORCA_Q4KS_MMQ": "OFF",
+      "STRATA_PORTABLE": "ON",
+      "STRATA_PREFILL_MMQ": "OFF",
+      "STRATA_Q6K_EXPERTS": "OFF"
+    },
+    "decision": "PASS_CLEAN_RELEASE_BUILD_AUDIT",
+    "guard_sha256": "34772f89ba76363b798a6188bc33b7895054dae21b8bcd56432e9ae9ff8cda95",
+    "host_receipt_sha256": "c74c145f12c8e51c682469da1dd8b1a5de52e124d52960a001008de802a74d0b",
+    "image": "sha256:bccb7ee7e7a78274519db9a43ba63c34ddd2e74bb60f8764a8f50aaee1f2c646",
+    "limitations": [
+      "Runtime libraries were not executed or resolved on controller. ELF SONAMEs and link inputs are bound; use the same pinned image with no host library overlays.",
+      "Source trees/objects/static archives were intentionally excluded from receipt transfer; immutable source package and guarded pre/post integrity provide source provenance.",
+      "Build PASS does not establish numerical parity, runtime safety admission or performance."
+    ],
+    "linked_runtime_sonames": {
+      "gfx906_qsa_query_swizzle_probe": [
+        "libamdhip64.so.7",
+        "libstdc++.so.6",
+        "libm.so.6",
+        "libgcc_s.so.1",
+        "libc.so.6"
+      ],
+      "strata": [
+        "libhipblas.so.3",
+        "libamdhip64.so.7",
+        "libm.so.6",
+        "libstdc++.so.6",
+        "libgcc_s.so.1",
+        "libc.so.6"
+      ],
+      "strata-device": [
+        "libamdhip64.so.7",
+        "libstdc++.so.6",
+        "libm.so.6",
+        "libgcc_s.so.1",
+        "libc.so.6"
+      ]
+    },
+    "llama_commit": "3cf03257f219afbe7334045ff7c6a06ac68c627d",
+    "native_mmq_translation_units": [
+      "mmq-instance-iq2_s.cu",
+      "mmq-instance-iq2_xs.cu",
+      "mmq-instance-iq2_xxs.cu",
+      "mmq-instance-iq3_s.cu",
+      "mmq-instance-iq3_xxs.cu",
+      "mmq-instance-iq4_nl.cu",
+      "mmq-instance-iq4_xs.cu",
+      "mmq-instance-q2_0.cu",
+      "mmq-instance-q8_0.cu"
+    ],
+    "no_gpu_execution": true,
+    "passed": true,
+    "pinned_image": "sha256:bccb7ee7e7a78274519db9a43ba63c34ddd2e74bb60f8764a8f50aaee1f2c646",
+    "probe_binary_sha256": "194be0198a8006e89b0f8f88fd4d93d56db7c0f2b6cd5087bda04862284650a1",
+    "quantizer_avx2_compilation_verified": true,
+    "raw_members": 50,
+    "recipe_override_sha256": "d4435d82b0f7e1aa1ed93b634c9a916eb4fb01a59ae0808c45c7b5446ce7f458",
+    "release_commit": "61b3fb5dd3f1e8ec09cf7e4e05208bc6d3c46406",
+    "runtime_admission": false,
+    "source_archive_sha256": "fd23af35cf2d74111dfb8d70f3c4306b2a8479ec2121dcba3dc3b86e4b57dc0b",
+    "source_integrity_passed": true,
+    "source_review_sha256": "e913fa54c73903ae94df2f2f8e1597132b9c6420025467b147ddfc083d628449",
+    "strata_binary_sha256": "572c7fb33c95d8b5c16803a8550abeab13eeccb9314136ae101ce61ecd605171",
+    "strata_commit": "61b3fb5dd3f1e8ec09cf7e4e05208bc6d3c46406",
+    "v1_missing_ninja_failure_preserved": true
+  },
+  "build_audit_sha256": "0ceb6319bc6632c9f56ed2aba96564655fc3e8de59df3739f13736ac08e30030",
+  "common_environment": {
+    "DO_NOT_TRACK": "1",
+    "HF_HUB_DISABLE_TELEMETRY": "1",
+    "HIP_VISIBLE_DEVICES": "0,1",
+    "STRATA_ARENA_MMAP": "1",
+    "STRATA_ATTN_LANECELL": "0",
+    "STRATA_GDN_CONVL2": "1",
+    "STRATA_GDN_HEAD": "1",
+    "STRATA_GDN_NOY": "1",
+    "STRATA_GDN_PP": "2",
+    "STRATA_HIP_SWIGLU_FUSED": "1",
+    "STRATA_MMVF_ROWS": "1",
+    "STRATA_STAGE_TRIM": "1",
+    "STRATA_TSUM": "0"
+  },
+  "component": {
+    "audit_script_sha256": "3b4d0b9f21c0ced863f5f73244001899d8be1c419b71606382ee424e3ba1e7b7",
+    "build_audit_sha256": "0ceb6319bc6632c9f56ed2aba96564655fc3e8de59df3739f13736ac08e30030",
+    "build_host_receipt_sha256": "c74c145f12c8e51c682469da1dd8b1a5de52e124d52960a001008de802a74d0b",
+    "clean_traces_absent": true,
+    "component_archive_sha256": "3d6b998661a309ed0e58f87b6cb3cd31affea08185b3e446c8860222653edf7b",
+    "component_harness_review_sha256": "55b0e5530e721aece84e68d4075c7f967a99158106f47c220d7e81aa0407d21d",
+    "component_manifest_sha256": "997f70f8b171c91d1399ed2e2ed59cf973ec9cd100868ed0676f90a2b347dfcb",
+    "component_result_analysis_sha256": "e4c73d90e904e955bc639094e993760f6ab370136507091c0621d37746ca085e",
+    "component_result_manifest_sha256": "3ba3aa29baabe10c01788d71ee8bc822721998b553a450fe0173ac86e6bf63c6",
+    "decision": "PASS_RELEASE_COMPONENTS_FOR_FULLMODEL",
+    "full_dump_bytes": 16023552,
+    "full_dump_count": 26,
+    "host_guard_checks_separate": 31,
+    "host_guard_source_review_sha256": "e913fa54c73903ae94df2f2f8e1597132b9c6420025467b147ddfc083d628449",
+    "image": "sha256:bccb7ee7e7a78274519db9a43ba63c34ddd2e74bb60f8764a8f50aaee1f2c646",
+    "independent_c_trace_smoke_pass": true,
+    "limits": [
+      "Component parity and paired means do not establish model throughput or qualification.",
+      "Host 31-check mock guard is separate prior source review evidence, not 31 GPU tests.",
+      "Collection uncompressed_bytes excludes its 28199-byte index; all 140 member hashes and actual 16525565 bytes verified.",
+      "Idle/process admission is observational, not proof of absence of arbitrary hidden processes."
+    ],
+    "model_performance_claim": false,
+    "owned_cleanup_pass": true,
+    "parity": {
+      "cross_gpu_exact": true,
+      "query_swizzle_exact": true,
+      "reduce12_exact": true
+    },
+    "passed": true,
+    "probe_sha256": "194be0198a8006e89b0f8f88fd4d93d56db7c0f2b6cd5087bda04862284650a1",
+    "raw_admission_sha256": "c7f46e33d1a75bfa7524083aef1f5a034b81d3cb2be97369a4c43bdf1faa315e",
+    "raw_summary_sha256": "8c2a19873c7233bbcdf073651dd4f3705fbca989517add7e651600f0d248e256",
+    "release_commit": "61b3fb5dd3f1e8ec09cf7e4e05208bc6d3c46406",
+    "result_archive_sha256": "12906d2dcc8aae10328d792faff427c03d9e1bb255db33099e05c853b74759c6",
+    "root_runtime_launch_required": true,
+    "source_archive_sha256": "fd23af35cf2d74111dfb8d70f3c4306b2a8479ec2121dcba3dc3b86e4b57dc0b",
+    "strata_binary_sha256": "572c7fb33c95d8b5c16803a8550abeab13eeccb9314136ae101ce61ecd605171"
+  },
+  "component_audit_sha256": "293a01e2f7659fb001421e4e3df932db358f476a3ba450d9d83a94bf43caba34",
+  "component_measurements": {
+    "all_float_values_finite": true,
+    "cross_gpu": {
+      "cross_gpu_full_output_equal": true,
+      "passed": true,
+      "performance_gate_applied": false
+    },
+    "full_dump_bytes": 16023552,
+    "full_dump_count": 26,
+    "maximum_observed_temperature_millic": [
+      39000,
+      47000,
+      46000
+    ],
+    "model_performance_claim": false,
+    "output_fnv_recomputed": true,
+    "results": [
+      {
+        "binary_sha256": "194be0198a8006e89b0f8f88fd4d93d56db7c0f2b6cd5087bda04862284650a1",
+        "combined_latency_reduction_pct": 36.1860483862165,
+        "incremental_reduce12_latency_reduction_pct": 26.75702881395707,
+        "input_fnv1a64": {
+          "edge1": "15a9b4c43dccbe15",
+          "edge33": "dd708747fc757609",
+          "large": "02d08d8b2acb9cca"
+        },
+        "output_sha256": {
+          "A1": "a00011ca8b03549db7aeaea38307583373bfdfebfa31e34207763903af9879a2",
+          "A2": "a00011ca8b03549db7aeaea38307583373bfdfebfa31e34207763903af9879a2",
+          "B1": "a00011ca8b03549db7aeaea38307583373bfdfebfa31e34207763903af9879a2",
+          "B2": "a00011ca8b03549db7aeaea38307583373bfdfebfa31e34207763903af9879a2",
+          "C1": "a00011ca8b03549db7aeaea38307583373bfdfebfa31e34207763903af9879a2",
+          "C2": "a00011ca8b03549db7aeaea38307583373bfdfebfa31e34207763903af9879a2",
+          "edge1-A": "02664df8e50693193060413c9f8eaf55131eaf456b74245e8347b24e824c7c6f",
+          "edge1-B": "02664df8e50693193060413c9f8eaf55131eaf456b74245e8347b24e824c7c6f",
+          "edge1-C": "02664df8e50693193060413c9f8eaf55131eaf456b74245e8347b24e824c7c6f",
+          "edge33-A": "24122feb972bfa4d0c33cacf0133b831b697a9e87af7085900d2a0447d73d4c8",
+          "edge33-B": "24122feb972bfa4d0c33cacf0133b831b697a9e87af7085900d2a0447d73d4c8",
+          "edge33-C": "24122feb972bfa4d0c33cacf0133b831b697a9e87af7085900d2a0447d73d4c8",
+          "route-smoke": "a00011ca8b03549db7aeaea38307583373bfdfebfa31e34207763903af9879a2"
+        },
+        "paired_mean_medians_ms": {
+          "A": 1.190959,
+          "B": 1.0376395,
+          "C": 0.759998
+        },
+        "passed": true,
+        "performance_gate_applied": false,
+        "physical_gpu_ordinal": 0,
+        "process_medians_ms": {
+          "A1": 1.190079,
+          "A2": 1.191839,
+          "B1": 1.037359,
+          "B2": 1.03792,
+          "C1": 0.759917,
+          "C2": 0.760079
+        },
+        "query_swizzle_latency_reduction_pct": 12.873616975899258,
+        "scope": "production QSA chunk+merge component; no model throughput claim"
+      },
+      {
+        "binary_sha256": "194be0198a8006e89b0f8f88fd4d93d56db7c0f2b6cd5087bda04862284650a1",
+        "combined_latency_reduction_pct": 36.13137042566096,
+        "incremental_reduce12_latency_reduction_pct": 26.476734220059434,
+        "input_fnv1a64": {
+          "edge1": "15a9b4c43dccbe15",
+          "edge33": "dd708747fc757609",
+          "large": "02d08d8b2acb9cca"
+        },
+        "output_sha256": {
+          "A1": "a00011ca8b03549db7aeaea38307583373bfdfebfa31e34207763903af9879a2",
+          "A2": "a00011ca8b03549db7aeaea38307583373bfdfebfa31e34207763903af9879a2",
+          "B1": "a00011ca8b03549db7aeaea38307583373bfdfebfa31e34207763903af9879a2",
+          "B2": "a00011ca8b03549db7aeaea38307583373bfdfebfa31e34207763903af9879a2",
+          "C1": "a00011ca8b03549db7aeaea38307583373bfdfebfa31e34207763903af9879a2",
+          "C2": "a00011ca8b03549db7aeaea38307583373bfdfebfa31e34207763903af9879a2",
+          "edge1-A": "02664df8e50693193060413c9f8eaf55131eaf456b74245e8347b24e824c7c6f",
+          "edge1-B": "02664df8e50693193060413c9f8eaf55131eaf456b74245e8347b24e824c7c6f",
+          "edge1-C": "02664df8e50693193060413c9f8eaf55131eaf456b74245e8347b24e824c7c6f",
+          "edge33-A": "24122feb972bfa4d0c33cacf0133b831b697a9e87af7085900d2a0447d73d4c8",
+          "edge33-B": "24122feb972bfa4d0c33cacf0133b831b697a9e87af7085900d2a0447d73d4c8",
+          "edge33-C": "24122feb972bfa4d0c33cacf0133b831b697a9e87af7085900d2a0447d73d4c8",
+          "route-smoke": "a00011ca8b03549db7aeaea38307583373bfdfebfa31e34207763903af9879a2"
+        },
+        "paired_mean_medians_ms": {
+          "A": 1.1879995,
+          "B": 1.0319985,
+          "C": 0.758759
+        },
+        "passed": true,
+        "performance_gate_applied": false,
+        "physical_gpu_ordinal": 1,
+        "process_medians_ms": {
+          "A1": 1.187599,
+          "A2": 1.1884,
+          "B1": 1.031679,
+          "B2": 1.032318,
+          "C1": 0.758798,
+          "C2": 0.75872
+        },
+        "query_swizzle_latency_reduction_pct": 13.131402833082003,
+        "scope": "production QSA chunk+merge component; no model throughput claim"
+      }
+    ]
+  },
+  "context_200k_qualified": false,
+  "cross_release_comparison": false,
+  "experiment": "v0.1.42 release-local combined gfx906 attention validation",
+  "fullmodel": {
+    "all_six_arms_same_binary": true,
+    "api_left_stopped": true,
+    "audit_passed": true,
+    "audit_script_sha256": "9b55836834fc900fd59c9d1a6eeb86dd3d312f9bad130f7308f9bd7b479f8a09",
+    "build_admission_sha256": "0ceb6319bc6632c9f56ed2aba96564655fc3e8de59df3739f13736ac08e30030",
+    "clean_timing_traces_absent": true,
+    "cleanup_passed": true,
+    "component_admission_sha256": "293a01e2f7659fb001421e4e3df932db358f476a3ba450d9d83a94bf43caba34",
+    "decision": "PASS_INDEPENDENT_V0142_RELEASE_LOCAL_FULLMODEL_SCREEN_AUDIT",
+    "diagnostic_4096_128_full_ids_work_parity": true,
+    "limitations": [
+      "Two clean observations per OFF/ON arm; descriptive fixed-screen gains, not significance or universal performance.",
+      "Query-swizzle and reduce12 enabled together; no separate contribution estimate.",
+      "4K logs are thread-local host evidence without device identifiers. Two rows do not prove two physical GPU routes. Separate component receipt provides both-GPU coverage.",
+      "Traced 4K durations excluded from performance. Fresh release OFF outputs/work are references, not c183.",
+      "Five unavailable optional lookup-chain counters remain null.",
+      "Retained summary ran17:46:31.264836 to17:58:52.310061UTC; later observation time is not execution end."
+    ],
+    "passed": true,
+    "pp_gate_passed": true,
+    "promoted": false,
+    "qualification_scope": "This predeclared release-local fixed-work six-arm screen only.",
+    "raw_archive_bytes": 159315,
+    "raw_archive_sha256": "605eaaf2bfc0743579cb9f3830b5ec8446b48b477550130695ee26712ed40ea7",
+    "raw_regular_files": 70,
+    "ready_done_thread_identity_affinity_passed": true,
+    "recomputed_sha256": "1a558e89b11ed0fd3a25a1a2dd636e88fcc4244f1be3efc717c4014fa03e2132",
+    "release_binary_sha256": "572c7fb33c95d8b5c16803a8550abeab13eeccb9314136ae101ce61ecd605171",
+    "release_commit": "61b3fb5dd3f1e8ec09cf7e4e05208bc6d3c46406",
+    "release_local_off_capacity_profile_equality": true,
+    "results": {
+      "arms": [
+        {
+          "PP": 348.337826460408,
+          "TG": 49.109883364027006,
+          "available_work": {
+            "accepted": 85,
+            "cache_hits": 70645,
+            "decode_windows": null,
+            "file_blobs": 0,
+            "file_read_mb": 0.0,
+            "lookup_chain_accepted": null,
+            "lookup_chain_offered": null,
+            "lookups": 73641,
+            "native_done_field_count": 16,
+            "native_suffix_accepted": null,
+            "native_suffix_offered": null,
+            "offered": 112,
+            "offloaded_experts": 0,
+            "optional_chain_counters_available": false,
+            "prompt_read": 4096,
+            "prompt_reused": 0,
+            "ram_blobs": 0,
+            "suffix_drafts": {
+              "accepted": 17,
+              "offered": 24,
+              "present": true,
+              "windows": 8
+            }
+          },
+          "decode_ms": 2606.4,
+          "output_ids_sha256": "5bcf403fdf891cf6c81b306bed6e5efa7298face8bc88accfaab2eee0b8fc2fd",
+          "outputs": 128,
+          "prompt_ms": 11758.7,
+          "prompt_tokens": 4096,
+          "route_evidence": {
+            "diagnostic": true,
+            "on": false,
+            "query": [
+              {
+                "active": 0,
+                "cap": 2051,
+                "kv_mode": 1,
+                "lane_cell": 0,
+                "nq": 32
+              },
+              {
+                "active": 0,
+                "cap": 2051,
+                "kv_mode": 1,
+                "lane_cell": 0,
+                "nq": 32
+              }
+            ],
+            "reduce12": [],
+            "scope": "thread-local host route observations; not every launch or physical-device counters"
+          },
+          "stable_info": {
+            "arena_mib": "32400",
+            "context": "204800",
+            "conversation_cache_mib": "4096",
+            "conversation_cache_min_free_mib": "8192",
+            "conversation_cache_min_tokens": "0",
+            "conversation_cache_slots": "4",
+            "cvec": "0",
+            "engine": "0.1.42",
+            "expert_cache_mib": "25150",
+            "expert_cache_primary_mib": "13051",
+            "expert_slots": "19078",
+            "expert_slots_primary": "9900",
+            "kv": "int8",
+            "kv_resident": "32768",
+            "logit_bias": "1",
+            "lookup": "3",
+            "mtp_max": "4",
+            "pcie_frac": "0.00",
+            "pool_workers": "15",
+            "spec": "6",
+            "spec_min_p": "0.50",
+            "tail_role_token": "-1",
+            "vram_elastic": "0"
+          },
+          "tag": "QOFF"
+        },
+        {
+          "PP": 361.971756305343,
+          "TG": 50.009767532721234,
+          "available_work": {
+            "accepted": 85,
+            "cache_hits": 70645,
+            "decode_windows": null,
+            "file_blobs": 0,
+            "file_read_mb": 0.0,
+            "lookup_chain_accepted": null,
+            "lookup_chain_offered": null,
+            "lookups": 73641,
+            "native_done_field_count": 16,
+            "native_suffix_accepted": null,
+            "native_suffix_offered": null,
+            "offered": 112,
+            "offloaded_experts": 0,
+            "optional_chain_counters_available": false,
+            "prompt_read": 4096,
+            "prompt_reused": 0,
+            "ram_blobs": 0,
+            "suffix_drafts": {
+              "accepted": 17,
+              "offered": 24,
+              "present": true,
+              "windows": 8
+            }
+          },
+          "decode_ms": 2559.5,
+          "output_ids_sha256": "5bcf403fdf891cf6c81b306bed6e5efa7298face8bc88accfaab2eee0b8fc2fd",
+          "outputs": 128,
+          "prompt_ms": 11315.8,
+          "prompt_tokens": 4096,
+          "route_evidence": {
+            "diagnostic": true,
+            "on": true,
+            "query": [
+              {
+                "active": 1,
+                "cap": 2051,
+                "kv_mode": 1,
+                "lane_cell": 0,
+                "nq": 32
+              },
+              {
+                "active": 1,
+                "cap": 2051,
+                "kv_mode": 1,
+                "lane_cell": 0,
+                "nq": 32
+              }
+            ],
+            "reduce12": [
+              {
+                "cap": 2051,
+                "nq": 32
+              },
+              {
+                "cap": 2051,
+                "nq": 32
+              }
+            ],
+            "scope": "thread-local host route observations; not every launch or physical-device counters"
+          },
+          "stable_info": {
+            "arena_mib": "32400",
+            "context": "204800",
+            "conversation_cache_mib": "4096",
+            "conversation_cache_min_free_mib": "8192",
+            "conversation_cache_min_tokens": "0",
+            "conversation_cache_slots": "4",
+            "cvec": "0",
+            "engine": "0.1.42",
+            "expert_cache_mib": "25150",
+            "expert_cache_primary_mib": "13051",
+            "expert_slots": "19078",
+            "expert_slots_primary": "9900",
+            "kv": "int8",
+            "kv_resident": "32768",
+            "logit_bias": "1",
+            "lookup": "3",
+            "mtp_max": "4",
+            "pcie_frac": "0.00",
+            "pool_workers": "15",
+            "spec": "6",
+            "spec_min_p": "0.50",
+            "tail_role_token": "-1",
+            "vram_elastic": "0"
+          },
+          "tag": "QON"
+        },
+        {
+          "PP": 598.988037787722,
+          "TG": 50.21306226125503,
+          "available_work": {
+            "accepted": 678,
+            "cache_hits": 548429,
+            "decode_windows": null,
+            "file_blobs": 0,
+            "file_read_mb": 0.0,
+            "lookup_chain_accepted": null,
+            "lookup_chain_offered": null,
+            "lookups": 569246,
+            "native_done_field_count": 16,
+            "native_suffix_accepted": null,
+            "native_suffix_offered": null,
+            "offered": 862,
+            "offloaded_experts": 0,
+            "optional_chain_counters_available": false,
+            "prompt_read": 65536,
+            "prompt_reused": 0,
+            "ram_blobs": 0,
+            "suffix_drafts": {
+              "accepted": 3,
+              "offered": 8,
+              "present": true,
+              "windows": 2
+            }
+          },
+          "decode_ms": 20393.1,
+          "output_ids_sha256": "908d3f9fdb6db7823e15f54d4586f8115e62a1b2e715c5489412cd73075ed2a6",
+          "outputs": 1024,
+          "prompt_ms": 109411.2,
+          "prompt_tokens": 65536,
+          "route_evidence": {
+            "diagnostic": false,
+            "route_observed": false
+          },
+          "stable_info": {
+            "arena_mib": "32400",
+            "context": "204800",
+            "conversation_cache_mib": "4096",
+            "conversation_cache_min_free_mib": "8192",
+            "conversation_cache_min_tokens": "0",
+            "conversation_cache_slots": "4",
+            "cvec": "0",
+            "engine": "0.1.42",
+            "expert_cache_mib": "25150",
+            "expert_cache_primary_mib": "13051",
+            "expert_slots": "19078",
+            "expert_slots_primary": "9900",
+            "kv": "int8",
+            "kv_resident": "32768",
+            "logit_bias": "1",
+            "lookup": "3",
+            "mtp_max": "4",
+            "pcie_frac": "0.00",
+            "pool_workers": "15",
+            "spec": "6",
+            "spec_min_p": "0.50",
+            "tail_role_token": "-1",
+            "vram_elastic": "0"
+          },
+          "tag": "A1"
+        },
+        {
+          "PP": 626.2679738124884,
+          "TG": 51.10162936347531,
+          "available_work": {
+            "accepted": 678,
+            "cache_hits": 548429,
+            "decode_windows": null,
+            "file_blobs": 0,
+            "file_read_mb": 0.0,
+            "lookup_chain_accepted": null,
+            "lookup_chain_offered": null,
+            "lookups": 569246,
+            "native_done_field_count": 16,
+            "native_suffix_accepted": null,
+            "native_suffix_offered": null,
+            "offered": 862,
+            "offloaded_experts": 0,
+            "optional_chain_counters_available": false,
+            "prompt_read": 65536,
+            "prompt_reused": 0,
+            "ram_blobs": 0,
+            "suffix_drafts": {
+              "accepted": 3,
+              "offered": 8,
+              "present": true,
+              "windows": 2
+            }
+          },
+          "decode_ms": 20038.5,
+          "output_ids_sha256": "908d3f9fdb6db7823e15f54d4586f8115e62a1b2e715c5489412cd73075ed2a6",
+          "outputs": 1024,
+          "prompt_ms": 104645.3,
+          "prompt_tokens": 65536,
+          "route_evidence": {
+            "diagnostic": false,
+            "route_observed": false
+          },
+          "stable_info": {
+            "arena_mib": "32400",
+            "context": "204800",
+            "conversation_cache_mib": "4096",
+            "conversation_cache_min_free_mib": "8192",
+            "conversation_cache_min_tokens": "0",
+            "conversation_cache_slots": "4",
+            "cvec": "0",
+            "engine": "0.1.42",
+            "expert_cache_mib": "25150",
+            "expert_cache_primary_mib": "13051",
+            "expert_slots": "19078",
+            "expert_slots_primary": "9900",
+            "kv": "int8",
+            "kv_resident": "32768",
+            "logit_bias": "1",
+            "lookup": "3",
+            "mtp_max": "4",
+            "pcie_frac": "0.00",
+            "pool_workers": "15",
+            "spec": "6",
+            "spec_min_p": "0.50",
+            "tail_role_token": "-1",
+            "vram_elastic": "0"
+          },
+          "tag": "B1"
+        },
+        {
+          "PP": 626.22668228666,
+          "TG": 51.051949346894006,
+          "available_work": {
+            "accepted": 678,
+            "cache_hits": 548429,
+            "decode_windows": null,
+            "file_blobs": 0,
+            "file_read_mb": 0.0,
+            "lookup_chain_accepted": null,
+            "lookup_chain_offered": null,
+            "lookups": 569246,
+            "native_done_field_count": 16,
+            "native_suffix_accepted": null,
+            "native_suffix_offered": null,
+            "offered": 862,
+            "offloaded_experts": 0,
+            "optional_chain_counters_available": false,
+            "prompt_read": 65536,
+            "prompt_reused": 0,
+            "ram_blobs": 0,
+            "suffix_drafts": {
+              "accepted": 3,
+              "offered": 8,
+              "present": true,
+              "windows": 2
+            }
+          },
+          "decode_ms": 20058.0,
+          "output_ids_sha256": "908d3f9fdb6db7823e15f54d4586f8115e62a1b2e715c5489412cd73075ed2a6",
+          "outputs": 1024,
+          "prompt_ms": 104652.2,
+          "prompt_tokens": 65536,
+          "route_evidence": {
+            "diagnostic": false,
+            "route_observed": false
+          },
+          "stable_info": {
+            "arena_mib": "32400",
+            "context": "204800",
+            "conversation_cache_mib": "4096",
+            "conversation_cache_min_free_mib": "8192",
+            "conversation_cache_min_tokens": "0",
+            "conversation_cache_slots": "4",
+            "cvec": "0",
+            "engine": "0.1.42",
+            "expert_cache_mib": "25150",
+            "expert_cache_primary_mib": "13051",
+            "expert_slots": "19078",
+            "expert_slots_primary": "9900",
+            "kv": "int8",
+            "kv_resident": "32768",
+            "logit_bias": "1",
+            "lookup": "3",
+            "mtp_max": "4",
+            "pcie_frac": "0.00",
+            "pool_workers": "15",
+            "spec": "6",
+            "spec_min_p": "0.50",
+            "tail_role_token": "-1",
+            "vram_elastic": "0"
+          },
+          "tag": "B2"
+        },
+        {
+          "PP": 598.5000968032994,
+          "TG": 50.11795338638789,
+          "available_work": {
+            "accepted": 678,
+            "cache_hits": 548429,
+            "decode_windows": null,
+            "file_blobs": 0,
+            "file_read_mb": 0.0,
+            "lookup_chain_accepted": null,
+            "lookup_chain_offered": null,
+            "lookups": 569246,
+            "native_done_field_count": 16,
+            "native_suffix_accepted": null,
+            "native_suffix_offered": null,
+            "offered": 862,
+            "offloaded_experts": 0,
+            "optional_chain_counters_available": false,
+            "prompt_read": 65536,
+            "prompt_reused": 0,
+            "ram_blobs": 0,
+            "suffix_drafts": {
+              "accepted": 3,
+              "offered": 8,
+              "present": true,
+              "windows": 2
+            }
+          },
+          "decode_ms": 20431.8,
+          "output_ids_sha256": "908d3f9fdb6db7823e15f54d4586f8115e62a1b2e715c5489412cd73075ed2a6",
+          "outputs": 1024,
+          "prompt_ms": 109500.4,
+          "prompt_tokens": 65536,
+          "route_evidence": {
+            "diagnostic": false,
+            "route_observed": false
+          },
+          "stable_info": {
+            "arena_mib": "32400",
+            "context": "204800",
+            "conversation_cache_mib": "4096",
+            "conversation_cache_min_free_mib": "8192",
+            "conversation_cache_min_tokens": "0",
+            "conversation_cache_slots": "4",
+            "cvec": "0",
+            "engine": "0.1.42",
+            "expert_cache_mib": "25150",
+            "expert_cache_primary_mib": "13051",
+            "expert_slots": "19078",
+            "expert_slots_primary": "9900",
+            "kv": "int8",
+            "kv_resident": "32768",
+            "logit_bias": "1",
+            "lookup": "3",
+            "mtp_max": "4",
+            "pcie_frac": "0.00",
+            "pool_workers": "15",
+            "spec": "6",
+            "spec_min_p": "0.50",
+            "tail_role_token": "-1",
+            "vram_elastic": "0"
+          },
+          "tag": "A2"
+        }
+      ],
+      "cleanup": {
+        "api_left_stopped": true,
+        "errors": [],
+        "gpu_after": [
+          {
+            "freq1_input": 1299000000,
+            "freq2_input": 1000000000,
+            "mode": "high",
+            "power1_cap": 190000000,
+            "power1_input": 30000000,
+            "temp1_input": 47000,
+            "temp2_input": 50000,
+            "temp3_input": 48000
+          },
+          {
+            "freq1_input": 1298000000,
+            "freq2_input": 1000000000,
+            "mode": "high",
+            "power1_cap": 190000000,
+            "power1_input": 32000000,
+            "temp1_input": 45000,
+            "temp2_input": 49000,
+            "temp3_input": 52000
+          }
+        ],
+        "passed": true
+      },
+      "comparison": {
+        "cross_release_comparison": false,
+        "diagnostic_included": false,
+        "gains": {
+          "PP": {
+            "candidate_mean": 626.2473280495742,
+            "control_mean": 598.7440672955106,
+            "gain_pct": 4.59349198703447,
+            "paired_gain_pct": [
+              4.554337366322225,
+              4.632678529452794
+            ]
+          },
+          "TG": {
+            "candidate_mean": 51.07678935518466,
+            "control_mean": 50.16550782382146,
+            "gain_pct": 1.8165499979858168,
+            "paired_gain_pct": [
+              1.7695935324500311,
+              1.8635955728387499
+            ]
+          }
+        },
+        "off_repeat_exact": true,
+        "pp_gate_passed": true,
+        "screen_passed": true,
+        "tg_gate_passed": true
+      },
+      "completed": true,
+      "final_max_sensor_celsius": 52.0,
+      "finish_utc": "2026-10-10T17:58:52.310061+00:00",
+      "peak_sensor_celsius": 81.0,
+      "ready_done_thread_counts": [
+        28,
+        28,
+        28,
+        28,
+        28,
+        28
+      ],
+      "start_utc": "2026-10-10T17:46:31.264836+00:00"
+    },
+    "runner_manifest_sha256": "665531f45da090940c4f750ff4ff06484479752bb2b242398decabc9e6d87e6d",
+    "runner_review_sha256": "52a376dfa0025bd1d34274c0ea25f0c3004be9e14472dec97d5b22f0528e5628",
+    "screen_passed": true,
+    "seal_script_sha256": "6b91c33f86f04ec9bcc6b8731fd63bd58ea1bae80756ce0d71d1ca4eca5f4ffa",
+    "target_execution_by_reviewer": false,
+    "technical_execution_passed": true,
+    "tg_gate_passed": true,
+    "timing_65536_1024_full_ids_work_and_off_repeat_parity": true
+  },
+  "fullmodel_audit_sha256": "32dd1b61050ce9426853c3bb81a7a8d3655840edf3b7ff7a850ff3243a28c640",
+  "method": {
+    "affinity_changes": false,
+    "arm_timeout_s": 600,
+    "automatic_retries": 0,
+    "cooldown_timeout_s": 900,
+    "diagnostic_outputs": 128,
+    "diagnostic_prompt": 4096,
+    "gate": ">=1pct mean PP or TG; winning metric bothpairs positive; companion mean and bothpairs nonnegative",
+    "historical_c183_expected_data": false,
+    "order": [
+      "QOFF",
+      "QON",
+      "A1",
+      "B1",
+      "B2",
+      "A2"
+    ],
+    "overall_timeout_s": 10800,
+    "profiling": false,
+    "promoted": false,
+    "seed": 12345,
+    "shutdown_timeout_s": 60,
+    "timing_outputs": 1024,
+    "timing_prompt": 65536
+  },
+  "qualification_scope": "This predeclared release-local fixed-work six-arm screen only.",
+  "release_flag_matrix": [
+    {
+      "action": "clear and omit",
+      "legacy_value": "1",
+      "name": "STRATA_Q2_AVX2_SPREAD",
+      "source_hits": [],
+      "status": "absent exact key from release C/C++ sources"
+    },
+    {
+      "action": "retain exact value",
+      "legacy_value": "1",
+      "name": "STRATA_GDN_NOY",
+      "source_hits": [
+        {
+          "file": "src/core/arch_defaults.cpp",
+          "line": 27
+        },
+        {
+          "file": "src/prefill/kernels.cu",
+          "line": 1464
+        }
+      ],
+      "status": "present supported common profile"
+    },
+    {
+      "action": "retain exact value",
+      "legacy_value": "1",
+      "name": "STRATA_GDN_CONVL2",
+      "source_hits": [
+        {
+          "file": "src/core/arch_defaults.cpp",
+          "line": 19
+        },
+        {
+          "file": "src/prefill/kernels.cu",
+          "line": 329
+        }
+      ],
+      "status": "present supported common profile"
+    },
+    {
+      "action": "clear and omit",
+      "legacy_value": "0",
+      "name": "STRATA_GR_UP_EXACT",
+      "source_hits": [],
+      "status": "absent exact key from release C/C++ sources"
+    },
+    {
+      "action": "retain exact value",
+      "legacy_value": "0",
+      "name": "STRATA_TSUM",
+      "source_hits": [
+        {
+          "file": "src/core/arch_defaults.cpp",
+          "line": 51
+        },
+        {
+          "file": "src/core/arch_defaults_test.cpp",
+          "line": 63
+        },
+        {
+          "file": "src/kernels/cuda/native_mmvq.cu",
+          "line": 1156
+        },
+        {
+          "file": "src/kernels/cuda/iq_kernels.cu",
+          "line": 2350
+        },
+        {
+          "file": "src/kernels/cuda/native_bf16.cu",
+          "line": 185
+        },
+        {
+          "file": "src/kernels/cuda/fused_gr.cu",
+          "line": 1380
+        }
+      ],
+      "status": "present supported common profile"
+    },
+    {
+      "action": "retain exact value",
+      "legacy_value": "1",
+      "name": "STRATA_HIP_SWIGLU_FUSED",
+      "source_hits": [
+        {
+          "file": "src/kernels/cuda/iq_kernels.cu",
+          "line": 3563
+        }
+      ],
+      "status": "present supported common profile"
+    },
+    {
+      "action": "retain exact value",
+      "legacy_value": "2",
+      "name": "STRATA_GDN_PP",
+      "source_hits": [
+        {
+          "file": "src/core/arch_defaults.cpp",
+          "line": 25
+        },
+        {
+          "file": "src/prefill/kernels.cu",
+          "line": 1183
+        }
+      ],
+      "status": "present supported common profile"
+    },
+    {
+      "action": "retain exact value",
+      "legacy_value": "1",
+      "name": "STRATA_ARENA_MMAP",
+      "source_hits": [
+        {
+          "file": "src/core/expert_source.cpp",
+          "line": 4334
+        },
+        {
+          "file": "src/program/generate.cpp",
+          "line": 154
+        },
+        {
+          "file": "include/strata/core/expert_source.hpp",
+          "line": 930
+        }
+      ],
+      "status": "present supported common profile"
+    },
+    {
+      "action": "retain exact value",
+      "legacy_value": "1",
+      "name": "STRATA_GDN_HEAD",
+      "source_hits": [
+        {
+          "file": "src/core/arch_defaults.cpp",
+          "line": 24
+        },
+        {
+          "file": "src/prefill/kernels.cu",
+          "line": 1074
+        }
+      ],
+      "status": "present supported common profile"
+    },
+    {
+      "action": "clear and omit",
+      "legacy_value": "2",
+      "name": "STRATA_GFX906_TOPK_REG",
+      "source_hits": [],
+      "status": "absent exact key from release C/C++ sources"
+    },
+    {
+      "action": "retain exact value",
+      "legacy_value": "1",
+      "name": "STRATA_MMVF_ROWS",
+      "source_hits": [
+        {
+          "file": "src/core/arch_defaults.cpp",
+          "line": 48
+        },
+        {
+          "file": "src/kernels/cuda/native_bf16.cu",
+          "line": 136
+        },
+        {
+          "file": "include/strata/kernels/bf16_gemv.hpp",
+          "line": 57
+        }
+      ],
+      "status": "present supported common profile"
+    },
+    {
+      "action": "clear and omit",
+      "legacy_value": "4",
+      "name": "STRATA_MMVF_RPB",
+      "source_hits": [],
+      "status": "absent exact key from release C/C++ sources"
+    },
+    {
+      "action": "clear and omit; release gfx906 default7, not legacy16 fallback2",
+      "legacy_value": "16",
+      "name": "STRATA_EXP_MODE",
+      "source_hits": [
+        {
+          "file": "src/kernels/native_expert_bench.cpp",
+          "line": 6
+        },
+        {
+          "file": "src/kernels/cuda/iq_kernels.cu",
+          "line": 2816
+        },
+        {
+          "file": "include/strata/kernels/iq_kernels.hpp",
+          "line": 79
+        }
+      ],
+      "status": "key present; value16 has no dedicated release mode"
+    },
+    {
+      "action": "retain exact value",
+      "legacy_value": "1",
+      "name": "STRATA_STAGE_TRIM",
+      "source_hits": [
+        {
+          "file": "src/program/generate.cpp",
+          "line": 2848
+        }
+      ],
+      "status": "present supported common profile"
+    },
+    {
+      "action": "clear and omit",
+      "legacy_value": "1",
+      "name": "STRATA_GFX906_HC_F16",
+      "source_hits": [],
+      "status": "absent exact key from release C/C++ sources"
+    },
+    {
+      "action": "clear and omit",
+      "legacy_value": "1",
+      "name": "STRATA_HC_F16_SCALE_PROBE",
+      "source_hits": [],
+      "status": "absent exact key from release C/C++ sources"
+    },
+    {
+      "action": "clear and omit",
+      "legacy_value": "1",
+      "name": "STRATA_HC_F16_EXACT_INPUT",
+      "source_hits": [],
+      "status": "absent exact key from release C/C++ sources"
+    },
+    {
+      "action": "clear and omit",
+      "legacy_value": "0",
+      "name": "STRATA_HC_F16_AUDIT",
+      "source_hits": [],
+      "status": "absent exact key from release C/C++ sources"
+    },
+    {
+      "action": "clear and omit",
+      "legacy_value": "1",
+      "name": "STRATA_HC_F16_TRACE",
+      "source_hits": [],
+      "status": "absent exact key from release C/C++ sources"
+    },
+    {
+      "action": "clear and omit",
+      "legacy_value": "32",
+      "name": "STRATA_GFX906_MMQ_OPT_CAP",
+      "source_hits": [],
+      "status": "absent exact key from release C/C++ sources"
+    },
+    {
+      "action": "exact0 OFF; exact1 ON",
+      "legacy_value": "1",
+      "name": "STRATA_GFX906_ATTN_QUERY_SWIZZLE",
+      "source_hits": [
+        {
+          "file": "src/kernels/cuda/qsa_decode_attn.cu",
+          "line": 641
+        }
+      ],
+      "status": "present treatment"
+    },
+    {
+      "action": "retain exact value",
+      "legacy_value": "0",
+      "name": "STRATA_ATTN_LANECELL",
+      "source_hits": [
+        {
+          "file": "src/core/arch_defaults.cpp",
+          "line": 49
+        },
+        {
+          "file": "src/kernels/cuda/qsa_decode_attn.cu",
+          "line": 166
+        }
+      ],
+      "status": "present supported common profile"
+    },
+    {
+      "action": "clear in timing; exact1 only in 4K route diagnostic",
+      "legacy_value": "1",
+      "name": "STRATA_GFX906_ATTN_QUERY_SWIZZLE_TRACE",
+      "source_hits": [
+        {
+          "file": "src/kernels/cuda/qsa_decode_attn.cu",
+          "line": 644
+        }
+      ],
+      "status": "present diagnostic"
+    },
+    {
+      "action": "clear and omit",
+      "legacy_value": "1",
+      "name": "STRATA_VERIFY_SKIP_EMPTY_PCIE",
+      "source_hits": [],
+      "status": "absent exact key from release C/C++ sources"
+    },
+    {
+      "action": "clear and omit",
+      "legacy_value": "1",
+      "name": "STRATA_PRIMARY_COMMIT_OVERLAP",
+      "source_hits": [],
+      "status": "absent exact key from release C/C++ sources"
+    },
+    {
+      "action": "exact0 OFF; exact1 ON",
+      "legacy_value": "1",
+      "name": "STRATA_GFX906_ATTN_REDUCE12",
+      "source_hits": [
+        {
+          "file": "src/kernels/cuda/qsa_decode_attn.cu",
+          "line": 668
+        }
+      ],
+      "status": "present treatment"
+    },
+    {
+      "action": "retain exact value",
+      "legacy_value": "0,1",
+      "name": "HIP_VISIBLE_DEVICES",
+      "source_hits": [
+        {
+          "file": "src/core/device_main.cpp",
+          "line": 34
+        },
+        {
+          "file": "src/core/device.cu",
+          "line": 57
+        },
+        {
+          "file": "src/program/generate.cpp",
+          "line": 1729
+        },
+        {
+          "file": "include/strata/core/device.hpp",
+          "line": 41
+        }
+      ],
+      "status": "present supported common profile"
+    },
+    {
+      "action": "retain explicit environment setting",
+      "legacy_value": "1",
+      "name": "DO_NOT_TRACK",
+      "source_hits": [],
+      "status": "non-engine telemetry setting"
+    },
+    {
+      "action": "retain explicit environment setting",
+      "legacy_value": "1",
+      "name": "HF_HUB_DISABLE_TELEMETRY",
+      "source_hits": [],
+      "status": "non-engine telemetry setting"
+    },
+    {
+      "action": "clear and omit",
+      "legacy_value": "1",
+      "name": "STRATA_GFX906_TOPK_FIT17",
+      "source_hits": [],
+      "status": "absent exact key from release C/C++ sources"
+    }
+  ],
+  "release_flag_matrix_sha256": "fe8ed4e47ee06b2dd613731eab847c9d6b1833fa115f755a573df152ac30369a",
+  "service_promoted": false,
+  "source_evidence": {
+    "include/strata/spec/draft_policy.hpp": {
+      "exact_tag_blob": true,
+      "git_blob": "09c06d74d24f37195e6181a952be2b062e98a001",
+      "sha256": "f6f1c972a9b80bc6c82c1b24c87335d40852bfd7555b10d8288030b24477ccb9"
+    },
+    "src/core/arch_defaults.cpp": {
+      "exact_tag_blob": true,
+      "git_blob": "e8ca7c9b7aa39a65214a277ad0f9b2f6dc1c600c",
+      "sha256": "89e942992a47aa08f7723ac2883de10fc9bf4b151d97574e06f29d22d9e4f4fd"
+    },
+    "src/kernels/cuda/iq_kernels.cu": {
+      "exact_tag_blob": true,
+      "git_blob": "7f9cff9750217252587c380fb3b4946c2b0c1b80",
+      "sha256": "34cd94ba0c848721d264bb7c4e278da9b22c177fd8fe6b57aea2420298240d1f"
+    },
+    "src/kernels/cuda/native_bf16.cu": {
+      "exact_tag_blob": true,
+      "git_blob": "1f4b98accfeafc8a0b6ae793e811883a770226cf",
+      "sha256": "ddb35a48c6372a85a5b2dff3ca56dd1fc9a76e800beb2f897d0c2c96d2b63093"
+    },
+    "src/kernels/cuda/qsa_decode_attn.cu": {
+      "exact_tag_blob": true,
+      "git_blob": "624036c61558f85448c28c3a6a9a687b96eb3e01",
+      "sha256": "ec0a11258848d6e2bf6ca0bbe463f06eada460a72be10ff5bb4dce065abe3ab0"
+    },
+    "src/prefill/kernels.cu": {
+      "exact_tag_blob": true,
+      "git_blob": "18ec999aa573e45a3de8e00ba959ba2c4f316c1d",
+      "sha256": "aeb42665fb5ec8ba83f4a9bfb160a362c04ac68cd76ec059e40015c37b86f618"
+    },
+    "src/program/generate.cpp": {
+      "exact_tag_blob": true,
+      "git_blob": "ff3f2e1a65939d4c1e7b80746179a55d780615b4",
+      "sha256": "d7f8d46a4be140c7f1b2a2a96c4a2288787620c449f85b092d8b4434e4ad7832"
+    }
+  }
+}
