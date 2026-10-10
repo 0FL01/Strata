@@ -1,0 +1,776 @@
+{
+  "total_samples": 11533,
+  "main_samples": 4565,
+  "other_thread_samples": 6968,
+  "wait_relaxed_leaf_samples": 8222,
+  "wait_relaxed_percent_all": 71.29107777681436,
+  "main_wait_relaxed_samples": 4524,
+  "main_wait_relaxed_percent": 99.10186199342826,
+  "async_events_loop_samples": 3138,
+  "async_events_loop_percent_all": 27.208878869331482,
+  "wait_or_async_percent_all": 98.49995664614585,
+  "unresolved_leaf_percent": 0.7543570623428423,
+  "empty_callchain_percent": 60.46128500823723,
+  "stack_at_cap_percent": 100.0,
+  "rows": [
+    {
+      "function": "_ZN4rocr4core14BusyWaitSignal11WaitRelaxedE22hsa_signal_condition_tlm16hsa_wait_state_t",
+      "module": "libhsa-runtime64.so.1.21.0",
+      "samples": 4109,
+      "thread_class": "main",
+      "function_demangled": "rocr::core::BusyWaitSignal::WaitRelaxed(hsa_signal_condition_t, long, unsigned long, hsa_wait_state_t)",
+      "percent_all": 35.62819734674412,
+      "percent_thread_class": 90.01095290251916
+    },
+    {
+      "function": "_ZN4rocr4core14BusyWaitSignal11WaitRelaxedE22hsa_signal_condition_tlm16hsa_wait_state_t",
+      "module": "libhsa-runtime64.so.1.21.0",
+      "samples": 3369,
+      "thread_class": "other_thread",
+      "function_demangled": "rocr::core::BusyWaitSignal::WaitRelaxed(hsa_signal_condition_t, long, unsigned long, hsa_wait_state_t)",
+      "percent_all": 29.2118269314142,
+      "percent_thread_class": 48.349598163031
+    },
+    {
+      "function": "_ZN4rocr4core7Runtime15AsyncEventsLoopEPv",
+      "module": "libhsa-runtime64.so.1.21.0",
+      "samples": 3138,
+      "thread_class": "other_thread",
+      "function_demangled": "rocr::core::Runtime::AsyncEventsLoop(void*)",
+      "percent_all": 27.208878869331482,
+      "percent_thread_class": 45.034443168771524
+    },
+    {
+      "function": "_ZN4rocr4core15InterruptSignal11WaitRelaxedE22hsa_signal_condition_tlm16hsa_wait_state_t",
+      "module": "libhsa-runtime64.so.1.21.0",
+      "samples": 415,
+      "thread_class": "main",
+      "function_demangled": "rocr::core::InterruptSignal::WaitRelaxed(hsa_signal_condition_t, long, unsigned long, hsa_wait_state_t)",
+      "percent_all": 3.598369895083673,
+      "percent_thread_class": 9.090909090909092
+    },
+    {
+      "function": "_ZN4rocr4core15InterruptSignal11WaitRelaxedE22hsa_signal_condition_tlm16hsa_wait_state_t",
+      "module": "libhsa-runtime64.so.1.21.0",
+      "samples": 329,
+      "thread_class": "other_thread",
+      "function_demangled": "rocr::core::InterruptSignal::WaitRelaxed(hsa_signal_condition_t, long, unsigned long, hsa_wait_state_t)",
+      "percent_all": 2.8526836035723577,
+      "percent_thread_class": 4.7215843857634905
+    },
+    {
+      "function": "unknown",
+      "module": "unknown",
+      "samples": 56,
+      "thread_class": "other_thread",
+      "function_demangled": "unknown",
+      "percent_all": 0.4855631665655077,
+      "percent_thread_class": 0.8036739380022963
+    },
+    {
+      "function": "unknown",
+      "module": "unknown",
+      "samples": 31,
+      "thread_class": "main",
+      "function_demangled": "unknown",
+      "percent_all": 0.2687938957773346,
+      "percent_thread_class": 0.6790799561883899
+    },
+    {
+      "function": "_ZN6strata7kernels3cpu10ExpertPool6workerEi",
+      "module": "strata",
+      "samples": 25,
+      "thread_class": "other_thread",
+      "function_demangled": "strata::kernels::cpu::ExpertPool::worker(int)",
+      "percent_all": 0.21676927078817307,
+      "percent_thread_class": 0.3587830080367394
+    },
+    {
+      "function": "_ZN6strata7kernels17iq4nl_dequant_rowEPKhPf",
+      "module": "strata",
+      "samples": 10,
+      "thread_class": "other_thread",
+      "function_demangled": "strata::kernels::iq4nl_dequant_row(unsigned char const*, float*)",
+      "percent_all": 0.08670770831526922,
+      "percent_thread_class": 0.14351320321469574
+    },
+    {
+      "function": "__sched_yield",
+      "module": "libc.so.6",
+      "samples": 9,
+      "thread_class": "other_thread",
+      "function_demangled": "__sched_yield",
+      "percent_all": 0.07803693748374231,
+      "percent_thread_class": 0.12916188289322617
+    },
+    {
+      "function": "pthread_mutex_unlock",
+      "module": "libc.so.6",
+      "samples": 9,
+      "thread_class": "other_thread",
+      "function_demangled": "pthread_mutex_unlock",
+      "percent_all": 0.07803693748374231,
+      "percent_thread_class": 0.12916188289322617
+    },
+    {
+      "function": "pthread_mutex_lock",
+      "module": "libc.so.6",
+      "samples": 5,
+      "thread_class": "other_thread",
+      "function_demangled": "pthread_mutex_lock",
+      "percent_all": 0.04335385415763461,
+      "percent_thread_class": 0.07175660160734787
+    },
+    {
+      "function": "_ZN6strata7prefill7Prefill8run_implEPKlllRNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE",
+      "module": "strata",
+      "samples": 4,
+      "thread_class": "main",
+      "function_demangled": "strata::prefill::Prefill::run_impl(long const*, long, long, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&)",
+      "percent_all": 0.03468308332610769,
+      "percent_thread_class": 0.08762322015334063
+    },
+    {
+      "function": "_ZN4rocr4core7Runtime21ConcurrentAsyncEvents12GetAllEventsERSt6vectorINS1_14AsyncEventItemESaIS4_EE",
+      "module": "libhsa-runtime64.so.1.21.0",
+      "samples": 4,
+      "thread_class": "other_thread",
+      "function_demangled": "rocr::core::Runtime::ConcurrentAsyncEvents::GetAllEvents(std::vector<rocr::core::Runtime::AsyncEventItem, std::allocator<rocr::core::Runtime::AsyncEventItem> >&)",
+      "percent_all": 0.03468308332610769,
+      "percent_thread_class": 0.0574052812858783
+    },
+    {
+      "function": "pthread_mutex_unlock",
+      "module": "libc.so.6",
+      "samples": 2,
+      "thread_class": "main",
+      "function_demangled": "pthread_mutex_unlock",
+      "percent_all": 0.017341541663053846,
+      "percent_thread_class": 0.04381161007667032
+    },
+    {
+      "function": "_ZN4rocr4core7Runtime15AsyncEventsPool5allocEv",
+      "module": "libhsa-runtime64.so.1.21.0",
+      "samples": 2,
+      "thread_class": "other_thread",
+      "function_demangled": "rocr::core::Runtime::AsyncEventsPool::alloc()",
+      "percent_all": 0.017341541663053846,
+      "percent_thread_class": 0.02870264064293915
+    },
+    {
+      "function": "__sched_yield",
+      "module": "libc.so.6",
+      "samples": 1,
+      "thread_class": "main",
+      "function_demangled": "__sched_yield",
+      "percent_all": 0.008670770831526923,
+      "percent_thread_class": 0.02190580503833516
+    },
+    {
+      "function": "pthread_mutex_lock",
+      "module": "libc.so.6",
+      "samples": 1,
+      "thread_class": "main",
+      "function_demangled": "pthread_mutex_lock",
+      "percent_all": 0.008670770831526923,
+      "percent_thread_class": 0.02190580503833516
+    },
+    {
+      "function": "_ZSt29_Rb_tree_insert_and_rebalancebPSt18_Rb_tree_node_baseS0_RS_",
+      "module": "libstdc++.so.6.0.33",
+      "samples": 1,
+      "thread_class": "main",
+      "function_demangled": "std::_Rb_tree_insert_and_rebalance(bool, std::_Rb_tree_node_base*, std::_Rb_tree_node_base*, std::_Rb_tree_node_base&)",
+      "percent_all": 0.008670770831526923,
+      "percent_thread_class": 0.02190580503833516
+    },
+    {
+      "function": "_ZN6strata4core8Verifier3runEiPKilPFvPvPKfS3_llPflES4_PiRNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE",
+      "module": "strata",
+      "samples": 1,
+      "thread_class": "main",
+      "function_demangled": "strata::core::Verifier::run(int, int const*, long, void (*)(void*, float const*, int const*, long, long, float*, long), void*, int*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&)",
+      "percent_all": 0.008670770831526923,
+      "percent_thread_class": 0.02190580503833516
+    },
+    {
+      "function": "hipGetLastError",
+      "module": "libamdhip64.so.7.14.60850-0000000",
+      "samples": 1,
+      "thread_class": "other_thread",
+      "function_demangled": "hipGetLastError",
+      "percent_all": 0.008670770831526923,
+      "percent_thread_class": 0.014351320321469576
+    },
+    {
+      "function": "pthread_rwlock_rdlock",
+      "module": "libc.so.6",
+      "samples": 1,
+      "thread_class": "other_thread",
+      "function_demangled": "pthread_rwlock_rdlock",
+      "percent_all": 0.008670770831526923,
+      "percent_thread_class": 0.014351320321469576
+    },
+    {
+      "function": "_ZN4rocr3AMD28hsa_amd_signal_async_handlerE12hsa_signal_s22hsa_signal_condition_tlPFblPvES3_",
+      "module": "libhsa-runtime64.so.1.21.0",
+      "samples": 1,
+      "thread_class": "other_thread",
+      "function_demangled": "rocr::AMD::hsa_amd_signal_async_handler(hsa_signal_s, hsa_signal_condition_t, long, bool (*)(long, void*), void*)",
+      "percent_all": 0.008670770831526923,
+      "percent_thread_class": 0.014351320321469576
+    },
+    {
+      "function": "_ZN4rocr3AMD8AqlQueue20AddWriteIndexReleaseEm",
+      "module": "libhsa-runtime64.so.1.21.0",
+      "samples": 1,
+      "thread_class": "other_thread",
+      "function_demangled": "rocr::AMD::AqlQueue::AddWriteIndexRelease(unsigned long)",
+      "percent_all": 0.008670770831526923,
+      "percent_thread_class": 0.014351320321469576
+    },
+    {
+      "function": "_ZN4rocr3AMD8BlitSdmaILb0ELb0EE13SubmitCommandEPKvmmRKSt6vectorIPNS_4core6SignalESaIS8_EERS7_RSA_",
+      "module": "libhsa-runtime64.so.1.21.0",
+      "samples": 1,
+      "thread_class": "other_thread",
+      "function_demangled": "rocr::AMD::BlitSdma<false, false>::SubmitCommand(void const*, unsigned long, unsigned long, std::vector<rocr::core::Signal*, std::allocator<rocr::core::Signal*> > const&, rocr::core::Signal&, std::vector<rocr::core::Signal*, std::allocator<rocr::core::Signal*> >&)",
+      "percent_all": 0.008670770831526923,
+      "percent_thread_class": 0.014351320321469576
+    },
+    {
+      "function": "_ZN4rocr3AMD8GpuAgent13TranslateTimeEm",
+      "module": "libhsa-runtime64.so.1.21.0",
+      "samples": 1,
+      "thread_class": "other_thread",
+      "function_demangled": "rocr::AMD::GpuAgent::TranslateTime(unsigned long)",
+      "percent_all": 0.008670770831526923,
+      "percent_thread_class": 0.014351320321469576
+    },
+    {
+      "function": "_ZN4rocr4core14BusyWaitSignal11LoadRelaxedEv",
+      "module": "libhsa-runtime64.so.1.21.0",
+      "samples": 1,
+      "thread_class": "other_thread",
+      "function_demangled": "rocr::core::BusyWaitSignal::LoadRelaxed()",
+      "percent_all": 0.008670770831526923,
+      "percent_thread_class": 0.014351320321469576
+    },
+    {
+      "function": "_ZN4rocr4core15InterruptSignal11LoadRelaxedEv",
+      "module": "libhsa-runtime64.so.1.21.0",
+      "samples": 1,
+      "thread_class": "other_thread",
+      "function_demangled": "rocr::core::InterruptSignal::LoadRelaxed()",
+      "percent_all": 0.008670770831526923,
+      "percent_thread_class": 0.014351320321469576
+    },
+    {
+      "function": "_ZN4rocr4core7Runtime11AsyncEvents8PushBackE12hsa_signal_s22hsa_signal_condition_tlPFblPvES5_",
+      "module": "libhsa-runtime64.so.1.21.0",
+      "samples": 1,
+      "thread_class": "other_thread",
+      "function_demangled": "rocr::core::Runtime::AsyncEvents::PushBack(hsa_signal_s, hsa_signal_condition_t, long, bool (*)(long, void*), void*)",
+      "percent_all": 0.008670770831526923,
+      "percent_thread_class": 0.014351320321469576
+    },
+    {
+      "function": "_ZNK4rocr3AMD8GpuAgent14supported_isasEv",
+      "module": "libhsa-runtime64.so.1.21.0",
+      "samples": 1,
+      "thread_class": "other_thread",
+      "function_demangled": "rocr::AMD::GpuAgent::supported_isas() const",
+      "percent_all": 0.008670770831526923,
+      "percent_thread_class": 0.014351320321469576
+    },
+    {
+      "function": "_ZN6strata7kernels10ngram_rowsEPKiS2_iRKNS0_9PleConstsEPj",
+      "module": "strata",
+      "samples": 1,
+      "thread_class": "other_thread",
+      "function_demangled": "strata::kernels::ngram_rows(int const*, int const*, int, strata::kernels::PleConsts const&, unsigned int*)",
+      "percent_all": 0.008670770831526923,
+      "percent_thread_class": 0.014351320321469576
+    },
+    {
+      "function": "_ZN6strata7prefill7Prefill8run_implEPKlllRNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE",
+      "module": "strata",
+      "samples": 1,
+      "thread_class": "other_thread",
+      "function_demangled": "strata::prefill::Prefill::run_impl(long const*, long, long, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&)",
+      "percent_all": 0.008670770831526923,
+      "percent_thread_class": 0.014351320321469576
+    }
+  ],
+  "scope_passed": true,
+  "quality_complete": false,
+  "performance_claim": false,
+  "provenance": {
+    "spool_sha256": "9816291ba0175095d990780822857b9a895f85935e9a5398e807863a11fdb283",
+    "extracted_json_sha256": "f7bee967796eabd539bf245be5b4ebe9255e4e31c18416a9f0a21a4ad1a0ffeb",
+    "actual_vetted_file_sha256": "f355351c3069a1f5215513965c89de62f9609c6f309ee7f609837701f68de6da",
+    "actual_vetted_file_transfer_pending": false,
+    "runner_actual_review_sha256": "adc2a37ff05ae3dd72b09bfc1867a859424132288896d579ba9ce674a64c408d",
+    "audit_source_sha256": "57b21ba9984a40cfca2b64f0301032c43f1b1de2de760db3d1e531fc29132d80",
+    "audit_review_sha256": "a652d0f00a1503e0f20915de989b699fa48d3a91dd3c7fedd7a311137937cad1",
+    "export_policy_sha256": "d7623a14f18b4f8ff367e5489a191ffc7579bacae372d65ab0fe11ef52d1335e",
+    "actual_archive_sha256": "dc3346e06f7fafb6897c423a707b17bb250ef03e34f1ee0aac561884243dfd96",
+    "actual_artifacts_sha256": {
+      "prefill-perf-local-audit-v4.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "prefill-perf-local-audit-v4.launch.json": "1787ad5e77b8282ffe9f2a83258f147f2c30cb65ff31315d98435321d8e8d7f8",
+      "prefill-perf-local-audit-v4.log": "ecc971026d38c6b7da6ac7dbd9d644263177aed1e862bf5021edaa73bf5fa101",
+      "prefill-perf-v4-vetted-aggregate.json": "f355351c3069a1f5215513965c89de62f9609c6f309ee7f609837701f68de6da"
+    },
+    "cleanup_spool_sha256": "6cf993b791ce2029ac12292e2b91258b44311d3355a078c9d456a9adad03c9a2"
+  },
+  "decoded_chain_shape": {
+    "main": {
+      "0": 5,
+      "1": 4445,
+      "2": 108,
+      "3": 5,
+      "4": 1,
+      "7": 1
+    },
+    "other_thread": {
+      "0": 6968
+    },
+    "source": "root numeric-only decoded audit",
+    "empty_nonmain_cause": "unresolved",
+    "source_spool_sha256": "cd77f87908b9ec581742246e4aa73a289c8b4a495751d7c312475a0249e298ca"
+  },
+  "separate_source_context": {
+    "source_sha256": "6f73546e4b654a9cc81f4b333a09530c7425e13f6ce33ac16ecb88a05b07fabd",
+    "lines": [
+      747,
+      748
+    ],
+    "prior_hc_cost_audit_sha256": "86496113dfd0cc289e4bb3747478718aacd0efcbc9c1bc2cbe94d736c3fb5639",
+    "established_by_current_sampled_callchains": false
+  },
+  "raw_unwind_numeric_evidence": {
+    "main_samples": 4565,
+    "other_samples": 6968,
+    "all_raw_callchain_entries": 0,
+    "all_raw_context_entries": 0,
+    "all_register_abi": 2,
+    "all_stack_bytes": 4096,
+    "all_dynamic_stack_bytes": 4096,
+    "source_spool_sha256": "7d009fe514281a0853606733307ffffe18e8dd600d6df1f04365c14d5548975f",
+    "empty_nonmain_cause": "unresolved; neither missing register ABI nor absent stack bytes"
+  },
+  "vetted_aggregate": {
+    "boundary": "prefill through first token",
+    "callchain_unwind_quality": "bounded DWARF4096/depth64; completeness not guaranteed",
+    "callchains": {
+      "at_depth64_samples": 0,
+      "empty_callchains": 6973,
+      "frames": 4687,
+      "rows": [
+        {
+          "function": "_ZN4rocr4core14BusyWaitSignal11WaitRelaxedE22hsa_signal_condition_tlm16hsa_wait_state_t",
+          "inclusive_samples": 4109,
+          "module": "libhsa-runtime64.so.1.21.0",
+          "thread_class": "main"
+        },
+        {
+          "function": "_ZN4rocr4core15InterruptSignal11WaitRelaxedE22hsa_signal_condition_tlm16hsa_wait_state_t",
+          "inclusive_samples": 415,
+          "module": "libhsa-runtime64.so.1.21.0",
+          "thread_class": "main"
+        },
+        {
+          "function": "unknown",
+          "inclusive_samples": 131,
+          "module": "unknown",
+          "thread_class": "main"
+        },
+        {
+          "function": "hipMemsetAsync",
+          "inclusive_samples": 1,
+          "module": "libamdhip64.so.7.14.60850-0000000",
+          "thread_class": "main"
+        },
+        {
+          "function": "_ZNSt7__cxx1119basic_istringstreamIcSt11char_traitsIcESaIcEEC1ERKNS_12basic_stringIcS2_S3_EESt13_Ios_Openmode",
+          "inclusive_samples": 1,
+          "module": "libstdc++.so.6.0.33",
+          "thread_class": "main"
+        },
+        {
+          "function": "_ZSt29_Rb_tree_insert_and_rebalancebPSt18_Rb_tree_node_baseS0_RS_",
+          "inclusive_samples": 1,
+          "module": "libstdc++.so.6.0.33",
+          "thread_class": "main"
+        },
+        {
+          "function": "_ZN6strata7prefill7Prefill3runEPKlllRNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE",
+          "inclusive_samples": 1,
+          "module": "strata",
+          "thread_class": "main"
+        },
+        {
+          "function": "_ZN6strata7prefill7Prefill8run_implEPKlllRNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE",
+          "inclusive_samples": 1,
+          "module": "strata",
+          "thread_class": "main"
+        }
+      ],
+      "samples": 11533,
+      "unresolved_frames": 158
+    },
+    "event": "cpu-clock:u",
+    "export_policy_sha256": "d7623a14f18b4f8ff367e5489a191ffc7579bacae372d65ab0fe11ef52d1335e",
+    "frequency_hz": 49,
+    "loss_free": true,
+    "lost_samples": 0,
+    "main_samples": 4565,
+    "new_thread_samples": 3785,
+    "performance_qualification": false,
+    "quality_complete": false,
+    "rows": [
+      {
+        "function": "_ZN4rocr4core14BusyWaitSignal11WaitRelaxedE22hsa_signal_condition_tlm16hsa_wait_state_t",
+        "module": "libhsa-runtime64.so.1.21.0",
+        "samples": 4109,
+        "thread_class": "main"
+      },
+      {
+        "function": "_ZN4rocr4core14BusyWaitSignal11WaitRelaxedE22hsa_signal_condition_tlm16hsa_wait_state_t",
+        "module": "libhsa-runtime64.so.1.21.0",
+        "samples": 3369,
+        "thread_class": "other_thread"
+      },
+      {
+        "function": "_ZN4rocr4core7Runtime15AsyncEventsLoopEPv",
+        "module": "libhsa-runtime64.so.1.21.0",
+        "samples": 3138,
+        "thread_class": "other_thread"
+      },
+      {
+        "function": "_ZN4rocr4core15InterruptSignal11WaitRelaxedE22hsa_signal_condition_tlm16hsa_wait_state_t",
+        "module": "libhsa-runtime64.so.1.21.0",
+        "samples": 415,
+        "thread_class": "main"
+      },
+      {
+        "function": "_ZN4rocr4core15InterruptSignal11WaitRelaxedE22hsa_signal_condition_tlm16hsa_wait_state_t",
+        "module": "libhsa-runtime64.so.1.21.0",
+        "samples": 329,
+        "thread_class": "other_thread"
+      },
+      {
+        "function": "unknown",
+        "module": "unknown",
+        "samples": 56,
+        "thread_class": "other_thread"
+      },
+      {
+        "function": "unknown",
+        "module": "unknown",
+        "samples": 31,
+        "thread_class": "main"
+      },
+      {
+        "function": "_ZN6strata7kernels3cpu10ExpertPool6workerEi",
+        "module": "strata",
+        "samples": 25,
+        "thread_class": "other_thread"
+      },
+      {
+        "function": "_ZN6strata7kernels17iq4nl_dequant_rowEPKhPf",
+        "module": "strata",
+        "samples": 10,
+        "thread_class": "other_thread"
+      },
+      {
+        "function": "__sched_yield",
+        "module": "libc.so.6",
+        "samples": 9,
+        "thread_class": "other_thread"
+      },
+      {
+        "function": "pthread_mutex_unlock",
+        "module": "libc.so.6",
+        "samples": 9,
+        "thread_class": "other_thread"
+      },
+      {
+        "function": "pthread_mutex_lock",
+        "module": "libc.so.6",
+        "samples": 5,
+        "thread_class": "other_thread"
+      },
+      {
+        "function": "_ZN6strata7prefill7Prefill8run_implEPKlllRNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE",
+        "module": "strata",
+        "samples": 4,
+        "thread_class": "main"
+      },
+      {
+        "function": "_ZN4rocr4core7Runtime21ConcurrentAsyncEvents12GetAllEventsERSt6vectorINS1_14AsyncEventItemESaIS4_EE",
+        "module": "libhsa-runtime64.so.1.21.0",
+        "samples": 4,
+        "thread_class": "other_thread"
+      },
+      {
+        "function": "pthread_mutex_unlock",
+        "module": "libc.so.6",
+        "samples": 2,
+        "thread_class": "main"
+      },
+      {
+        "function": "_ZN4rocr4core7Runtime15AsyncEventsPool5allocEv",
+        "module": "libhsa-runtime64.so.1.21.0",
+        "samples": 2,
+        "thread_class": "other_thread"
+      },
+      {
+        "function": "__sched_yield",
+        "module": "libc.so.6",
+        "samples": 1,
+        "thread_class": "main"
+      },
+      {
+        "function": "pthread_mutex_lock",
+        "module": "libc.so.6",
+        "samples": 1,
+        "thread_class": "main"
+      },
+      {
+        "function": "_ZSt29_Rb_tree_insert_and_rebalancebPSt18_Rb_tree_node_baseS0_RS_",
+        "module": "libstdc++.so.6.0.33",
+        "samples": 1,
+        "thread_class": "main"
+      },
+      {
+        "function": "_ZN6strata4core8Verifier3runEiPKilPFvPvPKfS3_llPflES4_PiRNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE",
+        "module": "strata",
+        "samples": 1,
+        "thread_class": "main"
+      },
+      {
+        "function": "hipGetLastError",
+        "module": "libamdhip64.so.7.14.60850-0000000",
+        "samples": 1,
+        "thread_class": "other_thread"
+      },
+      {
+        "function": "pthread_rwlock_rdlock",
+        "module": "libc.so.6",
+        "samples": 1,
+        "thread_class": "other_thread"
+      },
+      {
+        "function": "_ZN4rocr3AMD28hsa_amd_signal_async_handlerE12hsa_signal_s22hsa_signal_condition_tlPFblPvES3_",
+        "module": "libhsa-runtime64.so.1.21.0",
+        "samples": 1,
+        "thread_class": "other_thread"
+      },
+      {
+        "function": "_ZN4rocr3AMD8AqlQueue20AddWriteIndexReleaseEm",
+        "module": "libhsa-runtime64.so.1.21.0",
+        "samples": 1,
+        "thread_class": "other_thread"
+      },
+      {
+        "function": "_ZN4rocr3AMD8BlitSdmaILb0ELb0EE13SubmitCommandEPKvmmRKSt6vectorIPNS_4core6SignalESaIS8_EERS7_RSA_",
+        "module": "libhsa-runtime64.so.1.21.0",
+        "samples": 1,
+        "thread_class": "other_thread"
+      },
+      {
+        "function": "_ZN4rocr3AMD8GpuAgent13TranslateTimeEm",
+        "module": "libhsa-runtime64.so.1.21.0",
+        "samples": 1,
+        "thread_class": "other_thread"
+      },
+      {
+        "function": "_ZN4rocr4core14BusyWaitSignal11LoadRelaxedEv",
+        "module": "libhsa-runtime64.so.1.21.0",
+        "samples": 1,
+        "thread_class": "other_thread"
+      },
+      {
+        "function": "_ZN4rocr4core15InterruptSignal11LoadRelaxedEv",
+        "module": "libhsa-runtime64.so.1.21.0",
+        "samples": 1,
+        "thread_class": "other_thread"
+      },
+      {
+        "function": "_ZN4rocr4core7Runtime11AsyncEvents8PushBackE12hsa_signal_s22hsa_signal_condition_tlPFblPvES5_",
+        "module": "libhsa-runtime64.so.1.21.0",
+        "samples": 1,
+        "thread_class": "other_thread"
+      },
+      {
+        "function": "_ZNK4rocr3AMD8GpuAgent14supported_isasEv",
+        "module": "libhsa-runtime64.so.1.21.0",
+        "samples": 1,
+        "thread_class": "other_thread"
+      },
+      {
+        "function": "_ZN6strata7kernels10ngram_rowsEPKiS2_iRKNS0_9PleConstsEPj",
+        "module": "strata",
+        "samples": 1,
+        "thread_class": "other_thread"
+      },
+      {
+        "function": "_ZN6strata7prefill7Prefill8run_implEPKlllRNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE",
+        "module": "strata",
+        "samples": 1,
+        "thread_class": "other_thread"
+      }
+    ],
+    "sampled_thread_count": 61,
+    "samples": 11533,
+    "scope_passed": true,
+    "stack_at_buffer_cap_samples": 11533,
+    "stack_zero_samples": 0,
+    "status": "INCOMPLETE_OBSERVATIONAL_ATTRIBUTION",
+    "throttle_records": 0,
+    "unresolved_leaf_samples": 87
+  },
+  "schema_version": 1,
+  "archive_base_commit": "0c12f0f3225c4584202e88e8b2d552267e17e993",
+  "status": "INCOMPLETE_OBSERVATIONAL_ATTRIBUTION",
+  "runtime": {
+    "binary_sha256": "79ba570f5eead6095e5f1033c461b0653d1cd177440bb08ffa30b38902ad53c0",
+    "build_actual_audit_sha256": "a874c377808a6e4d1be1b4c8884824c77444590be216dabe79cc657c9c69a56b",
+    "prompt_tokens": 65536,
+    "output_tokens": 1024,
+    "all_output_ids_and_available_work_exact": true,
+    "frequency_hz": 49,
+    "event": "cpu-clock:u",
+    "stack_bytes": 4096,
+    "max_unwind_depth": 64,
+    "first_token_to_stop_command_us": 102.519,
+    "first_token_to_stopped_receipt_ms": 334.417,
+    "stopped_receipt_is_exact_disable_ACK": false,
+    "pure_prefill_boundary_established": false
+  },
+  "preserved_history": {
+    "capture_v1": "failed before GEN due to ACK framing; failure index preserved, full failure archive not independently audited",
+    "capture_v2": "accepted capture, exact outputs/work and cleanup",
+    "local_parser_v1": "rejected EVENT_UPDATE kind78",
+    "local_parser_v2": "rejected6799 source-proven non-executable data mappings",
+    "local_parser_v3": "binary scope passed, leaf rendering failed due to omitted IP field",
+    "local_parser_v4": "reviewed private IP rendering then discard raw addresses; exact sample reconciliation",
+    "capture_repeated_for_parser_revisions": false,
+    "raw_capture_modified": false
+  },
+  "publication_scope": {
+    "files": 3,
+    "raw_stacks_exported": false,
+    "raw_addresses_exported": false,
+    "private_mappings_exported": false,
+    "raw_data_stays_on_target": true,
+    "implementation_changes": false,
+    "PR_changes": false
+  },
+  "report_independent_review": {
+    "actual_archive_sha256": "dc3346e06f7fafb6897c423a707b17bb250ef03e34f1ee0aac561884243dfd96",
+    "actual_artifacts_sha256": {
+      "prefill-perf-local-audit-v4.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "prefill-perf-local-audit-v4.launch.json": "1787ad5e77b8282ffe9f2a83258f147f2c30cb65ff31315d98435321d8e8d7f8",
+      "prefill-perf-local-audit-v4.log": "ecc971026d38c6b7da6ac7dbd9d644263177aed1e862bf5021edaa73bf5fa101",
+      "prefill-perf-v4-vetted-aggregate.json": "f355351c3069a1f5215513965c89de62f9609c6f309ee7f609837701f68de6da"
+    },
+    "actual_vetted_file_sha256": "f355351c3069a1f5215513965c89de62f9609c6f309ee7f609837701f68de6da",
+    "allowed_symbol_demangles_verified": 28,
+    "attribution_complete": false,
+    "audit_script_sha256": "7a71eec697ebccc259b3280a1ee1e9dec16c627c1815d4abb58f0dc95c1469c9",
+    "audit_source_review_sha256": "a652d0f00a1503e0f20915de989b699fa48d3a91dd3c7fedd7a311137937cad1",
+    "collection_review_sha256": "adc2a37ff05ae3dd72b09bfc1867a859424132288896d579ba9ce674a64c408d",
+    "decision": "PASS_SANITIZED_OBSERVATIONAL_AGGREGATE_REVIEW",
+    "decoded_chain_shape": {
+      "main": {
+        "0": 5,
+        "1": 4445,
+        "2": 108,
+        "3": 5,
+        "4": 1,
+        "7": 1
+      },
+      "other": {
+        "0": 6968
+      }
+    },
+    "demangled_functions_sha256": "84d6d6bc38812743c0b79863ede9c9c77f699a4c61d37f6cd5f3090922e71333",
+    "empty_nonmain_cause": "Unresolved; register ABI and stack bytes are present, but valid recoverable upstream caller information is not established.",
+    "exclusive_leaf_rows_partition_all_samples": true,
+    "export_policy_sha256": "d7623a14f18b4f8ff367e5489a191ffc7579bacae372d65ab0fe11ef52d1335e",
+    "inclusive_rows_not_additive": true,
+    "limitations": [
+      "Independent checks here cover sanitized bytes/provenance/arithmetic/demangling and claims; private capture itself was not read.",
+      "71.291percent and98.500percent use all11533 leaf samples;99.102percent uses4565 main samples. These are userCPU residency shares, not elapsed-time shares or removablecost.",
+      "other_thread is not a proven peer/issuer/backend role.",
+      "All buffers at4096 cap and60.461percent empty chains imply incomplete caller evidence; buffer saturation alone does not diagnose emptychain cause.",
+      "Inclusive rows are not exclusive partitions; one-frame chains do not establish upstream callers.",
+      "Separate source context is not quantified or proven by current sampled callchains.",
+      "First-token-triggered window includes firsttoken/control latency; no purePP claim.",
+      "Prior failed capture/parser screens remain preserved; this is observational only.",
+      "Zero raw callchain entries with DWARF register/stack payload is distinct from rendered frame counts. This evidence does not establish the cause of empty decoded chains."
+    ],
+    "metrics_sha256": "aa58cf4bd34240e4272a3ff59c18b7383cd1ff5bd4b44271ded9d31d87aafb70",
+    "numeric_chain_shape_spool_sha256": "cd77f87908b9ec581742246e4aa73a289c8b4a495751d7c312475a0249e298ca",
+    "passed": true,
+    "performance_qualified": false,
+    "quality": {
+      "all_other_thread_rendered_chains_empty": true,
+      "all_stack_buffers_at_4096_cap": true,
+      "empty_rendered_chains": 6973,
+      "loss_and_throttle_zero_reported": true,
+      "main_one_frame_samples": 4445,
+      "main_samples": 4565,
+      "scope_passed_reported_by_reviewed_root_audit": true,
+      "unknown_leaf_samples": 87,
+      "unresolved_frames": 158
+    },
+    "raw_capture_accessed": false,
+    "raw_unwind_numeric_groups": {
+      "main": [
+        {
+          "callchain_entries": 0,
+          "dynamic_stack_bytes": 4096,
+          "register_abi": 2,
+          "samples": 4565,
+          "stack_bytes": 4096,
+          "user_context_entries": 0
+        }
+      ],
+      "other_thread": [
+        {
+          "callchain_entries": 0,
+          "dynamic_stack_bytes": 4096,
+          "register_abi": 2,
+          "samples": 6968,
+          "stack_bytes": 4096,
+          "user_context_entries": 0
+        }
+      ]
+    },
+    "raw_unwind_numeric_spool_sha256": "7d009fe514281a0853606733307ffffe18e8dd600d6df1f04365c14d5548975f",
+    "readme_sha256": "bfffbeaff2ef9cd6accf674ad431985befe854ab28c60c88921d43f6422bf411",
+    "recomputed_metrics": {
+      "async_events_loop_percent_all": 27.208878869331482,
+      "async_events_loop_samples": 3138,
+      "empty_callchain_percent": 60.46128500823723,
+      "main_samples": 4565,
+      "main_wait_relaxed_percent": 99.10186199342826,
+      "main_wait_relaxed_samples": 4524,
+      "other_thread_samples": 6968,
+      "stack_at_cap_percent": 100.0,
+      "total_samples": 11533,
+      "unresolved_leaf_percent": 0.7543570623428423,
+      "wait_or_async_percent_all": 98.49995664614585,
+      "wait_relaxed_leaf_samples": 8222,
+      "wait_relaxed_percent_all": 71.29107777681436
+    },
+    "root_cleanup_spool_sha256": "6cf993b791ce2029ac12292e2b91258b44311d3355a078c9d456a9adad03c9a2",
+    "root_or_gpu_execution": false,
+    "supersedes_review_sha256": "e39cf17869b03d049f17f271c079899320adfea8092f50f67d80f0de19fb5ca3"
+  },
+  "report_independent_review_sha256": "af738328bca7644cc86bbf639116738bc5a0520fc67e0908c2334ee3859c8a5f",
+  "review_scope": "Independent review binds canonical sanitized source artifacts; public derivative removes paths and adds explicit limitations/provenance without changing numeric observations."
+}

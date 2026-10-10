@@ -165,3 +165,8 @@ Offline consistency validation passed, including 18 rejected corruption cases. F
 ## Prefill existing-wait attribution: diagnostic only
 
 [Report](results/2026-10-10-gfx906-prefill-sync-attribution/README.md) and [numeric metrics](results/2026-10-10-gfx906-prefill-sync-attribution/metrics.json): one independently audited diagnostic attributes **17.574090553 CPU-s / 10.336731%** of **170.015937957 stage-thread CPU-s** to six existing wait sites. The **152.441847404 CPU-s residual is unclassified**, not useful compute, launch or GPU time. All 1,024 IDs/work and 17 scopes/130 buckets passed. Main wall 94.475046155 s excludes the final peer tail; full span is 99.740547885 s. **DIAGNOSTIC_ONLY**: no speed, critical-path or performance qualification claim, and the rejected CPU1 screen remains unchanged.
+
+
+## Prefill CPU samples: HSA wait/event leaves, incomplete callers
+
+[Report](results/2026-10-10-gfx906-prefill-cpu-profile/README.md) and [numeric metrics](results/2026-10-10-gfx906-prefill-cpu-profile/metrics.json): 11,533 user-space CPU samples include 4,524/4,565 main-thread samples (**99.102%**) in HSA WaitRelaxed functions. All-thread wait/event leaf share is **98.500%**, with no recorded loss/throttling. These are sampled CPU-residency shares, not model wall-time or removable cost. All 6,968 nonmain callchains are empty; every stack reached the 4,096-byte capture cap. Caller attribution is incomplete and the interval can include initial decode. No speed qualification; retained capture/parser failures and privacy limits are documented.
