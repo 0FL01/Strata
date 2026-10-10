@@ -140,3 +140,8 @@ Offline consistency validation passed, including 18 rejected corruption cases. F
 ## QSA merge: parked baseline exposure screen
 
 [Report](results/2026-10-10-gfx906-qsa-merge-exposure/README.md) and [numeric metrics](results/2026-10-10-gfx906-qsa-merge-exposure/metrics.json): unchanged c183 module35 synthetic replay gives primary GPU0 hot/rotate8 weighted exposure **821.6242314585002 / 819.9847139062499 ms**, below the **1003.739603960396 ms** screening threshold. Each device completed 34 cells, 476 samples, 4,624 launches and 272 preflights; source/ABI and actual raw audits passed. **PARK_WITHOUT_MODEL_QUALIFICATION**. Peer GPU1 is descriptive only; GPU events can include host dispatch gaps, masks are synthetic, and weighted extrema are not bounds. No candidate optimization, model PP/TG gain, rerun, promotion or deployment.
+
+
+## Q2_0 K640 MMQ tail: parked after synthetic timing screen
+
+[Report](results/2026-10-10-gfx906-mmq-q2-k640-tail/README.md) and [numeric metrics](results/2026-10-10-gfx906-mmq-q2-k640-tail/metrics.json): both-device full raw-bit synthetic replay and isolated component timing passed. Core median latency savings **10.993426–11.033575%** missed the separate frozen 12% campaign gate in both regimes/devices, despite full-grouped savings **12.118388–12.250872%**. K768 control slowed **0.226946–0.544809%**, within tolerance, not zero regression. **PARK_NO_MODEL_QUALIFICATION**. Original macro-OFF and compile-scope failures remain disclosed beside separate reproduction, static-admission and actual raw audits. No model gain, rerun, promotion or deployment.
