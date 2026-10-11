@@ -262,3 +262,8 @@ The same [v0.1.43 report's follow-on decode diagnostic](results/2026-10-11-gfx90
 ## 2026-10-11: c183 PP value-load lookahead, negative screen
 
 [Report](results/2026-10-11-gfx906-c183-pp-lookahead/README.md) · [Metrics](results/2026-10-11-gfx906-c183-pp-lookahead/metrics.json). Three finite synthetic full-output/scratch parity cases passed on owner0. The single four-cell value-load lookahead candidate increased captured full-batch median latency **0.754356→0.805721 ms (+6.809112%)**. All eight paired savings are negative, median **−0.051430 ms**, below the frozen **+0.240 ms** conditional PP relevance bar. **REJECT_PP_LOOKAHEAD_PERFORMANCE**; park without an engine patch, model run or variant sweep. All pairs remain; warm repeated-buffer timing is not cold/interleaved model performance. Actual audit **116 checks PASS**; cleanup passed, API stayed stopped, final sampled maximum **46 C**.
+
+
+## 2026-10-11: c183 Q5 head R2, below the practical filter
+
+[Report](results/2026-10-11-gfx906-c183-q5-head-r2/README.md) · [Metrics](results/2026-10-11-gfx906-c183-q5-head-r2/metrics.json). Five finite synthetic full-output parity cases passed on owner1 across literal archive/new-TU R1/R2 arms. All 72 timing samples remain; **all six T3 pairs regress**. The fixed 379-call/1,247-row scenario spans **48.3479–139.8509 ms / 0.2545–0.7362%**, below the 1% practical filter. **DEPRIORITIZE_BELOW_ONE_PERCENT_FIXED_SCENARIO**; park without T-specific variants, an engine patch or a model run. Original compilation-source identity remains unproven; synthetic component exposure is not model speedup. Actual audit **125 checks PASS**; cleanup passed, API stayed stopped, final sampled maximum **48 C**.

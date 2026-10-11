@@ -1,0 +1,234 @@
+{
+  "date": "2026-10-11",
+  "decision": "DEPRIORITIZE_BELOW_ONE_PERCENT_FIXED_SCENARIO",
+  "setup": {
+    "owner": 1,
+    "architecture": "gfx906",
+    "processes": 1,
+    "model_metadata": {
+      "weight_type": "Q5_K",
+      "type_id": 13,
+      "K": 2560,
+      "N": 248320
+    },
+    "weights": "Synthetic valid-format weights, not model tensor contents",
+    "weight_bytes": 437043200,
+    "weight_MiB": 416.796875,
+    "arms": [
+      "literal_c183_archive",
+      "new_translation_unit_R1_control",
+      "single_R2_candidate"
+    ],
+    "original_compilation_source_identity_proven": false
+  },
+  "correctness": {
+    "passed": true,
+    "full_byte_parity_cases": 5,
+    "cases": [
+      {
+        "T": 4,
+        "rows": 7,
+        "output_elements": 28,
+        "control_differences": 0,
+        "candidate_differences": 0,
+        "captured_differences": 0,
+        "canaries_passed": true,
+        "activation_immutable": true
+      },
+      {
+        "T": 1,
+        "rows": 248320,
+        "output_elements": 248320,
+        "control_differences": 0,
+        "candidate_differences": 0,
+        "captured_differences": 0,
+        "canaries_passed": true,
+        "activation_immutable": true
+      },
+      {
+        "T": 2,
+        "rows": 248320,
+        "output_elements": 496640,
+        "control_differences": 0,
+        "candidate_differences": 0,
+        "captured_differences": 0,
+        "canaries_passed": true,
+        "activation_immutable": true
+      },
+      {
+        "T": 3,
+        "rows": 248320,
+        "output_elements": 744960,
+        "control_differences": 0,
+        "candidate_differences": 0,
+        "captured_differences": 0,
+        "canaries_passed": true,
+        "activation_immutable": true
+      },
+      {
+        "T": 4,
+        "rows": 248320,
+        "output_elements": 993280,
+        "control_differences": 0,
+        "candidate_differences": 0,
+        "captured_differences": 0,
+        "canaries_passed": true,
+        "activation_immutable": true
+      }
+    ]
+  },
+  "timing": {
+    "warmups": 16,
+    "graph_calls_per_sample": 4,
+    "samples": 72,
+    "all_six_arm_permutations_per_T": true,
+    "T_domain": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "per_T_median_ms": {
+      "1": {
+        "archive": 1.1383797526250001,
+        "control_r1": 1.13843959575,
+        "candidate_r2": 1.11431980125
+      },
+      "2": {
+        "archive": 1.5320596098750001,
+        "control_r1": 1.5321996212500002,
+        "candidate_r2": 1.430959761125
+      },
+      "3": {
+        "archive": 1.94527935975,
+        "control_r1": 1.945319593,
+        "candidate_r2": 1.960239708375
+      },
+      "4": {
+        "archive": 2.7912193536250003,
+        "control_r1": 2.790759563375,
+        "candidate_r2": 2.314799428
+      }
+    },
+    "paired_median_deltas_ms": {
+      "archive_minus_candidate_r2": {
+        "1": 0.024039983749999938,
+        "2": 0.10109984875,
+        "3": -0.014980256625000021,
+        "4": 0.4761599302499999
+      },
+      "control_r1_minus_candidate_r2": {
+        "1": 0.024159967999999976,
+        "2": 0.10123986012500008,
+        "3": -0.014840125999999954,
+        "4": 0.4757401942499997
+      },
+      "archive_minus_control_r1": {
+        "1": -0.00003987549999995288,
+        "2": -0.00014013050000005745,
+        "3": -0.000040233250000021314,
+        "4": 0.0002198220000002582
+      }
+    },
+    "T3_archive_minus_R2_negative_pairs": 6,
+    "T3_pairs": 6,
+    "excluded_samples": 0
+  },
+  "conditional_fixed_suffix_off_scenario": {
+    "inferred_head_calls": 379,
+    "inferred_rows": 1247,
+    "distribution_measured": false,
+    "reference_wall_ms": 18995.85,
+    "integer_histograms": 6165,
+    "histogram_constraints": "sum(nT)=379; sum(T*nT)=1247; T in 1..4",
+    "formula": "sum(nT * median_paired_delta_ms[T])",
+    "envelopes": {
+      "archive_minus_candidate_r2": {
+        "min_ms": 48.347903295374984,
+        "max_ms": 139.85087824475,
+        "min_counts": [
+          0,
+          0,
+          269,
+          110
+        ],
+        "max_counts": [
+          89,
+          1,
+          0,
+          289
+        ],
+        "min_wall_share_percent": 0.25451824106515364,
+        "max_wall_share_percent": 0.7362180594432468
+      },
+      "control_r1_minus_candidate_r2": {
+        "min_ms": 48.339427473499974,
+        "max_ms": 139.74039315037493,
+        "min_counts": [
+          0,
+          0,
+          269,
+          110
+        ],
+        "max_counts": [
+          89,
+          1,
+          0,
+          289
+        ],
+        "min_wall_share_percent": 0.2544736217305358,
+        "max_wall_share_percent": 0.7356364319068373
+      },
+      "archive_minus_control_r1": {
+        "min_ms": 0.013357675750022668,
+        "max_ms": 0.059839508000078756,
+        "min_counts": [
+          0,
+          0,
+          269,
+          110
+        ],
+        "max_counts": [
+          89,
+          1,
+          0,
+          289
+        ],
+        "min_wall_share_percent": 0.00007031891571065612,
+        "max_wall_share_percent": 0.0003150135845465128
+      }
+    },
+    "practical_filter_percent": 1,
+    "required_total_saving_ms": 189.9585,
+    "relevance_gate_passed": false,
+    "measured_model_speedup": false,
+    "normal_suffix_enabled_T6_covered": false
+  },
+  "independent_actual_audit": {
+    "passed": true,
+    "checks_passed": 125
+  },
+  "cleanup": {
+    "passed": true,
+    "api_stayed_stopped": true,
+    "final_max_sampled_temperature_c": 48
+  },
+  "sha256": {
+    "analysis": "e7a4857c8f3929e38584b8c52aad45b328bb0272720d11241509bdb8dd72d8dc",
+    "actual_audit": "451272e16ba468a745af666627f6e86e196bf14bdb30294a37c62e83764e35b3",
+    "probe": "aee74ed71e01054898402b1630d3cb594b0ae18fa499ca88b3475c03fa535de9",
+    "raw_archive": "af0c26659e4fd43daa49865b936bb9b70028e5e3baffa0ff0db951e51ac6872e",
+    "extraction": "2e6c272d3fa09b482c18a801e622b3b27667c226514bce79b097082fe0e8d426"
+  },
+  "provenance_limits": {
+    "original_compilation_source_identity_proven": false,
+    "generic_multicolumn_reuse": "Adjacent PR1418 generic path is bypassed on wave64; explicit reuse was not added to this candidate.",
+    "earlier_R4": "Local preparation only; no execution evidence or test result."
+  },
+  "limitations": [
+    "Full parity covers these finite synthetic cases on owner1, not universal equivalence.",
+    "Captured synthetic timings are not whole-model wall predictions.",
+    "The histogram envelope uses an inferred fixed suffix-OFF scenario and excludes normal T6."
+  ],
+  "next_action": "Park R2, retain every T3 regression; no T-specific variants, engine patch, model run or timing retry."
+}
