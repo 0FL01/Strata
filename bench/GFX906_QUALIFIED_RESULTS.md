@@ -192,3 +192,7 @@ The [CPU profile](results/2026-10-10-gfx906-prefill-cpu-profile/README.md#follow
 ## 2026-10-11: empty-PCIe observer V1 failure / V2 diagnostic
 
 [Report](results/2026-10-11-gfx906-v0142-empty-pcie-observer/README.md) · [Metrics](results/2026-10-11-gfx906-v0142-empty-pcie-observer/metrics.json). V1 host-macro failure preserved; corrected V2 fresh OFF/OBS/OFF passed exact 64K/256 outputs/work and diagnostic quality. Four sites × 93 windows yielded 372 zero-count records; local median group brackets 29.12 us versus adjacent-marker p95 3.04 us. Original pre-wait predicates were false in 4/6/5/0 windows and waits remain. Local source-proposal signal only; no optimization, removable-time estimate, 48-layer extrapolation or promotion.
+
+## 2026-10-11: release-local empty-PCIe elision
+
+[Report](results/2026-10-11-gfx906-v0142-empty-pcie-elision/README.md) · [Metrics](results/2026-10-11-gfx906-v0142-empty-pcie-elision/metrics.json). Technical checks PASS across eight processes / twelve submitted requests (eleven complete plus expected refusal); scientific performance FAIL. TG mean +1.040069% with positive pairs, but first PP companion pair -0.107024% violates the unchanged rule (PP mean +0.709565%). Component CID failure and native V1 missing-owner trace failure remain preserved. Historical 1,480-record component evidence is explicitly rebound to an identical component binary, not rerun. No promotion, dropped pair, timing retry or cross-release gain claim.
