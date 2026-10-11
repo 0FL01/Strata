@@ -1,0 +1,73 @@
+{
+  "date": "2026-10-11",
+  "decision": "DEPRIORITIZE_BELOW_ONE_PERCENT",
+  "measured_scope": "Single draft-owner GPU1; original c183 kernels/core, new host-only probe; synthetic hot-buffer exposure only.",
+  "setup": {
+    "gpu_architecture": "gfx906",
+    "draft_owner_ordinal": 1,
+    "logit_count": 106299,
+    "dtype": "fp32",
+    "rows": 1,
+    "graph_repetitions": 128,
+    "warmups_per_stage": 16,
+    "event_batches_per_stage": 9,
+    "semantic_fixtures_passed": 6
+  },
+  "device_per_call_ms": {
+    "greedy": {
+      "min": 0.0351012721640625,
+      "median": 0.03514128178125,
+      "max": 0.0352725237578125
+    },
+    "probability": {
+      "min": 0.035162508484375,
+      "median": 0.035228759046875,
+      "max": 0.0353562645625
+    },
+    "pair": {
+      "min": 0.0700737759453125,
+      "median": 0.0701562836796875,
+      "max": 0.070525020359375
+    }
+  },
+  "conditional_linear_projection": {
+    "calls_bound_per_operation": 1134,
+    "call_count_measured": false,
+    "reference_wall_ms": 19030.8,
+    "reference_output_tokens": 1024,
+    "reference_epoch": "Historical normal c183 model run",
+    "formula": "pair_device_ms * 1134 / 19030.8 * 100",
+    "max_ms_decimal": "79.975373087531250",
+    "max_wall_share_percent_decimal": "0.4202417822032245097421022763",
+    "frozen_filter_percent": 1,
+    "below_filter": true,
+    "model_speedup_measured": false,
+    "rigorous_critical_path_ceiling": false
+  },
+  "independent_actual_audit": {
+    "passed": true,
+    "checks_passed": 121,
+    "semantic_fixtures_passed": 6,
+    "event_batches_passed": 27,
+    "live_atomic_terminal_bindings_passed": true
+  },
+  "cleanup": {
+    "passed": true,
+    "api_stayed_stopped": true,
+    "final_max_sampled_temperature_c": 47
+  },
+  "sha256": {
+    "probe": "c324e33a62a80ca59d18907e056aa759b75e35fae67db616e28d6706d7711ca9",
+    "raw_archive": "2dca96e1cd8c4ad06481340ce3e57dc3c7f13c2bdad8ffde54646720c5e4098b",
+    "extraction": "2198691123d3c12f65c8bdaf0ef22089596cc6f64e79d63386cbdafbb2103488",
+    "analysis": "d027061464b38d201d04367c251463aa2f7028c84f75d1996a1c1d2420230315",
+    "independent_actual_audit": "656e79074dc9b68b903378303ba0530a2dc8cc0441be2de09030743b9c97c85c"
+  },
+  "limitations": [
+    "Fixed synthetic hot logits and serial graph replay differ from real logits and interleaved MTP layers.",
+    "1134 is a conservative source-derived scenario bound, not a measured invocation count.",
+    "The linear projection is a prioritization screen, not a model critical-path ceiling or speedup.",
+    "Host dispatch is not credited; no production optimization, model qualification or promotion."
+  ],
+  "next_action": "Park head sampling; do not implement or run a model screen on this exposure."
+}
