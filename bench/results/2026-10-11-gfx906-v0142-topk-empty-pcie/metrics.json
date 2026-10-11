@@ -1,0 +1,549 @@
+{
+  "schema": "strata.gfx906.v0142.topk.empty_pcie.fixed_tail0.public_numeric.v1",
+  "date": "2026-10-11",
+  "decision": "PASS_TOPK_EMPTY_PCIE_FIXED_TAIL0_SCREEN_ONLY",
+  "screen_passed": true,
+  "production_promotion": false,
+  "source_epoch": "61b3fb5dd3f1e8ec09cf7e4e05208bc6d3c46406",
+  "candidate_binary_sha256": "5271849848cc95951e834f4ce4b11b1a1a6d9d21b08e94ff32c7a7ba851c87be",
+  "experiment": {
+    "scope": "Incremental same-binary empty-PCIe elision OFF/ON screen on the current-release always-ON REG2/FIT17 stack.",
+    "hardware": "Two gfx906 MI50 GPUs",
+    "order": [
+      "A1",
+      "B1",
+      "B2",
+      "A2"
+    ],
+    "cold_native_processes": 4,
+    "requests_per_arm": 1,
+    "prompt_tokens": 65536,
+    "outputs_per_arm": 1024,
+    "treatment": {
+      "flag": "STRATA_VERIFY_SKIP_EMPTY_PCIE",
+      "A": 0,
+      "B": 1,
+      "sole_configured_difference": true
+    },
+    "always_on": {
+      "STRATA_GFX906_TOPK_REG": 2,
+      "STRATA_GFX906_TOPK_FIT17": 1,
+      "STRATA_GFX906_ATTN_QUERY_SWIZZLE": 1,
+      "STRATA_GFX906_ATTN_REDUCE12": 1
+    },
+    "fixed_policy": {
+      "route_tail_skip": 0,
+      "spec": 6,
+      "mtp_max_t": 4,
+      "suffix_draft": 0,
+      "adapt_every": 0,
+      "prompt_cache": 0,
+      "prompt_cache_every": 0,
+      "pcie_frac": 0,
+      "prefill": 4096
+    },
+    "primary_overlap_enabled": false,
+    "diagnostic_timing_traces": false,
+    "rate_definition": {
+      "PP": "65536*1000/prompt_ms",
+      "TG": "1024*1000/decode_ms",
+      "timing": "Native prompt/decode counters; excludes model loading and request-wall time."
+    },
+    "predeclared_gate": {
+      "before_data": true,
+      "aggregate_formula": "100*(mean(B rates)/mean(A rates)-1)",
+      "TG_mean_pct_min": 1,
+      "TG_both_pairs_positive": true,
+      "PP_mean_pct_min": -1,
+      "PP_individual_pair_gate": false,
+      "all_historical_ids_required": true,
+      "all_available_work_equal_to_fresh_A1": true,
+      "thresholds_changed": false
+    }
+  },
+  "arms": {
+    "A1": {
+      "prompt_ms": 104674,
+      "decode_ms": 20549.3,
+      "PP": 626.0962607715383,
+      "TG": 49.83138111760498,
+      "accepted": 647,
+      "offered": 868,
+      "cache_hits": 580670,
+      "lookups": 598560,
+      "suffix_drafts": {
+        "present": false,
+        "windows": 0,
+        "accepted": 0,
+        "offered": 0
+      },
+      "all1024_historical_ids_equal": true,
+      "empty_pcie_elision": 0,
+      "prompt_tokens": 65536,
+      "actual_outputs": 1024
+    },
+    "B1": {
+      "prompt_ms": 104682.5,
+      "decode_ms": 20183.7,
+      "PP": 626.0454230649822,
+      "TG": 50.73400813527748,
+      "accepted": 647,
+      "offered": 868,
+      "cache_hits": 580670,
+      "lookups": 598560,
+      "suffix_drafts": {
+        "present": false,
+        "windows": 0,
+        "accepted": 0,
+        "offered": 0
+      },
+      "all1024_historical_ids_equal": true,
+      "empty_pcie_elision": 1,
+      "prompt_tokens": 65536,
+      "actual_outputs": 1024
+    },
+    "B2": {
+      "prompt_ms": 105770.7,
+      "decode_ms": 20191.6,
+      "PP": 619.6044840395308,
+      "TG": 50.71415836288357,
+      "accepted": 647,
+      "offered": 868,
+      "cache_hits": 580670,
+      "lookups": 598560,
+      "suffix_drafts": {
+        "present": false,
+        "windows": 0,
+        "accepted": 0,
+        "offered": 0
+      },
+      "all1024_historical_ids_equal": true,
+      "empty_pcie_elision": 1,
+      "prompt_tokens": 65536,
+      "actual_outputs": 1024
+    },
+    "A2": {
+      "prompt_ms": 104644.6,
+      "decode_ms": 20536.9,
+      "PP": 626.2721631120957,
+      "TG": 49.8614688682323,
+      "accepted": 647,
+      "offered": 868,
+      "cache_hits": 580670,
+      "lookups": 598560,
+      "suffix_drafts": {
+        "present": false,
+        "windows": 0,
+        "accepted": 0,
+        "offered": 0
+      },
+      "all1024_historical_ids_equal": true,
+      "empty_pcie_elision": 0,
+      "prompt_tokens": 65536,
+      "actual_outputs": 1024
+    }
+  },
+  "mean_rates": {
+    "PP": {
+      "OFF": 626.1842119418169,
+      "ON": 622.8249535522565,
+      "gain_percent": -0.5364648813395045
+    },
+    "TG": {
+      "OFF": 49.84642499291864,
+      "ON": 50.72408324908053,
+      "gain_percent": 1.760724578114825
+    }
+  },
+  "pairs_B1_A1_then_B2_A2": [
+    {
+      "PP": -0.008119790795979576,
+      "TG": 1.8113626342048272
+    },
+    {
+      "PP": -1.06466157451921,
+      "TG": 1.7101170783890396
+    }
+  ],
+  "gates": {
+    "all_historical_ids": true,
+    "all_work_equal_A1": true,
+    "TG_mean_at_least_1pct": true,
+    "TG_both_pairs_positive": true,
+    "PP_mean_at_least_minus1pct": true
+  },
+  "parity": {
+    "each_historical_output_ids_equal": true,
+    "all_four_complete_arrays_equal": true,
+    "compared_ids": 4096,
+    "outputs_per_arm": 1024,
+    "all_available_work_equal_to_fresh_A1": true,
+    "shared_work": {
+      "accepted": 647,
+      "offered": 868,
+      "cache_hits": 580670,
+      "lookups": 598560,
+      "prompt_reused": 0,
+      "prompt_read": 65536,
+      "ram_blobs": 0,
+      "file_blobs": 0,
+      "file_read_mb": 0,
+      "offloaded_experts": 0,
+      "lookup_chain_accepted": null,
+      "lookup_chain_offered": null,
+      "native_suffix_accepted": null,
+      "native_suffix_offered": null,
+      "decode_windows": null,
+      "native_done_field_count": 16,
+      "optional_chain_counters_available": false,
+      "suffix_drafts": {
+        "present": false,
+        "windows": 0,
+        "accepted": 0,
+        "offered": 0
+      }
+    },
+    "output_arrays_published": false,
+    "original_output_ids_json_bytes": 5430,
+    "original_output_ids_json_sha256": "333d09c6516beeb6ae8925cc0dec1959ad5a5555f196dec94c3be551ad24e17a",
+    "hash_scope": "SHA-256 of each original complete output-ID JSON artifact. The four artifacts have identical bytes; arrays remain private."
+  },
+  "PP_progress_curves": {
+    "A1": {
+      "progress_tokens": [
+        4096,
+        8192,
+        12288,
+        16384,
+        20480,
+        24576,
+        28672,
+        32768,
+        36864,
+        40960,
+        45056,
+        49152,
+        53248,
+        57344,
+        61440,
+        65535
+      ],
+      "cumulative_ms": [
+        10832,
+        16885,
+        22932,
+        28928,
+        35046,
+        41136,
+        47323,
+        53477,
+        59709,
+        65940,
+        72251,
+        78598,
+        85189,
+        91593,
+        98006,
+        104478
+      ],
+      "chunk_ms": [
+        10832,
+        6053,
+        6047,
+        5996,
+        6118,
+        6090,
+        6187,
+        6154,
+        6232,
+        6231,
+        6311,
+        6347,
+        6591,
+        6404,
+        6413,
+        6472
+      ],
+      "tail_ms": 196,
+      "total_ms": 104674
+    },
+    "B1": {
+      "progress_tokens": [
+        4096,
+        8192,
+        12288,
+        16384,
+        20480,
+        24576,
+        28672,
+        32768,
+        36864,
+        40960,
+        45056,
+        49152,
+        53248,
+        57344,
+        61440,
+        65535
+      ],
+      "cumulative_ms": [
+        10795,
+        16863,
+        22926,
+        28935,
+        35088,
+        41181,
+        47351,
+        53493,
+        59718,
+        65961,
+        72258,
+        78620,
+        85217,
+        91592,
+        98027,
+        104488
+      ],
+      "chunk_ms": [
+        10795,
+        6068,
+        6063,
+        6009,
+        6153,
+        6093,
+        6170,
+        6142,
+        6225,
+        6243,
+        6297,
+        6362,
+        6597,
+        6375,
+        6435,
+        6461
+      ],
+      "tail_ms": 194.5,
+      "total_ms": 104682.5
+    },
+    "B2": {
+      "progress_tokens": [
+        4096,
+        8192,
+        12288,
+        16384,
+        20480,
+        24576,
+        28672,
+        32768,
+        36864,
+        40960,
+        45056,
+        49152,
+        53248,
+        57344,
+        61440,
+        65535
+      ],
+      "cumulative_ms": [
+        10817,
+        16878,
+        24053,
+        30067,
+        36170,
+        42266,
+        48443,
+        54602,
+        60814,
+        67034,
+        73329,
+        79700,
+        86315,
+        92687,
+        99108,
+        105576
+      ],
+      "chunk_ms": [
+        10817,
+        6061,
+        7175,
+        6014,
+        6103,
+        6096,
+        6177,
+        6159,
+        6212,
+        6220,
+        6295,
+        6371,
+        6615,
+        6372,
+        6421,
+        6468
+      ],
+      "tail_ms": 194.7,
+      "total_ms": 105770.7
+    },
+    "A2": {
+      "progress_tokens": [
+        4096,
+        8192,
+        12288,
+        16384,
+        20480,
+        24576,
+        28672,
+        32768,
+        36864,
+        40960,
+        45056,
+        49152,
+        53248,
+        57344,
+        61440,
+        65535
+      ],
+      "cumulative_ms": [
+        10836,
+        16869,
+        22920,
+        28922,
+        35051,
+        41150,
+        47342,
+        53450,
+        59697,
+        65933,
+        72240,
+        78612,
+        85214,
+        91599,
+        98000,
+        104449
+      ],
+      "chunk_ms": [
+        10836,
+        6033,
+        6051,
+        6002,
+        6129,
+        6099,
+        6192,
+        6108,
+        6247,
+        6236,
+        6307,
+        6372,
+        6602,
+        6385,
+        6401,
+        6449
+      ],
+      "tail_ms": 195.6,
+      "total_ms": 104644.6
+    }
+  },
+  "PP_elapsed_localization": {
+    "B2_minus_A2_total_ms": 1126.1,
+    "chunk_differences_ms": [
+      -19,
+      28,
+      1124,
+      12,
+      -26,
+      -3,
+      -15,
+      51,
+      -35,
+      -16,
+      -12,
+      -1,
+      13,
+      -13,
+      20,
+      19
+    ],
+    "third_chunk_difference_ms": 1124,
+    "other_chunks_plus_tail_net_ms": 2.1,
+    "tail_difference_ms": -0.9,
+    "cause": "Unresolved. This localizes elapsed time only; no exclusion, subtraction or change to any gate."
+  },
+  "component_gate": {
+    "passed": true,
+    "admitted_v1_processes": 8,
+    "admitted_v2_processes": 2,
+    "composite_admission_sha256": "1648cc04c9c85d8e747f53628a3149d893bf2db6e7345e496bd4378f7c95947c",
+    "original_v1_late_inspect_transition_failed": true,
+    "failed_v1_transition_excluded_from_admission": true,
+    "scope": "Component admission only; not model throughput evidence."
+  },
+  "guard_validation": {
+    "passed": true,
+    "exact_output_ids_compared": 386,
+    "both_owners_capture_and_reuse": true,
+    "positive_pcie_refused_before_prefill_or_output": true,
+    "actual_review_sha256": "646adae73ad94a28d6ded8804b9a0222bf1532a49b06f63ee80c51ef72d30fca",
+    "scope": "Guard validation is separate from the four untraced timing arms."
+  },
+  "actual_runtime_independent_review": {
+    "decision": "PASS_TOPK_ELISION_FIXED_TAIL0_ACTUAL_AUDIT",
+    "audit_passed": true,
+    "screen_passed": true,
+    "checks_passed": 412,
+    "reviewed_at_utc": "2026-10-11T15:36:44.639527+00:00",
+    "immutable_binding_passed": true,
+    "sha256": "62989d2d5d53fb821e22db233c4159e74b6ff0ade360d9e62afd59f40fb3f6e2"
+  },
+  "execution": {
+    "completed": true,
+    "cleanup_passed": true,
+    "api_left_stopped": true,
+    "final_max_sampled_sensor_temperature_c": 53,
+    "all_four_arms_retained": true,
+    "timing_adjustments": false
+  },
+  "qualification_status": {
+    "screen_64K_1024": "PASS",
+    "current_4K_200K_correctness": "Not yet passed; separate qualification is being prepared.",
+    "ordinary_profile_qualification": false,
+    "general_correctness_guarantee": false,
+    "production_promotion": false,
+    "upstream_PR_submitted": false,
+    "release_near_54_TG_claim": false
+  },
+  "provenance": {
+    "raw_archive_sha256": "8c1f052d37ebf6c4259545db0735253b68a19050431551ac0b71cd4b87781444",
+    "raw_archive_compressed_bytes": 241508,
+    "raw_archive_regular_files": 73,
+    "raw_archive_expanded_bytes": 1650039,
+    "analysis_sha256": "032e72264169c7ce9953b7d1c0cfea1b07de4064e175e53c0d15009e14e03a94",
+    "extraction_receipt_sha256": "eb5629d2e73b82bd194f16c2eb06deea8bd24da65b7b4e845206f400dcc56975",
+    "runtime_manifest_sha256": "972d2d81819600cef6ccf5ecb059cd9703b60d3e69e0aabc5584bfd374098424",
+    "pre_execution_review_sha256": "61317d7a7ed95d1e900cdf6e0e39de9b2f68acccda562abe1ce221cb4fb5ea8f",
+    "transport_review_sha256": "7875d9d792b962a5c6ac7466ea8911865fe2fa3159bff565195c138120b51de2",
+    "build_review_sha256": "5411a9fc36902802d7a9aae58f344c82f5239a9734dffbe711694611f96eb585",
+    "component_admission_sha256": "1648cc04c9c85d8e747f53628a3149d893bf2db6e7345e496bd4378f7c95947c",
+    "guard_actual_review_sha256": "646adae73ad94a28d6ded8804b9a0222bf1532a49b06f63ee80c51ef72d30fca",
+    "actual_runtime_independent_review_sha256": "62989d2d5d53fb821e22db233c4159e74b6ff0ade360d9e62afd59f40fb3f6e2"
+  },
+  "limitations": [
+    "One predeclared current-release same-binary ABBA screen; no automatic promotion or cross-version speed claim.",
+    "Both PP pairs are retained, including second pair below -1%; the frozen PP gate applies to gain of mean rates.",
+    "Prior historical/current epochs and failed gates remain unchanged.",
+    "The B2/A2 PP pair is -1.0646615745%; passing the mean-rate floor is not evidence of zero PP loss.",
+    "PP chunk localization does not establish cause; no arm or interval was removed or adjusted.",
+    "Only reported work counters match. Five optional counters remain null; no proof of equality of every unreported operation.",
+    "Component and guard checks are separate evidence, not measured full-model gains.",
+    "No gains are pooled or summed with historical c183 or prior current-release studies.",
+    "Final sampled temperatures do not constitute continuous thermal proof.",
+    "Public numeric consistency checks do not repeat hardware tests or independently expose the private evidence."
+  ],
+  "sanitization": {
+    "full_output_arrays": false,
+    "generated_text": false,
+    "private_paths": false,
+    "process_identifiers": false,
+    "full_raw_payloads": false,
+    "configuration_contents": false,
+    "raw_logs": false
+  }
+}
