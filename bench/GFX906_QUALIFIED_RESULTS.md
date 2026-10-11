@@ -205,3 +205,9 @@ The [CPU profile](results/2026-10-10-gfx906-prefill-cpu-profile/README.md#follow
 ## 2026-10-11: strict HC component pass, hypothetical timing gate failure
 
 [Report](results/2026-10-11-gfx906-v0142-strict-hc/README.md) · [Metrics](results/2026-10-11-gfx906-v0142-strict-hc/metrics.json). Both-device synthetic full-output component checks passed all 64 cases (24 fast / 40 fallback). Corrected V2 GPU0 timing passed all 8 references and 128 warmup/measured sample checks, with all 12 fast quartets positive; the frozen hypothetical `528*S − 1200*P` screen nevertheless gives **−64.813104 ms**, below **+1036.092079 ms**. **PARK_INSUFFICIENT_HYPOTHETICAL_SIGNAL**; GPU1 timing was skipped by the fixed gate. V1 lifecycle failure remains invalid, and V2's repair branch was not used. A includes strict-enabled null-scratch rejection cost. Current-model activation is unknown; no all-workloads rejection, model gain, retry or promotion claim.
+
+
+## 2026-10-11: historical c183 recovery and release inclusion audit
+
+[Report](results/2026-10-11-gfx906-c183-recovery-inclusion/README.md) · [Metrics](results/2026-10-11-gfx906-c183-recovery-inclusion/metrics.json). One cold historical c183 observation reproduced every 1,024-output ID at **646.567331 PP / 53.748202 TG**, but the unchanged work gate failed: offered 872→874, hits 582049→582988, lookups 600000→600960 and suffix 5/9/16→6/11/20. This is descriptive near-54 TG recovery, not equal-work qualification or a new speedup. The historical integrated winner remains distinct from pristine v0.1.42: query/reduce and basic MMQ survive; strict HC, J32 override, primary overlap, empty-PCIe elision and REG2/FIT17 are absent. Exact historical compiled dequant identity is unresolved; current Q8 vectorization is present. Historical and release top-k gates/treatments differ; the release strict failure does not disprove the historical winner. No rebuild, retry or promotion.
+

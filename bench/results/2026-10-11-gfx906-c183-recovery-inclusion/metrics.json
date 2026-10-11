@@ -1,0 +1,223 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-11",
+  "decision": "OBSERVED_HISTORICAL_OUTPUT_REPRODUCTION_WITH_WORK_DRIFT",
+  "recovery": {
+    "engine_sha256": "c18316d678a669c309cb95e2f5de9af03fa5573256fd0e093aafc4b41000d049",
+    "rebuilt": false,
+    "order": [
+      "C1"
+    ],
+    "cold_prompt": true,
+    "warmups": 0,
+    "prompt_tokens": 65536,
+    "output_tokens": 1024,
+    "prompt_ms": 101359.9,
+    "decode_ms": 19051.8,
+    "PP": 646.5673308675325,
+    "TG": 53.748202269601826,
+    "all_1024_historical_ids_equal": true,
+    "work_gate_passed": false,
+    "runner_completed": false,
+    "runner_error": "available historical work counters changed",
+    "work": {
+      "historical": {
+        "accepted": 648,
+        "offered": 872,
+        "cache_hits": 582049,
+        "lookups": 600000,
+        "suffix_windows": 5,
+        "suffix_accepted": 9,
+        "suffix_offered": 16
+      },
+      "actual": {
+        "accepted": 648,
+        "offered": 874,
+        "cache_hits": 582988,
+        "lookups": 600960,
+        "suffix_windows": 6,
+        "suffix_accepted": 11,
+        "suffix_offered": 20
+      }
+    },
+    "unreported_optional_counters": null,
+    "independent_actual_audit": {
+      "status": "AUDIT_CONFIRMS_C183_REPLAY_IDS_AND_IDENTITY_WITH_HISTORICAL_WORK_GATE_FAIL",
+      "audit_passed": true,
+      "checks_passed": 66,
+      "replay_gate_passed": false,
+      "complete_historical_INFO_equal": true,
+      "ready_done_immutable_binding_passed": true,
+      "both_retained_live_inspections_passed": true,
+      "arithmetic": "Independent Decimal division agrees with the saved binary floating-point rates within 1e-12 absolute; exact float equality was not required.",
+      "review_sha256": "71a175c939574b23cbcb80b39fa6ab725b258ab6ec6abdcdd6d810781daaee17"
+    },
+    "native_exit": 0,
+    "runner_exit": 1,
+    "output_ids_sha256": "333d09c6516beeb6ae8925cc0dec1959ad5a5555f196dec94c3be551ad24e17a",
+    "cleanup": {
+      "passed": true,
+      "api_left_stopped": true,
+      "power_mode": "high",
+      "configured_cap_w": 190,
+      "max_final_sampled_temperature_c": 50,
+      "continuous_thermal_proof": false
+    }
+  },
+  "historical_combined": {
+    "report": "../2026-10-09-gfx906-direct-c183-vs-ce/README.md",
+    "order": [
+      "A1",
+      "B1",
+      "B2",
+      "A2"
+    ],
+    "stable_engine_sha256": "ce794788d64313236bbc24b47a3f8e06c841034afaf4e19a2fc5ffd84e337f14",
+    "PP": {
+      "stable": 598.318773666,
+      "c183": 647.068551491,
+      "gain_percent": 8.147793
+    },
+    "TG": {
+      "stable": 50.532092076,
+      "c183": 53.821369818,
+      "gain_percent": 6.509285
+    },
+    "all_four_full_output_arrays_equal": true,
+    "available_aggregate_counters_equal": true,
+    "constant_work_proven": false,
+    "stock_upstream_comparison": false
+  },
+  "release_baseline": {
+    "commit": "61b3fb5dd3f1e8ec09cf7e4e05208bc6d3c46406",
+    "source_tree": "7417abeee74c20912310306a2b1dc16f9ea7515b",
+    "engine_sha256": "572c7fb33c95d8b5c16803a8550abeab13eeccb9314136ae101ce61ecd605171",
+    "report": "../2026-10-10-gfx906-v0142-release-validation/README.md",
+    "query_swizzle_and_reduce12_on": {
+      "PP": 626.247328,
+      "TG": 51.076789,
+      "accepted": 678,
+      "offered": 862
+    },
+    "cross_release_speedup_claim": false,
+    "cross_epoch": {
+      "first_output_difference_zero_based": 13,
+      "output_array_lengths": [
+        1024,
+        1024
+      ],
+      "equal_output_positions": 25,
+      "current_tail_skip": 7,
+      "current_tail_skip_active": true,
+      "historical_tail_skip_feature_markers_absent_in_bound_source_and_binary": true,
+      "tail_skip_sole_cause_proven": false,
+      "historical_expert_mode": 16,
+      "release_expert_mode": 7
+    }
+  },
+  "inclusion": [
+    {
+      "feature": "guarded_qsa_query_swizzle",
+      "status": "PRESENT_AND_ENABLED_IN_TESTED_RELEASE_PROFILE"
+    },
+    {
+      "feature": "qsa_reduce12",
+      "status": "PRESENT_AND_ENABLED_IN_TESTED_RELEASE_PROFILE"
+    },
+    {
+      "feature": "strict_scaled_hc_fp16_with_native_fallback",
+      "status": "ABSENT_FROM_PRISTINE_RELEASE"
+    },
+    {
+      "feature": "q2_mmq_j32_selection_override",
+      "status": "ABSENT_FROM_PRISTINE_RELEASE",
+      "basic_native_mmq_compiled": true
+    },
+    {
+      "feature": "primary_only_commit_overlap",
+      "status": "ABSENT_FROM_PRISTINE_RELEASE",
+      "separate_release_port": true
+    },
+    {
+      "feature": "empty_pcie_grouped_call_elision",
+      "status": "ABSENT_FROM_PRISTINE_RELEASE",
+      "separate_release_reimplementation": true,
+      "historical_and_release_contracts_identical": false
+    },
+    {
+      "feature": "reg2_and_scalar_fit17_topk",
+      "status": "ABSENT_FROM_PRISTINE_RELEASE",
+      "separate_release_overlay": true,
+      "fit17_core_bytes": 3044,
+      "fit17_core_sha256": "7aa5f656210efa5b6e2ae0e6235969ba6f21398884eb30f70a2bd06e227664a7",
+      "fit17_guard_bytes": 891,
+      "fit17_guard_sha256": "218ad3ad4c0a5ce8c8d5e6b9b39f9259a46f856ad4ae0d046d024da07ec31cc6"
+    },
+    {
+      "feature": "pr1525_dequantization",
+      "status": "PARTIAL_FUNCTIONAL_OVERLAP_HISTORICAL_COMPILED_DONOR_UNRESOLVED",
+      "current_q8_vector_store_present": true,
+      "all_dequant_optimization_absent_claim": false
+    }
+  ],
+  "fit17_interpretation": {
+    "historical_report": "../2026-10-09-gfx906-qsa-fit17/README.md",
+    "historical_treatment": "FIT17 off/on with REG2 retained",
+    "historical_suffix_disabled_TG_gain_percent": 1.413177,
+    "historical_adaptive_TG_gain_percent": 1.299911,
+    "historical_PP_floor_percent": -1,
+    "historical_adaptive_second_pair_work_drift": true,
+    "release_report": "../2026-10-10-gfx906-v0142-topk-stack/README.md",
+    "release_treatment": "REG=0,FIT17=0 versus REG=2,FIT17=1 on the same candidate binary",
+    "release_TG_gain_percent": 2.564108,
+    "release_mean_PP_gain_percent": 0.113856,
+    "release_first_PP_pair_gain_percent": -0.05347,
+    "release_strict_performance_gate_passed": false,
+    "historical_winner_disproved": false,
+    "individual_release_feature_attribution": false
+  },
+  "provenance": {
+    "recovery_archive_sha256": "03b487409b615cccf123b8d74e14a63ed4ed96fab051d27abbca37d6ca509299",
+    "recovery_analysis_sha256": "caf110bba9ece00cd93789252014b996b238a24bd8ef8feb5b03ee8ab2a437c9",
+    "inclusion_audit_sha256": "c84b00766549235b1675819bbb17721709e4cb9618935b365569d80fbdb55c50",
+    "frozen_manifest_sha256": "fb71583d2f8d6d52bba57db43d7d9c489bf2a1648b3543473183126d9f92e8b2",
+    "historical_reference_sha256": "7021b6532ee7ade54a22af07669208cf71db818fd3d1cbad1a7632eaf4ec3233",
+    "prompt_fixture_sha256": "63ce3d4042027a00b2193feab143f1d9443b5c31a863a962ec9543ccb54d9695",
+    "historical_direct_summary_sha256": "91883277001d9b6c31d92a14563125e36fdffeee3fc8901b4e31b591968707c2",
+    "release_native_mmq_compile_commands_sha256": "4f3f273f9c83a7de268babb22803888eabe58b3148021519a04a5776276710ea",
+    "release_query_reduce_runtime_binding_sha256": "20d1f6e508e9c5c83c7caa4170fb159f944961a19d2054da82847fe55c718fe3",
+    "independent_actual_audit_sha256": "71a175c939574b23cbcb80b39fa6ab725b258ab6ec6abdcdd6d810781daaee17",
+    "independent_actual_extraction_receipt_sha256": "3fc32db8e81e9bc6ce2abc21e635aea8fbb1ea40cee01c9ed2a5f9e48f29188b",
+    "recovery_result_sha256": "18a2caeb82bc3f94734095dae985983008c5fd412c0818979d2bf55e9f5a8dbf",
+    "epoch_comparison": {
+      "historical_result_sha256": "7021b6532ee7ade54a22af07669208cf71db818fd3d1cbad1a7632eaf4ec3233",
+      "release_result_sha256": "8adeecde633ac63a1710b3cc63fd56d8035bfa7b735580ad2fe255638caf27ed",
+      "release_tail_activation_evidence_sha256": "f415909bd9d4027ba2f9f1299c54b97bd7a859a82db77e8f81ee315755fd6c61",
+      "bound_historical_generate_source_sha256": "e7a5a754af2155c779aad5f2232ba1c0052ebbd2a4795d40885eff571b62221c"
+    }
+  },
+  "claims": {
+    "approximately_54_TG_observed_on_historical_engine": true,
+    "equal_work_qualification": false,
+    "new_paired_speedup": false,
+    "cross_release_speedup": false,
+    "component_gains_added": false,
+    "complete_release_stack_qualified": false,
+    "retry": false,
+    "promoted": false,
+    "deployed": false
+  },
+  "limitations": [
+    "One unpaired cold observation is descriptive, not a confidence interval or new speedup qualification.",
+    "All historical output IDs match, but available work counters differ and the frozen work gate failed.",
+    "Adaptive timing-trained policy and aggregate counters do not prove constant work or isolate the cause of drift.",
+    "Historical full-stack and pristine release baseline are distinct engines/profiles; missing features do not quantify the whole cross-version difference.",
+    "Historical compiled dequant donor remains unresolved; current Q8_0 vectorization is present.",
+    "Historical model payloads lack a complete independent hash inventory.",
+    "Raw logs, private paths, configuration contents and model payloads are excluded.",
+    "Default tail-skip 7 is active on the release and absent from the historical bound source/binary; it is not proven to be the sole cause of cross-epoch output divergence.",
+    "Independent audit success describes evidence integrity and safety, not successful equal-work replay qualification.",
+    "Thermal values are sampled, not continuous."
+  ]
+}
+
