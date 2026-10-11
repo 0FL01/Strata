@@ -95,5 +95,104 @@
     "First-token equality does not establish full trajectory, quality, TG behavior or hidden/output finiteness.",
     "Decode cache work differs; detailed PP route work was not measured.",
     "No production promotion, new patch or PR follows from this exploratory receipt."
-  ]
+  ],
+  "follow_on_1024_output_trajectory": {
+    "status": "PASS_DESCRIPTIVE_APPROXIMATE_TRAJECTORY_SCREEN",
+    "scope": "Separate one fixed-order OFF then ON pair; original c183 HIP_PROMPT_F16 0/1; 65536 prompt tokens and 1024 outputs per arm.",
+    "comparison": {
+      "OFF_all_1024_equal_historical": true,
+      "ON_equal_historical": false,
+      "pair_trajectory_equal": false,
+      "first_divergence_index_zero_based": 13,
+      "matching_prefix_tokens": 13,
+      "mismatching_positions": 986,
+      "outputs_per_arm": 1024
+    },
+    "descriptive_rates": {
+      "PP_tokens_per_second": {
+        "OFF": 646.8411026777343,
+        "ON": 799.5217704254047
+      },
+      "PP_change_percent": 23.604045431809585,
+      "TG_tokens_per_second": {
+        "OFF": 53.92254952554475,
+        "ON": 55.58722145319328
+      },
+      "TG_rate_change_percent_descriptive": 3.0871535976983555,
+      "prompt_ms": {
+        "OFF": 101317,
+        "ON": 81969
+      },
+      "decode_ms": {
+        "OFF": 18990.2,
+        "ON": 18421.5
+      },
+      "TG_delta_is_isolated_speedup": false
+    },
+    "decode_work": {
+      "accepted": {
+        "OFF": 647,
+        "ON": 678
+      },
+      "offered": {
+        "OFF": 868,
+        "ON": 875
+      },
+      "acceptance_percent": {
+        "OFF": 74.53917050691244,
+        "ON": 77.48571428571428
+      },
+      "cache_hits": {
+        "OFF": 580670,
+        "ON": 557414
+      },
+      "lookups": {
+        "OFF": 598560,
+        "ON": 587520
+      },
+      "cache_misses": {
+        "OFF": 17890,
+        "ON": 30106
+      },
+      "equal_work": false
+    },
+    "PP_progress_intervals": {
+      "count": 16,
+      "all_faster": true,
+      "min_saved_ms": 1088,
+      "max_saved_ms": 1905,
+      "basis": "Integer-progress intervals; descriptive"
+    },
+    "INFO_equal": true,
+    "limitations": {
+      "approximate": true,
+      "quality_qualified": false,
+      "quality_smoke": "pending",
+      "hidden_tensor_finiteness_observed": false,
+      "logits_finiteness_observed": false,
+      "GEMM_output_finiteness_observed": false,
+      "full_trajectory_parity": false,
+      "TG_equivalence_qualified": false,
+      "balanced_performance_qualified": false,
+      "promoted": false,
+      "description": "ON changes both output trajectory and decode work. Its observed TG increase is not equal-work or isolated kernel acceleration. This does not establish quality loss or quality preservation."
+    },
+    "independent_actual_audit": {
+      "passed": true,
+      "checks_passed": 223
+    },
+    "cleanup": {
+      "passed": true,
+      "api_stayed_stopped": true,
+      "final_max_sampled_temperature_c": 53
+    },
+    "sha256": {
+      "analysis": "9c72f60a2fb69cb5dcc9726822c3f2c6a73593890ce7f5dcfff4619fe7095ec9",
+      "actual_audit": "1edfad1838f58640056899604a20f689b8a4c8f9472b5e668a6de9f63588295e",
+      "raw_archive": "832bc85b425b650b0729e795ac2dae656043e9cf91f26e06e4c78a3fd3090c9d",
+      "extraction": "d7d45460c9d893e77d0e92a324759feade9babe95c3bc7934e417ac18bdefa55",
+      "original_binary": "c18316d678a669c309cb95e2f5de9af03fa5573256fd0e093aafc4b41000d049"
+    },
+    "next_step": "Quality smoke pending; no further speed runs before quality review. No PR or promotion."
+  }
 }
