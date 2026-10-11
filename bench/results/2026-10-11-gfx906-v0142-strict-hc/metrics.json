@@ -1,0 +1,265 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-11",
+  "decision": "PARK_INSUFFICIENT_HYPOTHETICAL_SIGNAL",
+  "release_commit": "61b3fb5dd3f1e8ec09cf7e4e05208bc6d3c46406",
+  "candidate_patch_sha256": "9bd1ff42547d46475bf28731fe8fe41e800d422ed02b56758bbaf0bf2caf8115",
+  "candidate_engine_sha256": "a100949a2b20df62ace6d4bf957234380b053aafcbe01749b5c45a3d74da555e",
+  "timing_probe_sha256": "55700acf3310627be1afd51776b6fd9f521bd1b756402811caccf2fae12a3e76",
+  "device": {
+    "name": "AMD Radeon Pro VII",
+    "architecture": "gfx906:sramecc+:xnack-",
+    "component_owners": 2,
+    "timing_owner": 0
+  },
+  "component": {
+    "passed": true,
+    "archive_sha256": "bf832faed193a6c07b2876f9643cf8a5ab9c335982e42ce224bec21c65d283cf",
+    "independent_review_sha256": "d5abc2422e2be8f1de04e12ff46998e0f253ef0bdc76de059a129ab2460c6349",
+    "full_output_comparisons": 64,
+    "fast_route_calls": 24,
+    "fallback_calls": 40,
+    "cancellation_witness_rows": 32,
+    "full_canary_input_finiteness_scratch_rejection_checks_passed": true,
+    "owners": [
+      {
+        "ordinal": 0,
+        "cases": 32,
+        "taken": 12,
+        "fallback": 20,
+        "signed_zero_fallbacks": 4,
+        "cancellation_rows": 16,
+        "cleanup_passed": true
+      },
+      {
+        "ordinal": 1,
+        "cases": 32,
+        "taken": 12,
+        "fallback": 20,
+        "signed_zero_fallbacks": 4,
+        "cancellation_rows": 16,
+        "cleanup_passed": true
+      }
+    ],
+    "scope": "Four shapes times eight synthetic cases on each of two physical owners; full outputs compared in memory by the reviewed, PID-hash-bound probe.",
+    "complete_output_arrays_retained_offline": false,
+    "universal_gemm_equivalence_claim": false,
+    "nan_inf_empirically_tested": false
+  },
+  "timing_v1": {
+    "status": "INVALID_TIMING_LIFECYCLE_FAILURE",
+    "archive_sha256": "6fd873c6b769f7ac7783782442bbdd44e49ada67a98b12411c1bd76434851b3b",
+    "initial_binding_valid": true,
+    "failure": "Late PermissionError while reading the driver process environment.",
+    "exit_race_proven": false,
+    "timing_values_valid": false,
+    "performance_gate_evaluated": false,
+    "selection_uses_failed_timing": false,
+    "probe_completion_record_present": true,
+    "container_cli_exit_code": 0,
+    "runtime_exit_code": 1,
+    "cleanup_passed": true
+  },
+  "timing_v2": {
+    "audit_passed": true,
+    "correctness_passed": true,
+    "performance_gate_passed": false,
+    "archive_sha256": "9c6ba166d0d45c4711240c7fbb59ebc858db631535896960f5c9423e76247f7c",
+    "independent_review_sha256": "5755135ad4905ed0107be0985b0fc6661f7132ea2f06575f2167dac3ee34f39d",
+    "independent_parser_rerun_exact": true,
+    "independent_integer_ns_reduction_exact": true,
+    "gpu0_cells": 8,
+    "references": 8,
+    "warmup_samples": 32,
+    "measured_samples": 96,
+    "all_checked_samples": 128,
+    "quartets": 24,
+    "gpu1_ran": false,
+    "gpu1_skip_reason": "Fixed early stop after owner0 failed the hypothetical performance gate.",
+    "method": {
+      "arm_a": "Same-binary forced native, strict flag ON with null scratch; includes rejection/counter overhead.",
+      "arm_b": "Same-binary strict route with valid scratch: random case 0 must activate; tiny-W case 4 must fall back.",
+      "order": "One native reference, two warmups per arm, then three ABBA quartets for each of eight fixed cells.",
+      "paired_saving_ms": "(A1 + A2 - B1 - B2) / 2",
+      "timing": "Monotonic host interval immediately before Gemm::bf16 through final stream completion; includes conversion, guard copy/synchronization and GEMM.",
+      "outside_interval": "Setup, reset, counter reads, output transfer and full validation.",
+      "production_strict_off_comparison": false,
+      "full_sample_checks": "Full output-byte equality, finite output, all boundary canaries, complete input immutability and exact route counters."
+    },
+    "lifecycle_repair": {
+      "changes": "Versioned runner names and lifecycle handling only; unchanged timing probe, candidate engine, static archives, cell/order policy and frozen gate.",
+      "identity_binding_retained": true,
+      "exit_race_recovery_requires": "Positive termination and owned container CLI exit zero.",
+      "recovery_branch_used": false
+    },
+    "cells": [
+      {
+        "T": 4095,
+        "N": 320,
+        "K": 10240,
+        "case": 0,
+        "median_paired_saving_ms": "6.417143",
+        "median_signed_penalty_ms": "-6.417143",
+        "quartet_savings_ms": [
+          "6.523420",
+          "6.417143",
+          "5.3612615"
+        ]
+      },
+      {
+        "T": 4095,
+        "N": 320,
+        "K": 10240,
+        "case": 4,
+        "median_paired_saving_ms": "-0.1095555",
+        "median_signed_penalty_ms": "0.1095555",
+        "quartet_savings_ms": [
+          "0.377231",
+          "-0.5800785",
+          "-0.1095555"
+        ]
+      },
+      {
+        "T": 4095,
+        "N": 10240,
+        "K": 320,
+        "case": 0,
+        "median_paired_saving_ms": "3.2291755",
+        "median_signed_penalty_ms": "-3.2291755",
+        "quartet_savings_ms": [
+          "3.2457170",
+          "3.1938285",
+          "3.2291755"
+        ]
+      },
+      {
+        "T": 4095,
+        "N": 10240,
+        "K": 320,
+        "case": 4,
+        "median_paired_saving_ms": "-0.0719300",
+        "median_signed_penalty_ms": "0.0719300",
+        "quartet_savings_ms": [
+          "-0.0662000",
+          "-0.0719300",
+          "-0.0768475"
+        ]
+      },
+      {
+        "T": 4096,
+        "N": 320,
+        "K": 10240,
+        "case": 0,
+        "median_paired_saving_ms": "5.4850105",
+        "median_signed_penalty_ms": "-5.4850105",
+        "quartet_savings_ms": [
+          "5.254293",
+          "5.4850105",
+          "7.4336795"
+        ]
+      },
+      {
+        "T": 4096,
+        "N": 320,
+        "K": 10240,
+        "case": 4,
+        "median_paired_saving_ms": "-1.4664525",
+        "median_signed_penalty_ms": "1.4664525",
+        "quartet_savings_ms": [
+          "-1.4664525",
+          "-2.5666885",
+          "-0.2932105"
+        ]
+      },
+      {
+        "T": 4096,
+        "N": 10240,
+        "K": 320,
+        "case": 0,
+        "median_paired_saving_ms": "3.2100945",
+        "median_signed_penalty_ms": "-3.2100945",
+        "quartet_savings_ms": [
+          "3.1782190",
+          "3.2100945",
+          "3.2409925"
+        ]
+      },
+      {
+        "T": 4096,
+        "N": 10240,
+        "K": 320,
+        "case": 4,
+        "median_paired_saving_ms": "-0.1070035",
+        "median_signed_penalty_ms": "0.1070035",
+        "quartet_savings_ms": [
+          "-0.1070035",
+          "-0.1237620",
+          "-0.0893820"
+        ]
+      }
+    ],
+    "gate": {
+      "schema": "strata.strict.hc.hypothetical.gate.v1",
+      "passed": false,
+      "decision": "INSUFFICIENT_SIGNAL_FOR_THIS_HYPOTHETICAL_SCENARIO",
+      "hypothetical": true,
+      "current_activation_known": false,
+      "global_workload_bound": false,
+      "no_workload_benefit_claim": false,
+      "all_12_fast_quartet_savings_positive": true,
+      "fast_cell_median_savings_ms": [
+        "6.417143",
+        "3.2291755",
+        "5.4850105",
+        "3.2100945"
+      ],
+      "fallback_cell_signed_median_penalties_ms": [
+        "0.1095555",
+        "0.0719300",
+        "1.4664525",
+        "0.1070035"
+      ],
+      "conservative_fast_saving_S_ms": "3.2100945",
+      "signed_fallback_penalty_Praw_ms": "1.4664525",
+      "conservative_fallback_penalty_P_ms": "1.4664525",
+      "hypothetical_fast_calls": 528,
+      "hypothetical_fallback_calls": 1200,
+      "hypothetical_net_saved_ms": "-64.8131040",
+      "threshold_ms": "1036.092079",
+      "comparison": "strictly_greater_than",
+      "scenario_threshold_passed": false,
+      "break_even_fast_fraction": "0.3135759140237444422134536443",
+      "break_even_scope": "zero_net_saving_mixture_using_S_and_clamped_P; does_not_include_historical_scenario_threshold",
+      "break_even_note": "defined_only_for_positive_S",
+      "fallback_penalty_policy": "preserve_signed_raw_values; do_not_credit_fallback_speedups_in_gate",
+      "reduction": "per_cell_median_of_three_ABBA_paired_savings",
+      "repeat_or_threshold_adaptation": false
+    }
+  },
+  "cleanup": {
+    "passed": true,
+    "api_left_stopped": true,
+    "power_mode": "high",
+    "configured_cap_w": 190,
+    "max_final_temperature_c": 45
+  },
+  "claims": {
+    "model_run": false,
+    "model_gain": false,
+    "current_model_activation_known": false,
+    "global_workload_bound": false,
+    "every_workload_loses": false,
+    "promoted": false,
+    "performance_retry_or_threshold_change": false
+  },
+  "limitations": [
+    "Empirical synthetic component parity is not universal GEMM equality; complete output tensors are not available for offline recomputation.",
+    "NaN/Inf rejection was source-reviewed, not empirically exercised in the component cases; all signed-zero cases used safe fallback.",
+    "Timing A includes strict-enabled null-scratch rejection overhead and is not production strict-OFF.",
+    "Interleaved full validation changes synthetic cache/cadence; host timings are not isolated kernel service.",
+    "The historical 528-fast/1200-fallback mixture is hypothetical, not measured current-release activation or a global model bound.",
+    "Zero-net break-even fraction does not include the extra 1% PP saving threshold.",
+    "The negative gate result rejects this conservative scenario, not all possible workloads. No model run or throughput gain is established.",
+    "V1 remains invalid and contributes no performance-selection values; V2 is a separately recorded lifecycle repair, not a threshold-tuned retry."
+  ]
+}
