@@ -1,0 +1,99 @@
+{
+  "date": "2026-10-11",
+  "status": "PASS_APPROXIMATE_EXPLORATORY_PP_SCREEN",
+  "treatment": {
+    "binary": "Original c183",
+    "existing_flag": "HIP_PROMPT_F16",
+    "OFF": 0,
+    "ON": 1,
+    "order": "Single fixed OFF then ON pair",
+    "new_build": false,
+    "new_patch": false,
+    "approximate_operand_and_output_rounding": true,
+    "prompt_tokens_per_arm": 65536,
+    "outputs_per_arm": 1,
+    "both_owner_activation_verified": true,
+    "external_benchmark_context": "PR1978 table gains are not isolated prompt-F16 evidence."
+  },
+  "descriptive_result": {
+    "prompt_ms": {
+      "OFF": 101333.6,
+      "ON": 81985.9
+    },
+    "PP_tokens_per_second": {
+      "OFF": 646.7351401706837,
+      "ON": 799.3569625996665
+    },
+    "saved_ms": 19347.70000000001,
+    "PP_throughput_gain_percent": 23.598813942397424,
+    "PP_wall_reduction_percent": 19.093074755066443,
+    "chunks": {
+      "count": 16,
+      "all_faster": true,
+      "saved_ms": {
+        "min": 1087,
+        "max": 1866,
+        "total": 19348
+      },
+      "tail_ms": {
+        "OFF": 194.60000000000582,
+        "ON": 194.89999999999418
+      },
+      "tail_saving_ms": -0.29999999998835847,
+      "exclusions": 0,
+      "basis": "Integer-millisecond cumulative progress timestamps; not isolated GPU timers"
+    }
+  },
+  "observed_comparison": {
+    "first_output_matches_historical_both_arms": true,
+    "first_outputs_equal": true,
+    "INFO_equal": true,
+    "decode_cache_hits": {
+      "OFF": 469,
+      "ON": 468
+    },
+    "decode_lookups": {
+      "OFF": 480,
+      "ON": 480
+    },
+    "counter_scope": "Cache-hit/lookup snapshots start after PP; these are decode-only counters.",
+    "equal_work": false,
+    "detailed_PP_route_work_counters_available": false,
+    "PP_route_work_equality_established": false,
+    "cache_hit_difference_explains_PP_saving": false
+  },
+  "verification_limits": {
+    "hidden_tensor_finiteness_observed": false,
+    "logits_finiteness_observed": false,
+    "GEMM_output_finiteness_observed": false,
+    "numeric_quality_qualified": false,
+    "full_output_trajectory_qualified": false,
+    "TG_equivalence_qualified": false,
+    "balanced_performance_qualified": false,
+    "promoted": false,
+    "meaning": "A matching first token and absence of explicit nonfinite diagnostics do not establish finite hidden state or model quality."
+  },
+  "independent_actual_audit": {
+    "passed": true,
+    "checks_passed": 223
+  },
+  "cleanup": {
+    "passed": true,
+    "api_stayed_stopped": true,
+    "final_max_sampled_temperature_c": 55
+  },
+  "sha256": {
+    "analysis": "4eb696da01d4e2705eee482d0ff3f9fc13962627232975018dff8ce17a0fc0f8",
+    "actual_audit": "bb4c519306fb7cf38b185c0454273e001d36e8553b1245c609c34679632a2737",
+    "original_binary": "c18316d678a669c309cb95e2f5de9af03fa5573256fd0e093aafc4b41000d049",
+    "raw_archive": "ccf0e220082f3f850cf95739f92c965fb6a9d77d86e0a53db6199d35c9a27b08",
+    "extraction": "616d08c3ee901d63095c8c40fa7188bf4e72589b24acb5349f7f1a40c9ab1a1e"
+  },
+  "limitations": [
+    "Approximate arithmetic changes operand/output rounding.",
+    "One fixed-order one-output pair does not establish repeatability or qualified speedup.",
+    "First-token equality does not establish full trajectory, quality, TG behavior or hidden/output finiteness.",
+    "Decode cache work differs; detailed PP route work was not measured.",
+    "No production promotion, new patch or PR follows from this exploratory receipt."
+  ]
+}
