@@ -1,0 +1,501 @@
+{
+  "schema": "strata.gfx906.release.topk.fixed.tail0.public.v1",
+  "experiment": "2026-10-11 release-local REG2/FIT17 unpruned fixed-policy screen",
+  "classification": "PASS_NEW_UNPRUNED_FIXED_EPOCH_SCREEN_ONLY",
+  "screen_passed": true,
+  "production_promotion": false,
+  "method": {
+    "order": [
+      "A1",
+      "B1",
+      "B2",
+      "A2"
+    ],
+    "cold_process_per_arm": true,
+    "prompt_tokens": 65536,
+    "outputs_per_arm": 1024,
+    "warmups": 0,
+    "automatic_gpu_retries": 0,
+    "same_binary_sha256": "cdf8dffcddc6bc6c84c03cb90567d9c1e71e687af46791f4e46d9d5e4f071185",
+    "comparison": {
+      "A": {
+        "STRATA_GFX906_TOPK_REG": "0",
+        "STRATA_GFX906_TOPK_FIT17": "0"
+      },
+      "B": {
+        "STRATA_GFX906_TOPK_REG": "2",
+        "STRATA_GFX906_TOPK_FIT17": "1"
+      }
+    },
+    "shared_environment": {
+      "DO_NOT_TRACK": "1",
+      "HF_HUB_DISABLE_TELEMETRY": "1",
+      "HIP_VISIBLE_DEVICES": "0,1",
+      "STRATA_ARENA_MMAP": "1",
+      "STRATA_ATTN_LANECELL": "0",
+      "STRATA_GDN_CONVL2": "1",
+      "STRATA_GDN_HEAD": "1",
+      "STRATA_GDN_NOY": "1",
+      "STRATA_GDN_PP": "2",
+      "STRATA_GFX906_ATTN_QUERY_SWIZZLE": "1",
+      "STRATA_GFX906_ATTN_REDUCE12": "1",
+      "STRATA_HIP_SWIGLU_FUSED": "1",
+      "STRATA_MMVF_ROWS": "1",
+      "STRATA_ROUTE_TAIL_SKIP": "0",
+      "STRATA_STAGE_TRIM": "1",
+      "STRATA_TSUM": "0"
+    },
+    "shared_fixed_policy": {
+      "route_tail_skip": 0,
+      "spec": 6,
+      "mtp_max_t": 4,
+      "suffix_draft": 0,
+      "adapt_every": 0,
+      "prompt_cache": 0,
+      "prompt_cache_every": 0
+    },
+    "sampling": {
+      "seed": 12345,
+      "temperature": 0,
+      "top_k": 1,
+      "top_p": 1
+    },
+    "engine_info": {
+      "arena_mib": "32400",
+      "context": "204800",
+      "conversation_cache_mib": "4096",
+      "conversation_cache_min_free_mib": "8192",
+      "conversation_cache_min_tokens": "0",
+      "conversation_cache_slots": "4",
+      "cvec": "0",
+      "engine": "0.1.42",
+      "expert_cache_mib": "25150",
+      "expert_cache_primary_mib": "13051",
+      "expert_slots": "19078",
+      "expert_slots_primary": "9900",
+      "kv": "int8",
+      "kv_resident": "32768",
+      "logit_bias": "1",
+      "lookup": "0",
+      "mtp_max": "4",
+      "pcie_frac": "0.00",
+      "pool_workers": "15",
+      "spec": "6",
+      "spec_min_p": "0.50",
+      "tail_role_token": "-1",
+      "vram_elastic": "0",
+      "vram_free_mib": "504"
+    },
+    "rate_definition": {
+      "PP": "65536*1000/prompt_ms",
+      "TG": "1024*1000/decode_ms",
+      "timing": "Native prompt/decode counters; excludes model-load and request-wall time."
+    },
+    "predeclared_gate": {
+      "PP_individual_pair_gate": false,
+      "PP_mean_pct_min": -1,
+      "TG_both_pairs_positive": true,
+      "TG_mean_pct_min": 1,
+      "aggregate_formula": "100*((B1_rate+B2_rate)/(A1_rate+A2_rate)-1)",
+      "all_arm_work_equal": true,
+      "all_historical_ids_required": true,
+      "old_failed_gate_unchanged": true,
+      "work_reference": "fresh A1",
+      "before_data": true
+    },
+    "started_utc": "2026-10-11T10:58:45.676030+00:00",
+    "finished_utc": "2026-10-11T11:09:18.489968+00:00"
+  },
+  "arms": {
+    "A1": {
+      "tag": "A1",
+      "passed": true,
+      "prompt_tokens": 65536,
+      "actual_outputs": 1024,
+      "prompt_ms": 104670.8,
+      "decode_ms": 21060,
+      "PP": 626.1154018121578,
+      "TG": 48.62298195631529,
+      "output_id_count": 1024,
+      "output_ids_json_sha256": "333d09c6516beeb6ae8925cc0dec1959ad5a5555f196dec94c3be551ad24e17a",
+      "historical_1024_ids_equal": true,
+      "accepted": 647,
+      "offered": 868,
+      "cache_hits": 580670,
+      "lookups": 598560,
+      "prompt_reused": 0,
+      "prompt_read": 65536,
+      "ram_blobs": 0,
+      "file_blobs": 0,
+      "offloaded_experts": 0,
+      "file_read_mb": 0,
+      "lookup_chain_accepted": null,
+      "lookup_chain_offered": null,
+      "native_suffix_accepted": null,
+      "native_suffix_offered": null,
+      "decode_windows": null,
+      "optional_chain_counters_available": false,
+      "native_done_field_count": 16,
+      "suffix_drafts": {
+        "present": false,
+        "windows": 0,
+        "accepted": 0,
+        "offered": 0
+      }
+    },
+    "B1": {
+      "tag": "B1",
+      "passed": true,
+      "prompt_tokens": 65536,
+      "actual_outputs": 1024,
+      "prompt_ms": 104938.8,
+      "decode_ms": 20805.3,
+      "PP": 624.516384788086,
+      "TG": 49.218228047660936,
+      "output_id_count": 1024,
+      "output_ids_json_sha256": "333d09c6516beeb6ae8925cc0dec1959ad5a5555f196dec94c3be551ad24e17a",
+      "historical_1024_ids_equal": true,
+      "accepted": 647,
+      "offered": 868,
+      "cache_hits": 580670,
+      "lookups": 598560,
+      "prompt_reused": 0,
+      "prompt_read": 65536,
+      "ram_blobs": 0,
+      "file_blobs": 0,
+      "offloaded_experts": 0,
+      "file_read_mb": 0,
+      "lookup_chain_accepted": null,
+      "lookup_chain_offered": null,
+      "native_suffix_accepted": null,
+      "native_suffix_offered": null,
+      "decode_windows": null,
+      "optional_chain_counters_available": false,
+      "native_done_field_count": 16,
+      "suffix_drafts": {
+        "present": false,
+        "windows": 0,
+        "accepted": 0,
+        "offered": 0
+      }
+    },
+    "B2": {
+      "tag": "B2",
+      "passed": true,
+      "prompt_tokens": 65536,
+      "actual_outputs": 1024,
+      "prompt_ms": 104665.1,
+      "decode_ms": 20575.9,
+      "PP": 626.1494996899635,
+      "TG": 49.76696037597383,
+      "output_id_count": 1024,
+      "output_ids_json_sha256": "333d09c6516beeb6ae8925cc0dec1959ad5a5555f196dec94c3be551ad24e17a",
+      "historical_1024_ids_equal": true,
+      "accepted": 647,
+      "offered": 868,
+      "cache_hits": 580670,
+      "lookups": 598560,
+      "prompt_reused": 0,
+      "prompt_read": 65536,
+      "ram_blobs": 0,
+      "file_blobs": 0,
+      "offloaded_experts": 0,
+      "file_read_mb": 0,
+      "lookup_chain_accepted": null,
+      "lookup_chain_offered": null,
+      "native_suffix_accepted": null,
+      "native_suffix_offered": null,
+      "decode_windows": null,
+      "optional_chain_counters_available": false,
+      "native_done_field_count": 16,
+      "suffix_drafts": {
+        "present": false,
+        "windows": 0,
+        "accepted": 0,
+        "offered": 0
+      }
+    },
+    "A2": {
+      "tag": "A2",
+      "passed": true,
+      "prompt_tokens": 65536,
+      "actual_outputs": 1024,
+      "prompt_ms": 104631.9,
+      "decode_ms": 21497.3,
+      "PP": 626.3481787103169,
+      "TG": 47.63388890697902,
+      "output_id_count": 1024,
+      "output_ids_json_sha256": "333d09c6516beeb6ae8925cc0dec1959ad5a5555f196dec94c3be551ad24e17a",
+      "historical_1024_ids_equal": true,
+      "accepted": 647,
+      "offered": 868,
+      "cache_hits": 580670,
+      "lookups": 598560,
+      "prompt_reused": 0,
+      "prompt_read": 65536,
+      "ram_blobs": 0,
+      "file_blobs": 0,
+      "offloaded_experts": 0,
+      "file_read_mb": 0,
+      "lookup_chain_accepted": null,
+      "lookup_chain_offered": null,
+      "native_suffix_accepted": null,
+      "native_suffix_offered": null,
+      "decode_windows": null,
+      "optional_chain_counters_available": false,
+      "native_done_field_count": 16,
+      "suffix_drafts": {
+        "present": false,
+        "windows": 0,
+        "accepted": 0,
+        "offered": 0
+      }
+    }
+  },
+  "mean_rates": {
+    "PP": {
+      "OFF": 626.2317902612374,
+      "ON": 625.3329422390248,
+      "gain_percent": -0.14353279986595302
+    },
+    "TG": {
+      "OFF": 48.128435431647155,
+      "ON": 49.492594211817384,
+      "gain_percent": 2.8344133108329173
+    }
+  },
+  "pairs_B1_A1_then_B2_A2": [
+    {
+      "PP": -0.25538694934571504,
+      "TG": 1.224207293333901
+    },
+    {
+      "PP": -0.03172022001605157,
+      "TG": 4.4780544228927965
+    }
+  ],
+  "recomputed_native_reported_time_analysis": {
+    "aggregate_formula": "100*(mean(B rates)/mean(A rates)-1)",
+    "passed": true,
+    "gates": {
+      "all_historical_ids": true,
+      "all_work_equal_A1": true,
+      "TG_mean_at_least_1pct": true,
+      "TG_both_pairs_positive": true,
+      "PP_mean_at_least_minus1pct": true
+    },
+    "pairs": [
+      {
+        "off": "A1",
+        "on": "B1",
+        "TG_change_pct": 1.22420729333391,
+        "PP_change_pct": -0.2553869493457139
+      },
+      {
+        "off": "A2",
+        "on": "B2",
+        "TG_change_pct": 4.478054422892802,
+        "PP_change_pct": -0.031720220016032086
+      }
+    ],
+    "TG_mean_pct": 2.8344133108329115,
+    "PP_mean_pct": -0.14353279986593528,
+    "ids": {
+      "A1": {
+        "equal": true,
+        "compared_ids": 1024,
+        "mismatch_count": 0,
+        "first_divergence": null,
+        "mismatches": []
+      },
+      "B1": {
+        "equal": true,
+        "compared_ids": 1024,
+        "mismatch_count": 0,
+        "first_divergence": null,
+        "mismatches": []
+      },
+      "B2": {
+        "equal": true,
+        "compared_ids": 1024,
+        "mismatch_count": 0,
+        "first_divergence": null,
+        "mismatches": []
+      },
+      "A2": {
+        "equal": true,
+        "compared_ids": 1024,
+        "mismatch_count": 0,
+        "first_divergence": null,
+        "mismatches": []
+      }
+    },
+    "work": {
+      "A1": {
+        "equal": true,
+        "differences": {}
+      },
+      "B1": {
+        "equal": true,
+        "differences": {}
+      },
+      "B2": {
+        "equal": true,
+        "differences": {}
+      },
+      "A2": {
+        "equal": true,
+        "differences": {}
+      }
+    },
+    "work_reference": "fresh A1",
+    "A1_work": {
+      "accepted": 647,
+      "offered": 868,
+      "cache_hits": 580670,
+      "lookups": 598560,
+      "prompt_reused": 0,
+      "prompt_read": 65536,
+      "ram_blobs": 0,
+      "file_blobs": 0,
+      "file_read_mb": 0,
+      "offloaded_experts": 0,
+      "lookup_chain_accepted": null,
+      "lookup_chain_offered": null,
+      "native_suffix_accepted": null,
+      "native_suffix_offered": null,
+      "decode_windows": null,
+      "native_done_field_count": 16,
+      "optional_chain_counters_available": false,
+      "suffix_drafts": {
+        "present": false,
+        "windows": 0,
+        "accepted": 0,
+        "offered": 0
+      }
+    },
+    "historical_fixed_counts_informational": {
+      "accepted": 647,
+      "offered": 868,
+      "cache_hits": 580670,
+      "lookups": 598560
+    },
+    "historical_counter_match_required": false,
+    "PP_individual_pair_gate": false,
+    "old_failed_gate_unchanged": true,
+    "promoted": false,
+    "interpretation": "Separate unpruned fixed-policy recovery screen. Prior default-profile gate remains failed; no production promotion."
+  },
+  "parity": {
+    "all_four_full_output_arrays_equal": true,
+    "each_historical_output_ids_equal": true,
+    "output_ids_per_arm": 1024,
+    "all_available_work_equal_to_fresh_A1": true,
+    "historical_work_equality_required": false,
+    "optional_unreported_counters_are_null": true,
+    "output_arrays_published": false,
+    "hash_scope": "SHA-256 of each original 5430-byte output-ID JSON artifact; complete arrays are retained privately and were compared by the independent actual-raw audit."
+  },
+  "execution": {
+    "completed": true,
+    "native_returncodes": {
+      "A1": 0,
+      "B1": 0,
+      "B2": 0,
+      "A2": 0
+    },
+    "runner_exit_code": 0,
+    "cleanup_passed": true,
+    "api_left_stopped": true,
+    "build": false,
+    "power_changes": false,
+    "affinity_changes": false,
+    "final_maximum_sampled_sensor_c": 52,
+    "high_mode_and_190W_cap_unchanged": true,
+    "transfer_network_timeout_after_packing": true,
+    "transfer_recovery": "Same frozen archive resumed; no GPU rerun or repacking."
+  },
+  "provenance": {
+    "binary_sha256": "cdf8dffcddc6bc6c84c03cb90567d9c1e71e687af46791f4e46d9d5e4f071185",
+    "binary_bytes": 22119056,
+    "source_proof_sha256": "c41a830e571981fa591d55db6288e4440f9a5a6bdd2238c7fa3dbe94f45a5be6",
+    "runner_sha256": "a5194780a7cf589fa6d9bfb80496f08fa30faeb90116b319d90681bcfd777b4c",
+    "preexecution_review_sha256": "d5edc288210d776fbfca14f14ec63b5f429d52f5d9107739c856aadfe0294830",
+    "build_admission_sha256": "26cd7ca754b4698763f8dac881c1256314be78da835d3228db0baf64abd12ab0",
+    "component_admission_sha256": "1e5794ed726ba064a188f68fe699f2be7f795f4b41f75556d5c0e13d4655b273",
+    "launch_receipt_sha256": "2d5e1504f3a652bebf41180e515b089874e981f5e3e6341853507d23ac6b59fa",
+    "raw_archive_sha256": "4ba2393d6a3641a69aa10fa4dbf537a3739fc155d93740142bbe47776bb4bffe",
+    "raw_archive_bytes": 139566,
+    "raw_archive_regular_files": 64,
+    "raw_archive_expanded_bytes": 1012817,
+    "analysis_sha256": "6aa9ef2628db0f9eb0316369c1f0906136e53441d2cd1389789e7b3699a15cec",
+    "extraction_sha256": "9de415a9668ad16beb7ccd2c62a101190d345dc7a36db99232afbcb11285fa0b",
+    "reference_inputs": {
+      "historical.result.json": "7021b6532ee7ade54a22af07669208cf71db818fd3d1cbad1a7632eaf4ec3233",
+      "prompt-65536.ids.json": "63ce3d4042027a00b2193feab143f1d9443b5c31a863a962ec9543ccb54d9695",
+      "release.manifest.json": "fe64812d14d8a54975295793d6d7d877fe317ef2372064fd7e4c16a5cf8b8622"
+    },
+    "per_arm_result_sha256": {
+      "A1": "a8b49a14de6e60d27e8cac80ae6d6ef33a3799080c34afdd3a333f1e75a84875",
+      "B1": "84378be02581ed792e3642273be047f086b5f992b6783be90774fc6baee62b7e",
+      "B2": "bceda47f28b4af95fcd1d65f2dd183421d81dad2d3bc5e457e7ce5f2265aa401",
+      "A2": "daa0cdb71394c929d76c68d6b980401cb06065a474f4c6dc7cd47805d6454df5"
+    },
+    "per_arm_output_ids_json_sha256": {
+      "A1": "333d09c6516beeb6ae8925cc0dec1959ad5a5555f196dec94c3be551ad24e17a",
+      "B1": "333d09c6516beeb6ae8925cc0dec1959ad5a5555f196dec94c3be551ad24e17a",
+      "B2": "333d09c6516beeb6ae8925cc0dec1959ad5a5555f196dec94c3be551ad24e17a",
+      "A2": "333d09c6516beeb6ae8925cc0dec1959ad5a5555f196dec94c3be551ad24e17a"
+    },
+    "actual_raw_audit": {
+      "sha256": "1360af0eaf072097b895095c7abdbe71f1f39f630fda21b7ede7cca9a09cc586",
+      "passed": true,
+      "checks_passed": 190,
+      "decision": "PASS_RELEASE_TOPK_FIXED_TAIL0_ABBA_SCREEN",
+      "all4096_ids_match_historical": true,
+      "all_available_work_equal_fresh_A1": true,
+      "mean_rate_gains": {
+        "PP": {
+          "OFF_mean": 626.2317902612373,
+          "ON_mean": 625.3329422390248,
+          "gain_exact": "-27496836271955400/191571796116556073",
+          "gain_pct": -0.14353279986593528,
+          "pair_pct": [
+            -0.2553869493457139,
+            -0.031720220016032086
+          ]
+        },
+        "TG": {
+          "OFF_mean": 48.128435431647155,
+          "ON_mean": 49.492594211817384,
+          "gain_exact": "5737564215328100/2024251083425119",
+          "gain_pct": 2.8344133108329115,
+          "pair_pct": [
+            1.22420729333391,
+            4.478054422892802
+          ]
+        }
+      },
+      "old_default_profile_gate_remains_failed": true,
+      "cleanup_passed": true
+    }
+  },
+  "prior_evidence": {
+    "oct10_default_tail7_adaptive_topk_gate": "FAIL_UNCHANGED",
+    "prior_report": "../2026-10-10-gfx906-v0142-topk-stack/README.md",
+    "historical_c183_stack": "Frozen separate integrated stack and measurement epoch; near 53.75 TG is not this release-local fixed-policy baseline.",
+    "historical_model_complete_independent_hash_inventory": false
+  },
+  "limitations": [
+    "One four-arm ABBA on one fixed greedy fixture is a screen, not statistical confidence, broad repeatability or universal numerical/quality equivalence.",
+    "Combined REG2/FIT17 treatment only; no isolated per-PR or per-flag model attribution.",
+    "New tail-OFF, suffix-disabled policy and before-data mean-rate gate; the earlier tail-7 adaptive strict zero-negative-companion-pair FAIL is immutable.",
+    "Disabling suffix timing feedback does not fix every MTP proposal length: lengths remain probability-driven from 1 to 4. All available observed work must still match fresh A1.",
+    "Five optional unreported chain/window counters remain null; observed aggregate equality does not prove every unreported operation was constant.",
+    "No ordinary adaptive-profile, full-stack, cross-release, stock-upstream, 200K-prompt or service/default-promotion claim.",
+    "Build/component admission is retained historical evidence, not newly rerun component work in this epoch.",
+    "Sampled sensor readings are not continuous thermal proof.",
+    "Historical model payloads lack a complete independently verified hash inventory.",
+    "Only sanitized rates, counters, counts, parity results and provenance hashes are public; output-ID arrays, generated text, private paths, process identifiers, configuration contents, raw logs and model payloads are excluded."
+  ]
+}
