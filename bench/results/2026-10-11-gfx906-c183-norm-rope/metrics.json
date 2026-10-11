@@ -1,0 +1,251 @@
+{
+  "date": "2026-10-11",
+  "decision": "DEPRIORITIZE_WHOLE_MODEL_PERFORMANCE_PORT",
+  "original_fused_screen": {
+    "correctness_passed": false,
+    "decision": "REJECT_CORRECTNESS",
+    "owner": 0,
+    "first_case": {
+      "T": 1,
+      "family": "Q",
+      "rows": 24,
+      "head_dimension": 256,
+      "stride": 512,
+      "execution": "direct",
+      "differing_fp32_elements": 172,
+      "first_differing_index": 299,
+      "expected_bits": "bf9621cf",
+      "actual_bits": "bf9621d0",
+      "first_ulp_bit_distance": 1
+    },
+    "stopped_before_on_captured_timing_and_owner1": true,
+    "exact_arithmetic_cause_established": false,
+    "independent_actual_audit_checks_passed": 119
+  },
+  "candidate": {
+    "scope": "Single separately compiled component object; no engine patch",
+    "changes": "HIP register barriers materialize normalized a/b; literal separate rotation expressions",
+    "unchanged": "RMS, angle, reduction; RMS and fused candidate retain CTA256/logical32 reduction",
+    "causal_isolation": false,
+    "owner0_initial_screen": {
+      "finite_cases_passed": 48,
+      "nonfinite_cases_characterized_equal": 4,
+      "independent_actual_audit_checks_passed": 229
+    },
+    "both_owner_timing_screen": {
+      "cases": 104,
+      "finite_cases_passed": 96,
+      "nonfinite_cases_characterized_equal": 8,
+      "nonfinite_outside_finite_contract": true,
+      "captured_correctness_replays": 208,
+      "timing_records": 768,
+      "paired_comparisons": 384,
+      "all_paired_comparisons_positive": true,
+      "independent_actual_audit_checks_passed": 401
+    }
+  },
+  "timing_context": {
+    "graph_repetitions": 128,
+    "family_order": [
+      "Q",
+      "K",
+      "index"
+    ],
+    "phase_off": "Canonical production baseline; standalone native_rope_apply CTA128",
+    "phase_on": "Separate collateral launch-geometry characterization; standalone native_rope_apply CTA32",
+    "phase_control": "Cached NORM_ROPE; not an RMS reduction-mode change",
+    "medians_scope": "Ranges across T=1..4; phases and owners retained separately",
+    "median_paired_component_savings_us": [
+      {
+        "owner": 0,
+        "phase": "off",
+        "families": {
+          "Q": {
+            "min": 4.65563684765625,
+            "max": 4.725008042968749
+          },
+          "K": {
+            "min": 2.180624984375,
+            "max": 2.2612537695312502
+          },
+          "index": {
+            "min": 2.1787579179687504,
+            "max": 2.2468788085937503
+          }
+        }
+      },
+      {
+        "owner": 0,
+        "phase": "on",
+        "families": {
+          "Q": {
+            "min": 4.62376163671875,
+            "max": 4.6956329609375
+          },
+          "K": {
+            "min": 2.1612539414062493,
+            "max": 2.2481249140625
+          },
+          "index": {
+            "min": 2.14812881640625,
+            "max": 2.2162538984375
+          }
+        }
+      },
+      {
+        "owner": 1,
+        "phase": "off",
+        "families": {
+          "Q": {
+            "min": 4.65626176171875,
+            "max": 4.743132507812501
+          },
+          "K": {
+            "min": 2.1787539609375,
+            "max": 2.2250076289062495
+          },
+          "index": {
+            "min": 2.13375408203125,
+            "max": 2.22062901953125
+          }
+        }
+      },
+      {
+        "owner": 1,
+        "phase": "on",
+        "families": {
+          "Q": {
+            "min": 4.619382554687501,
+            "max": 4.688761429687499
+          },
+          "K": {
+            "min": 2.14624987109375,
+            "max": 2.2112578125
+          },
+          "index": {
+            "min": 2.119382609375,
+            "max": 2.19563278515625
+          }
+        }
+      }
+    ]
+  },
+  "conditional_projection": {
+    "representative_policy": "Fixed suffix OFF; does not cover normal suffix-enabled T6",
+    "reference_wall_ms": 18995.85,
+    "inferred_windows": 379,
+    "inferred_rows": 1247,
+    "qsa_layers_per_owner": 6,
+    "T_domain": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "integer_histograms": 6165,
+    "formula": "6 * sum(nT * (median_Q_T + median_K_T + median_index_T)) / 1000",
+    "histogram_constraints": "sum(nT)=379; sum(T*nT)=1247",
+    "exposures": [
+      {
+        "owner": 0,
+        "phase": "off",
+        "canonical_production_baseline": true,
+        "main_ms": {
+          "min": 20.68266510815625,
+          "max": 20.80127631365625
+        },
+        "linear_reference_wall_share_percent": {
+          "min": 0.10887991381357641,
+          "max": 0.10950431969959887
+        }
+      },
+      {
+        "owner": 0,
+        "phase": "on",
+        "canonical_production_baseline": false,
+        "main_ms": {
+          "min": 20.504216164289065,
+          "max": 20.667032354460936
+        },
+        "linear_reference_wall_share_percent": {
+          "min": 0.10794050365889953,
+          "max": 0.10879761818745114
+        }
+      },
+      {
+        "owner": 1,
+        "phase": "off",
+        "canonical_production_baseline": true,
+        "main_ms": {
+          "min": 20.617721086031253,
+          "max": 20.679084569601564
+        },
+        "linear_reference_wall_share_percent": {
+          "min": 0.10853802849586228,
+          "max": 0.10886106475678406
+        },
+        "separate_mtp": {
+          "Q_T1_max_ms": 5.280200837789063,
+          "eligible_K_T1_ms": {
+            "min": 0,
+            "max": 2.4707069917031252
+          },
+          "count_upper_bound_per_family": 1134,
+          "eligible_K_count_measured": false,
+          "index_credit": 0
+        }
+      },
+      {
+        "owner": 1,
+        "phase": "on",
+        "canonical_production_baseline": false,
+        "main_ms": {
+          "min": 20.450017420265628,
+          "max": 20.541971399624998
+        },
+        "linear_reference_wall_share_percent": {
+          "min": 0.10765518479176046,
+          "max": 0.10813925883614053
+        },
+        "separate_mtp": {
+          "Q_T1_max_ms": 5.238379817015626,
+          "eligible_K_T1_ms": {
+            "min": 0,
+            "max": 2.4338473538203127
+          },
+          "count_upper_bound_per_family": 1134,
+          "eligible_K_count_measured": false,
+          "index_credit": 0
+        }
+      }
+    ],
+    "sum_across_owners_or_mtp": false,
+    "model_speedup_measured": false
+  },
+  "cleanup": {
+    "passed": true,
+    "api_stayed_stopped": true,
+    "final_max_sampled_temperature_c": 48
+  },
+  "sha256": {
+    "original_analysis": "32ca4d0ac22fedfa37c5b2d9f0ac0bc656605fc5d02c7722a3049a173101a4cf",
+    "original_actual_audit": "bf62c6c84c32a148d682176a07f7a8bc7c33af8c0d8ad909e3860f07ffdf5c4b",
+    "original_raw_archive": "e063b9902f2ca2b98fc978a776d37a25984f16160ddb1418d283be5691b8fc44",
+    "candidate_analysis": "2b00f247c296ccfc77ef659ba87c071defc138f1b565f689ce6f375888ae457d",
+    "candidate_actual_audit": "3d79fed30de84135b16d7260cb91c122a6ff1eba6c7792b51a509edff41e4def",
+    "candidate_source": "e4503ef61a72b5a1839e67d1a9d8969c8357a665e34d6e343a65a398f06fd4e0",
+    "candidate_object": "01af3295158b7df158b9acb1ecd52c8fda1f821854b70007b089670002c9d855",
+    "timing_probe": "9a033d643fe54bee5bf7b17dedd1b180d00c53143506c1e8df74ebfbd2ce7d00",
+    "timing_analysis": "f005c3ed3acff8200b3e3095b20287419ba56817a93350742a209273c53d475c",
+    "timing_actual_audit": "edb6a176324df3f7cf2e3c2f37b84ba380a290f0fe4edeffc9150b630e6351dc",
+    "timing_raw_archive": "28fe6f3f83845abdb719f1596acd66a768a771855f16778313b2868c1b6501c6",
+    "exposure_projection": "8428a027fe98d7bffdc59335cb98cc5869f174b3c545c6901f313b5e7c154f63"
+  },
+  "limitations": [
+    "Original fused route remains rejected; candidate finite synthetic equality is bounded, not universal or model qualification.",
+    "Both materialization and rotation expressions changed; original mismatch cause is not isolated.",
+    "Captured independent slices differ from interleaved model work.",
+    "Source-weighted linear exposures are conditional scenarios, not rigorous critical-path bounds or measured model gains."
+  ],
+  "next_action": "Park engine integration and model timing; retain the component research result."
+}
