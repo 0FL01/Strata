@@ -1,0 +1,801 @@
+{
+  "baseline_engine_sha256": "572c7fb33c95d8b5c16803a8550abeab13eeccb9314136ae101ce61ecd605171",
+  "budget": {
+    "fraction_of_primary_conversion_envelope_percent": 59.76315609320695,
+    "memory_neutral_mechanism_established": false,
+    "naive_all_layer_fp16_cache_gib": {
+      "peer": 1.611328125,
+      "primary": 2.255859375
+    },
+    "not_predicted_gain_or_global_bound": true,
+    "reference_pp_ms": 104645.3,
+    "required_direct_saving_ms": 1036.0920792079207,
+    "target_throughput_gain_percent": 1
+  },
+  "cleanup": {
+    "api_left_stopped": true,
+    "configured_cap_w": 190,
+    "conversion_passed": true,
+    "power_mode": "high",
+    "pp_passed": true
+  },
+  "collection": {
+    "cause": "missing review placeholder",
+    "first_attempt_failed_before_contact": true,
+    "repair": "one literal review hash correction",
+    "repair_review_sha256": "8aeb1368200147d256660d03a92af86559417908d841e8f1dc837e9414d47a21",
+    "workload_rerun": false
+  },
+  "conversion_engine_sha256": "5245d8da65d08dfe5d7aafcaadb0cd0399d56e54627c07c6f0de0fbd4ce5e2d3",
+  "conversion_profile": {
+    "actual_routes": {
+      "ldw": "K",
+      "one_full_slice_per_call": true,
+      "ordinary": 1728,
+      "role_map": {
+        "1": "QKV",
+        "2": "gate",
+        "3": "output"
+      },
+      "row0": 0,
+      "strided": 0
+    },
+    "all_conversions_successful": true,
+    "archive_bytes": 206467,
+    "archive_sha256": "06318f6df94c35ab330eb2b1f44ca5d7e493cc1c61daae4683f9e9922c913dae",
+    "expanded_bytes": 3927395,
+    "first_id_matches": true,
+    "method": {
+      "STRATA_PREFILL_TIMING": false,
+      "VERIFY_PROFILE": false,
+      "added_synchronizations": 0,
+      "arithmetic_changed": false,
+      "event_pairs_per_owner": 2048,
+      "kernels_changed": false,
+      "modified_source_files": 3,
+      "new_header_files": 1,
+      "only_added_probe": "STRATA_GDN_CONVERSION_PROBE=1",
+      "pool_before_owner_pp_timer": true,
+      "projection_pool_per_owner": 2048,
+      "read_after_existing_sync": true,
+      "request_wall_includes_first_use_pool_setup": true,
+      "conversion_pool_per_owner": 2048
+    },
+    "observation": {
+      "interpretation": "Separate measured removal envelopes under a direct-work model, including launch/event gaps; not pure service or global critical path. No owner sum.",
+      "owners": [
+        {
+          "attempted_ms": 1733.663592987,
+          "conversion_attempts": 1008,
+          "owner": 0,
+          "projection_calls": 1008,
+          "roles": {
+            "1": {
+              "attempted_ms": 1191.849376860999,
+              "attempts": 336,
+              "succeeded_ms": 1191.849376860999,
+              "successes": 336,
+              "zero_ms": 0
+            },
+            "2": {
+              "attempted_ms": 518.4353373509996,
+              "attempts": 336,
+              "succeeded_ms": 518.4353373509996,
+              "successes": 336,
+              "zero_ms": 0
+            },
+            "3": {
+              "attempted_ms": 23.378878750999988,
+              "attempts": 336,
+              "succeeded_ms": 23.378878750999988,
+              "successes": 336,
+              "zero_ms": 0
+            }
+          },
+          "shape_histogram": [
+            {
+              "K": 2560,
+              "N": 10240,
+              "T": 4095,
+              "calls": 6,
+              "conversions_per_call": 1,
+              "role": 1,
+              "type": 12
+            },
+            {
+              "K": 2560,
+              "N": 10240,
+              "T": 4096,
+              "calls": 90,
+              "conversions_per_call": 1,
+              "role": 1,
+              "type": 12
+            },
+            {
+              "K": 2560,
+              "N": 10240,
+              "T": 4095,
+              "calls": 1,
+              "conversions_per_call": 1,
+              "role": 1,
+              "type": 13
+            },
+            {
+              "K": 2560,
+              "N": 10240,
+              "T": 4096,
+              "calls": 15,
+              "conversions_per_call": 1,
+              "role": 1,
+              "type": 13
+            },
+            {
+              "K": 2560,
+              "N": 10240,
+              "T": 4095,
+              "calls": 7,
+              "conversions_per_call": 1,
+              "role": 1,
+              "type": 14
+            },
+            {
+              "K": 2560,
+              "N": 10240,
+              "T": 4096,
+              "calls": 105,
+              "conversions_per_call": 1,
+              "role": 1,
+              "type": 14
+            },
+            {
+              "K": 2560,
+              "N": 10240,
+              "T": 4095,
+              "calls": 7,
+              "conversions_per_call": 1,
+              "role": 1,
+              "type": 23
+            },
+            {
+              "K": 2560,
+              "N": 10240,
+              "T": 4096,
+              "calls": 105,
+              "conversions_per_call": 1,
+              "role": 1,
+              "type": 23
+            },
+            {
+              "K": 2560,
+              "N": 6144,
+              "T": 4095,
+              "calls": 4,
+              "conversions_per_call": 1,
+              "role": 2,
+              "type": 12
+            },
+            {
+              "K": 2560,
+              "N": 6144,
+              "T": 4096,
+              "calls": 60,
+              "conversions_per_call": 1,
+              "role": 2,
+              "type": 12
+            },
+            {
+              "K": 2560,
+              "N": 6144,
+              "T": 4095,
+              "calls": 3,
+              "conversions_per_call": 1,
+              "role": 2,
+              "type": 14
+            },
+            {
+              "K": 2560,
+              "N": 6144,
+              "T": 4096,
+              "calls": 45,
+              "conversions_per_call": 1,
+              "role": 2,
+              "type": 14
+            },
+            {
+              "K": 2560,
+              "N": 6144,
+              "T": 4095,
+              "calls": 7,
+              "conversions_per_call": 1,
+              "role": 2,
+              "type": 21
+            },
+            {
+              "K": 2560,
+              "N": 6144,
+              "T": 4096,
+              "calls": 105,
+              "conversions_per_call": 1,
+              "role": 2,
+              "type": 21
+            },
+            {
+              "K": 2560,
+              "N": 6144,
+              "T": 4095,
+              "calls": 7,
+              "conversions_per_call": 1,
+              "role": 2,
+              "type": 23
+            },
+            {
+              "K": 2560,
+              "N": 6144,
+              "T": 4096,
+              "calls": 105,
+              "conversions_per_call": 1,
+              "role": 2,
+              "type": 23
+            },
+            {
+              "K": 6144,
+              "N": 2560,
+              "T": 4095,
+              "calls": 21,
+              "conversions_per_call": 1,
+              "role": 3,
+              "type": 8
+            },
+            {
+              "K": 6144,
+              "N": 2560,
+              "T": 4096,
+              "calls": 315,
+              "conversions_per_call": 1,
+              "role": 3,
+              "type": 8
+            }
+          ],
+          "succeeded_ms": 1733.663592987
+        },
+        {
+          "attempted_ms": 1301.892322688,
+          "conversion_attempts": 720,
+          "owner": 1,
+          "projection_calls": 720,
+          "roles": {
+            "1": {
+              "attempted_ms": 966.3405210139996,
+              "attempts": 240,
+              "succeeded_ms": 966.3405210139996,
+              "successes": 240,
+              "zero_ms": 0
+            },
+            "2": {
+              "attempted_ms": 318.9148357889999,
+              "attempts": 240,
+              "succeeded_ms": 318.9148357889999,
+              "successes": 240,
+              "zero_ms": 0
+            },
+            "3": {
+              "attempted_ms": 16.636965875000005,
+              "attempts": 240,
+              "succeeded_ms": 16.636965875000005,
+              "successes": 240,
+              "zero_ms": 0
+            }
+          },
+          "shape_histogram": [
+            {
+              "K": 2560,
+              "N": 10240,
+              "T": 4095,
+              "calls": 2,
+              "conversions_per_call": 1,
+              "role": 1,
+              "type": 12
+            },
+            {
+              "K": 2560,
+              "N": 10240,
+              "T": 4096,
+              "calls": 30,
+              "conversions_per_call": 1,
+              "role": 1,
+              "type": 12
+            },
+            {
+              "K": 2560,
+              "N": 10240,
+              "T": 4095,
+              "calls": 2,
+              "conversions_per_call": 1,
+              "role": 1,
+              "type": 13
+            },
+            {
+              "K": 2560,
+              "N": 10240,
+              "T": 4096,
+              "calls": 30,
+              "conversions_per_call": 1,
+              "role": 1,
+              "type": 13
+            },
+            {
+              "K": 2560,
+              "N": 10240,
+              "T": 4095,
+              "calls": 7,
+              "conversions_per_call": 1,
+              "role": 1,
+              "type": 14
+            },
+            {
+              "K": 2560,
+              "N": 10240,
+              "T": 4096,
+              "calls": 105,
+              "conversions_per_call": 1,
+              "role": 1,
+              "type": 14
+            },
+            {
+              "K": 2560,
+              "N": 10240,
+              "T": 4095,
+              "calls": 4,
+              "conversions_per_call": 1,
+              "role": 1,
+              "type": 23
+            },
+            {
+              "K": 2560,
+              "N": 10240,
+              "T": 4096,
+              "calls": 60,
+              "conversions_per_call": 1,
+              "role": 1,
+              "type": 23
+            },
+            {
+              "K": 2560,
+              "N": 6144,
+              "T": 4095,
+              "calls": 3,
+              "conversions_per_call": 1,
+              "role": 2,
+              "type": 12
+            },
+            {
+              "K": 2560,
+              "N": 6144,
+              "T": 4096,
+              "calls": 45,
+              "conversions_per_call": 1,
+              "role": 2,
+              "type": 12
+            },
+            {
+              "K": 2560,
+              "N": 6144,
+              "T": 4095,
+              "calls": 3,
+              "conversions_per_call": 1,
+              "role": 2,
+              "type": 13
+            },
+            {
+              "K": 2560,
+              "N": 6144,
+              "T": 4096,
+              "calls": 45,
+              "conversions_per_call": 1,
+              "role": 2,
+              "type": 13
+            },
+            {
+              "K": 2560,
+              "N": 6144,
+              "T": 4095,
+              "calls": 2,
+              "conversions_per_call": 1,
+              "role": 2,
+              "type": 14
+            },
+            {
+              "K": 2560,
+              "N": 6144,
+              "T": 4096,
+              "calls": 30,
+              "conversions_per_call": 1,
+              "role": 2,
+              "type": 14
+            },
+            {
+              "K": 2560,
+              "N": 6144,
+              "T": 4095,
+              "calls": 3,
+              "conversions_per_call": 1,
+              "role": 2,
+              "type": 21
+            },
+            {
+              "K": 2560,
+              "N": 6144,
+              "T": 4096,
+              "calls": 45,
+              "conversions_per_call": 1,
+              "role": 2,
+              "type": 21
+            },
+            {
+              "K": 2560,
+              "N": 6144,
+              "T": 4095,
+              "calls": 4,
+              "conversions_per_call": 1,
+              "role": 2,
+              "type": 23
+            },
+            {
+              "K": 2560,
+              "N": 6144,
+              "T": 4096,
+              "calls": 60,
+              "conversions_per_call": 1,
+              "role": 2,
+              "type": 23
+            },
+            {
+              "K": 6144,
+              "N": 2560,
+              "T": 4095,
+              "calls": 15,
+              "conversions_per_call": 1,
+              "role": 3,
+              "type": 8
+            },
+            {
+              "K": 6144,
+              "N": 2560,
+              "T": 4096,
+              "calls": 225,
+              "conversions_per_call": 1,
+              "role": 3,
+              "type": 8
+            }
+          ],
+          "succeeded_ms": 1301.892322688
+        }
+      ],
+      "performance_gain_claim": false,
+      "raw_scope_complete": true,
+      "reference_PP_budget_ms": 1036.0920792079207,
+      "tail_skip": "frozen omitted setting, effective default7; no unpruned-inference parity claim"
+    },
+    "owner_run_records": 17,
+    "reference_first_id": 248068,
+    "regular_files": 19,
+    "result": {
+      "accepted": 0,
+      "actual_outputs": 1,
+      "cache_hits": 469,
+      "decode_ms": 120.4,
+      "decode_windows": null,
+      "file_blobs": 0,
+      "file_read_mb": 0,
+      "lookup_chain_accepted": null,
+      "lookup_chain_offered": null,
+      "lookups": 475,
+      "native_done_field_count": 16,
+      "native_suffix_accepted": null,
+      "native_suffix_offered": null,
+      "offered": 0,
+      "offloaded_experts": 0,
+      "optional_chain_counters_available": false,
+      "output_ids": [
+        248068
+      ],
+      "passed": true,
+      "prompt_ms": 104719.9,
+      "prompt_read": 65536,
+      "prompt_reused": 0,
+      "prompt_tokens": 65536,
+      "ram_blobs": 0
+    },
+    "total_conversion_count_not_time": 1728
+  },
+  "date": "2026-10-11",
+  "decision": "OBSERVATIONAL_ONLY_NO_PERFORMANCE_QUALIFICATION",
+  "frozen_profile": {
+    "base_environment": {
+      "HIP_VISIBLE_DEVICES": "0,1",
+      "STRATA_ARENA_MMAP": "1",
+      "STRATA_ATTN_LANECELL": "0",
+      "STRATA_GDN_CONVL2": "1",
+      "STRATA_GDN_HEAD": "1",
+      "STRATA_GDN_NOY": "1",
+      "STRATA_GDN_PP": "2",
+      "STRATA_GFX906_ATTN_QUERY_SWIZZLE": "1",
+      "STRATA_GFX906_ATTN_REDUCE12": "1",
+      "STRATA_HIP_SWIGLU_FUSED": "1",
+      "STRATA_MMVF_ROWS": "1",
+      "STRATA_STAGE_TRIM": "1",
+      "STRATA_TSUM": "0"
+    },
+    "lane_cell": 0,
+    "parity_scope": "same frozen profile, not unpruned quality",
+    "query_swizzle": 1,
+    "reduce12": 1,
+    "tail_skip_effective": 7,
+    "tail_skip_setting": "unset"
+  },
+  "limitations": [
+    "Two separate instrumented observations, not optimization A/B or gain evidence.",
+    "Owners overlap: never add their intervals.",
+    "Event intervals include launch/event submission gaps and possible idle; not pure kernel service or a global critical-path bound.",
+    "Broad GDN stages and conversion intervals are from different runs; subtracting them does not establish pure GEMM cost.",
+    "Single-output conversion run does not establish 1024-output parity or matching long-decode work.",
+    "Frozen tail-skip default7 profile parity does not establish unpruned quality.",
+    "No memory-neutral cache mechanism, candidate speedup, deployment or promotion established."
+  ],
+  "observer_patch_sha256": "c85ca3cf88d2e01101cf02f9ee7066703018a0a87d3389f280386688ed3e935b",
+  "observer_source_manifest_sha256": "8b948f694794edf5b738ec5b556f30d0e660eccd8421085890c0beee20742ad4",
+  "pp_profile": {
+    "VERIFY_PROFILE": false,
+    "all_1024_ids_equal": true,
+    "all_available_work_equal": true,
+    "archive_sha256": "0b835bcd4ea3fcf473c9f749b2909015e87d8ae567264cd3d2c42d3462a6b7f0",
+    "extraction_verified": true,
+    "instrumented_decode_ms": 20061.1,
+    "instrumented_prompt_ms": 107443.9,
+    "only_added_probe": "STRATA_PREFILL_TIMING=1",
+    "primary": {
+      "gdn_input_output_ms": 19860,
+      "ranked": [
+        {
+          "ms": 19798,
+          "phase": "hc read",
+          "timeline_percent": 19.4848780103733
+        },
+        {
+          "ms": 18608,
+          "phase": "gemm gate/up",
+          "timeline_percent": 18.313698859330557
+        },
+        {
+          "ms": 14759,
+          "phase": "gdn",
+          "timeline_percent": 14.525574025411634
+        },
+        {
+          "ms": 11407,
+          "phase": "gemm down",
+          "timeline_percent": 11.226588719281152
+        },
+        {
+          "ms": 9423,
+          "phase": "qsa attn",
+          "timeline_percent": 9.273967344769554
+        },
+        {
+          "ms": 5417,
+          "phase": "qsa proj",
+          "timeline_percent": 5.331325597645831
+        },
+        {
+          "ms": 5101,
+          "phase": "gdn out proj",
+          "timeline_percent": 5.020323402915153
+        },
+        {
+          "ms": 3876,
+          "phase": "router+shared",
+          "timeline_percent": 3.814697806253506
+        },
+        {
+          "ms": 3689,
+          "phase": "qsa select",
+          "timeline_percent": 3.6306553682325036
+        },
+        {
+          "ms": 3074,
+          "phase": "gdn recurrence",
+          "timeline_percent": 3.0253821095003297
+        },
+        {
+          "ms": 2225,
+          "phase": "dequant",
+          "timeline_percent": 2.1898097572017674
+        },
+        {
+          "ms": 1301,
+          "phase": "ple",
+          "timeline_percent": 1.2804235928626964
+        },
+        {
+          "ms": 832,
+          "phase": "host grouping",
+          "timeline_percent": 0.8188412215693801
+        },
+        {
+          "ms": 668,
+          "phase": "combine",
+          "timeline_percent": 0.6574350192408004
+        },
+        {
+          "ms": 430,
+          "phase": "gather",
+          "timeline_percent": 0.42319918903225173
+        },
+        {
+          "ms": 308,
+          "phase": "gdn conv+gates",
+          "timeline_percent": 0.30312872144635705
+        },
+        {
+          "ms": 236,
+          "phase": "embed+steps",
+          "timeline_percent": 0.23226746188746838
+        },
+        {
+          "ms": 235,
+          "phase": "kv stage",
+          "timeline_percent": 0.23128327772692825
+        },
+        {
+          "ms": 215,
+          "phase": "wait copy",
+          "timeline_percent": 0.21159959451612587
+        },
+        {
+          "ms": 5,
+          "phase": "qsa indexer",
+          "timeline_percent": 0.004920920802700601
+        }
+      ],
+      "timeline_ms": 101607,
+      "tokens": 65535,
+      "wall_ms": 101620
+    },
+    "reference_prompt_ms": 104645.3,
+    "secondary": {
+      "gdn_input_output_ms": 14628,
+      "ranked": [
+        {
+          "ms": 15193,
+          "phase": "hc read",
+          "timeline_percent": 18.51134342179009
+        },
+        {
+          "ms": 15044,
+          "phase": "gemm gate/up",
+          "timeline_percent": 18.32979993664254
+        },
+        {
+          "ms": 10545,
+          "phase": "gdn",
+          "timeline_percent": 12.848161415308137
+        },
+        {
+          "ms": 9493,
+          "phase": "qsa attn",
+          "timeline_percent": 11.566391305407315
+        },
+        {
+          "ms": 8995,
+          "phase": "gemm down",
+          "timeline_percent": 10.95962180471282
+        },
+        {
+          "ms": 5571,
+          "phase": "qsa proj",
+          "timeline_percent": 6.787776884275166
+        },
+        {
+          "ms": 4083,
+          "phase": "gdn out proj",
+          "timeline_percent": 4.9747788581036625
+        },
+        {
+          "ms": 3771,
+          "phase": "qsa select",
+          "timeline_percent": 4.594634110680605
+        },
+        {
+          "ms": 3008,
+          "phase": "router+shared",
+          "timeline_percent": 3.664985257206911
+        },
+        {
+          "ms": 1968,
+          "phase": "gdn recurrence",
+          "timeline_percent": 2.3978360991300534
+        },
+        {
+          "ms": 1855,
+          "phase": "dequant",
+          "timeline_percent": 2.2601554694543946
+        },
+        {
+          "ms": 749,
+          "phase": "host grouping",
+          "timeline_percent": 0.9125910763457368
+        },
+        {
+          "ms": 480,
+          "phase": "combine",
+          "timeline_percent": 0.5848380729585496
+        },
+        {
+          "ms": 343,
+          "phase": "gather",
+          "timeline_percent": 0.4179155396349636
+        },
+        {
+          "ms": 335,
+          "phase": "embed+steps",
+          "timeline_percent": 0.40816823841898775
+        },
+        {
+          "ms": 232,
+          "phase": "kv stage",
+          "timeline_percent": 0.282671735263299
+        },
+        {
+          "ms": 224,
+          "phase": "gdn conv+gates",
+          "timeline_percent": 0.27292443404732314
+        },
+        {
+          "ms": 194,
+          "phase": "wait copy",
+          "timeline_percent": 0.2363720544874138
+        },
+        {
+          "ms": 0,
+          "phase": "qsa indexer",
+          "timeline_percent": 0
+        },
+        {
+          "ms": 0,
+          "phase": "ple",
+          "timeline_percent": 0
+        }
+      ],
+      "timeline_ms": 82074,
+      "tokens": 65535,
+      "wall_ms": 83422
+    },
+    "work": {
+      "accepted": 678,
+      "cache_hits": 548429,
+      "decode_windows": null,
+      "file_blobs": 0,
+      "file_read_mb": 0,
+      "lookup_chain_accepted": null,
+      "lookup_chain_offered": null,
+      "lookups": 569246,
+      "native_done_field_count": 16,
+      "native_suffix_accepted": null,
+      "native_suffix_offered": null,
+      "offered": 862,
+      "offloaded_experts": 0,
+      "optional_chain_counters_available": false,
+      "prompt_read": 65536,
+      "prompt_reused": 0,
+      "ram_blobs": 0,
+      "suffix_drafts": {
+        "accepted": 3,
+        "offered": 8,
+        "present": true,
+        "windows": 2
+      }
+    }
+  },
+  "release_commit": "61b3fb5dd3f1e8ec09cf7e4e05208bc6d3c46406",
+  "schema_version": 1
+}

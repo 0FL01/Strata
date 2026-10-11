@@ -196,3 +196,8 @@ The [CPU profile](results/2026-10-10-gfx906-prefill-cpu-profile/README.md#follow
 ## 2026-10-11: release-local empty-PCIe elision
 
 [Report](results/2026-10-11-gfx906-v0142-empty-pcie-elision/README.md) · [Metrics](results/2026-10-11-gfx906-v0142-empty-pcie-elision/metrics.json). Technical checks PASS across eight processes / twelve submitted requests (eleven complete plus expected refusal); scientific performance FAIL. TG mean +1.040069% with positive pairs, but first PP companion pair -0.107024% violates the unchanged rule (PP mean +0.709565%). Component CID failure and native V1 missing-owner trace failure remain preserved. Historical 1,480-record component evidence is explicitly rebound to an identical component binary, not rerun. No promotion, dropped pair, timing retry or cross-release gain claim.
+
+## 2026-10-11: current-release PP and GDN conversion observations
+
+[Report](results/2026-10-11-gfx906-v0142-gdn-conversion-profile/README.md) · [Metrics](results/2026-10-11-gfx906-v0142-gdn-conversion-profile/metrics.json). Separate broad PP and conversion-only diagnostics retain frozen default7 semantics. Broad profiling matched all 1,024 IDs/work; conversion-only 64K/1 matched the first ID and reconciled 1,728 successful conversions across 17 owner/run records. Primary/peer conversion envelopes are 1,733.663593/1,301.892323 ms, never summed. A 1% reference PP throughput gain requires 1,036.092079 ms direct saving, about 59.76% of the primary envelope, not a predicted speedup or global bound. Submission-gap, overlap, memory and collection-failure limits remain explicit. No optimization patch, caching, promotion or performance qualification.
+
