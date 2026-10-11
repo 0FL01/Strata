@@ -1,0 +1,446 @@
+{
+  "schema": "strata.gfx906.v0143.empty_pcie.fixed_tail0.public_numeric.v1",
+  "date": "2026-10-11",
+  "decision": "FAIL_V0143_EMPTY_PCIE_TG_MEAN_AND_PAIR_GATES",
+  "screen_passed": false,
+  "technical_actual_audit_passed": true,
+  "production_promotion": false,
+  "source_commit": "7695859aa13afb248bdb4d36f9b2e95707db079d",
+  "candidate_binary_sha256": "31e5603bc459c4a58554e17e5386b0e6528cf4b0b1aa45805a432721461693a5",
+  "experiment": {
+    "scope": "Standalone five-file empty-PCIe elision port on pinned v0.1.43; same-binary OFF/ON fixed-policy ABBA.",
+    "source_patch_file_count": 5,
+    "topk_REG2_FIT17_patch_included": false,
+    "primary_overlap_patch_included": false,
+    "hardware": "Two gfx906 MI50 GPUs",
+    "order": [
+      "A1",
+      "B1",
+      "B2",
+      "A2"
+    ],
+    "cold_native_processes": 4,
+    "requests_per_arm": 1,
+    "prompt_tokens": 65536,
+    "outputs_per_arm": 1024,
+    "treatment": {
+      "flag": "STRATA_VERIFY_SKIP_EMPTY_PCIE",
+      "A": 0,
+      "B": 1,
+      "sole_configured_difference": true
+    },
+    "fixed_policy": {
+      "route_tail_skip": 0,
+      "spec": 6,
+      "mtp_max_t": 4,
+      "suffix_draft": 0
+    },
+    "rate_definition": {
+      "PP": "65536*1000/prompt_ms",
+      "TG": "1024*1000/decode_ms",
+      "timing": "Native prompt/decode counters; excludes model loading and request-wall time."
+    },
+    "predeclared_gate": {
+      "before_data": true,
+      "aggregate_formula": "100*(mean(B rates)/mean(A rates)-1)",
+      "TG_mean_pct_min": 1,
+      "TG_both_pairs_positive": true,
+      "PP_mean_pct_min": -1,
+      "PP_individual_pair_gate": false,
+      "all_output_ids_equal_fresh_A1": true,
+      "all_available_work_equal_fresh_A1": true,
+      "all_stable_INFO_equal": true,
+      "historical_parity_required": false,
+      "historical_counter_match_required": false,
+      "thresholds_changed": false
+    }
+  },
+  "arms": {
+    "A1": {
+      "empty_pcie_elision": 0,
+      "prompt_tokens": 65536,
+      "outputs": 1024,
+      "prompt_ms": 104737.1,
+      "decode_ms": 21156,
+      "PP": 625.7190622997963,
+      "TG": 48.40234448856116,
+      "native_exit": 0
+    },
+    "B1": {
+      "empty_pcie_elision": 1,
+      "prompt_tokens": 65536,
+      "outputs": 1024,
+      "prompt_ms": 104661,
+      "decode_ms": 20738.8,
+      "PP": 626.174028530207,
+      "TG": 49.37604875884815,
+      "native_exit": 0
+    },
+    "B2": {
+      "empty_pcie_elision": 1,
+      "prompt_tokens": 65536,
+      "outputs": 1024,
+      "prompt_ms": 105174.8,
+      "decode_ms": 21981.4,
+      "PP": 623.1150427668986,
+      "TG": 46.58483991010581,
+      "native_exit": 0
+    },
+    "A2": {
+      "empty_pcie_elision": 0,
+      "prompt_tokens": 65536,
+      "outputs": 1024,
+      "prompt_ms": 104620,
+      "decode_ms": 21096.4,
+      "PP": 626.4194226725292,
+      "TG": 48.539087237632955,
+      "native_exit": 0
+    }
+  },
+  "mean_rates": {
+    "PP": {
+      "OFF": 626.0692424861627,
+      "ON": 624.6445356485528,
+      "gain_percent": -0.22756378063746308
+    },
+    "TG": {
+      "OFF": 48.470715863097055,
+      "ON": 47.980444334476985,
+      "gain_percent": -1.0114798593130248
+    }
+  },
+  "pairs": [
+    {
+      "off": "A1",
+      "on": "B1",
+      "TG_change_pct": 2.011688236542134,
+      "PP_change_pct": 0.07271094294914056
+    },
+    {
+      "off": "A2",
+      "on": "B2",
+      "TG_change_pct": -4.026131183637075,
+      "PP_change_pct": -0.5275027858384328
+    }
+  ],
+  "gates": {
+    "all_ids_equal_A1": true,
+    "all_work_equal_A1": true,
+    "all_stable_INFO_equal": true,
+    "TG_mean_at_least_1pct": false,
+    "TG_both_pairs_positive": false,
+    "PP_mean_at_least_minus1pct": true
+  },
+  "failed_conditions": [
+    "TG_mean_at_least_1pct",
+    "TG_both_pairs_positive"
+  ],
+  "parity": {
+    "all_four_complete_output_arrays_equal_fresh_A1": true,
+    "compared_ids": 4096,
+    "outputs_per_arm": 1024,
+    "all_available_work_equal_fresh_A1": true,
+    "all_stable_INFO_equal": true,
+    "shared_work": {
+      "accepted": 647,
+      "offered": 868,
+      "cache_hits": 580670,
+      "lookups": 598560,
+      "prompt_reused": 0,
+      "prompt_read": 65536,
+      "ram_blobs": 0,
+      "file_blobs": 0,
+      "file_read_mb": 0,
+      "offloaded_experts": 0,
+      "lookup_chain_accepted": null,
+      "lookup_chain_offered": null,
+      "native_suffix_accepted": null,
+      "native_suffix_offered": null,
+      "decode_windows": null,
+      "native_done_field_count": 16,
+      "optional_chain_counters_available": false,
+      "suffix_drafts": {
+        "present": false,
+        "windows": 0,
+        "accepted": 0,
+        "offered": 0
+      }
+    },
+    "output_arrays_published": false,
+    "original_output_ids_json_bytes": 5430,
+    "original_output_ids_json_sha256": "333d09c6516beeb6ae8925cc0dec1959ad5a5555f196dec94c3be551ad24e17a",
+    "hash_scope": "SHA-256 of each original complete output-ID JSON artifact; all four have identical bytes."
+  },
+  "historical_descriptive_comparisons": {
+    "required_for_admission": false,
+    "performance_comparison_claim": false,
+    "c183": {
+      "reference_label": "Retained historical full-stack c183 result; descriptive cross-version comparison.",
+      "compared_ids_per_arm": 1024,
+      "mismatch_count_per_arm": 0,
+      "first_divergence_index": null
+    },
+    "original_v0142_effective_tail7_B1": {
+      "reference_label": "Original v0.1.42 B1 with effective tail7, not the later tail0 qualified engine/epoch.",
+      "compared_ids_per_arm": 1024,
+      "mismatch_count_per_arm": 999,
+      "first_divergence_index": 13,
+      "qualified_tail0_winner_reference": false
+    },
+    "qualified_v0142_tail0_winner": {
+      "report": "../2026-10-11-gfx906-v0142-topk-empty-pcie/README.md",
+      "different_binary_stack_and_epoch": true,
+      "report_unchanged": true
+    }
+  },
+  "PP_progress_curves": {
+    "A1": {
+      "cumulative_ms": [
+        10886,
+        16917,
+        22975,
+        29003,
+        35109,
+        41216,
+        47412,
+        53543,
+        59773,
+        66003,
+        72308,
+        78715,
+        85263,
+        91667,
+        98080,
+        104535
+      ],
+      "increments_ms": [
+        10886,
+        6031,
+        6058,
+        6028,
+        6106,
+        6107,
+        6196,
+        6131,
+        6230,
+        6230,
+        6305,
+        6407,
+        6548,
+        6404,
+        6413,
+        6455
+      ],
+      "tail_ms": 202.10000000000582
+    },
+    "B1": {
+      "cumulative_ms": [
+        10811,
+        16865,
+        22922,
+        28949,
+        35060,
+        41166,
+        47349,
+        53475,
+        59717,
+        65946,
+        72263,
+        78604,
+        85211,
+        91583,
+        98007,
+        104464
+      ],
+      "increments_ms": [
+        10811,
+        6054,
+        6057,
+        6027,
+        6111,
+        6106,
+        6183,
+        6126,
+        6242,
+        6229,
+        6317,
+        6341,
+        6607,
+        6372,
+        6424,
+        6457
+      ],
+      "tail_ms": 197
+    },
+    "B2": {
+      "cumulative_ms": [
+        10831,
+        16874,
+        22918,
+        28930,
+        35037,
+        41133,
+        47323,
+        53449,
+        59674,
+        65900,
+        72213,
+        78564,
+        85731,
+        92118,
+        98532,
+        104978
+      ],
+      "increments_ms": [
+        10831,
+        6043,
+        6044,
+        6012,
+        6107,
+        6096,
+        6190,
+        6126,
+        6225,
+        6226,
+        6313,
+        6351,
+        7167,
+        6387,
+        6414,
+        6446
+      ],
+      "tail_ms": 196.8000000000029
+    },
+    "A2": {
+      "cumulative_ms": [
+        10821,
+        16862,
+        22928,
+        28953,
+        35067,
+        41170,
+        47344,
+        53469,
+        59709,
+        65927,
+        72224,
+        78586,
+        85183,
+        91557,
+        97983,
+        104425
+      ],
+      "increments_ms": [
+        10821,
+        6041,
+        6066,
+        6025,
+        6114,
+        6103,
+        6174,
+        6125,
+        6240,
+        6218,
+        6297,
+        6362,
+        6597,
+        6374,
+        6426,
+        6442
+      ],
+      "tail_ms": 195
+    }
+  },
+  "diagnostics": {
+    "B2_minus_A2_prompt_ms": 554.8,
+    "B2_minus_A2_chunk13_ms": 570,
+    "other_PP_intervals_plus_tail_net_ms": -15.2,
+    "B2_decode_ms": 21981.4,
+    "B1_decode_ms": 20738.8,
+    "B2_minus_B1_decode_ms": 1242.6,
+    "decode_GPU_samples_per_arm": 4,
+    "cause": "Unresolved.",
+    "limitations": "PP chunk13 localizes most paired PP excess. No per-token/verify timestamps, CPU scheduling/pagefault/IO trace or GPU timeline retained. Four in-decode GPU samples per arm do not establish cause of B2 decode slowdown or permit exclusion. No thermal/noise attribution or rerun-to-win.",
+    "thermal_or_noise_attribution": false,
+    "arms_excluded": 0,
+    "timing_adjustments": false,
+    "rerun_to_win": false
+  },
+  "component_validation": {
+    "passed": true,
+    "owner_count": 2,
+    "review_sha256": "61d7f60d45eceec09d4581b009e4edd9ddd5c56a6fa7cda470dae0b820c2f009",
+    "scope": "Standalone component checks, separate from model-throughput evidence.",
+    "per_owner": {
+      "zero_group_cases": 120,
+      "nonempty_group_controls": 20,
+      "state_transition_sequences": 200,
+      "captured_graph_replays": 600
+    },
+    "full_in_memory_byte_comparisons_and_canaries": true
+  },
+  "guard_validation": {
+    "passed": true,
+    "exact_output_ids_compared": 386,
+    "actual_review_sha256": "7c09b91c1c965327062ad9ec483e339f8d5c11dc9b6b644ce2175f4098791080",
+    "scope": "Separate model guard validation; not a performance qualification."
+  },
+  "actual_runtime_independent_review": {
+    "decision": "PASS_V0143_ELISION_TIMING_ACTUAL_AUDIT",
+    "passed": true,
+    "screen_passed": false,
+    "checks_passed": 288,
+    "immutable_binding_passed": true,
+    "reviewed_at_utc": "2026-10-11T17:52:45.542814+00:00",
+    "sha256": "de5468d621a2384cb9aeaf4c6e5dc51af197b788d82b1901af95b5b7018db204"
+  },
+  "execution": {
+    "completed": true,
+    "cleanup_passed": true,
+    "api_left_stopped": true,
+    "final_max_sampled_sensor_temperature_c": 53,
+    "all_four_arms_retained": true
+  },
+  "qualification_status": {
+    "performance_screen": "FAIL",
+    "broader_v0143_prompt_qualification": "Pending; no broader v0.1.43 qualification claimed.",
+    "v0142_qualified_result_unchanged": true,
+    "production_promotion": false,
+    "upstream_PR_submitted": false
+  },
+  "provenance": {
+    "analysis_sha256": "8e236fd730110deccc5b551ae85fdeb60cf061622492d20bed5d9d571b5fdb72",
+    "raw_archive_sha256": "5cc67837d6d714a3b5b80981ab33ea770bf1a5a1632845ad564a6a077d9cc288",
+    "raw_archive_compressed_bytes": 246248,
+    "raw_archive_regular_files": 73,
+    "raw_archive_expanded_bytes": 1660433,
+    "extraction_receipt_sha256": "86e830eb753b58041119cff2071e2f8a126b7d8748e16fbbca4c89ac49857fbb",
+    "build_review_sha256": "94fef38392b2aceb0efef2fc0814d986d2faac61a9340db6fed8d4332fc78bae",
+    "runtime_manifest_sha256": "4e48492e085d9f3e38261b491ffb8df5e208bf97ece286a446ca33ec1e3597b1",
+    "pre_execution_review_sha256": "4a4ee2532abc53ac38f7e831ebb5b2c7390d33cbe0be58d8f64914401cb05be8",
+    "transport_review_sha256": "606564270dabd5ef0f0b9d9ac86ae8ae5d369e4fd5e1897938b957d775b10c9f",
+    "source_proof_sha256": "dd1055345afb6a0876d15d5ddd794e97fd167ef81675f172531f640fbb926492",
+    "component_review_sha256": "61d7f60d45eceec09d4581b009e4edd9ddd5c56a6fa7cda470dae0b820c2f009",
+    "guard_actual_review_sha256": "7c09b91c1c965327062ad9ec483e339f8d5c11dc9b6b644ce2175f4098791080",
+    "actual_runtime_independent_review_sha256": "de5468d621a2384cb9aeaf4c6e5dc51af197b788d82b1901af95b5b7018db204"
+  },
+  "limitations": [
+    "One four-arm screen does not establish statistical significance, broad repeatability or universal equivalence.",
+    "The performance screen failed despite exact fresh-A1 output IDs, available work and stable INFO.",
+    "Five optional chain/window counters remain null; available-counter equality does not prove equality of every unreported operation.",
+    "B2 decode slowdown and the PP chunk-13 localization have no established cause; sparse GPU samples do not justify noise/thermal attribution or exclusion.",
+    "The original effective-tail7 v0.1.42 reference is not the later qualified tail0 winner.",
+    "No cross-version performance comparison or pooled gain is claimed.",
+    "Broader v0.1.43 prompt qualification remains pending; the qualified v0.1.42 result is unchanged.",
+    "Final sampled temperatures are not continuous thermal proof."
+  ],
+  "sanitization": {
+    "full_output_arrays": false,
+    "generated_text": false,
+    "private_paths": false,
+    "process_identifiers": false,
+    "full_raw_payloads": false,
+    "configuration_contents": false,
+    "raw_logs": false
+  }
+}
