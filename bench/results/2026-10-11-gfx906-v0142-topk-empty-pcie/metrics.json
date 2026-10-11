@@ -503,7 +503,7 @@
   },
   "qualification_status": {
     "screen_64K_1024": "PASS",
-    "current_4K_200K_correctness": "Not yet passed; separate qualification is being prepared.",
+    "current_4K_200K_correctness": "PASS_CORRECTNESS_ONLY",
     "ordinary_profile_qualification": false,
     "general_correctness_guarantee": false,
     "production_promotion": false,
@@ -545,5 +545,186 @@
     "full_raw_payloads": false,
     "configuration_contents": false,
     "raw_logs": false
+  },
+  "correctness_4K_200K": {
+    "decision": "PASS_TOPK_ELISION_CORRECTNESS_ACTUAL_AUDIT",
+    "correctness_passed": true,
+    "performance_claim": false,
+    "candidate_binary_sha256": "5271849848cc95951e834f4ce4b11b1a1a6d9d21b08e94ff32c7a7ba851c87be",
+    "source_epoch": "61b3fb5dd3f1e8ec09cf7e4e05208bc6d3c46406",
+    "fresh_native_processes": 4,
+    "order": [
+      "C4OFF",
+      "C4ON",
+      "C200OFF",
+      "C200ON"
+    ],
+    "total_historical_output_ids_compared": 2560,
+    "all_historical_ids_equal": true,
+    "all_same_prompt_OFF_ON_output_and_available_work_equal": true,
+    "same_fixed_policy_as_64K_screen": true,
+    "cases": {
+      "C4OFF": {
+        "prompt_tokens": 4096,
+        "outputs": 1024,
+        "all_historical_ids_equal": true,
+        "accepted": 684,
+        "offered": 850,
+        "cache_hits": 529826,
+        "lookups": 571200,
+        "suffix_drafts": {
+          "present": false,
+          "windows": 0,
+          "accepted": 0,
+          "offered": 0
+        },
+        "historical_work_equality_required": false
+      },
+      "C4ON": {
+        "prompt_tokens": 4096,
+        "outputs": 1024,
+        "all_historical_ids_equal": true,
+        "accepted": 684,
+        "offered": 850,
+        "cache_hits": 529826,
+        "lookups": 571200,
+        "suffix_drafts": {
+          "present": false,
+          "windows": 0,
+          "accepted": 0,
+          "offered": 0
+        },
+        "historical_work_equality_required": false
+      },
+      "C200OFF": {
+        "prompt_tokens": 200000,
+        "outputs": 256,
+        "all_historical_ids_equal": true,
+        "accepted": 161,
+        "offered": 220,
+        "cache_hits": 147072,
+        "lookups": 151680,
+        "suffix_drafts": {
+          "present": false,
+          "windows": 0,
+          "accepted": 0,
+          "offered": 0
+        },
+        "historical_work_equality_required": false
+      },
+      "C200ON": {
+        "prompt_tokens": 200000,
+        "outputs": 256,
+        "all_historical_ids_equal": true,
+        "accepted": 161,
+        "offered": 220,
+        "cache_hits": 147072,
+        "lookups": 151680,
+        "suffix_drafts": {
+          "present": false,
+          "windows": 0,
+          "accepted": 0,
+          "offered": 0
+        },
+        "historical_work_equality_required": false
+      }
+    },
+    "pairs": [
+      {
+        "off": "C4OFF",
+        "on": "C4ON",
+        "outputs_per_arm": 1024,
+        "all_output_ids_equal": true,
+        "all_work_equal": true,
+        "work": {
+          "accepted": 684,
+          "offered": 850,
+          "cache_hits": 529826,
+          "lookups": 571200,
+          "prompt_reused": 0,
+          "prompt_read": 4096,
+          "ram_blobs": 0,
+          "file_blobs": 0,
+          "offloaded_experts": 0,
+          "file_read_mb": 0,
+          "suffix_drafts": {
+            "present": false,
+            "windows": 0,
+            "accepted": 0,
+            "offered": 0
+          }
+        }
+      },
+      {
+        "off": "C200OFF",
+        "on": "C200ON",
+        "outputs_per_arm": 256,
+        "all_output_ids_equal": true,
+        "all_work_equal": true,
+        "work": {
+          "accepted": 161,
+          "offered": 220,
+          "cache_hits": 147072,
+          "lookups": 151680,
+          "prompt_reused": 0,
+          "prompt_read": 200000,
+          "ram_blobs": 0,
+          "file_blobs": 0,
+          "offloaded_experts": 0,
+          "file_read_mb": 0,
+          "suffix_drafts": {
+            "present": false,
+            "windows": 0,
+            "accepted": 0,
+            "offered": 0
+          }
+        }
+      }
+    ],
+    "fixture_provenance": {
+      "prompt_4096_json_sha256": "6709011b1777b4b847dff88d3eab088d166f763c478f35c2eb42edb6bca4b058",
+      "prompt_200000_json_sha256": "736636e97ede94cc37e32447eefde4217a38bd17c81a7349345be98060e766c4",
+      "historical_200000_exact_bytes_recovered": true,
+      "historical_200000_reconstruction": "Python json.dumps((retained_65536_prompt_ids * 4)[:200000]) with default separators and no trailing newline; exact historical SHA-256 matched.",
+      "historical_200000_original_target_artifacts_absent": true,
+      "alternate_fixture_fallback_used": false,
+      "raw_prompt_arrays_published": false,
+      "correctness_references_sha256": "13b8fd8b67d24cc65a027c990281f8d19696d0b77a72a75316638a438737fb9d"
+    },
+    "independent_actual_review": {
+      "passed": true,
+      "checks_passed": 316,
+      "reviewed_at_utc": "2026-10-11T16:16:30.523814+00:00",
+      "immutable_binding_passed": true,
+      "sha256": "1ff728db82541c51f3d73c23cdc47b3f49050b41da1db5c3ab88878b5e3dc6ef",
+      "analysis_pending_marker_superseded_by_later_actual_review": true
+    },
+    "execution": {
+      "completed": true,
+      "cleanup_passed": true,
+      "api_left_stopped": true,
+      "final_max_sampled_sensor_temperature_c": 54
+    },
+    "provenance": {
+      "analysis_sha256": "1642ca91f626751c1a613766d7074d140227b8b50aaecdb0e0b4b1776cec0dc0",
+      "raw_archive_sha256": "ad275f5735ee27938d3837bfb4d8dc8f82a87c6f8057e4c36293ca691ef7df76",
+      "raw_archive_compressed_bytes": 154187,
+      "raw_archive_regular_files": 72,
+      "raw_archive_expanded_bytes": 1292358,
+      "extraction_receipt_sha256": "47108de0ce1df9ee9a1685ada56e5055978e513270141da71ab46476e380ac39",
+      "pre_execution_review_sha256": "6f9091788e4ab545510b7081dba9f0147c7b3cf4de79abe7fcd2d99009497da4",
+      "transport_review_sha256": "9db389a43b8dc4f9bf91a183cd3effbea337d8a4e3f17b5d9d0c315bfdd663c8",
+      "runtime_manifest_sha256": "862818e9fe7b2e3c3db58c208f0e4a53ace2c5aa2ca4735c91b44aaac6128959",
+      "prior_timing_audit_sha256": "62989d2d5d53fb821e22db233c4159e74b6ff0ade360d9e62afd59f40fb3f6e2"
+    },
+    "source_inferred_selector_branch_coverage_only": true,
+    "limitations": [
+      "One OFF/ON correctness pair at each of 4K/1024 and 200000/256 is not a balanced performance experiment; no speed claim is made.",
+      "Selector branch/fallback coverage is source-inferred, not newly instrumented device counters.",
+      "Historical output equality is required; historical work-counter equality is not required. Available work matches within each fresh same-prompt OFF/ON pair.",
+      "These two fixtures do not establish universal equivalence or correctness on every workload.",
+      "This qualification binds the frozen current combined executable only; it does not qualify a different source port.",
+      "The original 64K screen rates, paired PP losses and unresolved chunk cause are unchanged."
+    ]
   }
 }

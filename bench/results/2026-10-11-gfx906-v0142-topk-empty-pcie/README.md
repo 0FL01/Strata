@@ -4,7 +4,7 @@
 
 **PASS_TOPK_EMPTY_PCIE_FIXED_TAIL0_SCREEN_ONLY.** Four cold 65,536-token / 1,024-output arms on the same combined executable measured **49.846425 → 50.724083 TG tokens/s (+1.760725%)**. Both TG pairs were positive. Mean PP changed **−0.536465%**, within the frozen −1% mean-rate floor. **Both PP pairs were negative, including B2/A2 at −1.064662%.** The rule has no individual PP-pair gate.
 
-All **4,096** compared output IDs matched the historical reference, and every available work field matched fresh A1. The independent actual-runtime review passed **412 checks**. This establishes one fixed-policy screen pass, not production promotion, general correctness, zero PP loss or a near-54-TG release result. Separate current-stack 4K/200K correctness qualification is being prepared and **has not passed** in this report. No upstream PR is submitted by this archive.
+All **4,096** compared output IDs matched the historical reference, and every available work field matched fresh A1. The independent actual-runtime review passed **412 checks**. This establishes one fixed-policy screen pass, not production promotion, general correctness, zero PP loss or a near-54-TG release result. The separate current-stack **4K/1,024 and 200,000/256 correctness extension has now passed**, with all 2,560 historical IDs and paired available work exact, confirmed by a 316-check independent actual-runtime review. This correctness extension makes no new speed claim. No upstream PR is submitted by this archive.
 
 | Native-counter metric | Elision OFF mean, tokens/s | Elision ON mean, tokens/s | Gain of mean rates | B1/A1, B2/A2 changes |
 | --- | ---: | ---: | ---: | --- |
@@ -57,6 +57,40 @@ Component admission passed for **8 V1 processes plus 2 V2 processes**, bound by 
 
 The separate actual guard review passed **386 output-ID comparisons**, confirmed capture/reuse for both owners, and confirmed expected positive-PCIe refusal before prefill or output. Guard review SHA-256 is `646adae73ad94a28d6ded8804b9a0222bf1532a49b06f63ee80c51ef72d30fca`. Guard instrumentation is separate from the four untraced timing arms.
 
+## 4K/200K correctness extension
+
+**PASS_TOPK_ELISION_CORRECTNESS_ACTUAL_AUDIT.** The same frozen combined executable completed four fresh processes in order **C4OFF, C4ON, C200OFF, C200ON**. The fixed policy remains the screen policy, including REG2/FIT17 ON and suffix 0. Each same-prompt pair changes only empty-PCIe elision OFF/ON.
+
+| Fixture | Outputs per arm | Total historical IDs compared | Accepted/offered per arm | Cache hits/lookups per arm | Historical IDs and paired work |
+| --- | ---: | ---: | --- | --- | --- |
+| 4,096 prompt tokens | 1,024 | 2,048 | 684/850 | 529826/571200 | Exact |
+| 200,000 prompt tokens | 256 | 512 | 161/220 | 147072/151680 | Exact |
+
+All **2,560** historical IDs matched. Outputs and all available work fields match within each fresh OFF/ON pair; equality to historical work counters is not required. Both fixtures have prompt reuse 0, no suffix-draft record, suffix windows/accepted/offered 0/0/0, and zero RAM/file blobs, offloaded experts and file-read MB.
+
+These are correctness/capacity checks, **not balanced performance comparisons**. No speed estimate is taken from them. Selector branch/fallback coverage is source-inferred, without new device-counter instrumentation; this does not prove universal equivalence.
+
+### Exact fixture recovery
+
+The 4K fixture JSON SHA-256 is `6709011b1777b4b847dff88d3eab088d166f763c478f35c2eb42edb6bca4b058`. The historical 200,000-token fixture JSON SHA-256 is `736636e97ede94cc37e32447eefde4217a38bd17c81a7349345be98060e766c4`.
+
+The original historical 200K target artifacts were absent. The exact historical bytes were recovered by repeating the retained 65,536-token prompt four times, taking the first 200,000 entries and serializing with Python `json.dumps` defaults, with no trailing newline. The resulting SHA-256 matched the historical fixture exactly. **No alternate-fixture fallback was used.** Prompt arrays and private locations are not published.
+
+### Independent review and cleanup
+
+The later independent actual-runtime review passed **316 checks**, binding this extension to the same candidate and prior guard/timing evidence, verifying all historical IDs, paired work, immutable execution identities and cleanup. This completed review supersedes the earlier analysis artifact's pending-review marker.
+
+Cleanup passed, the API remained stopped and the extension's final maximum sampled sensor temperature was **54°C**. This is separate from the 64K screen's 53°C final sample. No production promotion or upstream PR follows.
+
+The correctness raw archive contains **154,187 compressed bytes**, **72 regular files** and **1,292,358 expanded bytes**. SHA-256 provenance:
+
+- Correctness raw archive: `ad275f5735ee27938d3837bfb4d8dc8f82a87c6f8057e4c36293ca691ef7df76`.
+- Correctness analysis: `1642ca91f626751c1a613766d7074d140227b8b50aaecdb0e0b4b1776cec0dc0`.
+- Independent correctness review: `1ff728db82541c51f3d73c23cdc47b3f49050b41da1db5c3ab88878b5e3dc6ef`.
+- Correctness reference receipt: `13b8fd8b67d24cc65a027c990281f8d19696d0b77a72a75316638a438737fb9d`.
+
+The original 64K rates, pairs, gates, numerical PP curves and unresolved PP cause above are unchanged. This extension qualifies only these fixtures on the frozen executable, not a different source port.
+
 ## Audit, cleanup and provenance
 
 The independent actual-runtime audit passed **412 checks**. It binds the four actual process/request identities to the frozen candidate, verifies the sole elision 0/1 treatment and fixed policy, recomputes native rates and the unchanged gate, compares every historical ID and available work field, reconciles PP progress curves, and verifies cleanup. The review used the frozen evidence; it did not create new GPU performance observations.
@@ -73,6 +107,6 @@ The raw archive contains **241,508 compressed bytes**, **73 regular files** and 
 - Pre-execution review: `61317d7a7ed95d1e900cdf6e0e39de9b2f68acccda562abe1ce221cb4fb5ea8f`.
 - Build review: `5411a9fc36902802d7a9aae58f344c82f5239a9734dffbe711694611f96eb585`.
 
-One four-arm screen does not establish statistical significance or broad repeatability. Historical c183 measurements, earlier release screens and this current combined executable are distinct experiments; no cross-release or summed full-stack gain is claimed. The separate 4K/200K current-stack qualification is still pending.
+One four-arm screen does not establish statistical significance or broad repeatability. Historical c183 measurements, earlier release screens and this current combined executable are distinct experiments; no cross-release or summed full-stack gain is claimed. The separate 4K/200K extension establishes correctness on the two checked fixtures, without establishing universal equivalence or adding performance evidence.
 
 This publication changes only this report, its sanitized numeric metrics and the results index. Runtime sources, service configuration and deployment are unchanged. Private paths, process identifiers, credentials, configuration contents, raw logs, whole raw receipts, model payloads, generated text and output-ID arrays are excluded.
