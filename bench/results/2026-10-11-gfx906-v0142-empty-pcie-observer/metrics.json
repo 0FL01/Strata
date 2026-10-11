@@ -1,0 +1,1419 @@
+{
+  "actual_execution_date_utc": "2026-10-11",
+  "decision": "LOCAL_SOURCE_PROPOSAL_WORTH_REVIEWING",
+  "experiment": "v0.1.42 sparse empty-PCIe observer V1 failure and V2 diagnostic",
+  "observer_details": {
+    "all_skip_words_uint64_max": true,
+    "begin_sites_header_end_lines": 10,
+    "inventory_first": [
+      65535,
+      1
+    ],
+    "inventory_last": [
+      65788,
+      4
+    ],
+    "nonempty_records_total": 0,
+    "owners": {
+      "0": {
+        "attempts": 186,
+        "clock_khz": 25000,
+        "device": 0,
+        "device_plan": false,
+        "df_branch": 0,
+        "layers": [
+          0,
+          3
+        ],
+        "lb": 0,
+        "le": 27,
+        "pcie_mode": 2,
+        "shared_stream": 1,
+        "sites": {
+          "0": {
+            "down": 42,
+            "gu": 42,
+            "kind": "GDN",
+            "layer": 0,
+            "ring": 1
+          },
+          "3": {
+            "down": 42,
+            "gu": 42,
+            "kind": "QSA",
+            "layer": 3,
+            "ring": 4
+          }
+        },
+        "windows": 93
+      },
+      "1": {
+        "attempts": 186,
+        "clock_khz": 25000,
+        "device": 1,
+        "device_plan": false,
+        "df_branch": 0,
+        "layers": [
+          27,
+          28
+        ],
+        "lb": 27,
+        "le": 48,
+        "pcie_mode": 2,
+        "shared_stream": 1,
+        "sites": {
+          "27": {
+            "down": 42,
+            "gu": 42,
+            "kind": "QSA",
+            "layer": 27,
+            "ring": 1
+          },
+          "28": {
+            "down": 42,
+            "gu": 42,
+            "kind": "GDN",
+            "layer": 28,
+            "ring": 2
+          }
+        },
+        "windows": 93
+      }
+    },
+    "raw_ep_obs_lines": 382,
+    "records_total": 372,
+    "request_coverage": {
+      "accepted": 164,
+      "emitted": 256,
+      "final_keep": 4,
+      "offered": 216,
+      "total_committed_keeps": 257,
+      "windows": 93
+    },
+    "scope": "Pre-wait predicate false is a sampled condition, not a measured wait-stall duration. No clocks compared across owners. Clock rate is queried wall clock, not GPU core frequency.",
+    "sites": [
+      {
+        "T_counts": {
+          "1": 12,
+          "2": 10,
+          "3": 7,
+          "4": 64
+        },
+        "by_T": {
+          "1": {
+            "complete_windows": 12,
+            "local_ratio": 4.947368421052632,
+            "median_wait_containing_ticks": 160.0,
+            "median_zero_ready_group_ticks": 376,
+            "median_zero_ready_group_us": 15.04,
+            "nonzero_count": 0,
+            "p95_all_complete_adjacent_ticks": 76,
+            "p95_all_complete_adjacent_us": 3.04,
+            "passed": false,
+            "predicate_transitions": {
+              "0->0": 1,
+              "1->1": 11
+            },
+            "ready_cause0": {
+              "flag": 11,
+              "none": 1
+            },
+            "ready_cause1": {
+              "flag": 11,
+              "none": 1
+            },
+            "zero_ready_before": 11
+          },
+          "2": {
+            "complete_windows": 10,
+            "local_ratio": 6.578947368421052,
+            "median_wait_containing_ticks": 160.0,
+            "median_zero_ready_group_ticks": 500,
+            "median_zero_ready_group_us": 20.0,
+            "nonzero_count": 0,
+            "p95_all_complete_adjacent_ticks": 76,
+            "p95_all_complete_adjacent_us": 3.04,
+            "passed": false,
+            "predicate_transitions": {
+              "0->1": 1,
+              "1->1": 9
+            },
+            "ready_cause0": {
+              "flag": 9,
+              "none": 1
+            },
+            "ready_cause1": {
+              "flag": 10
+            },
+            "zero_ready_before": 9
+          },
+          "3": {
+            "complete_windows": 7,
+            "local_ratio": 8.0,
+            "median_wait_containing_ticks": 160,
+            "median_zero_ready_group_ticks": 608.0,
+            "median_zero_ready_group_us": 24.32,
+            "nonzero_count": 0,
+            "p95_all_complete_adjacent_ticks": 76,
+            "p95_all_complete_adjacent_us": 3.04,
+            "passed": false,
+            "predicate_transitions": {
+              "0->0": 1,
+              "1->1": 6
+            },
+            "ready_cause0": {
+              "flag": 6,
+              "none": 1
+            },
+            "ready_cause1": {
+              "flag": 6,
+              "none": 1
+            },
+            "zero_ready_before": 6
+          },
+          "4": {
+            "complete_windows": 64,
+            "local_ratio": 10.166666666666666,
+            "median_wait_containing_ticks": 160.0,
+            "median_zero_ready_group_ticks": 732.0,
+            "median_zero_ready_group_us": 29.28,
+            "nonzero_count": 0,
+            "p95_all_complete_adjacent_ticks": 72,
+            "p95_all_complete_adjacent_us": 2.88,
+            "passed": true,
+            "predicate_transitions": {
+              "0->0": 2,
+              "1->1": 62
+            },
+            "ready_cause0": {
+              "flag": 62,
+              "none": 2
+            },
+            "ready_cause1": {
+              "flag": 62,
+              "none": 2
+            },
+            "zero_ready_before": 62
+          }
+        },
+        "clock_khz": 25000,
+        "complete_windows": 93,
+        "device": 0,
+        "layer": 0,
+        "local_ratio": 9.578947368421053,
+        "median_wait_containing_ticks": 160,
+        "median_wait_containing_us": 6.4,
+        "median_zero_ready_group_ticks": 728.0,
+        "median_zero_ready_group_us": 29.12,
+        "nonzero_count": 0,
+        "not_ready_before_group": 5,
+        "p95_all_complete_adjacent_ticks": 76,
+        "p95_all_complete_adjacent_us": 3.04,
+        "passed": true,
+        "predicate_false_at_pre_wait_fraction": "4/93",
+        "predicate_false_at_pre_wait_pct": 4.301075268817204,
+        "predicate_false_at_pre_wait_sample": 4,
+        "predicate_transitions": {
+          "0->0": 4,
+          "0->1": 1,
+          "1->1": 88
+        },
+        "ready_cause0": {
+          "flag": 88,
+          "none": 5
+        },
+        "ready_cause1": {
+          "flag": 89,
+          "none": 4
+        },
+        "ring": 1,
+        "zero_ready_before": 88
+      },
+      {
+        "T_counts": {
+          "1": 12,
+          "2": 10,
+          "3": 7,
+          "4": 64
+        },
+        "by_T": {
+          "1": {
+            "complete_windows": 12,
+            "local_ratio": 5.0,
+            "median_wait_containing_ticks": 156.0,
+            "median_zero_ready_group_ticks": 380,
+            "median_zero_ready_group_us": 15.2,
+            "nonzero_count": 0,
+            "p95_all_complete_adjacent_ticks": 76,
+            "p95_all_complete_adjacent_us": 3.04,
+            "passed": false,
+            "predicate_transitions": {
+              "0->1": 1,
+              "1->1": 11
+            },
+            "ready_cause0": {
+              "flag": 11,
+              "none": 1
+            },
+            "ready_cause1": {
+              "flag": 12
+            },
+            "zero_ready_before": 11
+          },
+          "2": {
+            "complete_windows": 10,
+            "local_ratio": 6.944444444444445,
+            "median_wait_containing_ticks": 162.0,
+            "median_zero_ready_group_ticks": 500.0,
+            "median_zero_ready_group_us": 20.0,
+            "nonzero_count": 0,
+            "p95_all_complete_adjacent_ticks": 72,
+            "p95_all_complete_adjacent_us": 2.88,
+            "passed": false,
+            "predicate_transitions": {
+              "1->1": 10
+            },
+            "ready_cause0": {
+              "flag": 10
+            },
+            "ready_cause1": {
+              "flag": 10
+            },
+            "zero_ready_before": 10
+          },
+          "3": {
+            "complete_windows": 7,
+            "local_ratio": 7.6,
+            "median_wait_containing_ticks": 160,
+            "median_zero_ready_group_ticks": 608,
+            "median_zero_ready_group_us": 24.32,
+            "nonzero_count": 0,
+            "p95_all_complete_adjacent_ticks": 80,
+            "p95_all_complete_adjacent_us": 3.2,
+            "passed": false,
+            "predicate_transitions": {
+              "1->1": 7
+            },
+            "ready_cause0": {
+              "flag": 7
+            },
+            "ready_cause1": {
+              "flag": 7
+            },
+            "zero_ready_before": 7
+          },
+          "4": {
+            "complete_windows": 64,
+            "local_ratio": 9.578947368421053,
+            "median_wait_containing_ticks": 160.0,
+            "median_zero_ready_group_ticks": 728,
+            "median_zero_ready_group_us": 29.12,
+            "nonzero_count": 0,
+            "p95_all_complete_adjacent_ticks": 76,
+            "p95_all_complete_adjacent_us": 3.04,
+            "passed": true,
+            "predicate_transitions": {
+              "0->0": 6,
+              "0->1": 1,
+              "1->1": 57
+            },
+            "ready_cause0": {
+              "flag": 57,
+              "none": 7
+            },
+            "ready_cause1": {
+              "flag": 58,
+              "none": 6
+            },
+            "zero_ready_before": 57
+          }
+        },
+        "clock_khz": 25000,
+        "complete_windows": 93,
+        "device": 0,
+        "layer": 3,
+        "local_ratio": 9.578947368421053,
+        "median_wait_containing_ticks": 160,
+        "median_wait_containing_us": 6.4,
+        "median_zero_ready_group_ticks": 728,
+        "median_zero_ready_group_us": 29.12,
+        "nonzero_count": 0,
+        "not_ready_before_group": 8,
+        "p95_all_complete_adjacent_ticks": 76,
+        "p95_all_complete_adjacent_us": 3.04,
+        "passed": true,
+        "predicate_false_at_pre_wait_fraction": "6/93",
+        "predicate_false_at_pre_wait_pct": 6.451612903225806,
+        "predicate_false_at_pre_wait_sample": 6,
+        "predicate_transitions": {
+          "0->0": 6,
+          "0->1": 2,
+          "1->1": 85
+        },
+        "ready_cause0": {
+          "flag": 85,
+          "none": 8
+        },
+        "ready_cause1": {
+          "flag": 87,
+          "none": 6
+        },
+        "ring": 4,
+        "zero_ready_before": 85
+      },
+      {
+        "T_counts": {
+          "1": 12,
+          "2": 10,
+          "3": 7,
+          "4": 64
+        },
+        "by_T": {
+          "1": {
+            "complete_windows": 12,
+            "local_ratio": 4.947368421052632,
+            "median_wait_containing_ticks": 162.0,
+            "median_zero_ready_group_ticks": 376,
+            "median_zero_ready_group_us": 15.04,
+            "nonzero_count": 0,
+            "p95_all_complete_adjacent_ticks": 76,
+            "p95_all_complete_adjacent_us": 3.04,
+            "passed": false,
+            "predicate_transitions": {
+              "0->0": 1,
+              "1->1": 11
+            },
+            "ready_cause0": {
+              "flag": 11,
+              "none": 1
+            },
+            "ready_cause1": {
+              "flag": 11,
+              "none": 1
+            },
+            "zero_ready_before": 11
+          },
+          "2": {
+            "complete_windows": 10,
+            "local_ratio": 6.526315789473684,
+            "median_wait_containing_ticks": 158.0,
+            "median_zero_ready_group_ticks": 496.0,
+            "median_zero_ready_group_us": 19.84,
+            "nonzero_count": 0,
+            "p95_all_complete_adjacent_ticks": 76,
+            "p95_all_complete_adjacent_us": 3.04,
+            "passed": false,
+            "predicate_transitions": {
+              "1->1": 10
+            },
+            "ready_cause0": {
+              "flag": 10
+            },
+            "ready_cause1": {
+              "flag": 10
+            },
+            "zero_ready_before": 10
+          },
+          "3": {
+            "complete_windows": 7,
+            "local_ratio": 8.052631578947368,
+            "median_wait_containing_ticks": 160,
+            "median_zero_ready_group_ticks": 612,
+            "median_zero_ready_group_us": 24.48,
+            "nonzero_count": 0,
+            "p95_all_complete_adjacent_ticks": 76,
+            "p95_all_complete_adjacent_us": 3.04,
+            "passed": false,
+            "predicate_transitions": {
+              "1->1": 7
+            },
+            "ready_cause0": {
+              "flag": 7
+            },
+            "ready_cause1": {
+              "flag": 7
+            },
+            "zero_ready_before": 7
+          },
+          "4": {
+            "complete_windows": 64,
+            "local_ratio": 10.166666666666666,
+            "median_wait_containing_ticks": 160.0,
+            "median_zero_ready_group_ticks": 732.0,
+            "median_zero_ready_group_us": 29.28,
+            "nonzero_count": 0,
+            "p95_all_complete_adjacent_ticks": 72,
+            "p95_all_complete_adjacent_us": 2.88,
+            "passed": true,
+            "predicate_transitions": {
+              "0->0": 4,
+              "0->1": 2,
+              "1->1": 58
+            },
+            "ready_cause0": {
+              "flag": 58,
+              "none": 6
+            },
+            "ready_cause1": {
+              "flag": 60,
+              "none": 4
+            },
+            "zero_ready_before": 58
+          }
+        },
+        "clock_khz": 25000,
+        "complete_windows": 93,
+        "device": 1,
+        "layer": 27,
+        "local_ratio": 9.578947368421053,
+        "median_wait_containing_ticks": 160,
+        "median_wait_containing_us": 6.4,
+        "median_zero_ready_group_ticks": 728.0,
+        "median_zero_ready_group_us": 29.12,
+        "nonzero_count": 0,
+        "not_ready_before_group": 7,
+        "p95_all_complete_adjacent_ticks": 76,
+        "p95_all_complete_adjacent_us": 3.04,
+        "passed": true,
+        "predicate_false_at_pre_wait_fraction": "5/93",
+        "predicate_false_at_pre_wait_pct": 5.376344086021505,
+        "predicate_false_at_pre_wait_sample": 5,
+        "predicate_transitions": {
+          "0->0": 5,
+          "0->1": 2,
+          "1->1": 86
+        },
+        "ready_cause0": {
+          "flag": 86,
+          "none": 7
+        },
+        "ready_cause1": {
+          "flag": 88,
+          "none": 5
+        },
+        "ring": 1,
+        "zero_ready_before": 86
+      },
+      {
+        "T_counts": {
+          "1": 12,
+          "2": 10,
+          "3": 7,
+          "4": 64
+        },
+        "by_T": {
+          "1": {
+            "complete_windows": 12,
+            "local_ratio": 4.7,
+            "median_wait_containing_ticks": 164.0,
+            "median_zero_ready_group_ticks": 376.0,
+            "median_zero_ready_group_us": 15.04,
+            "nonzero_count": 0,
+            "p95_all_complete_adjacent_ticks": 80,
+            "p95_all_complete_adjacent_us": 3.2,
+            "passed": false,
+            "predicate_transitions": {
+              "1->1": 12
+            },
+            "ready_cause0": {
+              "flag": 12
+            },
+            "ready_cause1": {
+              "flag": 12
+            },
+            "zero_ready_before": 12
+          },
+          "2": {
+            "complete_windows": 10,
+            "local_ratio": 6.5,
+            "median_wait_containing_ticks": 164.0,
+            "median_zero_ready_group_ticks": 494.0,
+            "median_zero_ready_group_us": 19.76,
+            "nonzero_count": 0,
+            "p95_all_complete_adjacent_ticks": 76,
+            "p95_all_complete_adjacent_us": 3.04,
+            "passed": false,
+            "predicate_transitions": {
+              "1->1": 10
+            },
+            "ready_cause0": {
+              "flag": 10
+            },
+            "ready_cause1": {
+              "flag": 10
+            },
+            "zero_ready_before": 10
+          },
+          "3": {
+            "complete_windows": 7,
+            "local_ratio": 8.0,
+            "median_wait_containing_ticks": 160,
+            "median_zero_ready_group_ticks": 608,
+            "median_zero_ready_group_us": 24.32,
+            "nonzero_count": 0,
+            "p95_all_complete_adjacent_ticks": 76,
+            "p95_all_complete_adjacent_us": 3.04,
+            "passed": false,
+            "predicate_transitions": {
+              "1->1": 7
+            },
+            "ready_cause0": {
+              "flag": 7
+            },
+            "ready_cause1": {
+              "flag": 7
+            },
+            "zero_ready_before": 7
+          },
+          "4": {
+            "complete_windows": 64,
+            "local_ratio": 9.631578947368421,
+            "median_wait_containing_ticks": 160.0,
+            "median_zero_ready_group_ticks": 732.0,
+            "median_zero_ready_group_us": 29.28,
+            "nonzero_count": 0,
+            "p95_all_complete_adjacent_ticks": 76,
+            "p95_all_complete_adjacent_us": 3.04,
+            "passed": true,
+            "predicate_transitions": {
+              "1->1": 64
+            },
+            "ready_cause0": {
+              "flag": 64
+            },
+            "ready_cause1": {
+              "flag": 64
+            },
+            "zero_ready_before": 64
+          }
+        },
+        "clock_khz": 25000,
+        "complete_windows": 93,
+        "device": 1,
+        "layer": 28,
+        "local_ratio": 9.578947368421053,
+        "median_wait_containing_ticks": 160,
+        "median_wait_containing_us": 6.4,
+        "median_zero_ready_group_ticks": 728,
+        "median_zero_ready_group_us": 29.12,
+        "nonzero_count": 0,
+        "not_ready_before_group": 0,
+        "p95_all_complete_adjacent_ticks": 76,
+        "p95_all_complete_adjacent_us": 3.04,
+        "passed": true,
+        "predicate_false_at_pre_wait_fraction": "0/93",
+        "predicate_false_at_pre_wait_pct": 0.0,
+        "predicate_false_at_pre_wait_sample": 0,
+        "predicate_transitions": {
+          "1->1": 93
+        },
+        "ready_cause0": {
+          "flag": 93
+        },
+        "ready_cause1": {
+          "flag": 93
+        },
+        "ring": 2,
+        "zero_ready_before": 93
+      }
+    ]
+  },
+  "observer_details_sha256": "4f2802f358380a6b5f753619c9c5da536647fd69b1dbce172f27490f82b40362",
+  "optimization_qualified": false,
+  "promoted": false,
+  "recomputed_metrics_sha256": "1aeabce94c73d8b9dd48270fae3f38b2fd47f3ba0b070f099847839c709aaa62",
+  "v1_audit_sha256": "3742c6fb1a7e533c4d43958667b155130973a7c4b6dc3996da1029a32ab2323d",
+  "v1_preserved": {
+    "actual_build_review_sha256": "2a243b4fa379356bd697fc071163170cb981373e654b2d8a548c0e99dd8dd30f",
+    "actual_exit_code": 1,
+    "archive_bytes": 62685,
+    "archive_regular_members": 26,
+    "archive_sha256": "2eb6e8a291c5d32da042ac2a69f3667cb20d85eb7e3f9028da4a21c947d9581f",
+    "archive_uncompressed_bytes": 354200,
+    "audit_passed": true,
+    "candidate_binary_sha256": "a3842731df4fbaadbb20684922e2bbbdcf89553579e035336939cc99ca47b3d0",
+    "checks": [
+      "Sole fresh extraction only after terminal transfer_verified receipt; exact 62,685-byte archive SHA and all 26 regular member hashes/lengths independently verified. No links, traversal, oversized files or executable extraction.",
+      "Launch, one-use marker, package manifest, runtime/build review and summary bindings match exact admitted artifacts; no matrix or threshold changes. Exactly OFF1 and OBS process starts, no OFF2 evidence.",
+      "OFF1 complete ordered INFO/READY/RESUME0/REUSED0/256 tokens/DONE16 verified from raw output, all recorded IDs and available work equal its result/summary. Native PP progress lines retained and parsed as non-result progress.",
+      "OBS exact four-line stdout is INFO, READY204800stop, RESUME0, ERR empty PCIe observer: gfx906 HIP build required. Zero tokens, no REUSED, DONE or EP_OBS records. Complete raw reader and native exit1 retained.",
+      "Both READY INFO capacity/profile dictionaries match exactly. Cross-arm request/output/work parity is unavailable because OBS never completes and OFF2 is unlaunched.",
+      "Exact same binary, query-swizzle/reduce12 ON, LANECELL0, observer exact1 only in OBS, no other experimental flags, fixed 64K256 sampling and model/native args verified from process environment and Docker inspect.",
+      "UID/GID1000, render990 devices, label ownership, pinned image, no-network, exact read-only data mounts, no container restart, physical GPU mappings and CPU0/pool masks verified. OFF1 PID/thread starttimes/masks preserved through DONE; OBS only READY identity exists.",
+      "All 37 raw GPU snapshots and 33 arm snapshots within margins; power mode high/cap190W unchanged; initial per-arm cooldown<=55C. Final GPUs idle at 41/39C edge and all final sensors<=55C.",
+      "Failed OBS container stop was preceded by exact attempt-label verification and succeeded; final per-arm and all-container queries empty, no API operations, no power/affinity changes evidenced.",
+      "Original experiment never retried. Initial prelaunch rsync failure, collection/transfer errors and final verified transfer-only SSH stdout recovery are separately preserved. No collection failure was used to repeat native work."
+    ],
+    "cleanup_passed": true,
+    "collection_receipt": {
+      "bytes": 5708,
+      "sha256": "bbcd93bc318daa1343029b25c9ed802f2bce0f81249d2b81f80f8cb5ed949f77"
+    },
+    "collection_sha256": "bbcd93bc318daa1343029b25c9ed802f2bce0f81249d2b81f80f8cb5ed949f77",
+    "completed_requests": 1,
+    "controller_only": true,
+    "cross_arm_ids_work_parity": null,
+    "decision": "FAIL_V0142_EMPTY_PCIE_OBSERVER_RUNTIME_HOST_GUARD",
+    "endpoint_quality": null,
+    "extraction_receipt_sha256": "8dada51f3d1fde38e0add50c69c6721821ccc25af733fd5a3b0f03f9321c2c55",
+    "failed_requests": 1,
+    "failure_cause": {
+      "device_entry_scope": "The independent static device proof established an added observer entry. Entry existence did not establish that the host eligibility gate could enable it.",
+      "source_evidence": {
+        "compile_commands_sha256": "cf67ab22cef485e13164ffb0151c6aea63f3512a8d50732119ab43035cc2642d",
+        "error_branch": "err = \"empty PCIe observer: gfx906 HIP build required\"; return false;",
+        "error_line": 548,
+        "guard": "#if defined(STRATA_USE_HIP) && defined(STRATA_HIP_GFX906)",
+        "guard_line": 485,
+        "host_command_defines_gfx906": true,
+        "host_command_defines_hip_platform_amd": true,
+        "host_command_defines_strata_use_hip": false,
+        "host_compile": {
+          "output": "CMakeFiles/strata_engine.dir/src/core/verify.cpp.o"
+        },
+        "interpretation": "New host observer begin guard requires a macro absent from the actual host compile command; reported ERR matches its unsupported-build else branch. This occurs before observer begin/allocation/marker launch. Actual runtime receipts must establish observed failure and boundaries.",
+        "source_sha256": "030805e343806be58056150ef691954515700bde0be7d0f01e37dfb2b4924226"
+      },
+      "source_test_masking": {
+        "finding": "The prior CPU host-support fixture explicitly defined STRATA_USE_HIP and STRATA_HIP_GFX906, masking the actual host macro combination.",
+        "lines": [
+          17,
+          18
+        ],
+        "sha256": "86e23c903720f28af5af9d2ef10fe7b59b9fa773df90e9ac5c4e2688f9cc7ccf"
+      },
+      "summary": "The new host observer begin guard requires STRATA_USE_HIP, which is absent from the actual host compilation definitions. The exact runtime ERR is emitted by that guard\u2019s unsupported-build branch before observer initialization/allocation/marker launch."
+    },
+    "finished_utc": "2026-10-10T22:47:04.018908+00:00",
+    "gpu_execution_by_reviewer": false,
+    "launched_processes": 2,
+    "limits": [
+      "This is an implementation/host-eligibility failure before sparse observer measurements. It is not a negative empty-PCIe latency result or an instrumentation-overhead result.",
+      "Fixed OFF/ON/OFF quality, local window/readiness/resolution heuristics and exact cross-arm work/IDs cannot be evaluated; all such metrics are null, not zero or passed. OFF1 rates are descriptive only.",
+      "Normal model/GPU initialization and the complete OFF1 workload occurred. Only the added observer path failed before its initialization/markers; zero overall GPU execution is not claimed.",
+      "Continuous CPU sample files were not collected in this diagnostic. READY bindings exist for both arms; full DONE identity exists only for OFF1.",
+      "No EOS/fault-recovery, device-memory visibility, cleanup of successfully allocated observer buffers, removable latency, global48-layer timing or speedup was demonstrated.",
+      "Static build identity retains raw device-payload/original-instruction inequality with explicit PC-relative structural proofs; this runtime failure neither alters nor expands those proofs.",
+      "Known transport log inventory is non-exhaustive; it preserves the specified root-reported attempts and final recovery without treating network failures as workload failures."
+    ],
+    "local_statistics": null,
+    "observer_decode_deviation": null,
+    "observer_kernel_executed": false,
+    "off1": {
+      "decode_ms": 5344.4,
+      "output_ids_sha256": "67b00735e0565fbead82fe5e38708e626501ebdf7cefb07c75f40e255b749d60",
+      "outputs": 256,
+      "pp_tps": 626.192576002385,
+      "prompt_ms": 104657.9,
+      "prompt_tokens": 65536,
+      "raw_ids_and_all_available_work_match_result": true,
+      "tg_tps": 47.90060624204775,
+      "work": {
+        "accepted": 164,
+        "cache_hits": 143332,
+        "file_blobs": 0,
+        "file_read_mb": 0.0,
+        "lookups": 146623,
+        "offered": 216,
+        "offloaded_experts": 0,
+        "prompt_read": 65536,
+        "prompt_reused": 0,
+        "ram_blobs": 0,
+        "suffix_drafts": {
+          "accepted": 0,
+          "offered": 0,
+          "present": false,
+          "windows": 0
+        }
+      }
+    },
+    "off2_launched": false,
+    "optimization_qualified": false,
+    "passed": false,
+    "promoted": false,
+    "raw_protocol": {
+      "cleanup_error": null,
+      "done": false,
+      "ep_obs_lines": 0,
+      "native_exit": 1,
+      "observer_kernel_executed": false,
+      "protocol": [
+        "INFO",
+        "READY 204800 stop",
+        "RESUME 0",
+        "ERR empty PCIe observer: gfx906 HIP build required"
+      ],
+      "readers_complete": true,
+      "tokens": 0
+    },
+    "readiness_observations": 0,
+    "reviewed_utc": "2026-10-10T23:29:19.810713+00:00",
+    "runner_review_sha256": "a4a218d4271f8e4937688cc6d76b37a92fa8dbaac37c3c352e29b408eeafaa5d",
+    "runtime_manifest_sha256": "e5c293bb6e77ad2e302ca128719d71a6bb099dccb73e15cf6881b0dba6f9d012",
+    "runtime_matrix_completed": false,
+    "runtime_repeated": false,
+    "safety": {
+      "all_containers_absent": true,
+      "api_stopped": true,
+      "arm_gpu_samples": {
+        "OBS": 6,
+        "OFF1": 27
+      },
+      "continuous_cpu_samples_collected": false,
+      "final_gpu": [
+        {
+          "freq1_input": 1299000000,
+          "freq2_input": 1000000000,
+          "mode": "high",
+          "power1_cap": 190000000,
+          "power1_input": 28000000,
+          "temp1_input": 41000,
+          "temp2_input": 45000,
+          "temp3_input": 43000
+        },
+        {
+          "freq1_input": 1300000000,
+          "freq2_input": 1000000000,
+          "mode": "high",
+          "power1_cap": 190000000,
+          "power1_input": 29000000,
+          "temp1_input": 39000,
+          "temp2_input": 43000,
+          "temp3_input": 46000
+        }
+      ],
+      "final_gpu_busy_percent": [
+        0,
+        0
+      ],
+      "obs_done_identity_unavailable_due_to_failure": true,
+      "off1_done_thread_identity_exact": true,
+      "owned_obs_stop": true,
+      "passed": true,
+      "raw_gpu_snapshots": 37,
+      "ready_thread_count": 28
+    },
+    "schema": "strata.empty.pcie.observer.actual.runtime.independent.audit.v1",
+    "scientific_qualification": "NOT_EVALUATED_INCOMPLETE_MATRIX",
+    "screen_passed": false,
+    "source_or_runtime_modified": false,
+    "source_review_sha256": "fcf688f73727505650222586095c550758faf21148dd2cf2b8c0b4c975a629ed",
+    "stable_ready_capacity_equal": true,
+    "started_utc": "2026-10-10T22:44:09.917460+00:00",
+    "target_contact_by_reviewer": false
+  },
+  "v2": {
+    "archive": {
+      "bytes": 282605,
+      "regular_members": 39,
+      "sha256": "945164a61a4e4b481773062ef693e48f32c5e9af3ae31de4af6e3033ef0236eb",
+      "uncompressed_bytes": 2779102
+    },
+    "artifacts": {
+      "audit_safety.py": {
+        "bytes": 9252,
+        "sha256": "8ed9cd64e77bf3a9383e409f774268363e4dbf419fd7dcb4ff4d6e2a684f1fb7"
+      },
+      "audit_sensitivity.py": {
+        "bytes": 3034,
+        "sha256": "32a6ae3ec15e5c0cd21204b33d4beb0a0548b8487879bfbb69e043ef5c620987"
+      },
+      "extract_receipts.py": {
+        "bytes": 3253,
+        "sha256": "a71d121d3bfa2fe785fcb99a398a3ff7ad24beaec3a91b8fcdbee2993c079d96"
+      },
+      "extraction-receipt.json": {
+        "bytes": 10142,
+        "sha256": "6d1e3a3cca352ebab6a9bff01cac505c8228e53b8aa2c5eac5b6bf23c0ac5f98"
+      },
+      "final-integrity.json": {
+        "bytes": 1553,
+        "sha256": "3c43209678e4cfb2c9c8c220078b5ad719bb3865a053e1a265b97510bf768976"
+      },
+      "observer-details.json": {
+        "bytes": 16579,
+        "sha256": "4f2802f358380a6b5f753619c9c5da536647fd69b1dbce172f27490f82b40362"
+      },
+      "recompute_metrics.py": {
+        "bytes": 13916,
+        "sha256": "98f0037e4a828a8a01b721a35ed7503ae9d48d6bf26756b85b10022baf2c83a7"
+      },
+      "recomputed-metrics.json": {
+        "bytes": 23949,
+        "sha256": "1aeabce94c73d8b9dd48270fae3f38b2fd47f3ba0b070f099847839c709aaa62"
+      },
+      "safety-audit.json": {
+        "bytes": 1610,
+        "sha256": "9cc5b7b654cc9aaffe9b64d01366479ea5451768cb4270cb9413dbad296539ff"
+      },
+      "sensitivity-audit.json": {
+        "bytes": 311,
+        "sha256": "83c5a9743700a216b7de8ae289301b0375424aa7df23d754526cdd9698a81450"
+      }
+    },
+    "audit_passed": true,
+    "bindings": {
+      "collector_sha256": "86da3b03ed9d70bd0a27e4749e9ebe5e77ddbfa7c44a2dea0a0c7df56343be9a",
+      "image": "sha256:bccb7ee7e7a78274519db9a43ba63c34ddd2e74bb60f8764a8f50aaee1f2c646",
+      "pins": {
+        "actual_build_admission_sha256": "c5c057bf395cd4009e0f45406b698d264aa78472a1c183d60312c0ae32a9a1fe",
+        "added_module_proof_sha256": "7db8148bdf8df91e1bd7c916897a350fa6cf671e235fdffe2f9fb2f10566fa97",
+        "binary_sha256": "67c9fc5af0c694c4af0eca859ea78505e09be7a54f37a712c4a77f41f518caf4",
+        "blanket_normalization_used": false,
+        "candidate_inventory_sha256": "6277067bb87a7a939769703b752322217fc45452c4ccea3d8177b8effa11f909",
+        "cmake_gpu_discovery_attempted": true,
+        "compile_guard_sha256": "cb8a3edc209bdfe6ec75206107a10237bf8e65a4ac5a718c56448642ece513cf",
+        "control_flow_proof_sha256": "80b7d14197bdfd3ef969e427e21be5864a2cea6045adbcf2a773c9f76fc444bc",
+        "device_object_proof_sha256": "a8e204367fa82fd05ea96a76653c266bf6d00ccb330bc37e17d5783ecf638351",
+        "host_begin_cfg_proof_sha256": "781eb0e1ef9fe72d2559e92487cf870500f6e2046c37fe93fd981c5519d2bec1",
+        "independent_device_proof_review_sha256": "9e4c47e7ea77d4a84b375d81b3261a2c738bf1f00482fdc516f1a70637a903ed",
+        "outer_review_sha256": "0bea90233bbc7a04367b0041fe35277288d2b24d8a0cb870acde61add8943dca",
+        "raw_device_payload_bytes_equal": false,
+        "raw_device_payload_bytes_equal_to_v1": true,
+        "raw_original_instruction_bytes_equal": false,
+        "real_header_compile_proof_sha256": "9b4544d87222f7176476757e54529b94f131f3d02babb6ef3b706b293f3f5ff1",
+        "recipe_sha256": "4bf955db8cd32f3d3f4321b31dce486301ea753caec6f32f0261d5f17cd6ac12",
+        "release_binary_sha256": "572c7fb33c95d8b5c16803a8550abeab13eeccb9314136ae101ce61ecd605171",
+        "release_commit": "61b3fb5dd3f1e8ec09cf7e4e05208bc6d3c46406",
+        "source_archive_sha256": "dc7b2bbf59fae5e2eb37905c1a5f90b279ad33b9b792d6a4fcf78473a984d922",
+        "source_manifest_sha256": "cbce0b4f53e4c88589fe0db23316675db686c780de3977c4b009d83fccb342c0",
+        "source_review_sha256": "d1dad69e70d69753aab7644d87f52af852dbef318a95ca4545d2c136acb9d8d4",
+        "source_sha256sums_sha256": "0194b08ce6fe45c5e138b5774cc67e8584e5ee59198cc4b69fd63cccc0091e14",
+        "status": "ACTUAL_OBSERVER_V2_BUILD_ADMITTED",
+        "v1_binary_sha256": "a3842731df4fbaadbb20684922e2bbbdcf89553579e035336939cc99ca47b3d0",
+        "v1_device_preservation_proof_sha256": "0ffeb8ece7d9c424afdeaf84c09d0d6a2ce0b916009ce4a2e9cc42274170e91c",
+        "v1_failed_runtime_audit_sha256": "3742c6fb1a7e533c4d43958667b155130973a7c4b6dc3996da1029a32ab2323d",
+        "v1_reference_map_sha256": "d956f82eeda719b246c57735e8650edee06d5a3f763b03881a55b900b26e82d4"
+      },
+      "runtime_manifest_sha256": "182d26dff7df3a2d7da31c5f4166a5dd67b84f8300ae6f3732d7a91d3c36784b",
+      "runtime_review_sha256": "d206789ee597781bceadc1da5ec57c4017d90c1d71a5a7f83004945067915bf5",
+      "staging_helper_sha256": "c6fb0a91509ded0b63521e1716e9ef0cbee880687253fa14a0bde727324ffedb"
+    },
+    "collection": {
+      "sha256": "cd9ee299f662c573d86da4f6bd92d2711bf6b05ad2cdf82cf05466de60898634",
+      "transfer_verified": true
+    },
+    "decision": "PASS_V0142_EMPTY_PCIE_OBSERVER_V2_ACTUAL_RUNTIME_AUDIT",
+    "experiment": {
+      "all_available_raw_work_exact": true,
+      "all_raw_ids_exact": true,
+      "cold_resume_reused_both_zero": true,
+      "fresh_processes": 3,
+      "full_stderr_read_after_successful_exit": true,
+      "full_stdout_277_lines_per_arm": true,
+      "native_done_field_count": 16,
+      "only_observer_switch_varies": true,
+      "optional_chain_counters_available": false,
+      "order": [
+        "OFF1",
+        "OBS",
+        "OFF2"
+      ],
+      "output_ids_sha256": {
+        "OBS": "67b00735e0565fbead82fe5e38708e626501ebdf7cefb07c75f40e255b749d60",
+        "OFF1": "67b00735e0565fbead82fe5e38708e626501ebdf7cefb07c75f40e255b749d60",
+        "OFF2": "67b00735e0565fbead82fe5e38708e626501ebdf7cefb07c75f40e255b749d60"
+      },
+      "outputs_per_request": 256,
+      "prompt_tokens_per_request": 65536,
+      "query_swizzle_and_reduce12_on_all_arms": true,
+      "raw_output_ids_checked": 768,
+      "same_candidate_binary": true,
+      "stable_info_capacity_exact": true,
+      "work": {
+        "accepted": 164,
+        "cache_hits": 143332,
+        "file_blobs": 0,
+        "file_read_mb": 0.0,
+        "lookups": 146623,
+        "offered": 216,
+        "offloaded_experts": 0,
+        "prompt_read": 65536,
+        "prompt_reused": 0,
+        "ram_blobs": 0,
+        "suffix_drafts": {
+          "accepted": 0,
+          "offered": 0,
+          "present": false,
+          "windows": 0
+        }
+      }
+    },
+    "finished_utc": "2026-10-11T00:23:47.786612+00:00",
+    "limitations": [
+      "One predeclared OFF1/OBS/OFF2 diagnostic triplet on one deterministic 65536-input, 256-output prompt. This is a local source-proposal signal only; optimization qualification and promotion remain false.",
+      "The observed endpoint and observer-decode budgets do not establish a causal upper bound on instrumentation cost. Markers, stores, ring bookkeeping, per-window checked current-device host query and bookkeeping can perturb this diagnostic.",
+      "Local group brackets and adjacent marker spacing are same-owner measurements. There is no cross-owner clock subtraction, 48-layer extrapolation, global gain, removable-time estimate or demonstrated speedup.",
+      "Original readiness predicates are false at the post-group/pre-wait sample in 4/93, 6/93, 5/93 and 0/93 windows. These sampled states do not measure wait-stall durations. The original waits remain semantically necessary; a future empty-group proposal must preserve wait, count and ownership behavior.",
+      "Observed pcie_mode=2, device_plan=0, shared_stream=1, df_branch=0, split=0 and GU/down=42. Other branches, layouts, nonempty routes, workloads or formats are not demonstrated.",
+      "The 16-field native DONE protocol has no optional chain counters; only available native work counters and suffix-summary absence were compared. No EOS, multi-request reuse, fault-injection or general GPU fault-recovery claim is made.",
+      "CPU evidence is READY/DONE process and full thread identity/affinity, not continuous CPU sampling; continuous CPU sample files were not enabled. Existing GPU power and CPU-affinity settings were unchanged.",
+      "V2 actual static build proof reports raw payload and linked-fatbin equality to V1. Raw payload and original-instruction equality to release remain false, with separately pinned relocation/layout preservation proofs; there is no blanket normalization claim.",
+      "The preserved V1 run failed before observer data on its host eligibility guard. It was not a completed negative observation and none of its OFF1 timing was reused in this V2 triplet.",
+      "The controller-only reviewer did not contact the target or rerun the workload. Final device state is the terminal collected snapshot, not continuous observation after collection."
+    ],
+    "local_heuristic_passed": true,
+    "observer": {
+      "T_counts_per_site": {
+        "1": 12,
+        "2": 10,
+        "3": 7,
+        "4": 64
+      },
+      "drained_per_owner": true,
+      "error_bits_per_owner": [
+        0,
+        0
+      ],
+      "first_window_T": 1,
+      "foreign_profile_trace_absent": true,
+      "full_raw_and_derived_fields_match_emitted": true,
+      "invalid_per_owner": [
+        0,
+        0
+      ],
+      "nonempty_records": 0,
+      "owners": 2,
+      "per_T_summaries_match": true,
+      "queried_wall_clock_khz_per_owner": [
+        25000,
+        25000
+      ],
+      "records": 372,
+      "records_per_owner": 186,
+      "request_coverage": {
+        "accepted": 164,
+        "emitted": 256,
+        "final_keep": 4,
+        "offered": 216,
+        "total_committed_keeps": 257,
+        "windows": 93
+      },
+      "sites": [
+        {
+          "T_counts": {
+            "1": 12,
+            "2": 10,
+            "3": 7,
+            "4": 64
+          },
+          "clock_khz": 25000,
+          "complete_windows": 93,
+          "device": 0,
+          "layer": 0,
+          "local_ratio": 9.578947368421053,
+          "median_wait_containing_ticks": 160,
+          "median_wait_containing_us": 6.4,
+          "median_zero_ready_group_ticks": 728.0,
+          "median_zero_ready_group_us": 29.12,
+          "nonzero_count": 0,
+          "not_ready_before_group": 5,
+          "p95_all_complete_adjacent_ticks": 76,
+          "p95_all_complete_adjacent_us": 3.04,
+          "passed": true,
+          "predicate_false_at_pre_wait_fraction": "4/93",
+          "predicate_false_at_pre_wait_pct": 4.301075268817204,
+          "predicate_false_at_pre_wait_sample": 4,
+          "predicate_transitions": {
+            "0->0": 4,
+            "0->1": 1,
+            "1->1": 88
+          },
+          "ready_cause0": {
+            "flag": 88,
+            "none": 5
+          },
+          "ready_cause1": {
+            "flag": 89,
+            "none": 4
+          },
+          "ring": 1,
+          "zero_ready_before": 88
+        },
+        {
+          "T_counts": {
+            "1": 12,
+            "2": 10,
+            "3": 7,
+            "4": 64
+          },
+          "clock_khz": 25000,
+          "complete_windows": 93,
+          "device": 0,
+          "layer": 3,
+          "local_ratio": 9.578947368421053,
+          "median_wait_containing_ticks": 160,
+          "median_wait_containing_us": 6.4,
+          "median_zero_ready_group_ticks": 728,
+          "median_zero_ready_group_us": 29.12,
+          "nonzero_count": 0,
+          "not_ready_before_group": 8,
+          "p95_all_complete_adjacent_ticks": 76,
+          "p95_all_complete_adjacent_us": 3.04,
+          "passed": true,
+          "predicate_false_at_pre_wait_fraction": "6/93",
+          "predicate_false_at_pre_wait_pct": 6.451612903225806,
+          "predicate_false_at_pre_wait_sample": 6,
+          "predicate_transitions": {
+            "0->0": 6,
+            "0->1": 2,
+            "1->1": 85
+          },
+          "ready_cause0": {
+            "flag": 85,
+            "none": 8
+          },
+          "ready_cause1": {
+            "flag": 87,
+            "none": 6
+          },
+          "ring": 4,
+          "zero_ready_before": 85
+        },
+        {
+          "T_counts": {
+            "1": 12,
+            "2": 10,
+            "3": 7,
+            "4": 64
+          },
+          "clock_khz": 25000,
+          "complete_windows": 93,
+          "device": 1,
+          "layer": 27,
+          "local_ratio": 9.578947368421053,
+          "median_wait_containing_ticks": 160,
+          "median_wait_containing_us": 6.4,
+          "median_zero_ready_group_ticks": 728.0,
+          "median_zero_ready_group_us": 29.12,
+          "nonzero_count": 0,
+          "not_ready_before_group": 7,
+          "p95_all_complete_adjacent_ticks": 76,
+          "p95_all_complete_adjacent_us": 3.04,
+          "passed": true,
+          "predicate_false_at_pre_wait_fraction": "5/93",
+          "predicate_false_at_pre_wait_pct": 5.376344086021505,
+          "predicate_false_at_pre_wait_sample": 5,
+          "predicate_transitions": {
+            "0->0": 5,
+            "0->1": 2,
+            "1->1": 86
+          },
+          "ready_cause0": {
+            "flag": 86,
+            "none": 7
+          },
+          "ready_cause1": {
+            "flag": 88,
+            "none": 5
+          },
+          "ring": 1,
+          "zero_ready_before": 86
+        },
+        {
+          "T_counts": {
+            "1": 12,
+            "2": 10,
+            "3": 7,
+            "4": 64
+          },
+          "clock_khz": 25000,
+          "complete_windows": 93,
+          "device": 1,
+          "layer": 28,
+          "local_ratio": 9.578947368421053,
+          "median_wait_containing_ticks": 160,
+          "median_wait_containing_us": 6.4,
+          "median_zero_ready_group_ticks": 728,
+          "median_zero_ready_group_us": 29.12,
+          "nonzero_count": 0,
+          "not_ready_before_group": 0,
+          "p95_all_complete_adjacent_ticks": 76,
+          "p95_all_complete_adjacent_us": 3.04,
+          "passed": true,
+          "predicate_false_at_pre_wait_fraction": "0/93",
+          "predicate_false_at_pre_wait_pct": 0.0,
+          "predicate_false_at_pre_wait_sample": 0,
+          "predicate_transitions": {
+            "1->1": 93
+          },
+          "ready_cause0": {
+            "flag": 93
+          },
+          "ready_cause1": {
+            "flag": 93
+          },
+          "ring": 2,
+          "zero_ready_before": 93
+        }
+      ],
+      "windows_per_site": 93
+    },
+    "optimization_qualified": false,
+    "passed": true,
+    "promoted": false,
+    "quality": {
+      "endpoint_limit_pct": 0.5,
+      "endpoints": {
+        "PP": {
+          "passed": true,
+          "symmetric_difference_pct": 0.010986213257684499
+        },
+        "TG": {
+          "passed": true,
+          "symmetric_difference_pct": 0.03745248216325537
+        }
+      },
+      "observer_abs_decode_deviation_pct": 0.2808936162244153,
+      "observer_absolute_limit_pct": 1,
+      "observer_decode_deviation_pct": 0.2808936162244153,
+      "observer_decode_signed_difference_ms": 15.0,
+      "off_decode_time_mean_ms": 5340.1,
+      "passed": true
+    },
+    "quality_passed": true,
+    "reviewer_target_contact": false,
+    "reviewer_test_note": "An initial reviewer negative test incorrectly expected accepted=163 to be rejected by marker coverage alone. Tail clipping permits final_keep=3 or 4; corrected to accepted=162 for invalid short coverage and retained accepted=163 as a positive control. Native accepted=164 is independently bound to all three raw DONE records. Initial test script/logs are preserved; no implementation, thresholds or raw evidence changed.",
+    "runtime_repeat": false,
+    "safety": {
+      "all_containers_absent": true,
+      "all_ready_done_identity_exact": true,
+      "api_stopped": true,
+      "arm_gpu_samples": {
+        "OBS": 27,
+        "OFF1": 27,
+        "OFF2": 27
+      },
+      "continuous_cpu_samples_collected": false,
+      "exact_binary_image_environment": true,
+      "final_gpu": [
+        {
+          "freq1_input": 1299000000,
+          "freq2_input": 1000000000,
+          "mode": "high",
+          "power1_cap": 190000000,
+          "power1_input": 30000000,
+          "temp1_input": 49000,
+          "temp2_input": 52000,
+          "temp3_input": 50000
+        },
+        {
+          "freq1_input": 1298000000,
+          "freq2_input": 1000000000,
+          "mode": "high",
+          "power1_cap": 190000000,
+          "power1_input": 29000000,
+          "temp1_input": 47000,
+          "temp2_input": 51000,
+          "temp3_input": 53000
+        }
+      ],
+      "final_gpu_busy_percent": [
+        0,
+        0
+      ],
+      "finished_utc": "2026-10-11T00:23:47.786612+00:00",
+      "owned_cleanup_passed": true,
+      "owned_stops": 0,
+      "passed": true,
+      "power_affinity_changes": false,
+      "processes": 3,
+      "raw_gpu_snapshots": 86,
+      "ready_thread_count": {
+        "OBS": 28,
+        "OFF1": 28,
+        "OFF2": 28
+      },
+      "started_utc": "2026-10-11T00:16:40.968094+00:00"
+    },
+    "scientific_conclusion": "LOCAL_SOURCE_PROPOSAL_WORTH_REVIEWING",
+    "screen_passed": true,
+    "sensitivity": {
+      "actual_raw_record_mutations_rejected": 1129,
+      "no_source_or_raw_evidence_modified": true,
+      "no_target_contact": true,
+      "passed": true,
+      "strict_ratio_and_window_readiness_nonempty_boundary_checks": 6,
+      "tail_clipping_positive_control_passed": true,
+      "valid_readiness_inclusion_change_passed": true
+    },
+    "started_utc": "2026-10-11T00:16:40.968094+00:00",
+    "technical_parity_passed": true,
+    "terminal_exit": 0,
+    "timings": [
+      {
+        "decode_ms": "5341.1",
+        "pp_tps": 626.0460211076552,
+        "prompt_ms": "104682.4",
+        "tag": "OFF1",
+        "tg_tps": 47.93020164385614
+      },
+      {
+        "decode_ms": "5355.1",
+        "pp_tps": 626.3864927766175,
+        "prompt_ms": "104625.5",
+        "tag": "OBS",
+        "tg_tps": 47.80489626710986
+      },
+      {
+        "decode_ms": "5339.1",
+        "pp_tps": 626.1148036369229,
+        "prompt_ms": "104670.9",
+        "tag": "OFF2",
+        "tg_tps": 47.94815605626417
+      }
+    ],
+    "utc": "2026-10-11T00:33:33.154475+00:00",
+    "v1_failure_preserved_sha256": "3742c6fb1a7e533c4d43958667b155130973a7c4b6dc3996da1029a32ab2323d"
+  },
+  "v2_audit_sha256": "49585758de7a7419bc3d4750a9c5c4d6369b3e76b17251921e85d78c3dd9243e",
+  "v2_build": {
+    "added_module_proof_sha256": "7db8148bdf8df91e1bd7c916897a350fa6cf671e235fdffe2f9fb2f10566fa97",
+    "added_observer_entry": "_ZN6strata7kernels12_GLOBAL__N_125empty_pcie_observe_kernelEPyiiPKiiiiPVKiPVKjS8_",
+    "added_observer_entry_bytes": 888,
+    "auditor_tests_passed": 1447,
+    "baseline_binary_sha256": "572c7fb33c95d8b5c16803a8550abeab13eeccb9314136ae101ce61ecd605171",
+    "binaries": {
+      "build/gfx906_qsa_query_swizzle_probe": {
+        "byte_identical_to_v1": true,
+        "bytes": 284752,
+        "extracted_mode": "0o600",
+        "sha256": "234ae3a8d7a9e5f88aca30759ee23c7f3ee9c40c8b0b8f1c7183744ead8843d1"
+      },
+      "build/strata": {
+        "byte_identical_to_v1": false,
+        "bytes": 21920824,
+        "extracted_mode": "0o600",
+        "sha256": "67c9fc5af0c694c4af0eca859ea78505e09be7a54f37a712c4a77f41f518caf4"
+      },
+      "build/strata-device": {
+        "byte_identical_to_v1": true,
+        "bytes": 53800,
+        "extracted_mode": "0o600",
+        "sha256": "61939fc690d425d0350bd72f3584acebbd4f4ad3e38b40f49b4e8663ba8abaf6"
+      }
+    },
+    "blanket_normalization_used": false,
+    "blockers": [],
+    "candidate_binary_bytes": 21920824,
+    "candidate_binary_sha256": "67c9fc5af0c694c4af0eca859ea78505e09be7a54f37a712c4a77f41f518caf4",
+    "candidate_inventory_sha256": "6277067bb87a7a939769703b752322217fc45452c4ccea3d8177b8effa11f909",
+    "cmake_gpu_discovery_attempted": true,
+    "cmake_gpu_discovery_result": "No device found; zero discovery API calls is not claimed.",
+    "collection_archive_bytes": 15628610,
+    "collection_archive_sha256": "810924e9c42e74a01e7eafc99b378e65b00700647035c336fc3823e8a3d0d000",
+    "collection_index_sha256": "e5ffd3eaaa3dd0e18a244fbefeaa92098af65ab91e182a0e486be90a7a2c272d",
+    "collection_receipt_sha256": "6c39eab4667cf881707ea2cab966fb7936cb223dfec60f13baa1953b7acc8839",
+    "collection_regular_members": 187,
+    "collection_uncompressed_bytes": 61625428,
+    "collector_review_sha256": "a402d1b5f5b0b5e16bb9b0ca1c60d967172e7b0370f7cf047d9b7f8bc0e6d031",
+    "compile_guard_sha256": "cb8a3edc209bdfe6ec75206107a10237bf8e65a4ac5a718c56448642ece513cf",
+    "configured_objects_per_side": 191,
+    "container_image_id": "sha256:bccb7ee7e7a78274519db9a43ba63c34ddd2e74bb60f8764a8f50aaee1f2c646",
+    "control_flow_proof_sha256": "80b7d14197bdfd3ef969e427e21be5864a2cea6045adbcf2a773c9f76fc444bc",
+    "controller_provenance_manifest_sha256": "578c095b0811755bdd2cb8994a69383d1bc022fd131317224d9445eab4d09eb4",
+    "decision": "PASS_RELEASE_EMPTY_PCIE_OBSERVER_V2_BUILD_AUDIT",
+    "deduplicated_device_exports": 123,
+    "device_object_pairs": 61,
+    "device_object_proof_sha256": "a8e204367fa82fd05ea96a76653c266bf6d00ccb330bc37e17d5783ecf638351",
+    "device_payloads_identical_to_v1": true,
+    "device_payloads_preserved_vs_v1": true,
+    "engine_execution_by_reviewer": false,
+    "extraction_receipt_sha256": "597de0d230f7824cabeadd8709895ed0fd2321931535cb2d85ada9ec3078fc28",
+    "gpu_execution_by_reviewer": false,
+    "hip_compile_commands_per_side": 64,
+    "host_begin_bytes": 2138,
+    "host_begin_cfg_proof_sha256": "781eb0e1ef9fe72d2559e92487cf870500f6e2046c37fe93fd981c5519d2bec1",
+    "host_begin_cfg_reachability_passed": true,
+    "host_begin_instructions": 495,
+    "host_cfg_actual_parser_mutations_rejected": 6,
+    "host_cfg_actual_tests_sha256": "1405bf0e73f8e6e56bab2051bb2c84b50d786f52269598dc924fe303b8e861b8",
+    "host_cfg_addressed_obligations_sha256": "5726ec2319b1cf415b95c7bb3c2e9b0a8f124dc40feb3261a4e760425a44b222",
+    "host_cfg_checks_passed": 8250,
+    "host_cfg_parent_rerun_passed": true,
+    "host_cfg_seal_sha256": "8d936b6a47c17092a531355c0635bcf0667ba6cef9acbde5c17201d30b95d524",
+    "host_cfg_semantic_mutations_rejected": 13,
+    "host_checks_passed": 12034,
+    "host_proof_sha256": "05f2e7163f0741a1903563d600bfbed7763f54260b93387ed4e0d68967ce00dc",
+    "host_provenance_negative_mutations_rejected": 49,
+    "host_provenance_seal_sha256": "abeddd44842817b887d3081d5b91b8acba9460b74ac2bee438fd97ed57b76b82",
+    "host_provenance_tests_passed": 11,
+    "identity_meaning": "Against v1, all 61 device payloads and three linked fatbins are raw identical. Against pristine release, raw payload and all-original-instruction byte equality are false: four exact PC-relative literal fields (seven differing bytes) and derived descriptor entry offsets are explicitly accounted with preserved targets/ABI/resources. No blanket normalization is used.",
+    "independent_device_proof_review_sha256": "9e4c47e7ea77d4a84b375d81b3261a2c738bf1f00482fdc516f1a70637a903ed",
+    "independent_mutations_rejected": 1615,
+    "independent_positive_scenarios": 4,
+    "limits": [
+      "The v2 host source delta is exactly the reviewed STRATA_HIP_GFX906 guard convention; no global backend macro change or device source change. The failed v1 runtime stays preserved and is not a measured negative empty-PCIe timing result.",
+      "All available collected files, overlays, sealed recipes and reviews are rehashed. Omitted full target source trees, HIP/compiler/runtime bytes and full preprocessed text rely on the successful reviewed pinned-image helper/recipe/guard execution; these omitted bytes are not independently rehashed on this controller.",
+      "Actual named field/type/enum relationships are established through the pinned ordinary full-TU build and actual preprocessed body. The compiled property size 1472, gcnArchName offset 1160 and clock enum 10017 are observed; independent vendor offsetof or numeric-enum reconstruction is not claimed.",
+      "Inherited OnDevice destruction attempts restoration but does not check hipSetDevice status. Observer entry independently verifies current owner; this audit does not claim confirmed restoration or general fatal-GPU recovery.",
+      "The no-engine/no-GPU-workload assertion is limited to the v2 compile, collection and static audit. CMake discovery attempts are not excluded. Historical v1 OFF1 performed model/GPU work and is explicitly outside that assertion.",
+      "Against v1, all 61 device payloads and three linked fatbins are raw identical. Against pristine release, raw payload and all-original-instruction byte equality are false: four exact PC-relative literal fields (seven differing bytes) and derived descriptor entry offsets are explicitly accounted with preserved targets/ABI/resources. No blanket normalization is used.",
+      "This static audit only makes the binary eligible for the separately reviewed root-owned runtime gate. It does not authorize runtime, validate the fresh OFF/observer/OFF matrix, qualify optimization, or establish perturbation, quality, local wait removability or speedup."
+    ],
+    "linked_modules": {
+      "gfx906_qsa_query_swizzle_probe": 3,
+      "strata": 56,
+      "strata-device": 1
+    },
+    "no_engine_or_gpu_workload_execution": true,
+    "no_engine_or_gpu_workload_execution_scope": "V2 compile/collection/static audit only, excluding historical v1 runtime",
+    "no_new_device_entry_vs_v1": true,
+    "observer_entry_only_added": true,
+    "observer_entry_unchanged_from_v1": true,
+    "optimization_qualified": false,
+    "original_device_kernels_data_abi_resources_unchanged": true,
+    "original_device_preservation_vs_release_passed": true,
+    "original_direct_branches_proven": 593,
+    "original_verify_functions_raw_equal": 44,
+    "original_verify_functions_with_explicit_literal_fixes": 2,
+    "original_verify_kernel_count": 45,
+    "original_verify_shared_helper_count": 1,
+    "outer_review_sha256": "0bea90233bbc7a04367b0041fe35277288d2b24d8a0cb870acde61add8943dca",
+    "owned_cleanup_confirmed": true,
+    "passed": true,
+    "present_objects_per_side": 130,
+    "prior_v1_failed_runtime_preserved": true,
+    "prior_v1_failed_runtime_sha256": "3742c6fb1a7e533c4d43958667b155130973a7c4b6dc3996da1029a32ab2323d",
+    "proof_scripts": {
+      "audit_added_module.py": "32f77d86284f4ba9fa756a788484c102cc4042c84114d3698187ab1d08eccf48",
+      "audit_all_device.py": "39eac68c004fa4344505892ed8395195a432bc32bb119856df2113b10eeb264c",
+      "audit_control_flow.py": "8a7b8a3ae43ea83b64340f0471b40d2f1918ef8024992f6e7fc20efcde7d9207",
+      "audit_v1_preservation.py": "910953376f64be75e28223132fa44b6c943a5a4c57166de58f40a94fd1f531fa",
+      "host-cfg/audit_actual.py": "a3b2d1dbd01f286e69ee1f24047f32f3e8ab23324579991e1db4f2734cef7ea7",
+      "host-cfg/test_actual.py": "344c50be535b55c859639599323511f86e9ead842542667d991091a8bd3d8ba4",
+      "host-provenance-auditor/audit_host_v2.py": "e50e146b5822003eb209d40e94cb8371178f9c2d3cd124affe5c642e54c50343",
+      "host-provenance-auditor/evidence_validator.py": "94edd06adca754fbe164542534d18c5985dbf0a9e81573b4765d0b446e088f07",
+      "host-provenance-auditor/test_preparation.py": "8608627bec37239ccf11a0f034058f97a6e6eab616dfc15c26b0bd6af8d94da7",
+      "seal_aggregate.py": "1c8a5f17761bcc44db76bf679b0b256c61097555fb686d84d4c8b3e4f46b9259",
+      "test_device_audit.py": "80323de77c0c03ec8b5b3221c4f9ee93dd9cd0b4a4ca197cbc3a3065ca46ae31"
+    },
+    "raw_device_payload_bytes_equal": false,
+    "raw_device_payload_bytes_equal_to_v1": true,
+    "raw_equality_false_reference": "pristine release 61b3fb5",
+    "raw_linked_fatbin_bytes_equal_to_v1": true,
+    "raw_original_instruction_bytes_equal": false,
+    "raw_screen_sha256": "36ae58aa2e276ec018c83c3fbc1dd9c8bfe21fcaca4c6e67be39449dcce94a4c",
+    "real_header_compile_proof_passed": true,
+    "real_header_compile_proof_sha256": "9b4544d87222f7176476757e54529b94f131f3d02babb6ef3b706b293f3f5ff1",
+    "recipe_sha256": "4bf955db8cd32f3d3f4321b31dce486301ea753caec6f32f0261d5f17cd6ac12",
+    "release_commit": "61b3fb5dd3f1e8ec09cf7e4e05208bc6d3c46406",
+    "reviewed_at_utc": "2026-10-11T00:09:47.515317+00:00",
+    "runtime_admitted": false,
+    "runtime_screen_passed": false,
+    "schema": "strata.empty.pcie.observer.actual.independent.build.audit.v2",
+    "sole_extraction": true,
+    "source_archive_sha256": "dc7b2bbf59fae5e2eb37905c1a5f90b279ad33b9b792d6a4fcf78473a984d922",
+    "source_integrity_evidence": "Exact sealed overlay/inventory, immutable guard controls and successful pre/post source-integrity receipts; omitted target source bytes not independently rehashed.",
+    "source_integrity_passed": true,
+    "source_manifest_sha256": "cbce0b4f53e4c88589fe0db23316675db686c780de3977c4b009d83fccb342c0",
+    "source_review_sha256": "d1dad69e70d69753aab7644d87f52af852dbef318a95ca4545d2c136acb9d8d4",
+    "source_sha256sums_sha256": "0194b08ce6fe45c5e138b5774cc67e8584e5ee59198cc4b69fd63cccc0091e14",
+    "target_contact_by_reviewer": false,
+    "test_results_sha256": "716e45295c8ef153f7d781177b7c269124e4e6f3a9f84c6255bdf9fbf74b5534",
+    "v1_device_preservation_proof_sha256": "0ffeb8ece7d9c424afdeaf84c09d0d6a2ce0b916009ce4a2e9cc42274170e91c",
+    "v1_reference_map_sha256": "d956f82eeda719b246c57735e8650edee06d5a3f763b03881a55b900b26e82d4",
+    "version": 2
+  },
+  "v2_build_audit_sha256": "c5c057bf395cd4009e0f45406b698d264aa78472a1c183d60312c0ae32a9a1fe"
+}
