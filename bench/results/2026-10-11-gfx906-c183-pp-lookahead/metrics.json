@@ -1,0 +1,120 @@
+{
+  "date": "2026-10-11",
+  "decision": "REJECT_PP_LOOKAHEAD_PERFORMANCE",
+  "scope": {
+    "owner": 0,
+    "architecture": "gfx906",
+    "baseline": "Original c183 archive, query swizzle and reduce12 ON",
+    "candidate": "One value-only four-cell load-lookahead component candidate",
+    "unchanged": "FMA sequence, score and softmax",
+    "engine_patch": false,
+    "model_test": false
+  },
+  "correctness": {
+    "passed": true,
+    "finite_synthetic_cases": 3,
+    "comparison": "Full output and scratch; direct and captured execution",
+    "cases": [
+      {
+        "nq": 1,
+        "context": 4,
+        "selection_cap": 4,
+        "chunks": 1,
+        "masked": false,
+        "output_floats": 6144,
+        "scratch_floats": 6256,
+        "direct_differences": 0,
+        "captured_differences": 0,
+        "canaries_passed": true,
+        "inputs_immutable": true
+      },
+      {
+        "nq": 33,
+        "context": 4096,
+        "selection_cap": 2051,
+        "chunks": 33,
+        "masked": true,
+        "output_floats": 202752,
+        "scratch_floats": 6540800,
+        "direct_differences": 0,
+        "captured_differences": 0,
+        "canaries_passed": true,
+        "inputs_immutable": true
+      },
+      {
+        "nq": 32,
+        "context": 65536,
+        "selection_cap": 2051,
+        "chunks": 33,
+        "masked": false,
+        "output_floats": 196608,
+        "scratch_floats": 6540800,
+        "direct_differences": 0,
+        "captured_differences": 0,
+        "canaries_passed": true,
+        "inputs_immutable": true
+      }
+    ]
+  },
+  "timing": {
+    "timed_case": {
+      "nq": 32,
+      "context": 65536,
+      "selection_cap": 2051,
+      "chunks": 33,
+      "Q_heads": 24,
+      "KV_heads": 2,
+      "head_dimension": 256
+    },
+    "warmups": 16,
+    "graph_calls_per_sample": 16,
+    "paired_samples": 8,
+    "pair_orders": [
+      "AB",
+      "BA",
+      "AB",
+      "BA",
+      "AB",
+      "BA",
+      "AB",
+      "BA"
+    ],
+    "baseline_full_batch_median_ms": 0.75435614584375,
+    "candidate_full_batch_median_ms": 0.8057211041250001,
+    "median_latency_increase_percent": 6.809112454939736,
+    "signed_paired_saving_definition": "baseline minus candidate",
+    "signed_paired_saving_ms": {
+      "min": -0.052680015562500015,
+      "median": -0.051430016781249976,
+      "max": -0.04642003775000003
+    },
+    "negative_pairs": 8,
+    "excluded_pairs": 0,
+    "predeclared_conditional_pp_three_percent_relevance_bar_ms": 0.24,
+    "relevance_gate_passed": false,
+    "measured_model_speedup": false
+  },
+  "independent_actual_audit": {
+    "passed": true,
+    "checks_passed": 116
+  },
+  "cleanup": {
+    "passed": true,
+    "api_stayed_stopped": true,
+    "final_max_sampled_temperature_c": 46
+  },
+  "sha256": {
+    "analysis": "ddd72f650f43867fdaf167f3cff6c930edd72fbbb1d858e01968b3d9f6fce2c8",
+    "actual_audit": "7bef290c1768a6d927c0d575159c49d204c654023f7c61206d0462204c64ed94",
+    "probe": "759d2b004ca56530ae203aae857afe743177d78cf05768ba60440834f3c13e7f",
+    "raw_archive": "755f5fa57b4314da27d0feb0f8a4f80f563d26f61871a811766a632af17a85ac",
+    "extraction": "94d57e3f3ea56c9871500846ac11294239ab114d2bc0f3544c4f456d10e2d90f"
+  },
+  "limitations": [
+    "Finite synthetic full parity is limited to these three cases and owner0.",
+    "Warm repeated selection/pools differ from cold and interleaved model work.",
+    "The predeclared 0.24 ms bar is a conditional PP opportunity screen, not a model gain.",
+    "No causal explanation, universal cache-behavior claim or whole-kernel port is established."
+  ],
+  "next_action": "Park this candidate; no engine patch, model run, timing retry or variant sweep."
+}
