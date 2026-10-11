@@ -83,3 +83,34 @@ The private raw archive contains **246,248 compressed bytes**, **73 regular file
 One four-arm screen does not establish statistical significance, broad repeatability or universal equivalence. Broader v0.1.43 prompt qualification remains pending; the v0.1.42 qualification is a separate completed result.
 
 This publication adds only this report, sanitized numerical metrics and one index entry. Private paths, process identifiers, credentials, configuration contents, raw logs, whole raw receipts, model payloads, generated text and output-ID arrays are excluded. There is no production promotion or upstream PR submission.
+
+
+## Follow-on decode diagnostic: prior slowdown not reproduced
+
+**Diagnostic-only PASS; the failed ABBA above is unchanged.** One predeclared same-binary **OFF → ON** pair added only `STRATA_DECODE_TIMING=1`. Exactly two fresh 64K/1,024 arms completed, with all **2,048 output IDs**, available work and stable INFO equal. Reported work also matches the failed ABBA's fresh A1. The independent actual-runtime review passed **237 checks**.
+
+Each arm recorded **379 actual verify windows**, **1,247 total verified T**, **1,024 emitted outputs**, **647 accepted drafts** and **868 offered drafts**. Reconstructed bucket totals use the printed **379-window** denominator. It must not be replaced by `1024−647=377`: the final window truncates two outputs. Per-output and per-accepted-draft normalizations use 1,024 and 647 respectively and are retained in the metrics.
+
+Decode wall time was **21,110.2 → 20,744.0 ms (−366.2 ms)**. This single instrumented pair is not a speed qualification.
+
+| Aggregate bucket | Owner/scope | OFF ms/call | ON ms/call | Reconstructed ON−OFF request ms |
+| --- | --- | ---: | ---: | ---: |
+| Outer verify | Host interval across the full verify call | 50.03 | 49.07 | −363.84 |
+| GPU-reach wait | Primary verifier | 23.32 | 22.83 | −185.71 |
+| Per-layer host | Primary verifier | 2.61 | 2.59 | −7.58 |
+| CPU | Shared Drive across both owners | 2.61 | 2.58 | −11.37 |
+| Draft | Outer serial-decode host interval | 4.52 | 4.51 | −3.79 |
+
+Plan, actq, jobs, stage and commit/emit were unchanged at the printed precision. Each reconstructed bucket total has rounding uncertainty **±1.895 ms**; each OFF/ON bucket delta has **±3.79 ms** uncertainty. None of the absolute bucket shifts reaches the frozen **620 ms localization descriptor**, including its rounding bound. That descriptor is not a performance gate.
+
+**Do not sum these buckets.** The outer host interval, primary-verifier wait/pool/host/stage measurements and both-owner shared-Drive counters overlap and have different scopes. The final aggregate snapshot follows the ordinary commit drain, **after the decode wall-time cutoff**. It is neither pure GPU timing nor per-round attribution.
+
+The historical B2 slowdown **did not recur** in this pair. A persistent large host/CPU overhead is not supported by this observation, but the historical cause remains unresolved. The diagnostic cannot explain the old delay, justify an exclusion or overturn either failed TG condition. All original ABBA timings and conclusions above, and the separate qualified v0.1.42 result, remain unchanged.
+
+Cleanup passed, the API stayed stopped and the final sampled maximum was **53°C**. The private diagnostic archive contains **155,351 compressed bytes**, **41 regular files** and **981,723 expanded bytes**. SHA-256 provenance:
+
+- Diagnostic archive: `920ad69c369036a79252a360d7c2e0ce8b815cb599f82e9b133a3be95c846ebb`.
+- Diagnostic analysis: `30c44ddd10beb6701bd238e8722c6df24ee5d8efc5b4d92787cdd5972930a74b`.
+- Independent actual-runtime review: `ab8c8e4afc58636c0a9d86416799a3c53c1ce043e19db12bbf035afc55139115`.
+
+The completed actual review supersedes the earlier analysis's pending-review marker. This adds diagnostic evidence only, with no performance qualification, rerun-to-win, promotion or upstream PR.

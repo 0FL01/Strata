@@ -442,5 +442,424 @@
     "full_raw_payloads": false,
     "configuration_contents": false,
     "raw_logs": false
+  },
+  "decode_timing_diagnostic": {
+    "decision": "PASS_DIAGNOSTIC_ONLY_FAILED_ABBA_UNCHANGED",
+    "diagnostic_passed": true,
+    "performance_qualification": false,
+    "production_promotion": false,
+    "candidate_binary_sha256": "31e5603bc459c4a58554e17e5386b0e6528cf4b0b1aa45805a432721461693a5",
+    "experiment": {
+      "predeclared": true,
+      "pair_order": [
+        "OFF",
+        "ON"
+      ],
+      "fresh_native_processes": 2,
+      "prompt_tokens_per_arm": 65536,
+      "output_ids_per_arm": 1024,
+      "diagnostic_flag": "STRATA_DECODE_TIMING=1",
+      "other_diagnostic_instrumentation_added": false,
+      "fixed_policy_matches_failed_ABBA": true,
+      "comparison_flag": "STRATA_VERIFY_SKIP_EMPTY_PCIE",
+      "OFF": 0,
+      "ON": 1
+    },
+    "parity": {
+      "compared_output_ids": 2048,
+      "all_ids_equal_OFF": true,
+      "all_available_work_equal_OFF": true,
+      "all_stable_INFO_equal": true,
+      "reported_work_matches_failed_ABBA_A1": true,
+      "shared_work": {
+        "accepted": 647,
+        "offered": 868,
+        "cache_hits": 580670,
+        "lookups": 598560,
+        "prompt_reused": 0,
+        "prompt_read": 65536,
+        "ram_blobs": 0,
+        "file_blobs": 0,
+        "offloaded_experts": 0,
+        "file_read_mb": 0,
+        "suffix_drafts": {
+          "present": false,
+          "windows": 0,
+          "accepted": 0,
+          "offered": 0
+        }
+      }
+    },
+    "normalization": {
+      "actual_printed_windows_per_arm": 379,
+      "total_verified_T_per_arm": 1247,
+      "emitted_tokens_per_arm": 1024,
+      "accepted_draft_tokens_per_arm": 647,
+      "offered_draft_tokens_per_arm": 868,
+      "final_window_truncated_outputs": 2,
+      "use_1024_minus_647_as_window_denominator": false,
+      "per_verify_call_denominator": 379,
+      "per_emitted_token_denominator": 1024,
+      "per_accepted_draft_token_denominator": 647,
+      "reconstructed_request_formula": "Printed milliseconds per verify call * 379 actual windows.",
+      "per_arm_bucket_rounding_bound_ms": 1.895,
+      "pair_bucket_delta_rounding_bound_ms": 3.79,
+      "printed_bucket_decimals": 2,
+      "counts_per_layer_window_denominator": "379 actual windows * 48 model layers; shared Drive across both owners."
+    },
+    "arms": {
+      "OFF": {
+        "decode_ms": 21110.2,
+        "windows": 379,
+        "total_verified_T": 1247,
+        "emitted_tokens": 1024,
+        "accepted_draft_tokens": 647,
+        "offered_draft_tokens": 868,
+        "buckets": {
+          "verify": {
+            "ms_per_verify_call": 50.03,
+            "reconstructed_request_ms": 18961.37,
+            "rounding_error_bound_ms": 1.895,
+            "ms_per_emitted_token": 18.516962890625,
+            "ms_per_accepted_draft_token": 29.306599690880986,
+            "owner_scope": "outer serial decode host interval, across the full verify call"
+          },
+          "gpu_reach_wait": {
+            "ms_per_verify_call": 23.32,
+            "reconstructed_request_ms": 8838.28,
+            "rounding_error_bound_ms": 1.895,
+            "ms_per_emitted_token": 8.6311328125,
+            "ms_per_accepted_draft_token": 13.660401854714065,
+            "owner_scope": "primary verifier only"
+          },
+          "per_layer_host": {
+            "ms_per_verify_call": 2.61,
+            "reconstructed_request_ms": 989.1899999999999,
+            "rounding_error_bound_ms": 1.895,
+            "ms_per_emitted_token": 0.9660058593749999,
+            "ms_per_accepted_draft_token": 1.5288871715610508,
+            "owner_scope": "primary verifier only"
+          },
+          "plan": {
+            "ms_per_verify_call": 0.15,
+            "reconstructed_request_ms": 56.85,
+            "rounding_error_bound_ms": 1.895,
+            "ms_per_emitted_token": 0.055517578125,
+            "ms_per_accepted_draft_token": 0.08786707882534776,
+            "owner_scope": "shared Drive across both layer-split owners"
+          },
+          "actq": {
+            "ms_per_verify_call": 0.63,
+            "reconstructed_request_ms": 238.77,
+            "rounding_error_bound_ms": 1.895,
+            "ms_per_emitted_token": 0.233173828125,
+            "ms_per_accepted_draft_token": 0.3690417310664606,
+            "owner_scope": "shared Drive across both layer-split owners"
+          },
+          "jobs": {
+            "ms_per_verify_call": 0.01,
+            "reconstructed_request_ms": 3.79,
+            "rounding_error_bound_ms": 1.895,
+            "ms_per_emitted_token": 0.003701171875,
+            "ms_per_accepted_draft_token": 0.005857805255023184,
+            "owner_scope": "shared Drive across both layer-split owners"
+          },
+          "CPU": {
+            "ms_per_verify_call": 2.61,
+            "reconstructed_request_ms": 989.1899999999999,
+            "rounding_error_bound_ms": 1.895,
+            "ms_per_emitted_token": 0.9660058593749999,
+            "ms_per_accepted_draft_token": 1.5288871715610508,
+            "owner_scope": "shared Drive across both layer-split owners"
+          },
+          "stage": {
+            "ms_per_verify_call": 0.03,
+            "reconstructed_request_ms": 11.37,
+            "rounding_error_bound_ms": 1.895,
+            "ms_per_emitted_token": 0.011103515625,
+            "ms_per_accepted_draft_token": 0.01757341576506955,
+            "owner_scope": "primary verifier only"
+          },
+          "commit_emit": {
+            "ms_per_verify_call": 1.16,
+            "reconstructed_request_ms": 439.64,
+            "rounding_error_bound_ms": 1.895,
+            "ms_per_emitted_token": 0.4293359375,
+            "ms_per_accepted_draft_token": 0.6795054095826893,
+            "owner_scope": "outer serial decode host interval, across the full verify call"
+          },
+          "draft": {
+            "ms_per_verify_call": 4.52,
+            "reconstructed_request_ms": 1713.08,
+            "rounding_error_bound_ms": 1.895,
+            "ms_per_emitted_token": 1.6729296875,
+            "ms_per_accepted_draft_token": 2.647727975270479,
+            "owner_scope": "outer serial decode host interval, across the full verify call"
+          }
+        },
+        "counts_per_layer_window": {
+          "cpu_experts": 0.75,
+          "entries": 0.98,
+          "vram_hits": 31.92,
+          "pcie": 0
+        }
+      },
+      "ON": {
+        "decode_ms": 20744,
+        "windows": 379,
+        "total_verified_T": 1247,
+        "emitted_tokens": 1024,
+        "accepted_draft_tokens": 647,
+        "offered_draft_tokens": 868,
+        "buckets": {
+          "verify": {
+            "ms_per_verify_call": 49.07,
+            "reconstructed_request_ms": 18597.53,
+            "rounding_error_bound_ms": 1.895,
+            "ms_per_emitted_token": 18.161650390625,
+            "ms_per_accepted_draft_token": 28.74425038639876,
+            "owner_scope": "outer serial decode host interval, across the full verify call"
+          },
+          "gpu_reach_wait": {
+            "ms_per_verify_call": 22.83,
+            "reconstructed_request_ms": 8652.57,
+            "rounding_error_bound_ms": 1.895,
+            "ms_per_emitted_token": 8.449775390625,
+            "ms_per_accepted_draft_token": 13.373369397217928,
+            "owner_scope": "primary verifier only"
+          },
+          "per_layer_host": {
+            "ms_per_verify_call": 2.59,
+            "reconstructed_request_ms": 981.6099999999999,
+            "rounding_error_bound_ms": 1.895,
+            "ms_per_emitted_token": 0.9586035156249999,
+            "ms_per_accepted_draft_token": 1.5171715610510046,
+            "owner_scope": "primary verifier only"
+          },
+          "plan": {
+            "ms_per_verify_call": 0.15,
+            "reconstructed_request_ms": 56.85,
+            "rounding_error_bound_ms": 1.895,
+            "ms_per_emitted_token": 0.055517578125,
+            "ms_per_accepted_draft_token": 0.08786707882534776,
+            "owner_scope": "shared Drive across both layer-split owners"
+          },
+          "actq": {
+            "ms_per_verify_call": 0.63,
+            "reconstructed_request_ms": 238.77,
+            "rounding_error_bound_ms": 1.895,
+            "ms_per_emitted_token": 0.233173828125,
+            "ms_per_accepted_draft_token": 0.3690417310664606,
+            "owner_scope": "shared Drive across both layer-split owners"
+          },
+          "jobs": {
+            "ms_per_verify_call": 0.01,
+            "reconstructed_request_ms": 3.79,
+            "rounding_error_bound_ms": 1.895,
+            "ms_per_emitted_token": 0.003701171875,
+            "ms_per_accepted_draft_token": 0.005857805255023184,
+            "owner_scope": "shared Drive across both layer-split owners"
+          },
+          "CPU": {
+            "ms_per_verify_call": 2.58,
+            "reconstructed_request_ms": 977.82,
+            "rounding_error_bound_ms": 1.895,
+            "ms_per_emitted_token": 0.95490234375,
+            "ms_per_accepted_draft_token": 1.5113137557959815,
+            "owner_scope": "shared Drive across both layer-split owners"
+          },
+          "stage": {
+            "ms_per_verify_call": 0.03,
+            "reconstructed_request_ms": 11.37,
+            "rounding_error_bound_ms": 1.895,
+            "ms_per_emitted_token": 0.011103515625,
+            "ms_per_accepted_draft_token": 0.01757341576506955,
+            "owner_scope": "primary verifier only"
+          },
+          "commit_emit": {
+            "ms_per_verify_call": 1.16,
+            "reconstructed_request_ms": 439.64,
+            "rounding_error_bound_ms": 1.895,
+            "ms_per_emitted_token": 0.4293359375,
+            "ms_per_accepted_draft_token": 0.6795054095826893,
+            "owner_scope": "outer serial decode host interval, across the full verify call"
+          },
+          "draft": {
+            "ms_per_verify_call": 4.51,
+            "reconstructed_request_ms": 1709.29,
+            "rounding_error_bound_ms": 1.895,
+            "ms_per_emitted_token": 1.669228515625,
+            "ms_per_accepted_draft_token": 2.641870170015456,
+            "owner_scope": "outer serial decode host interval, across the full verify call"
+          }
+        },
+        "counts_per_layer_window": {
+          "cpu_experts": 0.75,
+          "entries": 0.98,
+          "vram_hits": 31.92,
+          "pcie": 0
+        }
+      }
+    },
+    "bucket_changes": {
+      "verify": {
+        "ON_minus_OFF_ms": -363.84000000000015,
+        "absolute_shift_at_least_620ms": false,
+        "rounding_error_bound_ms": 3.79,
+        "threshold_ambiguous_due_to_rounding": false,
+        "ms_per_verify_call_change": -0.9600000000000009,
+        "ms_per_emitted_token_change": -0.35531250000000014,
+        "ms_per_accepted_draft_token_change": -0.5623493044822254,
+        "owner_scope": "outer serial decode host interval, across the full verify call"
+      },
+      "gpu_reach_wait": {
+        "ON_minus_OFF_ms": -185.71000000000095,
+        "absolute_shift_at_least_620ms": false,
+        "rounding_error_bound_ms": 3.79,
+        "threshold_ambiguous_due_to_rounding": false,
+        "ms_per_verify_call_change": -0.490000000000002,
+        "ms_per_emitted_token_change": -0.18135742187500092,
+        "ms_per_accepted_draft_token_change": -0.28703245749613693,
+        "owner_scope": "primary verifier only"
+      },
+      "per_layer_host": {
+        "ON_minus_OFF_ms": -7.580000000000041,
+        "absolute_shift_at_least_620ms": false,
+        "rounding_error_bound_ms": 3.79,
+        "threshold_ambiguous_due_to_rounding": false,
+        "ms_per_verify_call_change": -0.020000000000000018,
+        "ms_per_emitted_token_change": -0.00740234375000004,
+        "ms_per_accepted_draft_token_change": -0.011715610510046215,
+        "owner_scope": "primary verifier only"
+      },
+      "plan": {
+        "ON_minus_OFF_ms": 0,
+        "absolute_shift_at_least_620ms": false,
+        "rounding_error_bound_ms": 3.79,
+        "threshold_ambiguous_due_to_rounding": false,
+        "ms_per_verify_call_change": 0,
+        "ms_per_emitted_token_change": 0,
+        "ms_per_accepted_draft_token_change": 0,
+        "owner_scope": "shared Drive across both layer-split owners"
+      },
+      "actq": {
+        "ON_minus_OFF_ms": 0,
+        "absolute_shift_at_least_620ms": false,
+        "rounding_error_bound_ms": 3.79,
+        "threshold_ambiguous_due_to_rounding": false,
+        "ms_per_verify_call_change": 0,
+        "ms_per_emitted_token_change": 0,
+        "ms_per_accepted_draft_token_change": 0,
+        "owner_scope": "shared Drive across both layer-split owners"
+      },
+      "jobs": {
+        "ON_minus_OFF_ms": 0,
+        "absolute_shift_at_least_620ms": false,
+        "rounding_error_bound_ms": 3.79,
+        "threshold_ambiguous_due_to_rounding": false,
+        "ms_per_verify_call_change": 0,
+        "ms_per_emitted_token_change": 0,
+        "ms_per_accepted_draft_token_change": 0,
+        "owner_scope": "shared Drive across both layer-split owners"
+      },
+      "CPU": {
+        "ON_minus_OFF_ms": -11.36999999999989,
+        "absolute_shift_at_least_620ms": false,
+        "rounding_error_bound_ms": 3.79,
+        "threshold_ambiguous_due_to_rounding": false,
+        "ms_per_verify_call_change": -0.029999999999999805,
+        "ms_per_emitted_token_change": -0.011103515624999893,
+        "ms_per_accepted_draft_token_change": -0.017573415765069322,
+        "owner_scope": "shared Drive across both layer-split owners"
+      },
+      "stage": {
+        "ON_minus_OFF_ms": 0,
+        "absolute_shift_at_least_620ms": false,
+        "rounding_error_bound_ms": 3.79,
+        "threshold_ambiguous_due_to_rounding": false,
+        "ms_per_verify_call_change": 0,
+        "ms_per_emitted_token_change": 0,
+        "ms_per_accepted_draft_token_change": 0,
+        "owner_scope": "primary verifier only"
+      },
+      "commit_emit": {
+        "ON_minus_OFF_ms": 0,
+        "absolute_shift_at_least_620ms": false,
+        "rounding_error_bound_ms": 3.79,
+        "threshold_ambiguous_due_to_rounding": false,
+        "ms_per_verify_call_change": 0,
+        "ms_per_emitted_token_change": 0,
+        "ms_per_accepted_draft_token_change": 0,
+        "owner_scope": "outer serial decode host interval, across the full verify call"
+      },
+      "draft": {
+        "ON_minus_OFF_ms": -3.7899999999999636,
+        "absolute_shift_at_least_620ms": false,
+        "rounding_error_bound_ms": 3.79,
+        "threshold_ambiguous_due_to_rounding": false,
+        "ms_per_verify_call_change": -0.009999999999999787,
+        "ms_per_emitted_token_change": -0.0037011718749999645,
+        "ms_per_accepted_draft_token_change": -0.0058578052550233295,
+        "owner_scope": "outer serial decode host interval, across the full verify call"
+      }
+    },
+    "decode_ms_change": -366.2000000000007,
+    "descriptor": {
+      "frozen_absolute_bucket_shift_ms": 620,
+      "qualification_gate": false,
+      "buckets_at_or_above_descriptor": 0,
+      "rounding_ambiguous_buckets": 0
+    },
+    "scope_limits": {
+      "do_not_sum_buckets": true,
+      "mixed_owner_scopes_and_nesting": true,
+      "outer_verify": "Outer serial-decode host interval across the full verify call.",
+      "primary_only": "Verifier GPU-reach wait, host/pool and stage measurements.",
+      "shared_Drive_both_owners": "CPU, plan, actq and jobs measurements.",
+      "snapshot": "Final aggregate snapshot follows the ordinary wait_commit drain, after the decode_ms wall cutoff.",
+      "pure_GPU_timing": false,
+      "per_round_attribution": false
+    },
+    "interpretation": {
+      "historical_B2_slowdown_reproduced": false,
+      "historical_cause": "Unresolved.",
+      "failed_ABBA_unchanged": true,
+      "persistent_large_host_or_CPU_overhead_supported_by_this_pair": false,
+      "exclusions": 0,
+      "speed_gate_applied": false
+    },
+    "independent_actual_review": {
+      "decision": "PASS_V0143_ELISION_DECODE_TIMING_ACTUAL_AUDIT",
+      "passed": true,
+      "checks_passed": 237,
+      "reviewed_at_utc": "2026-10-11T18:17:45.865593+00:00",
+      "immutable_binding_passed": true,
+      "sha256": "ab8c8e4afc58636c0a9d86416799a3c53c1ce043e19db12bbf035afc55139115",
+      "earlier_pending_review_marker_superseded": true
+    },
+    "cleanup": {
+      "passed": true,
+      "api_left_stopped": true,
+      "final_max_sampled_sensor_temperature_c": 53
+    },
+    "provenance": {
+      "analysis_sha256": "30c44ddd10beb6701bd238e8722c6df24ee5d8efc5b4d92787cdd5972930a74b",
+      "raw_archive_sha256": "920ad69c369036a79252a360d7c2e0ce8b815cb599f82e9b133a3be95c846ebb",
+      "raw_archive_compressed_bytes": 155351,
+      "raw_archive_regular_files": 41,
+      "raw_archive_expanded_bytes": 981723,
+      "extraction_receipt_sha256": "9c0f7eba884deeb61a77833ba503c347d9392ece9427071a19eef3292cb304ca",
+      "runtime_manifest_sha256": "727dc4cf455acb2316e81340b6c13df5d60de416c266bb9b6e0a2fbb9ef72226",
+      "pre_execution_review_sha256": "8d039f14eabcf56e43c1d77cee9224a1c2a8d2338516bc987c686475774afe5d",
+      "transport_review_sha256": "0781736ac138ef109e0978db2a9166cb62f417b9f320b6bc377fe1b5b0dd8fa0"
+    },
+    "limitations": [
+      "One instrumented OFF/ON pair is descriptive and cannot establish the cause of a prior uninstrumented slowdown or overturn the failed ABBA.",
+      "Bucket totals are reconstructed from rounded averages, not exact unrounded durations; normalized values use the printed 379-window denominator.",
+      "Mixed owner scopes and nested measurements overlap and must not be summed.",
+      "The final snapshot follows the ordinary commit drain after the decode wall-time cutoff; totals are not a pure GPU timeline or per-round trace.",
+      "No bucket reaches the frozen 620 ms localization descriptor, which is not a performance qualification gate.",
+      "No outlier removal, rerun-to-win, production promotion or upstream PR results from this diagnostic."
+    ]
   }
 }
