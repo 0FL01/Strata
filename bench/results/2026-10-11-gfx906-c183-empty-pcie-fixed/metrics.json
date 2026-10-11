@@ -1,0 +1,206 @@
+{
+  "schema": "strata.gfx906.c183.empty.pcie.fixed.public.v1",
+  "experiment": "2026-10-11 historical c183 full-stack empty-PCIe fixed-policy ablation",
+  "classification": "PASS_FIXED_C183_EMPTY_PCIE_ABLATION_SCREEN_ONLY",
+  "screen_passed": true,
+  "screen_only": true,
+  "production_promotion": false,
+  "method": {
+    "order": [
+      "A1",
+      "B1",
+      "B2",
+      "A2"
+    ],
+    "cold_process_per_arm": true,
+    "prompt_tokens": 65536,
+    "outputs_per_arm": 1024,
+    "warmups": 0,
+    "gpu_retries": 0,
+    "same_existing_binary_sha256": "c18316d678a669c309cb95e2f5de9af03fa5573256fd0e093aafc4b41000d049",
+    "rebuild": false,
+    "comparison": {
+      "A": {
+        "STRATA_VERIFY_SKIP_EMPTY_PCIE": 0
+      },
+      "B": {
+        "STRATA_VERIFY_SKIP_EMPTY_PCIE": 1
+      }
+    },
+    "only_treatment": "STRATA_VERIFY_SKIP_EMPTY_PCIE 0 versus 1 on the otherwise unchanged historical c183 full stack",
+    "shared_fixed_policy": {
+      "spec": 6,
+      "mtp_max_t": 4,
+      "suffix_draft": 0,
+      "STRATA_EXP_MODE": 16,
+      "STRATA_EXP_MODE_meaning": "Historical expert GPU-kernel dispatch selector; not precision or bit width."
+    },
+    "rate_definition": {
+      "PP": "65536*1000/prompt_ms",
+      "TG": "1024*1000/decode_ms",
+      "timing": "Native prompt/decode counters; excludes model loading and request-wall time."
+    },
+    "predeclared_gate": {
+      "before_data": true,
+      "aggregate_formula": "100*((B1_rate+B2_rate)/(A1_rate+A2_rate)-1)",
+      "TG_mean_pct_min": 1,
+      "TG_both_pairs_positive": true,
+      "PP_mean_pct_min": -1,
+      "PP_individual_pair_gate": false,
+      "all_historical_ids_required": true,
+      "all_available_work_equal": true,
+      "thresholds_changed": false
+    },
+    "same_existing_binary_bytes": 21589440
+  },
+  "arms": {
+    "A1": {
+      "prompt_ms": 101309.7,
+      "decode_ms": 19360.9,
+      "PP": 646.8877116406426,
+      "TG": 52.89010324933241,
+      "historical_1024_ids_equal": true
+    },
+    "B1": {
+      "prompt_ms": 102865.5,
+      "decode_ms": 19005,
+      "PP": 637.1037908725472,
+      "TG": 53.88055774796106,
+      "historical_1024_ids_equal": true
+    },
+    "B2": {
+      "prompt_ms": 101325.9,
+      "decode_ms": 18984.6,
+      "PP": 646.7842871368525,
+      "TG": 53.93845537962349,
+      "historical_1024_ids_equal": true
+    },
+    "A2": {
+      "prompt_ms": 101993.4,
+      "decode_ms": 19333.5,
+      "PP": 642.5513807756189,
+      "TG": 52.96506064602892,
+      "historical_1024_ids_equal": true
+    }
+  },
+  "mean_rates": {
+    "PP": {
+      "OFF": 644.7195462081307,
+      "ON": 641.9440390046998,
+      "gain_percent": -0.43049838022670706
+    },
+    "TG": {
+      "OFF": 52.927581947680665,
+      "ON": 53.90950656379228,
+      "gain_percent": 1.8552228913126134
+    }
+  },
+  "pairs_B1_A1_then_B2_A2": [
+    {
+      "PP": -1.5124604459221147,
+      "TG": 1.8726650881347062
+    },
+    {
+      "PP": 0.6587654291745793,
+      "TG": 1.8378053790967463
+    }
+  ],
+  "gates": {
+    "all_historical_ids": true,
+    "all_work_equal": true,
+    "TG_mean_at_least_1pct": true,
+    "TG_both_pairs_positive": true,
+    "PP_mean_at_least_minus1pct": true
+  },
+  "work_per_arm": {
+    "accepted": 647,
+    "offered": 868,
+    "cache_hits": 580670,
+    "lookups": 598560,
+    "suffix_draft": 0,
+    "prompt_read": 65536,
+    "prompt_reused": 0,
+    "ram_blobs": 0,
+    "file_blobs": 0,
+    "offloaded_experts": 0,
+    "file_read_mb": 0,
+    "lookup_chain_accepted": null,
+    "lookup_chain_offered": null,
+    "native_suffix_accepted": null,
+    "native_suffix_offered": null,
+    "decode_windows": null,
+    "optional_chain_counters_available": false,
+    "native_done_field_count": 16
+  },
+  "parity": {
+    "compared_historical_ids": 4096,
+    "outputs_per_arm": 1024,
+    "all_historical_ids_equal": true,
+    "all_available_work_equal": true,
+    "full_output_arrays_published": false
+  },
+  "execution": {
+    "native_processes": 4,
+    "successful_launches": 1,
+    "cleanup_passed": true,
+    "api_left_stopped": true,
+    "rebuild": false,
+    "final_max_sampled_sensor_temperature_c": 55,
+    "runner_exit_code": 0
+  },
+  "actual_runtime_independent_review": {
+    "audit_passed": true,
+    "screen_passed": true,
+    "independent_checks_passed": 327,
+    "all_4096_historical_ids_exact": true,
+    "all_available_work_equal": true,
+    "actual_empty_pcie_OFF_0_ON_1": true,
+    "historical_full_stack_other_flags_unchanged": true,
+    "cleanup_passed": true,
+    "api_left_stopped": true,
+    "reviewer_new_gpu_operations": 0,
+    "sha256": "492611f5897e784639bb5b6c38a82c5628f9a7eeb15d12d1f3f138c6e9b3757b"
+  },
+  "provenance": {
+    "raw_archive_sha256": "0062b375b4fe656b8bddcf619a8e3892eafa8d7b814146444a88b67d86ee6e9f",
+    "raw_archive_compressed_bytes": 143542,
+    "raw_archive_regular_files": 64,
+    "raw_archive_expanded_bytes": 1047396,
+    "analysis_sha256": "bd9f9e052c3922960f83fd913a65961f4f104ede902379f99a22eb655346416c",
+    "extraction_sha256": "4646638421d7c70c96bdd433398e07fdb71ef0c490dcc7f52db867d7c7e27235",
+    "actual_runtime_independent_review_sha256": "492611f5897e784639bb5b6c38a82c5628f9a7eeb15d12d1f3f138c6e9b3757b",
+    "collection_receipt_sha256": "fd1243e2f18ecf55e4b4521e67f041e6926d93790870cee34a9bb4186cfd21da",
+    "pre_execution_review_sha256": "784653e7fa7dafd91c2b3f2498f5f1186fcdd8fb386c094fed25b7749c6bb32c",
+    "transport_review_sha256": "6e07119c4bfb1f8c4e68e622e1abb9d37d95ab90ab10f0ae77dcf45e569166ab",
+    "source_proof_sha256": "2d7dddab862b64198d716f0eaa04e6a75ee94a33c5d0403a15f3f8210f040c8e",
+    "runtime_summary_sha256": "b54297d043135cba71c3c541ef1c2b5efc59f5ce5ecf8ba265bfc2977e8f18c8"
+  },
+  "interpretation": {
+    "fixed_c183_reference_reestablished": true,
+    "new_optimization": false,
+    "new_release_port_claim": false,
+    "gains_pooled_or_summed": false,
+    "prior_failed_gates_unchanged": true,
+    "ordinary_adaptive_profile_qualification": false,
+    "cross_release_speed_comparison": false,
+    "production_promotion": false
+  },
+  "limitations": [
+    "One four-arm screen on one fixture is descriptive and does not establish statistical significance or broad repeatability.",
+    "The first PP pair is -1.5124604459%; the predeclared PP gate applies to the aggregate mean and is not a per-pair floor.",
+    "The historical c183 integrated stack and newer release-local studies remain distinct binaries, stacks and epochs.",
+    "Equality of available aggregate counters does not establish equality of every unreported operation.",
+    "Final sampled temperatures do not constitute continuous thermal proof.",
+    "The cause of the first PP-pair regression is not established; it is not attributed to noise or to an isolated mechanism."
+  ],
+  "sanitization": {
+    "full_output_arrays": false,
+    "generated_text": false,
+    "raw_done_fields": false,
+    "private_paths": false,
+    "process_identifiers": false,
+    "full_raw_payloads": false,
+    "configuration_contents": false,
+    "raw_logs": false
+  }
+}
