@@ -1,0 +1,159 @@
+{
+  "date": "2026-10-11",
+  "decision": "PARK_SMALL_DESCRIPTIVE_PP_FORK_SIGNAL",
+  "observer": {
+    "status": "PASS_DESCRIPTIVE_PP_SHARED_OBSERVATION",
+    "prompt_tokens": 65536,
+    "outputs": 1,
+    "historical_first_output_equal": true,
+    "owner_event_envelopes": [
+      {
+        "owner": 0,
+        "shared_calls": 432,
+        "shared_only_ms": 2633.693093777,
+        "router_shared_ms": 3811.451604128,
+        "route_only_ms": 1177.758510351
+      },
+      {
+        "owner": 1,
+        "shared_calls": 336,
+        "shared_only_ms": 2060.18907976,
+        "router_shared_ms": 2975.092666386,
+        "route_only_ms": 914.9035866260001
+      }
+    ],
+    "records": 17,
+    "legacy_scope_verified": true,
+    "owner_intervals_summed_as_wall": false,
+    "overlap_opportunity_established": false,
+    "limitations": "GPU-event envelopes include stream idle and host submission gaps; shared-only includes projections, activation and scalar gate.",
+    "independent_actual_audit": {
+      "passed": true,
+      "checks_passed": 152
+    }
+  },
+  "v1_failure": {
+    "status": "REJECT_SETUP_NOT_ADMITTED",
+    "OFF_protocol_passed": true,
+    "historical_first_output_equal": true,
+    "ON_ran": false,
+    "setup_admitted": false,
+    "serial_fallback_calls": 768,
+    "fork_launches": 0,
+    "fork_joins": 0,
+    "guard_diagnosis": {
+      "status": "PROVEN_SUFFICIENT_ADMISSION_GUARD_BUG",
+      "valid_scalar_vectors": 48,
+      "actual_dimensions": {
+        "ne0": 2560,
+        "ne1": 0,
+        "logical_elements": 2560
+      },
+      "incorrect_guard": "ne1 == 1",
+      "finding": "Matrix-only dimension guard rejects valid one-dimensional scalar gates before admission.",
+      "original_runtime_reason_blank": true
+    },
+    "memory_pressure_established": false,
+    "fork_performance_measured": false,
+    "independent_actual_audit": {
+      "audit_passed": true,
+      "candidate_passed": false,
+      "checks_passed": 172
+    }
+  },
+  "corrected_v2": {
+    "status": "PASS_INITIAL_PP_FORK_ADMISSION_SCREEN",
+    "design": "One fixed-order OFF then ON pair; original serial GEMM handle versus the proposed second-handle fork.",
+    "prompt_tokens_per_arm": 65536,
+    "outputs_per_arm": 1,
+    "historical_first_output_equal": true,
+    "available_work_and_info_equal": true,
+    "OFF": {
+      "prompt_ms": 101301.5,
+      "pp_tokens_per_second": 646.9400749248531,
+      "owner_launches": [
+        0,
+        0
+      ],
+      "owner_joins": [
+        0,
+        0
+      ]
+    },
+    "ON": {
+      "prompt_ms": 100544.3,
+      "pp_tokens_per_second": 651.8121862701316,
+      "owner_launches": [
+        432,
+        336
+      ],
+      "owner_joins": [
+        432,
+        336
+      ]
+    },
+    "prompt_saved_ms": 757.1999999999971,
+    "descriptive_pp_gain_percent": 0.7531008719539489,
+    "persistent_extra_MiB_per_owner_per_arm": 38,
+    "admission_cap_MiB": 64,
+    "setup_checked_each_owner_each_arm": true,
+    "setup_warmups_each_owner_each_arm": 6,
+    "memory_snapshots_are_peak_bound": false,
+    "chunk_localization": {
+      "chunk_count": 16,
+      "all_positive": true,
+      "saved_ms": {
+        "min": 7,
+        "median": 39,
+        "max": 112,
+        "sum": 757
+      },
+      "tail_ms": {
+        "OFF": 194.5,
+        "ON": 194.3000000000029
+      },
+      "basis": "Integer-millisecond cumulative progress timestamps; not isolated GPU timers",
+      "exclusions": 0,
+      "prompt_rate_adjustments": false,
+      "independent_supplemental_audit_passed": true
+    },
+    "independent_actual_audit": {
+      "passed": true,
+      "checks_passed": 223
+    },
+    "full_output_trajectory_qualified": false,
+    "TG_gain_claim": false,
+    "performance_qualified": false,
+    "scheduling_only_causality": false,
+    "promoted": false
+  },
+  "cleanup": {
+    "all_three_passed": true,
+    "api_stayed_stopped": true,
+    "final_max_sampled_temperature_c": 54
+  },
+  "sha256": {
+    "observer_analysis": "9f35aa2d98f00d721d3269e3cec02a5e2bf6dd1d6cb76eadb63cf795d0df0953",
+    "observer_actual_audit": "89d617eedd3b796ac99732d0ecef46e0e2d53f7d258d1e0c674f4685d5611e26",
+    "observer_raw_archive": "391163992c2178fb2d39f86a11df6e901e9562c29df954b1706e71e85237b1f3",
+    "v1_analysis": "09353f7dd2dc972a68f2e799a11d8dc416987e89534f2c280bf6af98ccc2e3ed",
+    "v1_actual_audit": "c93676aad0f6df429051288a8843458898d074746942d4cbd4f6677e7fccb62b",
+    "v1_raw_archive": "4ee71fde341dedbd6f7449f621d178a22079d757408c59fe95ec4d6f729ffb1f",
+    "scalar_guard_diagnosis": "01d572fe7dc636585bef1d24161e2dbbac730dd5d6d0f942688ca3eca4a0cfed",
+    "v2_analysis": "670d9f03d2a73ca15f22d321490ff2ef6ea924c36eec8dd4536271620cbb0402",
+    "v2_actual_audit": "27cfb43879d7d0d37106aaff274d068354105c652dfc423153ddb3f6d2239c9e",
+    "v2_raw_archive": "438001a199bef2cbf9d7fd78e07da0136d31b7323fa37d0bc619fe6515f9b894",
+    "v2_candidate_binary": "15ff356ce73b9131e29bae5e0c3515dc397a7e3b45388a25bf90eb9618f0e4ae",
+    "chunk_analysis": "0191737403a86951f796570cb36fa2b095ecefe25ab32e247693a7657dd5de9a",
+    "chunk_supplemental_actual_audit": "78cf9e9d941a32478cb9147c62c6aafc9eb088917741488a22a0a121d7982c16"
+  },
+  "limitations": [
+    "Observer owner intervals overlap and cannot be added as unique wall savings.",
+    "V1 is a retained admission failure; its serial fallback is not a valid fork comparison.",
+    "One ordered V2 pair does not establish repeatability; positive chunk deltas do not remove order or handle-state confounding.",
+    "First-output and available-work equality do not qualify all logits, recurrent state or long decoding.",
+    "Persistent allocations and free-memory snapshots do not establish transient peak VRAM.",
+    "The small descriptive PP signal is not qualified speedup and implies no TG gain."
+  ],
+  "next_action": "Park the fork; no production integration, promotion or PR."
+}
