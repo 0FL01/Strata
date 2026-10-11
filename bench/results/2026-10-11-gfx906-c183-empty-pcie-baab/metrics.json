@@ -1,0 +1,785 @@
+{
+  "schema": "strata.gfx906.c183.empty.pcie.baab.pp.confirmation.public.v1",
+  "experiment": "2026-10-11 historical c183 empty-PCIe reversed BAAB PP confirmation",
+  "classification": "PASS_FIXED_C183_EMPTY_PCIE_BAAB_SCREEN_ONLY",
+  "screen_passed": true,
+  "screen_only": true,
+  "production_promotion": false,
+  "decision": "Retain empty-PCIe ON in the existing c183 best-known fixed profile at approximately 53.9 TG tokens/s; end this specific PP-confirmation repeat sequence.",
+  "method": {
+    "order": [
+      "B1",
+      "A1",
+      "A2",
+      "B2"
+    ],
+    "cold_process_per_arm": true,
+    "prompt_tokens": 65536,
+    "outputs_per_arm": 1024,
+    "warmups": 0,
+    "gpu_retries": 0,
+    "extra_repeats": 0,
+    "arms_excluded": 0,
+    "timing_adjustments": 0,
+    "same_existing_binary_sha256": "c18316d678a669c309cb95e2f5de9af03fa5573256fd0e093aafc4b41000d049",
+    "same_existing_binary_bytes": 21589440,
+    "rebuild": false,
+    "comparison": {
+      "A": {
+        "STRATA_VERIFY_SKIP_EMPTY_PCIE": 0
+      },
+      "B": {
+        "STRATA_VERIFY_SKIP_EMPTY_PCIE": 1
+      }
+    },
+    "only_treatment": "STRATA_VERIFY_SKIP_EMPTY_PCIE 0 versus 1 on the otherwise unchanged historical c183 full stack",
+    "shared_fixed_policy": {
+      "spec": 6,
+      "mtp_max_t": 4,
+      "suffix_draft": 0,
+      "STRATA_EXP_MODE": 16,
+      "STRATA_EXP_MODE_meaning": "Historical expert GPU-kernel dispatch selector; not precision or bit width."
+    },
+    "rate_definition": {
+      "PP": "65536*1000/prompt_ms",
+      "TG": "1024*1000/decode_ms",
+      "timing": "Native prompt/decode counters; excludes model loading and request-wall time."
+    },
+    "predeclared_gate": {
+      "before_data": true,
+      "aggregate_formula": "100*((B1_rate+B2_rate)/(A1_rate+A2_rate)-1)",
+      "TG_mean_pct_min": 1,
+      "TG_both_pairs_positive": true,
+      "PP_mean_pct_min": -1,
+      "PP_individual_pair_gate": false,
+      "all_historical_ids_required": true,
+      "all_available_work_equal": true,
+      "thresholds_changed": false
+    }
+  },
+  "arms": {
+    "B1": {
+      "prompt_ms": 101299.2,
+      "decode_ms": 19014.7,
+      "PP": 646.9547637098813,
+      "TG": 53.85307157094248,
+      "historical_1024_ids_equal": true
+    },
+    "A1": {
+      "prompt_ms": 101312.5,
+      "decode_ms": 20109.9,
+      "PP": 646.8698334361505,
+      "TG": 50.920193536516834,
+      "historical_1024_ids_equal": true
+    },
+    "A2": {
+      "prompt_ms": 101424.3,
+      "decode_ms": 19690.9,
+      "PP": 646.1567888563194,
+      "TG": 52.003717453239815,
+      "historical_1024_ids_equal": true
+    },
+    "B2": {
+      "prompt_ms": 101329.5,
+      "decode_ms": 18979.1,
+      "PP": 646.7613084047588,
+      "TG": 53.95408633707605,
+      "historical_1024_ids_equal": true
+    }
+  },
+  "mean_rates": {
+    "PP": {
+      "OFF": 646.513311146235,
+      "ON": 646.8580360573201,
+      "gain_percent": 0.05332062080423139
+    },
+    "TG": {
+      "OFF": 51.461955494878325,
+      "ON": 53.90357895400926,
+      "gain_percent": 4.7445213374644135
+    }
+  },
+  "pairs_B1_A1_then_B2_A2": [
+    {
+      "PP": 0.013129422542323965,
+      "TG": 5.759754295360975
+    },
+    {
+      "PP": 0.09355617071042932,
+      "TG": 3.7504412748760707
+    }
+  ],
+  "gates": {
+    "all_historical_ids": true,
+    "all_work_equal_A1": true,
+    "TG_mean_at_least_1pct": true,
+    "TG_both_pairs_positive": true,
+    "PP_mean_at_least_minus1pct": true
+  },
+  "work_per_arm": {
+    "accepted": 647,
+    "offered": 868,
+    "cache_hits": 580670,
+    "lookups": 598560,
+    "prompt_read": 65536,
+    "prompt_reused": 0,
+    "ram_blobs": 0,
+    "file_blobs": 0,
+    "offloaded_experts": 0,
+    "file_read_mb": 0,
+    "lookup_chain_accepted": null,
+    "lookup_chain_offered": null,
+    "native_suffix_accepted": null,
+    "native_suffix_offered": null,
+    "decode_windows": null,
+    "native_done_field_count": 16,
+    "optional_chain_counters_available": false,
+    "suffix_drafts": {
+      "present": false,
+      "windows": 0,
+      "accepted": 0,
+      "offered": 0
+    }
+  },
+  "parity": {
+    "compared_historical_ids": 4096,
+    "outputs_per_arm": 1024,
+    "all_historical_ids_equal": true,
+    "all_available_work_equal": true,
+    "full_output_arrays_published": false
+  },
+  "prior_ABBA_retained": {
+    "order": [
+      "A1",
+      "B1",
+      "B2",
+      "A2"
+    ],
+    "arms": {
+      "A1": {
+        "prompt_ms": 101309.7,
+        "decode_ms": 19360.9,
+        "PP": 646.8877116406426,
+        "TG": 52.89010324933241,
+        "historical_1024_ids_equal": true
+      },
+      "B1": {
+        "prompt_ms": 102865.5,
+        "decode_ms": 19005,
+        "PP": 637.1037908725472,
+        "TG": 53.88055774796106,
+        "historical_1024_ids_equal": true
+      },
+      "B2": {
+        "prompt_ms": 101325.9,
+        "decode_ms": 18984.6,
+        "PP": 646.7842871368525,
+        "TG": 53.93845537962349,
+        "historical_1024_ids_equal": true
+      },
+      "A2": {
+        "prompt_ms": 101993.4,
+        "decode_ms": 19333.5,
+        "PP": 642.5513807756189,
+        "TG": 52.96506064602892,
+        "historical_1024_ids_equal": true
+      }
+    },
+    "mean_rates": {
+      "PP": {
+        "OFF": 644.7195462081307,
+        "ON": 641.9440390046998,
+        "gain_percent": -0.43049838022670706
+      },
+      "TG": {
+        "OFF": 52.927581947680665,
+        "ON": 53.90950656379228,
+        "gain_percent": 1.8552228913126134
+      }
+    },
+    "pairs_B1_A1_then_B2_A2": [
+      {
+        "PP": -1.5124604459221147,
+        "TG": 1.8726650881347062
+      },
+      {
+        "PP": 0.6587654291745793,
+        "TG": 1.8378053790967463
+      }
+    ],
+    "first_PP_pair_loss_retained": true,
+    "analysis_sha256": "bd9f9e052c3922960f83fd913a65961f4f104ede902379f99a22eb655346416c"
+  },
+  "all8_descriptive_only": {
+    "arm_count": 8,
+    "OFF_arm_count": 4,
+    "ON_arm_count": 4,
+    "mean_rates": {
+      "PP": {
+        "OFF_mean": 645.6164286771829,
+        "ON_mean": 644.4010375310099,
+        "gain_percent": -0.18825282198334792
+      },
+      "TG": {
+        "OFF_mean": 52.194768721279495,
+        "ON_mean": 53.90654275890077,
+        "gain_percent": 3.279589276009953
+      }
+    },
+    "all_available_work_equal": true,
+    "new_qualification": false,
+    "not_a_new_gate": true,
+    "confidence_interval_or_significance_claim": false,
+    "cross_epoch_TG_mean_change_percent": {
+      "OFF": -2.769116590761922,
+      "ON": -0.010995481429609821
+    }
+  },
+  "frozen_PP_chunk_descriptor": {
+    "frozen_before_BAAB_data": true,
+    "descriptor_sha256": "494ad5a28858b7c04a4bfef10afe64a355ad96beef8b2ef3a17915fbe3860c4c",
+    "reference_source": "All four original ABBA arms, same ordinal; medians frozen before BAAB data.",
+    "endpoint_tokens": [
+      4096,
+      8192,
+      12288,
+      16384,
+      20480,
+      24576,
+      28672,
+      32768,
+      36864,
+      40960,
+      45056,
+      49152,
+      53248,
+      57344,
+      61440,
+      65535
+    ],
+    "original_ABBA_increment_ms": {
+      "A1": [
+        10363,
+        5926,
+        5858,
+        5809,
+        5986,
+        5907,
+        5985,
+        5929,
+        6076,
+        6057,
+        6056,
+        6147,
+        6436,
+        6174,
+        6223,
+        6182
+      ],
+      "B1": [
+        10350,
+        5949,
+        5853,
+        6543,
+        5943,
+        5928,
+        5995,
+        5933,
+        6045,
+        6836,
+        6085,
+        6213,
+        6412,
+        6183,
+        6202,
+        6194
+      ],
+      "B2": [
+        10346,
+        5906,
+        5835,
+        5786,
+        5980,
+        5955,
+        5980,
+        5943,
+        6072,
+        6050,
+        6072,
+        6212,
+        6386,
+        6180,
+        6239,
+        6187
+      ],
+      "A2": [
+        10368,
+        5889,
+        5853,
+        5800,
+        6309,
+        5903,
+        5996,
+        5936,
+        6052,
+        6424,
+        6079,
+        6164,
+        6428,
+        6208,
+        6211,
+        6178
+      ]
+    },
+    "reference_median_increment_ms": [
+      10356.5,
+      5916,
+      5853,
+      5804.5,
+      5983,
+      5917.5,
+      5990,
+      5934.5,
+      6062,
+      6240.5,
+      6075.5,
+      6188,
+      6420,
+      6181.5,
+      6217,
+      6184.5
+    ],
+    "rule": "New chunk increment minus frozen same-ordinal median strictly greater than 500 ms.",
+    "threshold_ms": 500,
+    "not_a_gate": true,
+    "never_subtract_or_exclude": true,
+    "native_progress_rounding_ms": 1,
+    "BAAB_curves": {
+      "B1": {
+        "endpoints": [
+          4096,
+          8192,
+          12288,
+          16384,
+          20480,
+          24576,
+          28672,
+          32768,
+          36864,
+          40960,
+          45056,
+          49152,
+          53248,
+          57344,
+          61440,
+          65535
+        ],
+        "cumulative_ms": [
+          10365,
+          16242,
+          22095,
+          27904,
+          33880,
+          39808,
+          45771,
+          51743,
+          57834,
+          63882,
+          69923,
+          76114,
+          82529,
+          88727,
+          94933,
+          101104
+        ],
+        "increment_ms": [
+          10365,
+          5877,
+          5853,
+          5809,
+          5976,
+          5928,
+          5963,
+          5972,
+          6091,
+          6048,
+          6041,
+          6191,
+          6415,
+          6198,
+          6206,
+          6171
+        ],
+        "residual_ms": [
+          8.5,
+          -39,
+          0,
+          4.5,
+          -7,
+          10.5,
+          -27,
+          37.5,
+          29,
+          -192.5,
+          -34.5,
+          3,
+          -5,
+          16.5,
+          -11,
+          -13.5
+        ],
+        "large_delay_ordinals": [],
+        "large_delay_count": 0,
+        "maximum_positive_residual_ms": 37.5,
+        "sum_positive_residual_ms": 109.5,
+        "tail_ms": 195.1999999999971
+      },
+      "A1": {
+        "endpoints": [
+          4096,
+          8192,
+          12288,
+          16384,
+          20480,
+          24576,
+          28672,
+          32768,
+          36864,
+          40960,
+          45056,
+          49152,
+          53248,
+          57344,
+          61440,
+          65535
+        ],
+        "cumulative_ms": [
+          10363,
+          16239,
+          22062,
+          27890,
+          33852,
+          39771,
+          45763,
+          51672,
+          57786,
+          63845,
+          69918,
+          76118,
+          82515,
+          88727,
+          94944,
+          101117
+        ],
+        "increment_ms": [
+          10363,
+          5876,
+          5823,
+          5828,
+          5962,
+          5919,
+          5992,
+          5909,
+          6114,
+          6059,
+          6073,
+          6200,
+          6397,
+          6212,
+          6217,
+          6173
+        ],
+        "residual_ms": [
+          6.5,
+          -40,
+          -30,
+          23.5,
+          -21,
+          1.5,
+          2,
+          -25.5,
+          52,
+          -181.5,
+          -2.5,
+          12,
+          -23,
+          30.5,
+          0,
+          -11.5
+        ],
+        "large_delay_ordinals": [],
+        "large_delay_count": 0,
+        "maximum_positive_residual_ms": 52,
+        "sum_positive_residual_ms": 128,
+        "tail_ms": 195.5
+      },
+      "A2": {
+        "endpoints": [
+          4096,
+          8192,
+          12288,
+          16384,
+          20480,
+          24576,
+          28672,
+          32768,
+          36864,
+          40960,
+          45056,
+          49152,
+          53248,
+          57344,
+          61440,
+          65535
+        ],
+        "cumulative_ms": [
+          10384,
+          16289,
+          22119,
+          27968,
+          33958,
+          39906,
+          45864,
+          51818,
+          57902,
+          63954,
+          70051,
+          76246,
+          82638,
+          88830,
+          95033,
+          101222
+        ],
+        "increment_ms": [
+          10384,
+          5905,
+          5830,
+          5849,
+          5990,
+          5948,
+          5958,
+          5954,
+          6084,
+          6052,
+          6097,
+          6195,
+          6392,
+          6192,
+          6203,
+          6189
+        ],
+        "residual_ms": [
+          27.5,
+          -11,
+          -23,
+          44.5,
+          7,
+          30.5,
+          -32,
+          19.5,
+          22,
+          -188.5,
+          21.5,
+          7,
+          -28,
+          10.5,
+          -14,
+          4.5
+        ],
+        "large_delay_ordinals": [],
+        "large_delay_count": 0,
+        "maximum_positive_residual_ms": 44.5,
+        "sum_positive_residual_ms": 194.5,
+        "tail_ms": 202.3000000000029
+      },
+      "B2": {
+        "endpoints": [
+          4096,
+          8192,
+          12288,
+          16384,
+          20480,
+          24576,
+          28672,
+          32768,
+          36864,
+          40960,
+          45056,
+          49152,
+          53248,
+          57344,
+          61440,
+          65535
+        ],
+        "cumulative_ms": [
+          10374,
+          16270,
+          22103,
+          27907,
+          33878,
+          39800,
+          45777,
+          51710,
+          57785,
+          63845,
+          69909,
+          76124,
+          82542,
+          88729,
+          94980,
+          101133
+        ],
+        "increment_ms": [
+          10374,
+          5896,
+          5833,
+          5804,
+          5971,
+          5922,
+          5977,
+          5933,
+          6075,
+          6060,
+          6064,
+          6215,
+          6418,
+          6187,
+          6251,
+          6153
+        ],
+        "residual_ms": [
+          17.5,
+          -20,
+          -20,
+          -0.5,
+          -12,
+          4.5,
+          -13,
+          -1.5,
+          13,
+          -180.5,
+          -11.5,
+          27,
+          -2,
+          5.5,
+          34,
+          -31.5
+        ],
+        "large_delay_ordinals": [],
+        "large_delay_count": 0,
+        "maximum_positive_residual_ms": 34,
+        "sum_positive_residual_ms": 101.5,
+        "tail_ms": 196.5
+      }
+    }
+  },
+  "prior_PP_localization": {
+    "contrast": "Original ABBA B1 minus A1",
+    "whole_prompt_difference_ms": 1555.8,
+    "chunk_ordinals": [
+      4,
+      10
+    ],
+    "chunk_difference_ms": 1513,
+    "fraction_of_whole_prompt_difference": 0.9724900372798542,
+    "remaining_chunks_plus_tail_ms": 42.8,
+    "no_time_subtracted": true,
+    "causal_attribution_established": false
+  },
+  "source_read_only_diagnosis": {
+    "skip_knob_read_and_graph_capture_after_PP_cutoff": true,
+    "PP_loss_cause_established": false,
+    "noise_or_thermal_cause_proven": false,
+    "new_instrumentation": false,
+    "diagnosis_sha256": "94004ea6191cb3448a115b738e0d3867d28468a6bdab2720225d776553f0183d"
+  },
+  "execution": {
+    "native_processes": 4,
+    "successful_launches": 1,
+    "cleanup_passed": true,
+    "api_left_stopped": true,
+    "rebuild": false,
+    "final_max_sampled_sensor_temperature_c": 55,
+    "runner_exit_code": 0,
+    "native_exit_codes": [
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "actual_runtime_independent_review": {
+    "audit_passed": true,
+    "screen_passed": true,
+    "independent_checks_passed": 327,
+    "all_4096_historical_ids_exact": true,
+    "all_available_work_equal": true,
+    "actual_empty_pcie_OFF_0_ON_1": true,
+    "historical_full_stack_other_flags_unchanged": true,
+    "cleanup_passed": true,
+    "api_left_stopped": true,
+    "new_gpu_operations_by_reviewer": 0
+  },
+  "provenance": {
+    "raw_archive_sha256": "4d64914370675865e2063962cdb9da9be317b93710ee695e8c98a0bf61d9ef29",
+    "raw_archive_compressed_bytes": 142774,
+    "raw_archive_regular_files": 64,
+    "raw_archive_expanded_bytes": 1042701,
+    "analysis_sha256": "edfd440520871f8d12f01b941ad88be146d8a6ca74a007004a1af32f64660846",
+    "chunk_and_pooled_analysis_sha256": "501750e7d6db4b881b4ebc20dce7bf6ad12bae6b522a71ff7aea957038143c28",
+    "frozen_PP_descriptor_sha256": "494ad5a28858b7c04a4bfef10afe64a355ad96beef8b2ef3a17915fbe3860c4c",
+    "extraction_receipt_sha256": "651405d5d3aca19fead46b7e2850566731398db4c4a8cf57134afd6f777d5fa1",
+    "actual_runtime_independent_review_sha256": "9d5ccc0bfab96f4fba1176decb661c31298a9a178d24e62a0cfca5b0ffddde7c",
+    "collection_receipt_sha256": "7cb1725bf17b65169ee50ec6756aa4b1d656411019a2c58cad2a7bdb50a81455",
+    "pre_execution_review_sha256": "e6b8081be3870d3e3376f466556054f410206fbe71847a7a84ba9bd8987370aa",
+    "transport_review_sha256": "20119e393932af57184df5ab6747d85a2dc7f1a74dccc36d9c78c24b158d6635",
+    "source_proof_sha256": "2d7dddab862b64198d716f0eaa04e6a75ee94a33c5d0403a15f3f8210f040c8e",
+    "runtime_summary_sha256": "9aeb130b9470bad19c19a09befecf0580e2ab3d2299873bab38c35ee28a34029",
+    "prior_ABBA_actual_review_sha256": "492611f5897e784639bb5b6c38a82c5628f9a7eeb15d12d1f3f138c6e9b3757b"
+  },
+  "interpretation": {
+    "retain_existing_empty_PCIE_ON": true,
+    "PP_confirmation_repeats_ended": true,
+    "zero_PP_loss_proven": false,
+    "universal_output_or_quality_guarantee": false,
+    "new_optimization": false,
+    "new_source_patch": false,
+    "production_promotion": false,
+    "ordinary_adaptive_profile_qualification": false,
+    "new_release_port_claim": false,
+    "cross_release_speed_comparison": false,
+    "prior_failed_gates_unchanged": true
+  },
+  "limitations": [
+    "The reversed BAAB is one additional preauthorized screen on one fixed fixture; it does not prove statistical significance or universal equivalence.",
+    "The original ABBA first PP pair remains -1.5124604459%; no timing or arm is removed from either epoch.",
+    "All-eight arithmetic mean rates are descriptive context, not a new qualification or a replacement for the per-epoch frozen gates.",
+    "ON TG means differ by -0.0109954814% across epochs while OFF slows by -2.7691165908%; the larger BAAB relative gain is not evidence for a stable +4.7445213375% effect.",
+    "Zero residuals above 500 ms do not establish a zero PP effect; the descriptor is not an equivalence test.",
+    "The first PP penalty is localized to two interior chunks but its causal mechanism remains unproven; sparse GPU telemetry does not establish noise or a thermal cause.",
+    "Five optional chain/window counters are unreported and remain null; equality covers the available native counters and suffix fields.",
+    "Only the configured empty-PCIe selector and compiled-source eligibility are bound; no new per-round activation instrumentation is claimed.",
+    "Final sampled temperatures are not continuous thermal proof."
+  ],
+  "sanitization": {
+    "full_output_arrays": false,
+    "generated_text": false,
+    "raw_done_payloads": false,
+    "private_paths": false,
+    "process_identifiers": false,
+    "full_raw_payloads": false,
+    "configuration_contents": false,
+    "raw_logs": false
+  },
+  "descriptor_pool_independent_review": {
+    "passed": true,
+    "independent_checks_passed": 48,
+    "sha256": "9822b29ce3a6043c500adf162d866b9427323006fb684f01e7d28bea9135b813",
+    "frozen_descriptor_sha256": "494ad5a28858b7c04a4bfef10afe64a355ad96beef8b2ef3a17915fbe3860c4c",
+    "coordinator_analysis_sha256": "501750e7d6db4b881b4ebc20dce7bf6ad12bae6b522a71ff7aea957038143c28",
+    "ABBA_actual_review_sha256": "492611f5897e784639bb5b6c38a82c5628f9a7eeb15d12d1f3f138c6e9b3757b",
+    "BAAB_actual_review_sha256": "9d5ccc0bfab96f4fba1176decb661c31298a9a178d24e62a0cfca5b0ffddde7c",
+    "all8_pool_and_frozen_chunk_recomputed": true,
+    "new_gpu_operations": 0
+  }
+}
