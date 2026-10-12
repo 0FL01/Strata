@@ -1,0 +1,191 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-12",
+  "experiment": "gfx906 c183 HIP_PROMPT_F16 fixed first-16 HumanEval pilot",
+  "disposition": "bounded pilot passes both arms; approximate F16 remains experimental; exact c183 default unchanged",
+  "inference": {
+    "original_binary_sha256": "c18316d678a669c309cb95e2f5de9af03fa5573256fd0e093aafc4b41000d049",
+    "original_binary_bytes": 21589440,
+    "engine_patch": false,
+    "arms": {
+      "OFF": {
+        "HIP_PROMPT_F16": 0
+      },
+      "ON": {
+        "HIP_PROMPT_F16": 1
+      }
+    },
+    "engine_processes_per_arm": 1,
+    "serial_requests_per_arm": 16,
+    "samples_per_task_per_arm": 1,
+    "max_output_tokens": 768,
+    "temperature": 0,
+    "top_p": 0.95,
+    "top_k": 20,
+    "min_p": 0,
+    "penalty_repeat": 1,
+    "penalty_freq": 0,
+    "penalty_present": 0,
+    "penalty_last_n": 0,
+    "seed": 0,
+    "thinking": false,
+    "effective_prompt_cache": 0,
+    "short_read": 0,
+    "answer_seed": false,
+    "retries": 0,
+    "original_layer_split": [
+      27,
+      21
+    ],
+    "fresh_process_equivalence_between_requests_established": false,
+    "hidden_tensor_finiteness_observed": false
+  },
+  "dataset": {
+    "evaluator_repository": "https://github.com/evalplus/evalplus",
+    "evaluator_commit": "26d6d00bb1fd0fa37f39c99d5290da67891d1c5e",
+    "dataset_repository": "https://github.com/evalplus/humanevalplus_release",
+    "dataset_commit": "68cd26d53a0dec69f85eafe1f82a2a74155a2bd6",
+    "selection": "fixed numeric first 16, HumanEval/0 through HumanEval/15",
+    "total_benchmark_tasks": 164,
+    "selected_tasks": 16,
+    "task_ids": [
+      "HumanEval/0",
+      "HumanEval/1",
+      "HumanEval/2",
+      "HumanEval/3",
+      "HumanEval/4",
+      "HumanEval/5",
+      "HumanEval/6",
+      "HumanEval/7",
+      "HumanEval/8",
+      "HumanEval/9",
+      "HumanEval/10",
+      "HumanEval/11",
+      "HumanEval/12",
+      "HumanEval/13",
+      "HumanEval/14",
+      "HumanEval/15"
+    ],
+    "base_inputs_per_arm": 63,
+    "extra_inputs_per_arm": 11151,
+    "subset_sha256": "924cc95ad618a1aaf23770ff60dc0b0ed0f9706dbc6373b6b9990abdde25bf8c",
+    "official_result_md5": "f0632e210e942bf7c2374e5d218e74c5"
+  },
+  "generation": {
+    "requests_per_arm": 16,
+    "http200_per_arm": 16,
+    "native_done_per_arm": 16,
+    "natural_stop_per_arm": 16,
+    "length_stop_per_arm": 0,
+    "resumed_tokens_per_request": 0,
+    "reused_tokens_per_request": 0,
+    "cleanup_passed": true,
+    "api_left_stopped": true,
+    "final_maximum_sensor_c": 49
+  },
+  "evaluation": {
+    "execution_coverage_passed": true,
+    "arms": {
+      "OFF": {
+        "tasks": 16,
+        "base_pass": 16,
+        "base_plus_pass": 16,
+        "base_pass_at_1": 1,
+        "base_plus_pass_at_1": 1,
+        "failure_statuses": 0,
+        "timeout_statuses": 0,
+        "status_for_every_selected_task": {
+          "base": "pass",
+          "plus": "pass"
+        }
+      },
+      "ON": {
+        "tasks": 16,
+        "base_pass": 16,
+        "base_plus_pass": 16,
+        "base_pass_at_1": 1,
+        "base_plus_pass_at_1": 1,
+        "failure_statuses": 0,
+        "timeout_statuses": 0,
+        "status_for_every_selected_task": {
+          "base": "pass",
+          "plus": "pass"
+        }
+      }
+    },
+    "off_pass_on_fail": [],
+    "off_fail_on_pass": [],
+    "different_solution_text_tasks": [
+      "HumanEval/0",
+      "HumanEval/6",
+      "HumanEval/9",
+      "HumanEval/10",
+      "HumanEval/11",
+      "HumanEval/12"
+    ],
+    "admitted_solution_strings_matched": 32,
+    "cleanup_passed": true,
+    "descendants_drained": true,
+    "temporary_inputs_removed": true,
+    "isolated_cpu_only": true,
+    "network": false,
+    "host_execution_of_generated_code": false,
+    "writable_host_mounts": false
+  },
+  "evidence_sha256": {
+    "generation_actual_review": "537ce875950ba78ac5f07d1faadb49ac5465b151e189cfab419b1848dc4006d8",
+    "generation_archive": "365ecde3d75c5864eac0801da53f83d0a176fd9ce3934d620483b0d8a143ff0f",
+    "generation_summary": "ee90e909be6eab4f0e8a5dda48ab7ecd3ffa35ede2ac8a6ed9a619008d0f7aad",
+    "evaluator_actual_review": "c22d314029d0e6ead70f3d5604c1895dfa539bf624806d7da366faca05933f32",
+    "evaluator_archive": "0f9e5de566a2858c57671d6e25d6fa26a5f1feb72c4713405d6687a44948242e",
+    "evaluator_summary": "47bb44ba94b828bab4253d0518c81dac8e7730b0f00e3588cb2c6496dae85321",
+    "evaluator_manifest": "dad6fa9f23ec05ae0678698b1a150e79415323e1c67a16868d5724d1fb657ef1",
+    "evaluator_job": "42aac72ebca6d45a2e58b489bbaf7f2de9bbd7faea22a6536bf9c536d6166d11",
+    "evaluator_package_review": "211a3ea3e75376b5501eb742f4a48da8662c0b290d692eda2aa3df5e0b09d0e8",
+    "evaluator_host_receipt": "0a0079c0f1d195826f111ebec1bcc9fbd63b6098db60166182f20b14aecac0d7",
+    "samples": {
+      "OFF": "bf7d869b7e0d1880cc1b64f941abd86849acdbf1f8ad4e58fa9ec01117b22603",
+      "ON": "0d203b63b1a70ce3102225812cb66e881495bc4c29805c6148b3f280f71b1b44"
+    },
+    "results": {
+      "OFF": "4f9df89abd9e442309a71d8841f31bd5fbb57e208ad46a5a12f69ffc25c02f9f",
+      "ON": "68c02ae00642dd5f5c036368379aac9e21b0364378885862a979d80c950c5dbd"
+    }
+  },
+  "evaluator_archive": {
+    "bytes": 16706,
+    "members": 12,
+    "expanded_bytes": 74628
+  },
+  "prior_infrastructure_failures": [
+    {
+      "stage": "setup V1",
+      "result": "pandas native-extension mapping failure after dependency installation; no model or generated-code evaluation",
+      "diagnosis": "Default noexec mapping is strongly supported; actual V1 mount flags and errno were not retained",
+      "v2_correction": "Disposable work mount executable mappings; imports passed",
+      "actual_failure_review_sha256": "651cf315d7ec071b852c3f78c7d0d562c8fe7e35b126d4678f8934ef4e19fc00"
+    },
+    {
+      "stage": "generation V1",
+      "result": "Verified 61303528-byte dependency library exceeded 32 MiB archive-member cap; zero model requests",
+      "v2_correction": "64 MiB member cap; archive, hash and total-size checks retained"
+    },
+    {
+      "stage": "evaluator V1",
+      "result": "64 MiB file-size ceiling rejected canonical reference pickle before generated-solution tests",
+      "v2_correction": "256 MiB file-size ceiling; task data, scoring and other isolation unchanged",
+      "generated_solutions_tested": 0,
+      "actual_failure_review_sha256": "a9014c8cdc385fa306adfd988e18f23d29ed120f86a55b52e0e5f841ce6055ac"
+    }
+  ],
+  "limitations": [
+    "Fixed first-16 pilot, not the full 164-task benchmark or a representative broad-quality estimate.",
+    "Six solution texts differ despite identical pass/fail outcomes; numerical or general output equivalence is not established.",
+    "No model-performance claim; diagnostic generation/evaluation durations are omitted.",
+    "Serial request reset does not establish fresh-process equivalence; hidden tensor finiteness is unobserved.",
+    "Earlier F16 trajectory divergence, USER-text likelihood drift and bounded copy/retrieval findings remain intact.",
+    "Original exact c183 default is unchanged; no global F16 promotion or implementation PR."
+  ],
+  "prior_findings": "../2026-10-11-gfx906-c183-prompt-f16/README.md",
+  "privacy": "Only aggregate metrics, public task IDs, pass/fail statuses and provenance hashes; solution text, raw outputs, private paths and process identifiers excluded."
+}
