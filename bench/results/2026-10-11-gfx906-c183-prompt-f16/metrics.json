@@ -378,5 +378,98 @@
       "No general-quality or promotion decision follows from this narrow pass."
     ],
     "next_step": "Long-context free-generation needle task is only being planned; no GPU result for it is included."
+  },
+  "follow_on_64k_free_generation_needle": {
+    "date": "2026-10-12",
+    "status": "PASS_BOUNDED_NEEDLE_TASK",
+    "scope": {
+      "task_count": 1,
+      "simultaneous_retrieval_targets": 3,
+      "prompt_tokens": 65536,
+      "filler": "Repeated public-source document text",
+      "target_depth_percent_approx": [
+        10.0281,
+        49.9619,
+        89.8956
+      ],
+      "chat_template": "Canonical model template",
+      "thinking_enabled": false,
+      "generation": "Natural free generation",
+      "answer_tokens_seeded": false,
+      "teacher_forced": false,
+      "treatment": "Original c183 HIP_PROMPT_F16 OFF/ON",
+      "output_cap_including_EOS": 64
+    },
+    "result": {
+      "OFF_exact_fixed_key_value_answers": true,
+      "ON_exact_fixed_key_value_answers": true,
+      "OFF_natural_EOS": true,
+      "ON_natural_EOS": true,
+      "output_tokens_including_EOS": {
+        "OFF": 35,
+        "ON": 35
+      },
+      "full_output_token_sequences_equal": true,
+      "same_decoded_bytes_sha256": "6f66c33e68ce3bd22699db3a80fd7b282bb4bd98fb9a428835b6bffb24ed5e84",
+      "judge_scope": "Exact original-token-byte decoding with natural EOS; at most one optional terminal LF permitted."
+    },
+    "decode_work": {
+      "accepted": {
+        "OFF": 26,
+        "ON": 26
+      },
+      "offered": {
+        "OFF": 30,
+        "ON": 30
+      },
+      "cache_hits": {
+        "OFF": 18139,
+        "ON": 18101
+      },
+      "lookups": {
+        "OFF": 19680,
+        "ON": 19680
+      },
+      "all_work_equal": false
+    },
+    "interpretation": {
+      "bounded_task_passed": true,
+      "three_independent_quality_samples": false,
+      "general_quality_certified": false,
+      "long_output_qualified": false,
+      "repeatability_qualified": false,
+      "hidden_tensor_finiteness_proven": false,
+      "TG_benchmark": false,
+      "performance_qualified": false,
+      "prior_trajectory_and_likelihood_results_unchanged": true,
+      "promoted": false,
+      "PR_created": false
+    },
+    "independent_actual_audit": {
+      "passed": true,
+      "checks_passed": 233
+    },
+    "cleanup": {
+      "passed": true,
+      "api_stayed_stopped": true,
+      "final_max_sampled_temperature_c": 55
+    },
+    "sha256": {
+      "analysis": "3e306cc78200df3749fd47938832016d8ccab959d9da99fc28ae2d8cfb228833",
+      "actual_audit": "897cbadc6821da3e4abc455a680ff3d7ca5dd92765031baaca0d3735f630d115",
+      "fixture_manifest": "558ccf29740472fc0f5f5dc21894b617cfefb9363bdb2f0988f567cebf4da7dd",
+      "fixture_actual_audit": "e84f7ff78acee5d3385c368a7f89a8676e17e5f5de0964d7f9d56e95e9deea18",
+      "judge": "fe6273d42c8825be3a4b1095d07774fadd27f1ae9efb6c2682e0b805f9a1c58a",
+      "decode_table": "9720bb8c74f2b61eeccf3c49c8793dea6b153d1d17d0e074b0455c3bcf819876",
+      "raw_archive": "193c83eca22554569c06e3492c87a509578b599bc36d5dd768e3945f4adedbec",
+      "extraction": "d54c6913f15d29c9c35725189a3c30036cc22264bc048dc1299fa2858b05b87c",
+      "original_binary": "c18316d678a669c309cb95e2f5de9af03fa5573256fd0e093aafc4b41000d049"
+    },
+    "limitations": [
+      "One synthetic repeated-public-filler prompt with three retrieval targets is a bounded task, not three independent quality samples.",
+      "A short natural-EOS answer does not establish long-output behavior, general quality or hidden numerical health.",
+      "Decode cache work differs; no TG benchmark or equal-work acceleration is claimed.",
+      "All earlier approximation, divergent-trajectory and role-specific likelihood findings remain unchanged."
+    ]
   }
 }

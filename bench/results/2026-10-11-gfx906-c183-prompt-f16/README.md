@@ -46,3 +46,11 @@ A narrow 4K supplied-answer copy fixture uses the canonical model Jinja template
 This is an easy **teacher-forced copy sanity pass, not free-generation or general-quality qualification**. The earlier USER-text drift remains unchanged; these different fixtures and roles must be interpreted separately and do not isolate a causal role effect. No global F16 promotion follows.
 
 The actual audit passed **250 checks**, with a sealed arithmetic supplement. Cleanup passed, API stayed stopped, final sampled maximum **46 C**. Long-context free-generation needle work is still planning, with no result included here.
+
+## Follow-on: bounded 64K free-generation needle pass (2026-10-12)
+
+Both OFF and ON recover all **three fixed key-value answers** from one 65,536-token repeated-public-filler prompt, at approximately **10.0281% / 49.9619% / 89.8956% depth**. The canonical template disables thinking; no answer tokens are seeded. Both produce the same **35 output tokens including natural EOS**, before the 64-token cap, and pass exact decoded-answer checking.
+
+This is **one bounded free-generation task, not three independent quality samples**. Accepted/offered work is **26/30** in both arms, but cache hits differ **18,139→18,101**, with 19,680 lookups each. No equal-work or TG benchmark claim follows.
+
+The **233-check actual audit passed**; cleanup passed, API stayed stopped, final sampled maximum **55 C**. Earlier trajectory divergence and USER-/assistant-role likelihood findings remain unchanged. No general-quality certification, global F16 promotion or PR.

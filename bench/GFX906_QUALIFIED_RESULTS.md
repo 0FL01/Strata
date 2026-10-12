@@ -286,3 +286,6 @@ The same [F16 report's USER-text likelihood diagnosis](results/2026-10-11-gfx906
 
 
 The [assistant-role copy follow-on](results/2026-10-11-gfx906-c183-prompt-f16/README.md#follow-on-assistant-role-supplied-answer-copy-sanity-2026-10-12) adds one easy 4K supplied-answer teacher-forced sanity check: **257/257 assistant targets top-1 in both arms**, mean NLL **0.000148026→0.000176076**, perplexity ratio **1.000028051**; im_end is never top-1. Prior USER-text drift remains unchanged. This is not free-generation, long-context or general-quality qualification. Actual audit **250 checks PASS** plus arithmetic review; cleanup **46 C**, API stopped. No global F16 promotion.
+
+
+The [bounded 64K free-generation needle follow-on](results/2026-10-11-gfx906-c183-prompt-f16/README.md#follow-on-bounded-64k-free-generation-needle-pass-2026-10-12) passes in both OFF/ON arms: three fixed answers at roughly **10/50/90% depth**, identical **35-token outputs including natural EOS**, with no answer seed. This is one repeated-public-filler task, not three independent samples or broad quality certification. Accepted/offered **26/30** matches, but cache hits **18,139→18,101** differ; no TG benchmark. Actual audit **233 checks PASS**; cleanup **55 C**, API stopped. All prior results remain; no promotion or PR.
