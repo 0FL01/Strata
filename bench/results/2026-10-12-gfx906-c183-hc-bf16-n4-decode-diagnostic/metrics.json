@@ -1,0 +1,233 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-12",
+  "experiment": "HC BF16 N4 single decode-phase diagnostic pair",
+  "disposition": "Prior slowdown did not recur; no fix, cause localization, zero-loss proof or replacement qualification.",
+  "configuration": {
+    "prompt_tokens": 65536,
+    "output_tokens_per_arm": 1024,
+    "order": [
+      "OFF",
+      "ON"
+    ],
+    "same_derived_binary": true,
+    "derived_binary_sha256": "ba130bd3742f3f1d53cf0c65f38732400f2ceed4f5d78038aa0f84783d5bc863",
+    "STRATA_DECODE_TIMING": 1,
+    "VERIFY_PROFILE_present": false,
+    "global_prompt_F16_off": true,
+    "shadow_off": true,
+    "instrumentation": "Existing unconditional clocks; flag enables summary printing after the native decode interval.",
+    "new_GPU_events": false,
+    "new_timestamp_instrumentation": false,
+    "new_source_patch": false
+  },
+  "results": {
+    "arms": {
+      "OFF": {
+        "prompt_ms": 101320.5,
+        "decode_ms": 19006,
+        "PP_tokens_per_second": 646.8187582966922,
+        "TG_tokens_per_second": 53.877722824371254,
+        "output_count": 1024,
+        "all_outputs_match_historical": true,
+        "raw_stdout_sha256": "75a9d8e49f4616e5485261d1bf6dbb48e481f8d85944a7fa2af9ed4bae713ac1",
+        "raw_stderr_sha256": "6693c71eef48bb9cc2d6e16c18dac3d60818a8b1b59ab07f94c1b96f5b1a541a"
+      },
+      "ON": {
+        "prompt_ms": 98704,
+        "decode_ms": 18971.4,
+        "PP_tokens_per_second": 663.9649862214297,
+        "TG_tokens_per_second": 53.975984903591716,
+        "output_count": 1024,
+        "all_outputs_match_historical": true,
+        "raw_stdout_sha256": "2f0593acc62151222d9bb8213123fb5e9bb66c7d33eaccaf3ad52ea1298dfbde",
+        "raw_stderr_sha256": "a61715bffa66e3975688e8aec4c4b39959d6cedd12d25c85e72c9634054cc83e"
+      }
+    },
+    "decode_ON_minus_OFF_ms": -34.599999999998545,
+    "TG_rate_change_pct": 0.18237979274062788,
+    "PP_rate_change_pct_diagnostic_only": 2.6508550818609145,
+    "all_outputs_and_available_work_historical_exact": true,
+    "recorded_work_each_arm": {
+      "accepted": 647,
+      "offered": 868,
+      "cache_hits": 580670,
+      "lookups": 598560,
+      "prompt_reused": 0,
+      "prompt_read": 65536,
+      "ram_blobs": 0,
+      "file_blobs": 0,
+      "file_read_mb": 0,
+      "offloaded_experts": 0,
+      "lookup_chain_accepted": null,
+      "lookup_chain_offered": null,
+      "native_suffix_accepted": null,
+      "native_suffix_offered": null,
+      "decode_windows": null,
+      "native_done_field_count": 16,
+      "optional_chain_counters_available": false,
+      "suffix_drafts": {
+        "present": false,
+        "windows": 0,
+        "accepted": 0,
+        "offered": 0
+      }
+    },
+    "windows_each_arm": 379,
+    "ON_candidate_takes": 1536,
+    "ON_fallbacks": 0,
+    "diagnostic_only": true,
+    "performance_qualified": false,
+    "replaces_uninstrumented_results": false,
+    "slowdown_recurred": false,
+    "prior_loss_cause_localized": false,
+    "zero_TG_loss_proven": false
+  },
+  "phase_estimates": {
+    "unit": "ms",
+    "arms": {
+      "OFF": {
+        "windows": 379,
+        "native_decode_ms_rounded": 19006,
+        "outer_phase_total_ms_estimates": {
+          "verify": 17108.06,
+          "commit_emit": 174.34,
+          "draft": 1720.66
+        },
+        "per_phase_rounding_half_width_ms": 1.895,
+        "unassigned_ms_estimate": 2.94,
+        "unassigned_rounding_interval_ms": [
+          -2.795,
+          8.675
+        ],
+        "printed_phase_averages_ms_per_window": {
+          "verify": 45.14,
+          "commit_emit": 0.46,
+          "draft": 4.54
+        }
+      },
+      "ON": {
+        "windows": 379,
+        "native_decode_ms_rounded": 18971.4,
+        "outer_phase_total_ms_estimates": {
+          "verify": 17073.95,
+          "commit_emit": 174.34,
+          "draft": 1720.66
+        },
+        "per_phase_rounding_half_width_ms": 1.895,
+        "unassigned_ms_estimate": 2.45,
+        "unassigned_rounding_interval_ms": [
+          -3.285,
+          8.185
+        ],
+        "printed_phase_averages_ms_per_window": {
+          "verify": 45.05,
+          "commit_emit": 0.46,
+          "draft": 4.54
+        }
+      }
+    },
+    "deltas": {
+      "verify": {
+        "ON_minus_OFF_ms": -34.11000000000058,
+        "rounding_half_width_ms": 3.79
+      },
+      "commit_emit": {
+        "ON_minus_OFF_ms": 0,
+        "rounding_half_width_ms": 3.79
+      },
+      "draft": {
+        "ON_minus_OFF_ms": 0,
+        "rounding_half_width_ms": 3.79
+      },
+      "unassigned": {
+        "ON_minus_OFF_ms": -0.48999999999999977,
+        "rounding_half_width_ms": 11.47,
+        "rounding_interval_ms": [
+          -11.96,
+          10.98
+        ]
+      }
+    },
+    "rounding": {
+      "printed_phase_average_resolution_ms": 0.01,
+      "window_count": 379,
+      "per_arm_per_phase_half_width_ms": 1.895,
+      "phase_difference_half_width_ms": 3.79,
+      "native_decode_resolution_ms": 0.1,
+      "per_arm_unassigned_half_width_ms": 5.735,
+      "unassigned_difference_half_width_ms": 11.47,
+      "statistical_confidence_interval": false
+    },
+    "semantics": {
+      "verify_includes_acceptance_scan": true,
+      "commit_emit_includes_stdout_flush": true,
+      "draft_includes_deferred_primary_commit_wait": true,
+      "final_commit_wait_outside_native_decode_ms": true,
+      "unassigned_is_not_GPU_idle": true,
+      "nested_counters_are_additive_owner_GPU_split": false,
+      "corrected_nested_counter_scope": "Mixed primary-Verifier and shared-Drive scopes; not exclusively primary-owner observations.",
+      "original_helper_scope_label_over_broad": true,
+      "numeric_phase_totals_unchanged": true,
+      "primary_Verifier_printed_fields": [
+        "gpu_reach_wait",
+        "per_layer_host",
+        "stage"
+      ],
+      "shared_both_stage_Drive_printed_fields": [
+        "plan",
+        "actq",
+        "jobs",
+        "cpu",
+        "cpu_experts_per_layer_window",
+        "cpu_entries_per_layer_window",
+        "vram_hits_per_layer_window",
+        "pcie_per_layer_window"
+      ],
+      "nested_fields_form_complete_verify_decomposition": false
+    }
+  },
+  "independent_actual_review": {
+    "passed": true,
+    "checks": 324,
+    "original_receipt_unchanged": true,
+    "interpretation_addendum_status": "independently verified and bound"
+  },
+  "cleanup": {
+    "passed": true,
+    "API_off": true,
+    "peak_sampled_temperature_C": 83,
+    "final_maximum_temperature_C": 53
+  },
+  "evidence_sha256": {
+    "actual_review": "81a31629fb7d67944c28d1cec566101206273c231a6e655bb5cfee8b04c47122",
+    "archive": "ca250385a7a583c6895128fb33a90dcb2528c38722493339b6cc082cddac3a61",
+    "collection": "5245b5538f35e296f832b0ce6dc7efd218bd587e801f96b1dcc26d7fd09dc841",
+    "extraction": "52f39ab0e9c4bdb4e72387dfaf890dc3aabcce29ed0fb9f77b35b038234cb1ff",
+    "runtime_manifest": "9f8f12112f4b56364a426e490b1723625f707f61a8bcdbeca65029eb96ae8bf8",
+    "runtime_review": "69d6a759291fd32adce0adf79d90f6c4c0b7d58692c74c132195a181f256c4bb",
+    "build_review": "89f7a9a9fa5c98cf325d4109c4f6d58e6d8dc0e57789a5fa756b340498741e2d",
+    "probe": "ba130bd3742f3f1d53cf0c65f38732400f2ceed4f5d78038aa0f84783d5bc863",
+    "summary": "7c171cdfbc3e0d12926fbf749a7b4977993bd979296c5e7424d5cec35591732f",
+    "decode_source_proof": "10c010d3ce9c0b9014ee3060564d997db3877e3630b37c32d7e923e9a264336c",
+    "decode_analyzer": "19e7e65e53d35ebac70b38beeee9a6b9b7c167354fcddd968dc5547fa6ab7e05",
+    "nested_scope_addendum": "4923ed846576c74650c88170ca7886fe7a53a13363608d0884f90b4400fe9e87",
+    "nested_scope_source": "e7a5a754af2155c779aad5f2232ba1c0052ebbd2a4795d40885eff571b62221c"
+  },
+  "previous_unfavorable_report": "../2026-10-12-gfx906-c183-hc-bf16-n4-baab-length/README.md",
+  "retained_prior_evidence": {
+    "all_eight_prior_arms_unchanged": true,
+    "all_four_prior_TG_pairs_negative": true,
+    "new_BAAB_TG_change_pct": -1.6126706714888583,
+    "pooled_eight_TG_change_pct": -0.8620313253929313,
+    "cause_unresolved": true
+  },
+  "limitations": [
+    "One predeclared OFF/ON diagnostic pair; no outcome-selected repeat.",
+    "The earlier slow cases did not recur, so their cause was not localized.",
+    "Printed phase averages retain rounding bounds; small residual changes are not independently resolved.",
+    "Aggregate host-side categories do not identify individual stalls or a unique GPU/software cause.",
+    "No broad quality, universal exactness, default promotion or zero-TG-loss claim."
+  ],
+  "privacy": "Aggregate rates, phase estimates, work counts and hashes only; no tensor payloads, generated token arrays, private paths or pointer logs."
+}
