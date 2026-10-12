@@ -1,0 +1,546 @@
+{
+  "schema": "gfx906.c183.joined_observer_inventory_peer_affinity_screen.v1",
+  "date": "2026-10-12",
+  "decision": "SINGLE_PAIR_SCREEN_WITH_INCREASED_CALLER_CPU_QUALIFICATION_SEPARATE",
+  "prior_results": {
+    "all_retained": true,
+    "negative_N4_TG_pairs": 4,
+    "historical_stalls_explained": false,
+    "fix_established": false,
+    "zero_TG_loss_established": false,
+    "default_promotion": false
+  },
+  "joined_observer_v2": {
+    "scope": {
+      "prompt_tokens": 65536,
+      "outputs_per_arm": 1024,
+      "order": [
+        "N4_OFF",
+        "N4_ON"
+      ],
+      "changed_host_diagnostic": true,
+      "qualification": false
+    },
+    "audit": {
+      "passed": true,
+      "independent": true,
+      "checks": 1128,
+      "actual_review_sha256": "60d5a5f95047e6d426d3199735ca8cc340ad314b9f2c3a909bf642e7833091fd",
+      "archive_sha256": "5f1096c53cf7a0c998ab0816b58844a4ab21fa3f7b600429939ab32f60d49429",
+      "collection_sha256": "6bdd2c4a5af2885d2b9d602bc89a6a5f3fb0e89faf23f36ccb17e79180a5a191",
+      "extraction_sha256": "fd2062b03848a3b48cb17e1c0a0b7403e5b4ed675d97b3338e0f8d5088dc3b5a",
+      "runtime_manifest_sha256": "a54f8a1dcd6b4f27d02553b01e4f721a6c3001caa0603b3d7511a27d1220ce96",
+      "runtime_review_sha256": "abce29e636174d5e101e36cda11a7f7a32abf302740ab405cceecce9936a3ba5",
+      "build_review_sha256": "d6de9d98f97217df4ddba38bf91c1510e6562fc9ae06f57f487d22cf0419d04f",
+      "probe_sha256": "f3efd0e2f572170e0c416360c171b6fd319d40b45c6a9ca81c976803c4960b53",
+      "summary_sha256": "9d143632f72be5ef64e412ca5d32465c2fb9fc1959412d5887e68da1d5593ad9"
+    },
+    "arms": {
+      "OFF": {
+        "prompt_ms": 101374.3,
+        "decode_ms": 19000.6,
+        "PP": 646.4754873769782,
+        "TG": 53.89303495679084,
+        "output_count": 1024,
+        "all_ids_equal_historical": true,
+        "raw_stdout_sha256": "1b8b61daccb5b0d9d84127c041e35a52a685b3b173b53953a4a3e5a86d824056",
+        "raw_stderr_sha256": "9068528f63e68424fa252a83d9c99e94b72e18a0e3322eb89dc9f4e45fe1036f",
+        "work": {
+          "accepted": 647,
+          "offered": 868,
+          "cache_hits": 580670,
+          "lookups": 598560,
+          "prompt_read": 65536,
+          "prompt_reused": 0
+        },
+        "snapshot_count": 760,
+        "snapshot_errors": 0,
+        "windows": 379,
+        "request_serving_thread_cpu_ms": 18995.669,
+        "sum_window_serving_thread_cpu_ms": 17098.564,
+        "outer_verify_ms": 17099.282726999998,
+        "signed_outer_minus_window_cpu_ms": 0.7187269999994896,
+        "first_equals_max_by_T": [
+          {
+            "T": 1,
+            "wall_ms": 121.434921,
+            "serving_thread_cpu_ms": 120.59
+          },
+          {
+            "T": 2,
+            "wall_ms": 52.433496,
+            "serving_thread_cpu_ms": 51.839
+          },
+          {
+            "T": 3,
+            "wall_ms": 60.492719,
+            "serving_thread_cpu_ms": 59.826
+          },
+          {
+            "T": 4,
+            "wall_ms": 71.2215,
+            "serving_thread_cpu_ms": 70.88
+          }
+        ]
+      },
+      "ON": {
+        "prompt_ms": 100943.4,
+        "decode_ms": 18980.9,
+        "PP": 649.2351159164443,
+        "TG": 53.94896975380514,
+        "output_count": 1024,
+        "all_ids_equal_historical": true,
+        "raw_stdout_sha256": "c09a5ebbe09389a4126ccca98debf0e52343ff1abed99fa79bf0101149d26c34",
+        "raw_stderr_sha256": "925ac85ef688bce4e1f08c6e43e76b2403ba212efff65c46a7d4d5e494c8d18a",
+        "work": {
+          "accepted": 647,
+          "offered": 868,
+          "cache_hits": 580670,
+          "lookups": 598560,
+          "prompt_read": 65536,
+          "prompt_reused": 0
+        },
+        "snapshot_count": 760,
+        "snapshot_errors": 0,
+        "windows": 379,
+        "request_serving_thread_cpu_ms": 18975.164,
+        "sum_window_serving_thread_cpu_ms": 17079.985,
+        "outer_verify_ms": 17080.757111,
+        "signed_outer_minus_window_cpu_ms": 0.7721109999984037,
+        "first_equals_max_by_T": [
+          {
+            "T": 1,
+            "wall_ms": 123.614647,
+            "serving_thread_cpu_ms": 122.808
+          },
+          {
+            "T": 2,
+            "wall_ms": 53.00553,
+            "serving_thread_cpu_ms": 52.68
+          },
+          {
+            "T": 3,
+            "wall_ms": 66.219609,
+            "serving_thread_cpu_ms": 65.678
+          },
+          {
+            "T": 4,
+            "wall_ms": 71.79143,
+            "serving_thread_cpu_ms": 71.754
+          }
+        ]
+      }
+    },
+    "PP_rate_change_percent": 0.42687288123839373,
+    "TG_rate_change_percent": 0.10378854532713255,
+    "decode_ON_minus_OFF_ms": -19.7,
+    "all_shape_maxima_equal_first": true,
+    "slow_episode_reproduced": false,
+    "nonfirst_window_accounting": {
+      "OFF": {
+        "first_windows": 4,
+        "nonfirst_windows": 375,
+        "first_wall_ms": 305.582636,
+        "first_cpu_ms": 303.135,
+        "nonfirst_wall_ms": 16793.700091,
+        "nonfirst_cpu_ms": 16795.429,
+        "nonfirst_voluntary": 0,
+        "nonfirst_involuntary": 140
+      },
+      "ON": {
+        "first_windows": 4,
+        "nonfirst_windows": 375,
+        "first_wall_ms": 314.631216,
+        "first_cpu_ms": 312.92,
+        "nonfirst_wall_ms": 16766.125894999997,
+        "nonfirst_cpu_ms": 16767.065000000002,
+        "nonfirst_voluntary": 0,
+        "nonfirst_involuntary": 124
+      }
+    },
+    "PP_progress": {
+      "interval_deltas_ms": [
+        -296,
+        2139,
+        -142,
+        -182,
+        -141,
+        -165,
+        -174,
+        -195,
+        -134,
+        -179,
+        -192,
+        -150,
+        -167,
+        -167,
+        -109,
+        -168
+      ],
+      "second_interval_delta_ms": 2139,
+      "other15_sum_delta_ms": -2561,
+      "total_cumulative_delta_ms": -422,
+      "all_other15_ON_faster": true,
+      "interval_delta_rounding_half_width_ms": 2,
+      "last_cumulative_delta_rounding_half_width_ms": 1,
+      "first_interval_delta_rounding_half_width_ms": 1,
+      "nonfirst_interval_delta_rounding_half_width_ms": 2,
+      "not_excluded_from_reported_rate": true,
+      "no_counterfactual_performance_claim": true
+    },
+    "measurement_limits": [
+      "760 serving-thread snapshots per arm; first/max records are selected by the reviewed instrumentation, not a complete exported per-window trace.",
+      "CPU brackets slightly enclose wall timestamps. Signed wall-minus-CPU is retained and cannot distinguish descheduling from synchronous driver blocking.",
+      "Context switches count events, not durations; CPU accounting excludes other threads.",
+      "Owner host/pool counters overlap; peer run is inclusive; shared Drive observations span both owners.",
+      "Sparse external samples do not identify a unique cause.",
+      "The slower second PP interval remains in the reported rate; inclusive progress timing does not identify its responsible operation."
+    ],
+    "cleanup": {
+      "cleanup_passed": true,
+      "api_left_stopped": true,
+      "peak_sampled_temperature_c": 82,
+      "final_maximum_temperature_c": 53
+    }
+  },
+  "current_state_inventory": {
+    "actual_review_sha256": "afa7d878ae718522384b251224811611401f42ba92d39880a89f9a0c51a13e69",
+    "checks": 29,
+    "source_helper_sha256": "6ab41b757fff5ba2284b4a1e241ef0b65f3b4124eb6fa281475d6c9a2a873be1",
+    "stdout_sha256": "07eb509dacd50f11d7f150b4761015939fcc77c561f2584c95e2c9677ea4005b",
+    "current_ancestor_throttle_counts_zero": true,
+    "kernel_logs_available": false,
+    "sampled_nonroot_cpu_max_unlimited": true,
+    "sampled_readable_memory_max_and_high_unlimited": true,
+    "pressure_avg10": {
+      "cpu": {
+        "some": 0,
+        "full": 0
+      },
+      "io": {
+        "some": 0,
+        "full": 0
+      },
+      "memory": {
+        "some": 0,
+        "full": 0
+      }
+    },
+    "read_only": true,
+    "applies_to_prior_requests": false,
+    "removed_container_leaf_limits_available": false,
+    "kernel_log_access": "denied by normal permissions",
+    "interpretation": "Short current idle-state sample; no observed short-window pressure or sampled ancestor throttling. This does not establish the historical absence of pressure, throttling or kernel events."
+  },
+  "peer_affinity_screen": {
+    "scope": {
+      "prompt_tokens": 65536,
+      "outputs_per_arm": 1024,
+      "N4": "ON in both arms",
+      "affinity_order": [
+        "OFF",
+        "ON"
+      ],
+      "instrumented_single_pair": true,
+      "qualification": false,
+      "eight_arm_test": "separate; no result included",
+      "global_F16": 0,
+      "shadow": 0,
+      "decode_boundary_profilers_absent": true
+    },
+    "rates": {
+      "OFF": {
+        "PP": 663.9253002991595,
+        "TG": 53.89757355650298,
+        "prompt_ms": 98709.9,
+        "decode_ms": 18999,
+        "request_wall_s": 117.86144144402351,
+        "prompt_plus_decode_ms": 117708.9
+      },
+      "ON": {
+        "PP": 673.9169779035523,
+        "TG": 53.94072841053951,
+        "prompt_ms": 97246.4,
+        "decode_ms": 18983.8,
+        "request_wall_s": 116.37765572301578,
+        "prompt_plus_decode_ms": 116230.2
+      }
+    },
+    "changes": {
+      "PP_rate_change_pct": 1.50494002862831,
+      "TG_rate_change_pct": 0.0800682687343901,
+      "prompt_time_change_ms": -1463.5,
+      "decode_time_change_ms": -15.200000000000728,
+      "prompt_plus_decode_change_ms": -1478.699999999997,
+      "controller_request_wall_change_ms": -1483.7857210077345
+    },
+    "historical_outputs_equal": true,
+    "historical_work_equal": true,
+    "work": {
+      "accepted": 647,
+      "offered": 868,
+      "cache_hits": 580670,
+      "lookups": 598560,
+      "prompt_read": 65536,
+      "prompt_reused": 0
+    },
+    "affinity_validation": {
+      "ON_expanded_tasks": 16,
+      "all_task_masks_restored": true,
+      "thread_census_unchanged": {
+        "OFF": true,
+        "ON": true
+      },
+      "treatment_active": {
+        "OFF": false,
+        "ON": true
+      },
+      "limit": "Allowed-mask expansion is observed; actual CPU residency, spare-core isolation and exclusive use are not established."
+    },
+    "peer_caller": {
+      "groups": {
+        "OFF": {
+          "all": {
+            "wall_ms": "76282.900296",
+            "caller_cpu_ms": "40417.034",
+            "signed_wall_minus_cpu_ms": "35865.866296",
+            "caller_cpu_fraction_percent": "52.98308512546071010493347538",
+            "involuntary": 13923,
+            "voluntary": 31
+          },
+          "first15_can_overlap_primary": {
+            "wall_ms": "71141.610876",
+            "caller_cpu_ms": "35294.897",
+            "signed_wall_minus_cpu_ms": "35846.713876",
+            "caller_cpu_fraction_percent": "49.61217010044809208011276857",
+            "involuntary": 12297,
+            "voluntary": 25
+          },
+          "final_draining": {
+            "wall_ms": "5141.28942",
+            "caller_cpu_ms": "5122.137",
+            "signed_wall_minus_cpu_ms": "19.15242",
+            "caller_cpu_fraction_percent": "99.62747827567349826417669364",
+            "involuntary": 1626,
+            "voluntary": 6
+          }
+        },
+        "ON": {
+          "all": {
+            "wall_ms": "74830.476176",
+            "caller_cpu_ms": "74375.808",
+            "signed_wall_minus_cpu_ms": "454.668176",
+            "caller_cpu_fraction_percent": "99.39240240175589925809053694",
+            "involuntary": 310,
+            "voluntary": 43
+          },
+          "first15_can_overlap_primary": {
+            "wall_ms": "69692.160306",
+            "caller_cpu_ms": "69238.365",
+            "signed_wall_minus_cpu_ms": "453.795306",
+            "caller_cpu_fraction_percent": "99.34885745540459097043620348",
+            "involuntary": 265,
+            "voluntary": 42
+          },
+          "final_draining": {
+            "wall_ms": "5138.31587",
+            "caller_cpu_ms": "5137.443",
+            "signed_wall_minus_cpu_ms": "0.87287",
+            "caller_cpu_fraction_percent": "99.98301252741007531714861274",
+            "involuntary": 45,
+            "voluntary": 1
+          }
+        }
+      },
+      "deltas": {
+        "wall_ms": "-1452.424120",
+        "caller_cpu_ms": "33958.774",
+        "caller_cpu_change_percent": "84.02094522819264768414228520",
+        "wall_change_percent": "-1.903996982763068696944291130"
+      },
+      "task_wall_ON_minus_OFF_ms": [
+        -84.127414,
+        -102.782585,
+        -87.248958,
+        -110.889474,
+        -100.056937,
+        -89.413635,
+        -103.192953,
+        -79.288225,
+        -95.765371,
+        -89.522527,
+        -96.261045,
+        -124.141904,
+        -100.586514,
+        -97.585281,
+        -88.587747,
+        -2.97355
+      ],
+      "all_16_task_walls_faster": true,
+      "scope": "Task-local RUSAGE_THREAD for the peer caller. Includes caller-executed runtime/driver/polling work; excludes issuer and other helper or child threads. Not total process CPU, useful-compute CPU or energy.",
+      "wall_scope": "Serial task wall sums overlap primary PP and cannot be added to prompt time. CPU/wall endpoints have small skew; wall-minus-CPU is not precise off-CPU attribution."
+    },
+    "PP_progress": {
+      "OFF": {
+        "cumulative_ms": [
+          10064,
+          15817,
+          21504,
+          27180,
+          32975,
+          38758,
+          44566,
+          50325,
+          56249,
+          62148,
+          68069,
+          74105,
+          80374,
+          86416,
+          92489,
+          98513
+        ],
+        "interval_ms": [
+          10064,
+          5753,
+          5687,
+          5676,
+          5795,
+          5783,
+          5808,
+          5759,
+          5924,
+          5899,
+          5921,
+          6036,
+          6269,
+          6042,
+          6073,
+          6024
+        ],
+        "post_progress_prompt_remainder_ms": "196.9"
+      },
+      "ON": {
+        "cumulative_ms": [
+          9973,
+          15619,
+          21221,
+          26783,
+          32512,
+          38193,
+          43899,
+          49574,
+          55410,
+          61217,
+          67042,
+          72955,
+          79133,
+          85069,
+          91037,
+          97049
+        ],
+        "interval_ms": [
+          9973,
+          5646,
+          5602,
+          5562,
+          5729,
+          5681,
+          5706,
+          5675,
+          5836,
+          5807,
+          5825,
+          5913,
+          6178,
+          5936,
+          5968,
+          6012
+        ],
+        "post_progress_prompt_remainder_ms": "197.4"
+      },
+      "interval_delta_ON_minus_OFF_ms": [
+        -91,
+        -107,
+        -85,
+        -114,
+        -66,
+        -102,
+        -102,
+        -84,
+        -88,
+        -92,
+        -96,
+        -123,
+        -91,
+        -106,
+        -105,
+        -12
+      ],
+      "rounding_delta_halfwidth_ms": [
+        1,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ]
+    },
+    "all_16_PP_intervals_faster": true,
+    "native_sum_scope": "prompt_ms plus decode_ms; excludes final commit wait and post-timer metadata printing.",
+    "request_wall_scope": "Submission through DONE handling and binding; excludes load.",
+    "no_single_stall_removal_claim": true,
+    "provenance": {
+      "author_accounting_sha256": "83210660fb971fd460e18361000a8808e121f55ecbf8b32d24b1e87ffff750c3",
+      "summary_sha256": "dca78a4412f45ba80df40498e25022b1a37de305e7a4206865b92d0a0ea80ae0",
+      "raw_files": {
+        "OFF.stdout": {
+          "sha256": "cf63f194bd89756ec537bf4eaad4a7978764d643a623426c27475f1497bb7375",
+          "bytes": 7397
+        },
+        "OFF.stderr": {
+          "sha256": "45532a865aba6b0c0f5803da66ab6b752a7076d1661327552a600dd4e6815b1a",
+          "bytes": 18171
+        },
+        "ON.stdout": {
+          "sha256": "1a3dcbc7b1a338de45f4e3033772a54699d6b890a5c5d0dd091fb020db149efd",
+          "bytes": 7396
+        },
+        "ON.stderr": {
+          "sha256": "adffddf6d8ae99ac6c1a9e763bba166ae45328b150a2051f98fa480d86ef57c1",
+          "bytes": 18150
+        }
+      },
+      "binary_sha256": "48dba26a0951c85e44fe7124ef161e719495bad040b6d7d6d8e95f219b7100a8",
+      "build_review_sha256": "a90ce22f8980f302b3ab6b0cc04a07c4ec808cdc51185f6b5756bbffe889e543",
+      "runtime_manifest_sha256": "ab389b765033b2940086f907949c31de54e7a3eb2429eef833b385af4d930933",
+      "runtime_review_sha256": "00054455ca98ddd9ea4feff6888c6dbe9a42806cceee34830bcbb83cee5f3007",
+      "archive_sha256": "69bf5efd6a1dd4986fdec515a53a1f936f1dd2e72cc5c0ddc6c621a5a10bfd2f",
+      "collection_sha256": "c5f9aeb37c3ceec8c5334fc07b513721f0c2f8c2fa394067cc7b5e90b0d476f5",
+      "extraction_sha256": "62c38026a238910d84ce0707b0d0851e4ec0396661f5f572ea5b6745fef6089f"
+    },
+    "audit": {
+      "passed": true,
+      "independent": true,
+      "checks": 412,
+      "actual_review_sha256": "d4a780a219d15bbe669924bc305995b7c7586aa78bf29364d7186d86c29e2863",
+      "author_numbers_independently_equal": true
+    },
+    "cleanup": {
+      "passed": true,
+      "api_left_stopped": true,
+      "final_maximum_temperature_C": 51,
+      "sampled_peak_C": 82
+    }
+  }
+}
