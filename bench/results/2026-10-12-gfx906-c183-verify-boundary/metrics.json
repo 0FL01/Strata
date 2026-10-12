@@ -1,0 +1,521 @@
+{
+  "schema": "gfx906.c183.hc_bf16_n4.verify_boundary_observer.v1",
+  "date": "2026-10-12",
+  "decision": "DIAGNOSTIC_NON_REPRODUCTION_PRIOR_TG_LOSSES_UNRESOLVED",
+  "scope": {
+    "prompt_tokens": 65536,
+    "output_count_per_arm": 1024,
+    "order": [
+      "OFF",
+      "ON"
+    ],
+    "arm_count": 2,
+    "changed_host_diagnostic_epoch": true,
+    "baseline_generate_and_verify_objects_reproduced": true,
+    "qualified_prefill_and_gpu_objects_reused": true,
+    "new_gpu_events": 0,
+    "new_synchronization_calls": 0,
+    "new_warmups": 0,
+    "steady_host_clock_reads_per_window": 6,
+    "window_capture_clock_reads_per_miss": 4,
+    "commit_capture_clock_reads_per_miss": 2,
+    "observed_added_clock_reads_per_arm": 2310,
+    "performance_qualification": false,
+    "prior_results_replaced": false,
+    "zero_TG_loss_demonstrated": false,
+    "causal_explanation_of_prior_losses": false
+  },
+  "measurement_definitions": {
+    "outer_verify": "Host elapsed outer verify interval including caller acceptance work.",
+    "primary_wait": "Host elapsed progress/polling interval; includes polling overhead, stream queries and possible host descheduling; not direct GPU kernel time.",
+    "peer_ms": "Inclusive recursive peer run, already nested in outer verify.",
+    "host_ms": "Overlaps pool and is excluded from exclusive accounting.",
+    "instantiate_ms": "Host elapsed graph instantiation plus graph destruction.",
+    "upload_sync_ms": "Window-capture upload host API plus its existing synchronization.",
+    "commit_capture_ms": "Inclusive recording, instantiation and graph destruction; no separate upload or synchronization phase.",
+    "terminal_sync_ms": "Only the existing main-stream synchronization; conditional copy-stream waits are count-only.",
+    "shared_drive": "Drive counters span both owners.",
+    "residual": "Unassigned host envelope, not GPU idle.",
+    "capture_subtraction": "Descriptive arithmetic; does not create an independently warmed benchmark.",
+    "per_T_limits": "First/max/total lack a window index and per-owner join; later T4 cannot be uniquely tied to the aggregated wait delta.",
+    "primary_or_peer_outer_envelope_ms": "For primary: outer verify minus inclusive peer run, still includes acceptance/caller work. For peer: inclusive recursive run.",
+    "disjoint_accounting": "Primary exclusive-known categories plus primary residual plus inclusive peer outer reconstruct overall verify; host is excluded because it overlaps pool. Do not add peer outer again to its nested components."
+  },
+  "arms": {
+    "OFF": {
+      "prompt_ms": 101365.8,
+      "decode_ms": 19494.2,
+      "pp_plus_decode_ms": 120860,
+      "PP_tokens_per_second": 646.5296973930062,
+      "TG_tokens_per_second": 52.528444357808986,
+      "all_1024_outputs_equal_historical": true,
+      "work": {
+        "accepted": 647,
+        "offered": 868,
+        "cache_hits": 580670,
+        "lookups": 598560,
+        "prompt_read": 65536,
+        "prompt_reused": 0
+      },
+      "coverage": [
+        {
+          "owner": 0,
+          "T": 4095,
+          "calls": 54,
+          "takes": 0,
+          "fallback": 54,
+          "shadow": 0
+        },
+        {
+          "owner": 0,
+          "T": 4096,
+          "calls": 810,
+          "takes": 0,
+          "fallback": 810,
+          "shadow": 0
+        },
+        {
+          "owner": 1,
+          "T": 4095,
+          "calls": 42,
+          "takes": 0,
+          "fallback": 42,
+          "shadow": 0
+        },
+        {
+          "owner": 1,
+          "T": 4096,
+          "calls": 630,
+          "takes": 0,
+          "fallback": 630,
+          "shadow": 0
+        }
+      ],
+      "stdout_sha256": "e6406e29de592fd1046af1876460f196b30348abae5c7eca477b812079ba255e",
+      "stderr_sha256": "feb88fc0b0d678c82e7959e68f359d33078875def202f944a3f74c2b73224249"
+    },
+    "ON": {
+      "prompt_ms": 99320.4,
+      "decode_ms": 19000.8,
+      "pp_plus_decode_ms": 118321.2,
+      "PP_tokens_per_second": 659.8443018755463,
+      "TG_tokens_per_second": 53.892467685571134,
+      "all_1024_outputs_equal_historical": true,
+      "work": {
+        "accepted": 647,
+        "offered": 868,
+        "cache_hits": 580670,
+        "lookups": 598560,
+        "prompt_read": 65536,
+        "prompt_reused": 0
+      },
+      "coverage": [
+        {
+          "owner": 0,
+          "T": 4095,
+          "calls": 54,
+          "takes": 54,
+          "fallback": 0,
+          "shadow": 0
+        },
+        {
+          "owner": 0,
+          "T": 4096,
+          "calls": 810,
+          "takes": 810,
+          "fallback": 0,
+          "shadow": 0
+        },
+        {
+          "owner": 1,
+          "T": 4095,
+          "calls": 42,
+          "takes": 42,
+          "fallback": 0,
+          "shadow": 0
+        },
+        {
+          "owner": 1,
+          "T": 4096,
+          "calls": 630,
+          "takes": 630,
+          "fallback": 0,
+          "shadow": 0
+        }
+      ],
+      "stdout_sha256": "50a665473b1ff08840ca19c9f25597cd62d0b39acb3f08ba8eba498328459a17",
+      "stderr_sha256": "a761eebdf0d583bec37d7f7ee848c54d10038ac721e9a972d06e7649ea570796"
+    }
+  },
+  "observer": {
+    "OFF": {
+      "outer_verify_ms": 17599.038518,
+      "all_capture_ms": 331.437096,
+      "outer_verify_minus_all_capture_ms": 17267.601422,
+      "owners": [
+        {
+          "owner": 0,
+          "runs": 379,
+          "wait_ms": 8225.795356,
+          "pool_ms": 919.691353,
+          "host_ms": 9.572096,
+          "sync_calls": 379,
+          "sync_ms": 70.477049,
+          "peer_calls": 379,
+          "peer_ms": 8064.93801,
+          "copy_waits": 0,
+          "commit_captures": 1,
+          "commit_capture_ms": 0.5564,
+          "window_capture_components_ms": {
+            "record_ms": 57.743235,
+            "instantiate_ms": 219.34921500000002,
+            "upload_sync_ms": 0.07404
+          },
+          "window_capture_ms": 277.16649,
+          "primary_or_peer_outer_envelope_ms": 9534.100508000001,
+          "exclusive_known_ms": 9493.686647999999,
+          "unassigned_owner_envelope_ms": 40.41386000000239
+        },
+        {
+          "owner": 1,
+          "runs": 379,
+          "wait_ms": 6624.825541,
+          "pool_ms": 297.874891,
+          "host_ms": 0.227164,
+          "sync_calls": 379,
+          "sync_ms": 1048.264188,
+          "peer_calls": 0,
+          "peer_ms": 0,
+          "copy_waits": 0,
+          "commit_captures": 1,
+          "commit_capture_ms": 0.415602,
+          "window_capture_components_ms": {
+            "record_ms": 24.783941,
+            "instantiate_ms": 28.504661,
+            "upload_sync_ms": 0.010002
+          },
+          "window_capture_ms": 53.298604,
+          "primary_or_peer_outer_envelope_ms": 8064.93801,
+          "exclusive_known_ms": 8024.678826,
+          "unassigned_owner_envelope_ms": 40.25918399999955
+        }
+      ],
+      "captures": [
+        {
+          "owner": 0,
+          "T": 1,
+          "count": 1,
+          "record_ms": 50.38673,
+          "instantiate_ms": 7.315625,
+          "upload_sync_ms": 0.003206
+        },
+        {
+          "owner": 0,
+          "T": 2,
+          "count": 1,
+          "record_ms": 2.5493,
+          "instantiate_ms": 196.170272,
+          "upload_sync_ms": 0.035092
+        },
+        {
+          "owner": 0,
+          "T": 3,
+          "count": 1,
+          "record_ms": 2.524334,
+          "instantiate_ms": 8.672812,
+          "upload_sync_ms": 0.033707
+        },
+        {
+          "owner": 0,
+          "T": 4,
+          "count": 1,
+          "record_ms": 2.282871,
+          "instantiate_ms": 7.190506,
+          "upload_sync_ms": 0.002035
+        },
+        {
+          "owner": 1,
+          "T": 1,
+          "count": 1,
+          "record_ms": 18.564534,
+          "instantiate_ms": 6.794063,
+          "upload_sync_ms": 0.002824
+        },
+        {
+          "owner": 1,
+          "T": 2,
+          "count": 1,
+          "record_ms": 1.998773,
+          "instantiate_ms": 7.336165,
+          "upload_sync_ms": 0.002104
+        },
+        {
+          "owner": 1,
+          "T": 3,
+          "count": 1,
+          "record_ms": 1.998584,
+          "instantiate_ms": 7.60089,
+          "upload_sync_ms": 0.002538
+        },
+        {
+          "owner": 1,
+          "T": 4,
+          "count": 1,
+          "record_ms": 2.22205,
+          "instantiate_ms": 6.773543,
+          "upload_sync_ms": 0.002536
+        }
+      ],
+      "outer_by_T": [
+        {
+          "T": 1,
+          "count": 47,
+          "total_ms": 1490.058254,
+          "max_ms": 120.501826,
+          "first_ms": 120.501826
+        },
+        {
+          "T": 2,
+          "count": 48,
+          "total_ms": 1804.005898,
+          "max_ms": 241.496309,
+          "first_ms": 241.496309
+        },
+        {
+          "T": 3,
+          "count": 32,
+          "total_ms": 1346.679028,
+          "max_ms": 71.1244,
+          "first_ms": 60.976624
+        },
+        {
+          "T": 4,
+          "count": 252,
+          "total_ms": 12958.295338,
+          "max_ms": 338.061519,
+          "first_ms": 70.907296
+        }
+      ],
+      "terminal": {
+        "registered": 2,
+        "finished": 1,
+        "active": 0,
+        "errors": 0,
+        "clock_reads": 2310
+      }
+    },
+    "ON": {
+      "outer_verify_ms": 17097.022369,
+      "all_capture_ms": 172.9396,
+      "outer_verify_minus_all_capture_ms": 16924.082769,
+      "owners": [
+        {
+          "owner": 0,
+          "runs": 379,
+          "wait_ms": 7940.745785,
+          "pool_ms": 916.354979,
+          "host_ms": 9.626588,
+          "sync_calls": 379,
+          "sync_ms": 70.912825,
+          "peer_calls": 379,
+          "peer_ms": 8011.088232,
+          "copy_waits": 0,
+          "commit_captures": 1,
+          "commit_capture_ms": 0.591546,
+          "window_capture_components_ms": {
+            "record_ms": 58.62387,
+            "instantiate_ms": 58.837284000000004,
+            "upload_sync_ms": 0.076416
+          },
+          "window_capture_ms": 117.53757,
+          "primary_or_peer_outer_envelope_ms": 9085.934136999998,
+          "exclusive_known_ms": 9046.142705,
+          "unassigned_owner_envelope_ms": 39.79143199999817
+        },
+        {
+          "owner": 1,
+          "runs": 379,
+          "wait_ms": 6571.885621,
+          "pool_ms": 296.46405,
+          "host_ms": 0.268551,
+          "sync_calls": 379,
+          "sync_ms": 1047.625693,
+          "peer_calls": 0,
+          "peer_ms": 0,
+          "copy_waits": 0,
+          "commit_captures": 1,
+          "commit_capture_ms": 0.507818,
+          "window_capture_components_ms": {
+            "record_ms": 24.955524,
+            "instantiate_ms": 29.336958,
+            "upload_sync_ms": 0.010184
+          },
+          "window_capture_ms": 54.302666,
+          "primary_or_peer_outer_envelope_ms": 8011.088232,
+          "exclusive_known_ms": 7970.7858479999995,
+          "unassigned_owner_envelope_ms": 40.30238400000053
+        }
+      ],
+      "captures": [
+        {
+          "owner": 0,
+          "T": 1,
+          "count": 1,
+          "record_ms": 51.163818,
+          "instantiate_ms": 7.79177,
+          "upload_sync_ms": 0.003596
+        },
+        {
+          "owner": 0,
+          "T": 2,
+          "count": 1,
+          "record_ms": 2.605849,
+          "instantiate_ms": 8.029045,
+          "upload_sync_ms": 0.034031
+        },
+        {
+          "owner": 0,
+          "T": 3,
+          "count": 1,
+          "record_ms": 2.542933,
+          "instantiate_ms": 35.234512,
+          "upload_sync_ms": 0.036568
+        },
+        {
+          "owner": 0,
+          "T": 4,
+          "count": 1,
+          "record_ms": 2.31127,
+          "instantiate_ms": 7.781957,
+          "upload_sync_ms": 0.002221
+        },
+        {
+          "owner": 1,
+          "T": 1,
+          "count": 1,
+          "record_ms": 18.837477,
+          "instantiate_ms": 7.085033,
+          "upload_sync_ms": 0.002971
+        },
+        {
+          "owner": 1,
+          "T": 2,
+          "count": 1,
+          "record_ms": 1.93558,
+          "instantiate_ms": 7.29256,
+          "upload_sync_ms": 0.001959
+        },
+        {
+          "owner": 1,
+          "T": 3,
+          "count": 1,
+          "record_ms": 2.04437,
+          "instantiate_ms": 7.778984,
+          "upload_sync_ms": 0.002537
+        },
+        {
+          "owner": 1,
+          "T": 4,
+          "count": 1,
+          "record_ms": 2.138097,
+          "instantiate_ms": 7.180381,
+          "upload_sync_ms": 0.002717
+        }
+      ],
+      "outer_by_T": [
+        {
+          "T": 1,
+          "count": 47,
+          "total_ms": 1496.222153,
+          "max_ms": 122.616276,
+          "first_ms": 122.616276
+        },
+        {
+          "T": 2,
+          "count": 48,
+          "total_ms": 1615.045858,
+          "max_ms": 53.026769,
+          "first_ms": 53.026769
+        },
+        {
+          "T": 3,
+          "count": 32,
+          "total_ms": 1343.472233,
+          "max_ms": 87.8934,
+          "first_ms": 87.8934
+        },
+        {
+          "T": 4,
+          "count": 252,
+          "total_ms": 12642.282125,
+          "max_ms": 71.690495,
+          "first_ms": 71.690495
+        }
+      ],
+      "terminal": {
+        "registered": 2,
+        "finished": 1,
+        "active": 0,
+        "errors": 0,
+        "clock_reads": 2310
+      }
+    }
+  },
+  "aggregate_ON_minus_OFF_ms": {
+    "decode": -493.4,
+    "pp_plus_decode": -2538.8,
+    "outer_verify": -502.016149,
+    "primary_wait": -285.049571,
+    "inclusive_peer": -53.849778,
+    "all_captures": -158.497496,
+    "outer_verify_minus_all_captures": -343.518653
+  },
+  "T2": {
+    "primary_instantiate_and_destroy_ms": {
+      "OFF": 196.170272,
+      "ON": 8.029045
+    },
+    "first_outer_delta_ms": -188.46954,
+    "nonfirst_count_per_arm": 47,
+    "nonfirst_outer_total_ms": {
+      "OFF": 1562.509589,
+      "ON": 1562.019089
+    },
+    "nonfirst_outer_delta_ms": -0.4905
+  },
+  "T4": {
+    "OFF_first_ms": 70.907296,
+    "OFF_max_ms": 338.061519,
+    "ON_first_ms": 71.690495,
+    "ON_max_ms": 71.690495,
+    "OFF_max_is_later_than_first": true,
+    "owner_wait_causal_join_available": false
+  },
+  "audit": {
+    "independent": true,
+    "passed": true,
+    "checks": 532,
+    "actual_review_sha256": "6b0383e755043a416c81d074a01984899dc7a3ba3cbe8b75f84c406e64ec4270",
+    "archive_sha256": "cd5f1855f0348f598320482116bb19c0426d402d8892835d14b6eaf9a286542f",
+    "collection_sha256": "45bcee4976dff850649e27e222399e191240bc926f9ee871b9553ce1454e51f6",
+    "extraction_sha256": "0d1a870810daef24f1e9d69a2c58a3370595e6e968bcb72fdc8e1a6d3d1b9fa4",
+    "runtime_manifest_sha256": "8a2ef1573173460e97cf7f2dc0bcd32da290297b44c33bca3dd29819d077a48c",
+    "runtime_review_sha256": "f0af61829bd5a2afa196ba7b6153de3c8fdfd17307b1b06a3b9eb1666905ca1a",
+    "build_review_sha256": "cbd467a1337e299c1ee1e822922396f06c699a1f2b9036b60905f03088a09be0",
+    "probe_sha256": "55faf7f2eb4b1c15fa09ef4acaf94ae6472f9f65efc7e087f3321703d6e97952",
+    "summary_sha256": "e8df15dd88b1cd5bcb335daa80d18f73225f54535469db63748b4e769edeed50",
+    "author_capture_accounting_sha256": "6ca26d10a0bf2fb1f066856a64b148273a8c538215ea078c6c54a8f99b0be546"
+  },
+  "cleanup": {
+    "cleanup_passed": true,
+    "api_left_stopped": true,
+    "peak_sampled_temperature_c": 83,
+    "final_maximum_temperature_c": 52
+  },
+  "limitations": [
+    "One fixed-order pair with an instrumented host binary.",
+    "All four earlier negative TG pairs remain retained and unresolved.",
+    "No fix, zero-loss proof, new performance qualification or default promotion.",
+    "No internal tensors were compared by this observer; output and recorded work equality remain the available runtime evidence."
+  ]
+}
