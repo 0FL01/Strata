@@ -1,0 +1,245 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-12",
+  "experiment": "gfx906 c183 archived-Gemm output diagnosis and signed-FIRST4 screen",
+  "disposition": "Four tested FP32-output alternatives have full-fixture parity but all32 timing pairs regress; park without integration.",
+  "scope": {
+    "owner": 0,
+    "component_only": true,
+    "model_execution": false,
+    "model_or_sample_code_published": false,
+    "geometry_count": 1,
+    "captured_model_activations": false
+  },
+  "fixture": {
+    "T": 4096,
+    "N": 2560,
+    "K": 6144,
+    "alpha": 1,
+    "beta": 0,
+    "output_elements": 10485760,
+    "operands": "Identical already-FP16 activation and synthetic dequantized-weight operands for the compared GEMMs.",
+    "reference": "Literal archived-Gemm FP32 output; direct default rocBLAS control matches it bit-for-bit.",
+    "X": {
+      "range_min": -1,
+      "range_max": 1,
+      "source_possible_values": 4097,
+      "grid_step": 0.00048828125,
+      "minimum_possible_nonzero_absolute": 0.00048828125
+    },
+    "weight_scale": {
+      "numerator_min": 1024,
+      "numerator_max": 2047,
+      "denominator": 1048576,
+      "fixed_exponent": true
+    },
+    "weight_quant_integer": {
+      "min": -127,
+      "max": 127
+    },
+    "W": {
+      "conversion": "FP16 round-to-nearest-even of quant multiplied by scale",
+      "minimum_possible_nonzero_absolute": 0.0009765625,
+      "maximum_possible_absolute": 0.2479248046875
+    },
+    "absolute_dot_product_upper_bound": 1523.25,
+    "input_subnormals_or_outliers": false,
+    "representativeness": "One deterministic narrow-range synthetic fixture; no realized model distribution or universal exactness claim."
+  },
+  "numerical_diagnosis": {
+    "identical_in_v1_v2": true,
+    "full_fixture_finite": true,
+    "comparisons": {
+      "storage": {
+        "comparison": "FP32 reference versus FP16-round-and-widen(reference)",
+        "mismatches": 10483999,
+        "mismatch_percent": 99.98320579528809,
+        "finite_pairs": 10485760,
+        "max_abs": 0.0078125,
+        "rmse": 0.0010306095033372378
+      },
+      "additional": {
+        "comparison": "FP16-round-and-widen(reference) versus widened actual FP16 output",
+        "mismatches": 73709,
+        "mismatch_percent": 0.7029438018798828,
+        "finite_pairs": 10485760,
+        "max_abs": 0.015625,
+        "rmse": 0.00014935805718343538
+      },
+      "total": {
+        "comparison": "FP32 reference versus widened actual FP16 output",
+        "mismatches": 10484187,
+        "mismatch_percent": 99.98499870300293,
+        "finite_pairs": 10485760,
+        "max_abs": 0.007875442504882812,
+        "rmse": 0.00103064374136008
+      }
+    },
+    "scalar_case": {
+      "input_value": 1.0009765625,
+      "squared_product_final_half_rounding_absolute_loss": 9.5367431640625e-7
+    },
+    "interpretation": "The FP16 output path changes values with already-identical FP16 operands. Additional differences from the rounded FP32 reference exceed final storage rounding alone, without identifying a unique internal library cause.",
+    "input_canary_repeat_checks_passed": true,
+    "independent_review_limit": "Full-array counts come from the audited compiled probe. Full output arrays were not exported, so receipts do not permit independent elementwise recomputation."
+  },
+  "timing_protocol": {
+    "warmups_per_arm": 16,
+    "captured_GEMMs_per_graph_launch_sample": 1,
+    "pairs_per_candidate": 8,
+    "pair_order": "Alternating AB/BA",
+    "allocation_dequantization_copies_checks_outside_events": true,
+    "full_byte_input_canary_recheck": "After each timing series, not after every sample."
+  },
+  "V1": {
+    "policy": "positive-only FIRST4",
+    "returned_solution_count": 59,
+    "all_returned_ids_negative": true,
+    "selected": 0,
+    "executed": 0,
+    "timed": 0,
+    "outcome": "Policy limitation; no alternative parity or speed result.",
+    "actual_review_sha256": "0b5893ad3a44c2acd1d69c3b477f0285c0ea19796c30bdc45213b5035370b7b4",
+    "archive_bytes": 42344,
+    "evidence": {
+      "archive_sha256": "59a6ea309483e062285e9c1e805a4863ec467602245d9c8885ff6ff9c1176220",
+      "extraction_sha256": "0cf73303b60538784ff4d2f6b57d5f58f32c681bd1d5bd4e0e236e88174127fb",
+      "collection_sha256": "d1b23e652c867eddfe1b39cb1c5b23ede8ed1a96871ba437a39679a089c4b6b7",
+      "stdout_sha256": "18b0359378b2277ae2d640278000a670c0269f5f39901ad00b5ebcaa1313ff92",
+      "analysis_sha256": "32279e709bb278c6edefe56fbda5bf4009c82cd6e16429f182cf9b47fc3ccb21",
+      "summary_sha256": "04d8a3c0c938a719153b93a5ef002f4f76a4ba83f7214cdc52b57e9d495a0c85",
+      "runtime_manifest_sha256": "f8bdd455a7acf87964a19300932c998b6a7becf3449ffa7220c3da24e600cacd",
+      "runtime_review_sha256": "ebfcf1045ce830b5fd360c198c5ad2fad6af532449279facb92b65a38bccd91f",
+      "build_review_sha256": "b14333c58afd7656d7a57268a2894b7c4b63428f719d657779dd1b10c3cb89bd",
+      "probe_sha256": "e94feddb1d06c5bfbdd8d4af5a147f78ccee1e1d3ca0d8be10db903533aa8686",
+      "member_sha256": "9b0d9fb8cf20c97bb81e43b363e6a6b68d32af0d36234b90ed058ad4433ad048"
+    },
+    "cleanup": {
+      "passed": true,
+      "API_left_stopped": true,
+      "final_maximum_temperature_C": 47
+    }
+  },
+  "V2": {
+    "selection": {
+      "eligibility": "signed int32 identifier less than -10",
+      "order": "signed ascending unique FIRST4",
+      "query_count_cap": 4096,
+      "max_selected": 4,
+      "replacements": 0,
+      "identifier_conversion": "Pass original int32 unchanged",
+      "returned_count": 59,
+      "eligible_count": 59,
+      "returned_list_fingerprint": "1bda0d33368f0f33",
+      "same_returned_list_as_v1": true,
+      "untested_count": 55
+    },
+    "direct_control": {
+      "full_byte_parity": true,
+      "atomics": "not_allowed",
+      "hipblas_control_atomics": "not_allowed",
+      "pointer_mode": "host",
+      "same_stream_checked": true
+    },
+    "candidates": [
+      {
+        "solution_id": -605559732,
+        "full_byte_parity": true,
+        "finite_elements": 10485760,
+        "post_timing_parity": true,
+        "pairs": 8,
+        "slower_pairs": 8,
+        "median_reference_ms": 15.05791805,
+        "median_candidate_ms": 33.16495705,
+        "median_paired_saved_ms": -18.112319499999998
+      },
+      {
+        "solution_id": -605559731,
+        "full_byte_parity": true,
+        "finite_elements": 10485760,
+        "post_timing_parity": true,
+        "pairs": 8,
+        "slower_pairs": 8,
+        "median_reference_ms": 15.1883216,
+        "median_candidate_ms": 32.2883949,
+        "median_paired_saved_ms": -17.1302366
+      },
+      {
+        "solution_id": -605559730,
+        "full_byte_parity": true,
+        "finite_elements": 10485760,
+        "post_timing_parity": true,
+        "pairs": 8,
+        "slower_pairs": 8,
+        "median_reference_ms": 15.11751935,
+        "median_candidate_ms": 33.655756,
+        "median_paired_saved_ms": -18.533681899999994
+      },
+      {
+        "solution_id": -605559729,
+        "full_byte_parity": true,
+        "finite_elements": 10485760,
+        "post_timing_parity": true,
+        "pairs": 8,
+        "slower_pairs": 8,
+        "median_reference_ms": 15.133439549999999,
+        "median_candidate_ms": 29.783919349999998,
+        "median_paired_saved_ms": -14.6824794
+      }
+    ],
+    "slower_pairs_total": 32,
+    "speed_winner": false,
+    "integration": false,
+    "actual_review_sha256": "61444576602ab2c4e3bbe8800661808f51ead26c07584ffa375d72c2939b17a7",
+    "archive_bytes": 73165,
+    "evidence": {
+      "archive_sha256": "581073f66f2a0bdd5106193af473e60df57b95f7b3f26c672e2d3cdb25ee0648",
+      "extraction_sha256": "0b53b271c3e06a8e673674d2b7d6d5ec52df962147764080c29445c262d5c032",
+      "collection_sha256": "fbad78db7316dd9ffbb845a4cb5031e224ed99974aa22dbfb6ef91b94f15edb2",
+      "stdout_sha256": "a6e952c1465270774aa6e9e2047b4e4b0cbc10a4540a3e1eb5563b09fa978f2b",
+      "analysis_sha256": "eae920dda18c36874c91426372c5c7385ad8b3a91dde5401a333d106813ffaa9",
+      "summary_sha256": "42318895bc8562dffcf64dc62b09a49c44fd12b392b9bc77ebd0c64813b9d01e",
+      "runtime_manifest_sha256": "ff923cf4413f0574ece2e4526ba9844ac47db7977c0e06c568e3143263104351",
+      "runtime_review_sha256": "af38ced7523b5ce7d77d4a2cbdb9257c40ef54e1e7bfd5201de58d82e97c5fd7",
+      "build_review_sha256": "b4d1b67bebbe07455e95dc04d2c80111a2799f90c545e9ee42d895eb5e546c9a",
+      "probe_sha256": "a70c2e6e70cdd902f45c36d072ef811744afbcd2ea057522ef19568e43c9c7e1",
+      "member_sha256": "9b0d9fb8cf20c97bb81e43b363e6a6b68d32af0d36234b90ed058ad4433ad048"
+    },
+    "cleanup": {
+      "passed": true,
+      "API_left_stopped": true,
+      "final_maximum_temperature_C": 46,
+      "sampled_peak_temperature_C": 68,
+      "both_GPUs_finally_idle": true
+    }
+  },
+  "explanatory_half_output_timing": {
+    "purpose": "Explanation only; not a precision-preserving candidate or model-speed result.",
+    "V1": {
+      "median_fp32_ms": 15.115196699999998,
+      "median_fp16_ms": 10.35727835,
+      "median_paired_saved_ms": 4.8175192000000004,
+      "positive_pairs": 8
+    },
+    "V2": {
+      "median_fp32_ms": 15.10607815,
+      "median_fp16_ms": 10.23767855,
+      "median_paired_saved_ms": 4.8570394,
+      "positive_pairs": 8
+    }
+  },
+  "independent_review": {
+    "both_actual_reviews_passed": true,
+    "files_rehashed_per_attempt": 18,
+    "parser_recomputed_exactly": true,
+    "no_additional_execution_by_reviewer": true
+  },
+  "unchanged_option_verdict": "../2026-10-12-gfx906-c183-prompt-f16-abba/README.md",
+  "limitations": [
+    "Only four of59 returned solutions tested; no claim about the other55.",
+    "Full parity applies to this finite narrow-range fixture, not general numerical equivalence or model quality.",
+    "Individual FP16 products fit exactly in FP32, but long sums can still round or vary with order.",
+    "No unique internal cause isolated, no speed winner or engine integration."
+  ],
+  "privacy": "Only aggregate measurements, solution identifiers and hashes; no model/sample code, output arrays, private paths or process identifiers."
+}
