@@ -54,3 +54,11 @@ Both OFF and ON recover all **three fixed key-value answers** from one 65,536-to
 This is **one bounded free-generation task, not three independent quality samples**. Accepted/offered work is **26/30** in both arms, but cache hits differ **18,139→18,101**, with 19,680 lookups each. No equal-work or TG benchmark claim follows.
 
 The **233-check actual audit passed**; cleanup passed, API stayed stopped, final sampled maximum **55 C**. Earlier trajectory divergence and USER-/assistant-role likelihood findings remain unchanged. No general-quality certification, global F16 promotion or PR.
+
+## Final synthetic retrieval step: 200K needle pass (2026-10-12)
+
+Both OFF and ON recover all **three fixed answers** from one **200,000-token** repeated-public-filler prompt, at approximately **10.009% / 49.9875% / 89.966% depth**, without an answer seed. Both produce the same **35 output tokens including natural EOS** and pass exact decoded-answer checking.
+
+Diagnostic prompt time is **325,656.6→268,733.4 ms**, while short decode is **833.1→1,070.5 ms**. Decode work differs (accepted/offered **25/30→25/29**); these are neither balanced performance results nor a TG benchmark.
+
+The **233-check actual audit passed**; cleanup passed, API stayed stopped, final sampled maximum **55 C**. This completes the predefined synthetic retrieval sequence. All prior findings remain intact. One bounded retrieval task does not establish broad quality or long-output behavior. **Exact c183 remains the unchanged default; approximate F16 remains experimental. No promotion or PR.**

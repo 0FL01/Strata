@@ -471,5 +471,112 @@
       "Decode cache work differs; no TG benchmark or equal-work acceleration is claimed.",
       "All earlier approximation, divergent-trajectory and role-specific likelihood findings remain unchanged."
     ]
+  },
+  "follow_on_200k_free_generation_needle": {
+    "date": "2026-10-12",
+    "status": "PASS_BOUNDED_NEEDLE_TASK",
+    "scope": {
+      "task_count": 1,
+      "simultaneous_retrieval_targets": 3,
+      "prompt_tokens": 200000,
+      "filler": "Repeated public-source document text",
+      "target_depth_percent_approx": [
+        10.009,
+        49.9875,
+        89.966
+      ],
+      "generation": "Natural free generation",
+      "answer_tokens_seeded": false,
+      "teacher_forced": false,
+      "treatment": "Original c183 HIP_PROMPT_F16 OFF/ON",
+      "output_cap_including_EOS": 64
+    },
+    "result": {
+      "OFF_exact_fixed_key_value_answers": true,
+      "ON_exact_fixed_key_value_answers": true,
+      "OFF_natural_EOS": true,
+      "ON_natural_EOS": true,
+      "output_tokens_including_EOS": {
+        "OFF": 35,
+        "ON": 35
+      },
+      "full_output_token_sequences_equal": true,
+      "same_decoded_bytes_sha256": "be011d0db74e0b30cac4c0bba5d01fa8e39acda7228277a2387898fd800180bf",
+      "judge_scope": "Exact original-token-byte decoding with natural EOS; at most one optional terminal LF permitted."
+    },
+    "diagnostic_timing_ms": {
+      "prompt": {
+        "OFF": 325656.6,
+        "ON": 268733.4
+      },
+      "short_decode": {
+        "OFF": 833.1,
+        "ON": 1070.5
+      },
+      "balanced_performance_benchmark": false,
+      "TG_benchmark": false,
+      "scope": "Diagnostic accounting for one bounded task; short decode work differs."
+    },
+    "decode_work": {
+      "accepted": {
+        "OFF": 25,
+        "ON": 25
+      },
+      "offered": {
+        "OFF": 30,
+        "ON": 29
+      },
+      "cache_hits": {
+        "OFF": 18255,
+        "ON": 17783
+      },
+      "lookups": {
+        "OFF": 19680,
+        "ON": 19200
+      },
+      "all_work_equal": false
+    },
+    "interpretation": {
+      "bounded_task_passed": true,
+      "three_independent_quality_samples": false,
+      "general_quality_certified": false,
+      "long_output_qualified": false,
+      "repeatability_qualified": false,
+      "hidden_tensor_finiteness_proven": false,
+      "performance_qualified": false,
+      "prior_results_unchanged": true,
+      "synthetic_retrieval_sequence_complete": true,
+      "exact_c183_default_unchanged": true,
+      "approximate_F16_status": "experimental",
+      "promoted": false,
+      "PR_created": false
+    },
+    "independent_actual_audit": {
+      "passed": true,
+      "checks_passed": 233
+    },
+    "cleanup": {
+      "passed": true,
+      "api_stayed_stopped": true,
+      "final_max_sampled_temperature_c": 55
+    },
+    "sha256": {
+      "analysis": "37a5b8674e6f1fe2dee0fe1496c6d85051751c90a32eb138671504e91083435e",
+      "actual_audit": "ba61999e2d4faf87604573ff19f69ed3e97ab21d9b5782ca9c9f1214f91132c3",
+      "fixture_manifest": "28033ea8bba0a2a85d8a820162bb084e090ce43f5ddd15d97bf36bb34fcfb1cc",
+      "fixture_actual_audit": "9d9040b694179b2228a0e2c736a5fc22d2a503d08dd384b16c6f26da449f5717",
+      "judge": "fe6273d42c8825be3a4b1095d07774fadd27f1ae9efb6c2682e0b805f9a1c58a",
+      "decode_table": "9720bb8c74f2b61eeccf3c49c8793dea6b153d1d17d0e074b0455c3bcf819876",
+      "raw_archive": "3df22a0a3348cd2e7e64dc6494eb8f2fd7217a999c782cc710410ee2d66f0490",
+      "extraction": "b0a0542616b1159eb39bc7bfb41c25a313a3de5f96c0fb56e77340b70fe7e0b7",
+      "original_binary": "c18316d678a669c309cb95e2f5de9af03fa5573256fd0e093aafc4b41000d049"
+    },
+    "limitations": [
+      "One synthetic repeated-public-filler prompt with three retrieval targets is a bounded task, not three independent quality samples.",
+      "A short natural-EOS answer does not establish long-output behavior, general quality or hidden numerical health.",
+      "Prompt and short-decode times are diagnostic-only; decode work differs and no TG acceleration is claimed.",
+      "All earlier approximate arithmetic, divergent-trajectory and role-specific likelihood findings remain unchanged.",
+      "The predefined synthetic retrieval sequence is complete; no additional tests follow from this receipt."
+    ]
   }
 }
