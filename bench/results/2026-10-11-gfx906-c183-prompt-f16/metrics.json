@@ -194,5 +194,101 @@
       "original_binary": "c18316d678a669c309cb95e2f5de9af03fa5573256fd0e093aafc4b41000d049"
     },
     "next_step": "Quality smoke pending; no further speed runs before quality review. No PR or promotion."
+  },
+  "follow_on_user_text_likelihood": {
+    "date": "2026-10-12",
+    "status": "NARROW_USER_TEXT_LIKELIHOOD_DIAGNOSTIC_ONLY",
+    "scope": {
+      "fixtures": "Two new public-repository excerpt fixtures: docs4k and code64k.",
+      "role_sequence": "user(long excerpt), assistant acknowledgment, user(disjoint excerpt)",
+      "scored_role": "USER text",
+      "scored_targets_per_fixture_per_arm": 512,
+      "assistant_task_benchmark": false,
+      "representative_quality_corpus": false,
+      "treatment": "Original c183 HIP_PROMPT_F16 OFF/ON; teacher-forced fixed targets.",
+      "primary_scored_fields_finite": true,
+      "all_teacher_forced_positions_aligned": true,
+      "temperature_note": "Scores use raw-logit normalization without temperature division; greedy output temperature does not alter this normalization."
+    },
+    "fixtures": {
+      "docs4k": {
+        "scored_targets": 512,
+        "primary_unconditional": {
+          "OFF_mean_NLL": 5.857475606136719,
+          "ON_mean_NLL": 6.388835818970703,
+          "ON_minus_OFF_mean_NLL": 0.5313602128339845,
+          "ON_over_OFF_perplexity_ratio": 1.7012447905260468
+        },
+        "OFF_ON_argmax_agreement_fraction": 0.984375,
+        "worse_target_NLL_positions": 492,
+        "better_target_NLL_positions": 20,
+        "all_positions_retained": true,
+        "post_run_descriptive_decomposition": {
+          "im_end_mass_penalty_delta_mean": 0.5192651649121094,
+          "conditional_without_im_end_delta_mean_NLL": 0.012095047921874984,
+          "conditional_without_im_end_perplexity_ratio": 1.0121684888056515,
+          "additive_residual": 0,
+          "replaces_primary_unconditional_metric": false
+        }
+      },
+      "code64k": {
+        "scored_targets": 512,
+        "primary_unconditional": {
+          "OFF_mean_NLL": 4.091674711570312,
+          "ON_mean_NLL": 4.3475712562558595,
+          "ON_minus_OFF_mean_NLL": 0.25589654468554723,
+          "ON_over_OFF_perplexity_ratio": 1.2916190961676175
+        },
+        "OFF_ON_argmax_agreement_fraction": 0.95703125,
+        "worse_target_NLL_positions": 386,
+        "better_target_NLL_positions": 126,
+        "all_positions_retained": true,
+        "post_run_descriptive_decomposition": {
+          "im_end_mass_penalty_delta_mean": 0.22721557374609375,
+          "conditional_without_im_end_delta_mean_NLL": 0.028680970939453133,
+          "conditional_without_im_end_perplexity_ratio": 1.0290962304954627,
+          "additive_residual": 2.7755575615628914e-17,
+          "replaces_primary_unconditional_metric": false
+        }
+      }
+    },
+    "interpretation": {
+      "summary": "Unconditional USER-text target likelihood worsens on both fixtures; most aggregate NLL shift is in the im_end mass penalty.",
+      "conditional_metric_is_post_run_localization": true,
+      "numerical_mechanism_causally_identified": false,
+      "general_assistant_quality_degradation_established": false,
+      "quality_pass": false,
+      "representative_quality_qualified": false,
+      "full_vocab_KL_observed": false,
+      "all_hidden_tensor_finiteness_proven": false,
+      "high_argmax_agreement_does_not_establish_probability_calibration": true,
+      "global_F16_promotion": false
+    },
+    "independent_actual_audit": {
+      "passed": true,
+      "checks_passed": 423,
+      "score_health_passed": true,
+      "alignment_passed": true
+    },
+    "independent_score_arithmetic_review": {
+      "passed": true,
+      "all_positions_retained": true
+    },
+    "cleanup": {
+      "passed": true,
+      "api_stayed_stopped": true,
+      "final_max_sampled_temperature_c": 53
+    },
+    "sha256": {
+      "analysis": "ee1571966b05b55380f9dff0efe95e3d93cd2fd3f6de32e8757be44dab7d5c30",
+      "actual_audit": "8927351fb69fb91a7d34532d7e0f19a9622c8c5fc6a62d938dbdd86d6889c5bd",
+      "score_arithmetic_audit": "7eea3a60aa5e33e03799cb49ae72b64eb819334baa3ffb8ad10af2f4546f4c63",
+      "fixture_manifest": "82b82af39c5d8a99388eb745efa5b668d07c855e41906ba15619ccc5aafc428e",
+      "fixture_actual_audit": "af0d1b17d157f41a7de310e4b8ce2b6ad5d3bd7d976056507d4aa3bde2fda5be",
+      "raw_archive": "0008464603a469c974b6ea4a20c732d36c42de0c954d2b9131a7fd131c17ec1e",
+      "extraction": "4bbee7c36592b547206815f89ae59d692a32126c645b4cf6a3dc617fa3d55f41",
+      "original_binary": "c18316d678a669c309cb95e2f5de9af03fa5573256fd0e093aafc4b41000d049"
+    },
+    "next_step": "Prepare an assistant-role 4K fixture. No GPU execution for that next fixture yet; no global F16 promotion."
   }
 }

@@ -23,3 +23,18 @@ PP measured **646.841→799.522 tokens/s (+23.604045%)**, with all 16 prompt-pro
 - Cache misses: **17,890→30,106**
 
 INFO matches. The **223-check actual audit passed**; cleanup passed, API stayed stopped, final sampled maximum **53 C**. Approximate arithmetic, unseen hidden/logit/output finiteness and the single ordered pair remain limiting. Neither quality preservation nor quality loss is established. **Quality smoke is pending. No further speed runs before quality review; no PR or promotion.**
+
+## Follow-on: narrow USER-text likelihood diagnosis (2026-10-12)
+
+Two new public-repository fixtures (4K docs / 64K code) score **512 teacher-forced USER-text targets each**. Their role sequence is user excerpt → assistant acknowledgment → user disjoint excerpt. **This is not an assistant-task benchmark.** Scored fields are finite and every target position is aligned.
+
+Primary unconditional mean-NLL changes, ON minus OFF:
+
+- 4K docs: **+0.531360**, perplexity ratio **1.701245**; NLL worsens at **492/512** positions
+- 64K code: **+0.255897**, perplexity ratio **1.291619**; NLL worsens at **386/512** positions
+
+OFF/ON argmax agreement remains **98.4375% / 95.703125%**; agreement does not establish probability calibration. Post-run arithmetic localizes most aggregate NLL increase to the **im_end probability-mass penalty: +0.519265 / +0.227216**. Conditional NLL changes after excluding im_end are **+0.012095 / +0.028681**. **The unconditional results remain primary; this conditional diagnostic does not replace them.** Every scored position is retained.
+
+These findings establish worse target likelihood on these USER-text fixtures, **not general assistant-quality degradation or a quality pass**. They do not identify the numerical cause, establish full-vocabulary KL or prove all hidden tensors finite. The actual audit passed **423 checks**, with an independent score-arithmetic review; cleanup passed, API stayed stopped, final sampled maximum **53 C**.
+
+The earlier pending quality check has yielded this narrow diagnosis. Assistant-role 4K fixture preparation is next, with no GPU execution for it yet. No global F16 promotion.
