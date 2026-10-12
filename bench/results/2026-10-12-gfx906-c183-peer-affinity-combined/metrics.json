@@ -1,0 +1,563 @@
+{
+  "schema": "gfx906.c183.N4_peer_affinity_combined_qualification.v1",
+  "date": "2026-10-12",
+  "decision": "PASS_FROZEN_COMBINED_PROFILE_BLOCK_GATES",
+  "experiment": {
+    "same_binary": true,
+    "prompt_tokens": 65536,
+    "outputs_per_arm": 1024,
+    "fresh_processes": 8,
+    "order": [
+      "A1",
+      "B1",
+      "B2",
+      "A2",
+      "B3",
+      "A3",
+      "A4",
+      "B4"
+    ],
+    "treatments": {
+      "A": {
+        "N4": 0,
+        "peer_affinity": 0
+      },
+      "B": {
+        "N4": 1,
+        "peer_affinity": 1
+      }
+    },
+    "global_F16": 0,
+    "shadow": 0,
+    "decode_boundary_profilers_absent": true,
+    "all_eight_retained": true,
+    "excluded_arms": [],
+    "additional_repeats": 0
+  },
+  "qualification": {
+    "passed": true,
+    "frozen_criteria": {
+      "PP": {
+        "both_chronological_pairs_strictly_positive": true,
+        "each_block_separately": true,
+        "mean_rate_gain_min_pct": 1
+      },
+      "TG": {
+        "each_block_separately": true,
+        "mean_rate_ratio_min": 1,
+        "statistical_zero_loss_proven": false
+      }
+    },
+    "block_gate_status": {
+      "ABBA": {
+        "PP_gate_passed": true,
+        "TG_gate_passed": true,
+        "rate_and_exactness_gates_passed": true
+      },
+      "BAAB": {
+        "PP_gate_passed": true,
+        "TG_gate_passed": true,
+        "rate_and_exactness_gates_passed": true
+      }
+    },
+    "pooled_cannot_rescue_failing_block": true,
+    "statistical_zero_loss_proven": false,
+    "all_individual_TG_pairs_nonnegative": false,
+    "default_promotion": false,
+    "clean_current_main_port_qualified": false
+  },
+  "timing_definitions": {
+    "rate_comparison": "Arithmetic means of per-arm native rates, not reciprocals of mean durations.",
+    "PP": "Prompt tokens per second using native prompt_ms.",
+    "TG": "Generated tokens per second using native decode_ms.",
+    "native_timed_sum": "prompt_ms plus decode_ms; excludes final commit wait and post-timer reporting.",
+    "request_wall": "Submission through DONE handling and binding; excludes model load.",
+    "delta": "ON minus OFF for time changes; percentage rate changes compare ON/OFF.",
+    "CPU_scope": "Calling peer-task thread only via RUSAGE_THREAD; excludes descendants/helpers and includes caller-executed runtime/driver/polling work. Not useful-compute, total-process CPU or energy accounting.",
+    "peer_task_wall": "Task intervals overlap primary PP and are not additive to request duration.",
+    "affinity_scope": "Verified allowed-mask expansion/restoration does not establish actual core residency or exclusive/spare-core use."
+  },
+  "arms": {
+    "A1": {
+      "mode": "A",
+      "PP": 646.2032992496327,
+      "TG": 53.92851312137602,
+      "decode_ms": 18988.1,
+      "prompt_ms": 101417,
+      "prompt_plus_decode_ms": 120405.1,
+      "request_wall_s": 120.56958932901034,
+      "peer_caller": {
+        "calling_thread_cpu_ms": 41436.602,
+        "involuntary": 14281,
+        "peer_task_wall_ms": 78214.475177,
+        "treatment_active": false,
+        "voluntary": 36
+      },
+      "validation": {
+        "historical_outputs_and_work_equal": true,
+        "expanded_tasks": 0,
+        "all_restored": true,
+        "persistent_census_equal": true,
+        "N4_calls": {
+          "calls": 1536,
+          "takes": 0,
+          "fallback": 1536,
+          "shadow": 0
+        }
+      }
+    },
+    "B1": {
+      "mode": "B",
+      "PP": 673.5519650233147,
+      "TG": 53.9100586482474,
+      "decode_ms": 18994.6,
+      "prompt_ms": 97299.1,
+      "prompt_plus_decode_ms": 116293.7,
+      "request_wall_s": 116.46236051298911,
+      "peer_caller": {
+        "calling_thread_cpu_ms": 74535.419,
+        "involuntary": 241,
+        "peer_task_wall_ms": 74892.32263,
+        "treatment_active": true,
+        "voluntary": 44
+      },
+      "validation": {
+        "historical_outputs_and_work_equal": true,
+        "expanded_tasks": 16,
+        "all_restored": true,
+        "persistent_census_equal": true,
+        "N4_calls": {
+          "calls": 1536,
+          "takes": 1536,
+          "fallback": 0,
+          "shadow": 0
+        }
+      }
+    },
+    "B2": {
+      "mode": "B",
+      "PP": 673.797803083579,
+      "TG": 53.86270270838922,
+      "decode_ms": 19011.3,
+      "prompt_ms": 97263.6,
+      "prompt_plus_decode_ms": 116274.9,
+      "request_wall_s": 116.43226452003,
+      "peer_caller": {
+        "calling_thread_cpu_ms": 74343.39,
+        "involuntary": 297,
+        "peer_task_wall_ms": 74822.722872,
+        "treatment_active": true,
+        "voluntary": 49
+      },
+      "validation": {
+        "historical_outputs_and_work_equal": true,
+        "expanded_tasks": 16,
+        "all_restored": true,
+        "persistent_census_equal": true,
+        "N4_calls": {
+          "calls": 1536,
+          "takes": 1536,
+          "fallback": 0,
+          "shadow": 0
+        }
+      }
+    },
+    "A2": {
+      "mode": "A",
+      "PP": 646.0122034165623,
+      "TG": 53.284766488877324,
+      "decode_ms": 19217.5,
+      "prompt_ms": 101447,
+      "prompt_plus_decode_ms": 120664.5,
+      "request_wall_s": 120.83515792700928,
+      "peer_caller": {
+        "calling_thread_cpu_ms": 41479.724,
+        "involuntary": 14269,
+        "peer_task_wall_ms": 78302.37892,
+        "treatment_active": false,
+        "voluntary": 23
+      },
+      "validation": {
+        "historical_outputs_and_work_equal": true,
+        "expanded_tasks": 0,
+        "all_restored": true,
+        "persistent_census_equal": true,
+        "N4_calls": {
+          "calls": 1536,
+          "takes": 0,
+          "fallback": 1536,
+          "shadow": 0
+        }
+      }
+    },
+    "B3": {
+      "mode": "B",
+      "PP": 667.6541841468807,
+      "TG": 53.22715624561422,
+      "decode_ms": 19238.3,
+      "prompt_ms": 98158.6,
+      "prompt_plus_decode_ms": 117396.9,
+      "request_wall_s": 117.5660748980008,
+      "peer_caller": {
+        "calling_thread_cpu_ms": 75186.99,
+        "involuntary": 326,
+        "peer_task_wall_ms": 75690.9607,
+        "treatment_active": true,
+        "voluntary": 51
+      },
+      "validation": {
+        "historical_outputs_and_work_equal": true,
+        "expanded_tasks": 16,
+        "all_restored": true,
+        "persistent_census_equal": true,
+        "N4_calls": {
+          "calls": 1536,
+          "takes": 1536,
+          "fallback": 0,
+          "shadow": 0
+        }
+      }
+    },
+    "A3": {
+      "mode": "A",
+      "PP": 646.1115591424352,
+      "TG": 53.38393685681219,
+      "decode_ms": 19181.8,
+      "prompt_ms": 101431.4,
+      "prompt_plus_decode_ms": 120613.2,
+      "request_wall_s": 120.7693191319704,
+      "peer_caller": {
+        "calling_thread_cpu_ms": 41487.676999999996,
+        "involuntary": 14264,
+        "peer_task_wall_ms": 78286.404833,
+        "treatment_active": false,
+        "voluntary": 21
+      },
+      "validation": {
+        "historical_outputs_and_work_equal": true,
+        "expanded_tasks": 0,
+        "all_restored": true,
+        "persistent_census_equal": true,
+        "N4_calls": {
+          "calls": 1536,
+          "takes": 0,
+          "fallback": 1536,
+          "shadow": 0
+        }
+      }
+    },
+    "A4": {
+      "mode": "A",
+      "PP": 646.6630289240012,
+      "TG": 53.671576078410816,
+      "decode_ms": 19079,
+      "prompt_ms": 101344.9,
+      "prompt_plus_decode_ms": 120423.9,
+      "request_wall_s": 120.57488580798963,
+      "peer_caller": {
+        "calling_thread_cpu_ms": 41499.29,
+        "involuntary": 14304,
+        "peer_task_wall_ms": 78297.633537,
+        "treatment_active": false,
+        "voluntary": 24
+      },
+      "validation": {
+        "historical_outputs_and_work_equal": true,
+        "expanded_tasks": 0,
+        "all_restored": true,
+        "persistent_census_equal": true,
+        "N4_calls": {
+          "calls": 1536,
+          "takes": 0,
+          "fallback": 1536,
+          "shadow": 0
+        }
+      }
+    },
+    "B4": {
+      "mode": "B",
+      "PP": 673.5443503713251,
+      "TG": 53.915735602287214,
+      "decode_ms": 18992.6,
+      "prompt_ms": 97300.2,
+      "prompt_plus_decode_ms": 116292.8,
+      "request_wall_s": 116.45463637099601,
+      "peer_caller": {
+        "calling_thread_cpu_ms": 74544.979,
+        "involuntary": 232,
+        "peer_task_wall_ms": 74860.760276,
+        "treatment_active": true,
+        "voluntary": 52
+      },
+      "validation": {
+        "historical_outputs_and_work_equal": true,
+        "expanded_tasks": 16,
+        "all_restored": true,
+        "persistent_census_equal": true,
+        "N4_calls": {
+          "calls": 1536,
+          "takes": 1536,
+          "fallback": 0,
+          "shadow": 0
+        }
+      }
+    }
+  },
+  "block_and_pooled_statistics": {
+    "ABBA": {
+      "CPU_cost": {
+        "OFF": {
+          "cpu_ms": 41458.163,
+          "involuntary": 14275,
+          "voluntary": 29.5,
+          "wall_ms": 78258.4270485
+        },
+        "ON": {
+          "cpu_ms": 74439.4045,
+          "involuntary": 269,
+          "voluntary": 46.5,
+          "wall_ms": 74857.522751
+        }
+      },
+      "PP_pct": 4.266646339325104,
+      "TG_pct": 0.5218399702136991,
+      "TG_ratio": 1.0052183997021369,
+      "mean": {
+        "OFF": {
+          "PP": 646.1077513330976,
+          "TG": 53.60663980512667,
+          "decode_ms": 19102.8,
+          "prompt_ms": 101432,
+          "prompt_plus_decode_ms": 120534.8,
+          "request_wall_s": 120.70237362800981
+        },
+        "ON": {
+          "PP": 673.6748840534468,
+          "TG": 53.88638067831831,
+          "decode_ms": 19002.95,
+          "prompt_ms": 97281.35,
+          "prompt_plus_decode_ms": 116284.3,
+          "request_wall_s": 116.44731251650956
+        }
+      },
+      "pairs": {
+        "B1/A1": {
+          "PP_pct": 4.232207697707378,
+          "TG_pct": -0.03422025207163568,
+          "decode_delta_ms": 6.5,
+          "native_sum_delta_ms": -4111.4,
+          "prompt_delta_ms": -4117.9,
+          "request_delta_ms": -4107.22881602123
+        },
+        "B2/A2": {
+          "PP_pct": 4.301095168182134,
+          "TG_pct": 1.0846180955536975,
+          "decode_delta_ms": -206.2,
+          "native_sum_delta_ms": -4389.6,
+          "prompt_delta_ms": -4183.4,
+          "request_delta_ms": -4402.89340697928
+        }
+      }
+    },
+    "BAAB": {
+      "CPU_cost": {
+        "OFF": {
+          "cpu_ms": 41493.4835,
+          "involuntary": 14284,
+          "voluntary": 22.5,
+          "wall_ms": 78292.019185
+        },
+        "ON": {
+          "cpu_ms": 74865.9845,
+          "involuntary": 279,
+          "voluntary": 51.5,
+          "wall_ms": 75275.860488
+        }
+      },
+      "PP_pct": 3.7457378029216697,
+      "TG_pct": 0.08162018964058311,
+      "TG_ratio": 1.0008162018964057,
+      "mean": {
+        "OFF": {
+          "PP": 646.3872940332182,
+          "TG": 53.5277564676115,
+          "decode_ms": 19130.4,
+          "prompt_ms": 101388.15,
+          "prompt_plus_decode_ms": 120518.55,
+          "request_wall_s": 120.67210246998002
+        },
+        "ON": {
+          "PP": 670.5992672591029,
+          "TG": 53.57144592395072,
+          "decode_ms": 19115.45,
+          "prompt_ms": 97729.4,
+          "prompt_plus_decode_ms": 116844.85,
+          "request_wall_s": 117.01035563449841
+        }
+      },
+      "pairs": {
+        "B3/A3": {
+          "PP_pct": 3.3341958829893694,
+          "TG_pct": -0.2936849929567598,
+          "decode_delta_ms": 56.5,
+          "native_sum_delta_ms": -3216.3,
+          "prompt_delta_ms": -3272.8,
+          "request_delta_ms": -3203.2442339696
+        },
+        "B4/A4": {
+          "PP_pct": 4.156928762736352,
+          "TG_pct": 0.4549140191443162,
+          "decode_delta_ms": -86.4,
+          "native_sum_delta_ms": -4131.1,
+          "prompt_delta_ms": -4044.7,
+          "request_delta_ms": -4120.24943699362
+        }
+      }
+    },
+    "pooled": {
+      "CPU_cost": {
+        "OFF": {
+          "cpu_ms": 41475.82325,
+          "involuntary": 14279.5,
+          "voluntary": 26,
+          "wall_ms": 78275.22311675
+        },
+        "ON": {
+          "cpu_ms": 74652.6945,
+          "involuntary": 274,
+          "voluntary": 49,
+          "wall_ms": 75066.6916195
+        }
+      },
+      "PP_pct": 4.006135739697087,
+      "TG_pct": 0.3018921474177881,
+      "TG_ratio": 1.0030189214741778,
+      "mean": {
+        "OFF": {
+          "PP": 646.2475226831579,
+          "TG": 53.567198136369086,
+          "decode_ms": 19116.6,
+          "prompt_ms": 101410.075,
+          "prompt_plus_decode_ms": 120526.675,
+          "request_wall_s": 120.68723804899491
+        },
+        "ON": {
+          "PP": 672.1370756562749,
+          "TG": 53.72891330113451,
+          "decode_ms": 19059.2,
+          "prompt_ms": 97505.375,
+          "prompt_plus_decode_ms": 116564.575,
+          "request_wall_s": 116.72883407550398
+        }
+      },
+      "pairs": {}
+    }
+  },
+  "pooled_cost": {
+    "mean_peer_caller_CPU_OFF_ms": 41475.82325,
+    "mean_peer_caller_CPU_ON_ms": 74652.6945,
+    "mean_peer_caller_CPU_increase_ms": 33176.87125,
+    "mean_peer_caller_CPU_increase_pct": 79.9908685356836,
+    "mean_native_timed_sum_change_ms": -3962.100000000006,
+    "mean_controller_request_change_ms": -3958.403973490931,
+    "mean_task_wall_change_ms": -3208.5314972500055
+  },
+  "pooled_dispersion_descriptive": {
+    "A": {
+      "PP": {
+        "n": 4,
+        "min": 646.0122034165623,
+        "max": 646.6630289240012,
+        "sample_SD": 0.2877860257722809
+      },
+      "TG": {
+        "n": 4,
+        "min": 53.284766488877324,
+        "max": 53.92851312137602,
+        "sample_SD": 0.29143072662593966
+      },
+      "prompt_ms": {
+        "n": 4,
+        "min": 101344.9,
+        "max": 101447,
+        "sample_SD": 45.14401953747772
+      },
+      "decode_ms": {
+        "n": 4,
+        "min": 18988.1,
+        "max": 19217.5,
+        "sample_SD": 103.85544440872336
+      }
+    },
+    "B": {
+      "PP": {
+        "n": 4,
+        "min": 667.6541841468807,
+        "max": 673.797803083579,
+        "sample_SD": 2.9909121193698764
+      },
+      "TG": {
+        "n": 4,
+        "min": 53.22715624561422,
+        "max": 53.915735602287214,
+        "sample_SD": 0.3353485536207572
+      },
+      "prompt_ms": {
+        "n": 4,
+        "min": 97263.6,
+        "max": 98158.6,
+        "sample_SD": 435.81502479071844
+      },
+      "decode_ms": {
+        "n": 4,
+        "min": 18992.6,
+        "max": 19238.3,
+        "sample_SD": 119.69397088686937
+      }
+    }
+  },
+  "exactness": {
+    "all_eight_outputs_match_historical": true,
+    "output_count_each": 1024,
+    "recorded_work_equal": true,
+    "work_per_arm": {
+      "accepted": 647,
+      "offered": 868,
+      "cache_hits": 580670,
+      "lookups": 598560,
+      "prompt_read": 65536,
+      "prompt_reused": 0
+    },
+    "same_mode_reproducible": true,
+    "intermediate_tensor_parity_measured_in_this_run": false
+  },
+  "audit": {
+    "independent": true,
+    "passed": true,
+    "checks": 1402,
+    "actual_review_sha256": "dd26a5916964a0780bd3f7ccee4325ca2c14141dd6cf19c2c02d0ab15250785c",
+    "binary_sha256": "48dba26a0951c85e44fe7124ef161e719495bad040b6d7d6d8e95f219b7100a8",
+    "build_review_sha256": "a90ce22f8980f302b3ab6b0cc04a07c4ec808cdc51185f6b5756bbffe889e543",
+    "runtime_manifest_sha256": "9812ab87eea3f6b6bc2ccddcf24287ec975da0851c2844e67006e814058d9cfe",
+    "runtime_review_sha256": "63500170a250a9a12276a9953ad430b8e5bc049530e38c0bd71dca203353b3e3",
+    "archive_sha256": "ee42a48082f4fc4ae2fab07d20aedc93f28fc99d61b5f978c41ea4c5341fa573",
+    "collection_sha256": "a3f92b8b8d41c76504b07ac890fa8b5a0b359a5c2ddd9736239dfecc6b637947",
+    "extraction_sha256": "ffff72a1f524d59a4870c87d163ba81b6845fb2efa4316a8720f5a7834e2d91b",
+    "summary_sha256": "30f50ceae4aab2bef855e3a771cadcfddd83f680d1e109dd8064d724acf56654"
+  },
+  "cleanup": {
+    "passed": true,
+    "api_left_stopped": true,
+    "final_maximum_temperature_C": 53
+  },
+  "limitations": [
+    "Qualification is bounded to the frozen c183-derived binary and 64K/1024 profile.",
+    "Combined N4 and affinity treatment does not isolate separate causal contributions.",
+    "B1/A1 and B3/A3 retain negative TG rate changes; no zero-run-loss or statistical-equivalence claim.",
+    "All prior N4-only adverse results and diagnostic/screening epochs are retained and not pooled here.",
+    "Historical stalls are not uniquely explained or retroactively repaired.",
+    "Shadow is off; unused zero internal mismatch/nonfinite counters provide no intermediate tensor-parity or finiteness evidence.",
+    "Sparse telemetry does not identify per-kernel or per-phase frequency/power/thermal causes.",
+    "Clean current-main port admission and default promotion require separate evidence."
+  ]
+}
