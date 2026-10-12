@@ -38,3 +38,11 @@ OFF/ON argmax agreement remains **98.4375% / 95.703125%**; agreement does not es
 These findings establish worse target likelihood on these USER-text fixtures, **not general assistant-quality degradation or a quality pass**. They do not identify the numerical cause, establish full-vocabulary KL or prove all hidden tensors finite. The actual audit passed **423 checks**, with an independent score-arithmetic review; cleanup passed, API stayed stopped, final sampled maximum **53 C**.
 
 The earlier pending quality check has yielded this narrow diagnosis. Assistant-role 4K fixture preparation is next, with no GPU execution for it yet. No global F16 promotion.
+
+## Follow-on: assistant-role supplied-answer copy sanity (2026-10-12)
+
+A narrow 4K supplied-answer copy fixture uses the canonical model Jinja template with thinking disabled. All **257 teacher-forced assistant answer targets are top-1 in both arms**. Mean NLL is **0.000148026→0.000176076** (perplexity ratio **1.000028051**). Mean im_end probability stays small, **4.936e−6→5.627e−6**, and im_end is never top-1.
+
+This is an easy **teacher-forced copy sanity pass, not free-generation or general-quality qualification**. The earlier USER-text drift remains unchanged; these different fixtures and roles must be interpreted separately and do not isolate a causal role effect. No global F16 promotion follows.
+
+The actual audit passed **250 checks**, with a sealed arithmetic supplement. Cleanup passed, API stayed stopped, final sampled maximum **46 C**. Long-context free-generation needle work is still planning, with no result included here.

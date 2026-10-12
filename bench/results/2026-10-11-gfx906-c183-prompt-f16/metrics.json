@@ -290,5 +290,93 @@
       "original_binary": "c18316d678a669c309cb95e2f5de9af03fa5573256fd0e093aafc4b41000d049"
     },
     "next_step": "Prepare an assistant-role 4K fixture. No GPU execution for that next fixture yet; no global F16 promotion."
+  },
+  "follow_on_assistant_copy_sanity": {
+    "date": "2026-10-12",
+    "status": "PASS_NARROW_TEACHER_FORCED_ASSISTANT_COPY_SANITY",
+    "scope": {
+      "context": "4K",
+      "task": "Easy supplied-answer copy",
+      "scored_role": "ASSISTANT answer",
+      "scored_targets_per_arm": 257,
+      "teacher_forced": true,
+      "free_generation": false,
+      "chat_template": "Canonical model Jinja",
+      "thinking_enabled": false,
+      "excluded_targets": "Header, thought and end controls",
+      "treatment": "Original c183 HIP_PROMPT_F16 OFF/ON"
+    },
+    "result": {
+      "primary_unconditional": {
+        "OFF_mean_NLL": 0.0001480257315175097,
+        "ON_mean_NLL": 0.00017607635019455253,
+        "ON_minus_OFF_mean_NLL": 0.000028050618677042814,
+        "ON_over_OFF_perplexity_ratio": 1.0000280510120994
+      },
+      "target_is_top1_count": {
+        "OFF": 257,
+        "ON": 257
+      },
+      "OFF_ON_argmax_agreement_fraction": 1,
+      "mean_im_end_probability": {
+        "OFF": 0.0000049356829828473,
+        "ON": 0.000005626844549728657
+      },
+      "im_end_top1_count": {
+        "OFF": 0,
+        "ON": 0
+      },
+      "post_run_descriptive_decomposition": {
+        "conditional_without_im_end_delta_mean_NLL": 0.000027359354085603117,
+        "im_end_mass_penalty_delta_mean": 6.912645914396844e-7,
+        "additive_residual": -1.0587911840678754e-22,
+        "replaces_primary_unconditional_metric": false
+      },
+      "all_positions_retained": true
+    },
+    "interpretation": {
+      "narrow_copy_sanity_passed": true,
+      "prior_USER_text_drift_retained": true,
+      "role_sensitive_reading_required": true,
+      "isolated_causal_role_effect_established": false,
+      "free_generation_accuracy_measured": false,
+      "general_quality_qualified": false,
+      "long_context_qualified": false,
+      "all_hidden_tensor_finiteness_proven": false,
+      "full_vocab_KL_observed": false,
+      "performance_qualified": false,
+      "global_F16_promotion": false
+    },
+    "independent_actual_audit": {
+      "passed": true,
+      "checks_passed": 250,
+      "primary_score_health_passed": true,
+      "teacher_forced_alignment_passed": true
+    },
+    "independent_score_arithmetic_review": {
+      "passed": true
+    },
+    "cleanup": {
+      "passed": true,
+      "api_stayed_stopped": true,
+      "final_max_sampled_temperature_c": 46
+    },
+    "sha256": {
+      "analysis": "a7478084b114eb4dfd88663b735664bf80977faf5919edd1282fe43beb47ae54",
+      "actual_audit": "a0d9d0a2685bf5881328006ac8e058c508ad8e86fc7240ae8ef3a31c948b4a84",
+      "score_arithmetic_audit": "d4f324d8abdfaf8cd70e975f9ed9cdae9fae604527a8d210adbaf23e37c65121",
+      "fixture_manifest": "3140781c1386e80fa341109c767fc4cc881af90db1f9d89cfd912652f85270d8",
+      "fixture_actual_audit": "6db401c6c380432c8069ab2cf0dd16e9f0e0de4590b0da7c9c485692f9e3fe77",
+      "raw_archive": "c36c9d4fe5e825a009bd63fd90cdd7693552b22844260ac576ce1e91d5c89b0b",
+      "extraction": "3af9fe4f04a0c9c235c5fd66c1d4cdd0d21a15b2ca150ff34cb84bce7d6a92b0",
+      "original_binary": "c18316d678a669c309cb95e2f5de9af03fa5573256fd0e093aafc4b41000d049"
+    },
+    "limitations": [
+      "One supplied-answer teacher-forced fixture does not establish free-generation copying or representative quality.",
+      "The earlier USER-text likelihood drift remains valid in its different fixture/role scope.",
+      "Different fixtures and roles do not isolate a causal role effect.",
+      "No general-quality or promotion decision follows from this narrow pass."
+    ],
+    "next_step": "Long-context free-generation needle task is only being planned; no GPU result for it is included."
   }
 }
