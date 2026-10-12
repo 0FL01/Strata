@@ -1,0 +1,368 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-12",
+  "experiment": "c183-derived HC BF16 N4 shadow and 64K model ABBA",
+  "disposition": "Frozen 64K exact-output/work ABBA PP and practical TG gates pass for the pinned opt-in path; no default promotion.",
+  "pinned_scope": {
+    "hardware": "gfx906",
+    "reference_backend": "Pinned c183 rocBLAS BF16 GSU3 path",
+    "N": 4,
+    "K": 10240,
+    "T": [
+      4096,
+      4095
+    ],
+    "same_derived_binary_for_OFF_ON": true,
+    "derived_binary_sha256": "ba130bd3742f3f1d53cf0c65f38732400f2ceed4f5d78038aa0f84783d5bc863",
+    "production_flags": {
+      "STRATA_HC_BF16_N4": {
+        "OFF": 0,
+        "ON": 1
+      },
+      "STRATA_HC_BF16_N4_SHADOW": 0,
+      "STRATA_HIP_PROMPT_F16": 0
+    },
+    "broad_library_hardware_or_shape_portability_established": false,
+    "default_promoted": false,
+    "PR_submission_included": false,
+    "rocBLAS_version": "5.5.0",
+    "hipBLAS_version": "3.5.0",
+    "recorded_library_build_revision": "cd957402309",
+    "guards": [
+      "gfx906",
+      "BF16 N4/K10240/T4096 or T4095",
+      "Packed original strides, alpha1, beta0, FP32 output",
+      "Valid existing same-stream scratch lease",
+      "Disjoint buffers",
+      "Explicit opt-in and global prompt-F16 OFF"
+    ],
+    "compatibility_limit": "Arithmetic compatibility is tied to the pinned installed GSU3 schedule, not all gfx906 library versions.",
+    "original_baseline_binary_sha256": "c18316d678a669c309cb95e2f5de9af03fa5573256fd0e093aafc4b41000d049",
+    "source_sha256": {
+      "prefill": "db66a66d96420bac3303cc27a984b16eaec5583b02823042f2798771e825d8bc",
+      "kernel": "47c656551a8d78042944e4ed540cfbf0a985d4372299fc1b165a46b517052be8",
+      "core": "b9799bad3fb1ca3d56af907ab5c5c98eed6b06b9b7d19da76bfca15aa02e1527"
+    }
+  },
+  "shadow": {
+    "prompt_tokens": 65536,
+    "output_count": 1,
+    "real_activation_calls": 1536,
+    "FP32_elements_compared": 25165440,
+    "mismatches": 0,
+    "nonfinite_outputs": 0,
+    "errors": 0,
+    "OFF_ON_first_output_and_recorded_work_equal": true,
+    "reference_output_preserved_downstream": true,
+    "candidate_output_trajectory_validated_by_shadow": false,
+    "ON_coverage": [
+      {
+        "owner": 0,
+        "T": 4095,
+        "calls": 54,
+        "takes": 54,
+        "fallback": 0,
+        "shadow": 54,
+        "words": 884520,
+        "mismatches": 0,
+        "nonfinite": 0,
+        "errors": 0
+      },
+      {
+        "owner": 0,
+        "T": 4096,
+        "calls": 810,
+        "takes": 810,
+        "fallback": 0,
+        "shadow": 810,
+        "words": 13271040,
+        "mismatches": 0,
+        "nonfinite": 0,
+        "errors": 0
+      },
+      {
+        "owner": 1,
+        "T": 4095,
+        "calls": 42,
+        "takes": 42,
+        "fallback": 0,
+        "shadow": 42,
+        "words": 687960,
+        "mismatches": 0,
+        "nonfinite": 0,
+        "errors": 0
+      },
+      {
+        "owner": 1,
+        "T": 4096,
+        "calls": 630,
+        "takes": 630,
+        "fallback": 0,
+        "shadow": 630,
+        "words": 10321920,
+        "mismatches": 0,
+        "nonfinite": 0,
+        "errors": 0
+      }
+    ],
+    "performance_qualified": false,
+    "timings_omitted_as_diagnostic_only": true,
+    "audit": {
+      "passed": true,
+      "checks": 306
+    },
+    "cleanup": {
+      "passed": true,
+      "API_off": true,
+      "sampled_peak_C": 79,
+      "final_maximum_C": 55
+    },
+    "evidence_sha256": {
+      "actual_review": "d0d9d3013558f706b15667d327faf96b238835e6afc880265ac660934e436dde",
+      "archive": "20681239fa9b695b1fb100fe4b409488c5b0add0329b1b54c390a8a87b696b31",
+      "collection": "bef6f547bb17b071babf30b70edb928e775c5771ac5c1a7cac3aaf61686a0f98",
+      "extraction": "abea05b34888d6df142967348bbcce08073357c86316fd722fcb87771c2de380",
+      "runtime_manifest": "5dfe9a0c164ab8281c66400ec8ef9eb2bb8ba916b46c9ad7deec3d8559645734",
+      "runtime_review": "18268555de670eac9633d2f6d9f83a9c5afb1c1acfc375cb1ec5329291ff96e3",
+      "build_review": "89f7a9a9fa5c98cf325d4109c4f6d58e6d8dc0e57789a5fa756b340498741e2d",
+      "probe": "ba130bd3742f3f1d53cf0c65f38732400f2ceed4f5d78038aa0f84783d5bc863",
+      "summary": "7b5c1626bc90399998256770a32a54e6014d1b495463f070909a6777003eaef7",
+      "OFF_stdout": "bcb58fe9079239880584e69625d6d30b622fb87699f66437f02952cf0429398f",
+      "OFF_stderr": "4f368aa7ebbab0dd1924cec5fe700a02e97a7871efcd3865342ff1358c373a27",
+      "ON_stdout": "d0d50fe85deff3dd7f0bfdb8114b0315bf9f5fe5958161d08b982495aa95f1fc",
+      "ON_stderr": "8f08ba60a7c9d548661ac413e5e38b2ca7491ff2b72feab65ffe7ed711c54515"
+    },
+    "inherited_label_correction": "Inherited timing_scope referred to shared-fork; sealed source, environment and shadow records define the actual N4 shadow scope.",
+    "evidence_limit": "Full tensor words stayed private; independent review checks compiled comparison/ISA, raw aggregate records and bindings."
+  },
+  "model_ABBA": {
+    "prompt_tokens_per_arm": 65536,
+    "output_tokens_per_arm": 1024,
+    "decoding": "fixed greedy",
+    "order": [
+      "A1_OFF",
+      "B1_ON",
+      "B2_ON",
+      "A2_OFF"
+    ],
+    "fresh_processes": 4,
+    "retries": 0,
+    "excluded_arms": 0,
+    "arms": {
+      "A1": {
+        "prompt_ms": 101318.2,
+        "decode_ms": 19013.1,
+        "PP_tokens_per_second": 646.8334415731823,
+        "TG_tokens_per_second": 53.857603441837476,
+        "all1024_output_tokens_match_historical": true,
+        "raw_stdout_sha256": "58cac0afe78abd4f69cf6be19692d0dbfcca875c291d7228a6e37179945bc4cc",
+        "raw_stderr_sha256": "4a3e0b9393e62e7b2bdf90dc66c333e775edf6de8dcc15ee18af63fdc9c13428"
+      },
+      "B1": {
+        "prompt_ms": 98587.2,
+        "decode_ms": 19037.2,
+        "PP_tokens_per_second": 664.7516107567717,
+        "TG_tokens_per_second": 53.78942281427941,
+        "all1024_output_tokens_match_historical": true,
+        "raw_stdout_sha256": "57f5a76e02158c4f186e625eaf2eec02bf0ab864240525b5151fa67e86921fab",
+        "raw_stderr_sha256": "5cc250a6df310cc38c55971849b08719e51fe95a151b9b6ea24c858cb317261a"
+      },
+      "B2": {
+        "prompt_ms": 98560.3,
+        "decode_ms": 19001.8,
+        "PP_tokens_per_second": 664.9330409911496,
+        "TG_tokens_per_second": 53.88963150859392,
+        "all1024_output_tokens_match_historical": true,
+        "raw_stdout_sha256": "057206f46e60cf741976a4d8aed06f9e744530ec490fa26d830201a5f6a9420c",
+        "raw_stderr_sha256": "7bab37eedbdabaf81698647411548b3370b34fd1e0e180ecfaf5bfa20e299159"
+      },
+      "A2": {
+        "prompt_ms": 101302.8,
+        "decode_ms": 18983.7,
+        "PP_tokens_per_second": 646.931772863139,
+        "TG_tokens_per_second": 53.941012552874305,
+        "all1024_output_tokens_match_historical": true,
+        "raw_stdout_sha256": "88dd9c65d863c1aff89953355881e3e4324833c4313df513849bd51debb5701d",
+        "raw_stderr_sha256": "1d5ccb22e636b635bdb12737064d4cf48ec3ce3e89f221f1fb5895354ccd1a83"
+      }
+    },
+    "rate_aggregation": "Arithmetic mean of two per-arm rates for each mode.",
+    "mean_rates_tokens_per_second": {
+      "OFF": {
+        "PP": 646.8826072181607,
+        "TG": 53.89930799735589
+      },
+      "ON": {
+        "PP": 664.8423258739606,
+        "TG": 53.83952716143666
+      }
+    },
+    "PP_mean_rate_gain_pct": 2.7763489782224093,
+    "paired_rate_changes_pct": {
+      "B1/A1": {
+        "PP_gain_pct": 2.770136488306796,
+        "TG_gain_pct": -0.1265942470531467
+      },
+      "B2/A2": {
+        "PP_gain_pct": 2.7825605238620543,
+        "TG_gain_pct": -0.09525413381890058
+      }
+    },
+    "prompt_elapsed": {
+      "OFF_mean_ms": 101310.5,
+      "ON_mean_ms": 98573.75,
+      "saved_ms": 2736.75,
+      "time_reduction_pct": 2.701348823665859
+    },
+    "PP_gate": {
+      "mean_gain_min_pct": 1,
+      "both_pairs_strictly_positive": true,
+      "all_four_historical_outputs_and_work_required": true,
+      "passed": true
+    },
+    "TG_mean_rate_change_pct": -0.1109120657396212,
+    "TG_mean_rate_ratio": 0.9988908793426038,
+    "TG_gate": {
+      "minimum_mean_rate_ratio": 0.99,
+      "passed": true,
+      "interpretation": "Practical one-percent tolerance, not throughput equivalence proof."
+    },
+    "all_four_output_token_trajectories_historical_exact": true,
+    "all_four_available_work_counters_historical_exact": true,
+    "same_mode_output_and_work_equal": {
+      "OFF": true,
+      "ON": true
+    },
+    "recorded_work_each_arm": {
+      "accepted": 647,
+      "offered": 868,
+      "cache_hits": 580670,
+      "lookups": 598560,
+      "prompt_reused": 0,
+      "prompt_read": 65536,
+      "ram_blobs": 0,
+      "file_blobs": 0,
+      "file_read_mb": 0,
+      "offloaded_experts": 0,
+      "lookup_chain_accepted": null,
+      "lookup_chain_offered": null,
+      "native_suffix_accepted": null,
+      "native_suffix_offered": null,
+      "decode_windows": null,
+      "native_done_field_count": 16,
+      "optional_chain_counters_available": false,
+      "suffix_drafts": {
+        "present": false,
+        "windows": 0,
+        "accepted": 0,
+        "offered": 0
+      }
+    },
+    "ON_candidate_output_retained": true,
+    "ON_takes_each_arm": 1536,
+    "ON_fallbacks_each_arm": 0,
+    "shadow_mode": false,
+    "OFF_coverage_each_arm": [
+      {
+        "owner": 0,
+        "T": 4095,
+        "calls": 54,
+        "takes": 0,
+        "fallback": 54,
+        "shadow": 0
+      },
+      {
+        "owner": 0,
+        "T": 4096,
+        "calls": 810,
+        "takes": 0,
+        "fallback": 810,
+        "shadow": 0
+      },
+      {
+        "owner": 1,
+        "T": 4095,
+        "calls": 42,
+        "takes": 0,
+        "fallback": 42,
+        "shadow": 0
+      },
+      {
+        "owner": 1,
+        "T": 4096,
+        "calls": 630,
+        "takes": 0,
+        "fallback": 630,
+        "shadow": 0
+      }
+    ],
+    "ON_coverage_each_arm": [
+      {
+        "owner": 0,
+        "T": 4095,
+        "calls": 54,
+        "takes": 54,
+        "fallback": 0,
+        "shadow": 0
+      },
+      {
+        "owner": 0,
+        "T": 4096,
+        "calls": 810,
+        "takes": 810,
+        "fallback": 0,
+        "shadow": 0
+      },
+      {
+        "owner": 1,
+        "T": 4095,
+        "calls": 42,
+        "takes": 42,
+        "fallback": 0,
+        "shadow": 0
+      },
+      {
+        "owner": 1,
+        "T": 4096,
+        "calls": 630,
+        "takes": 630,
+        "fallback": 0,
+        "shadow": 0
+      }
+    ],
+    "production_internal_tensor_parity_measured": false,
+    "production_internal_tensor_finiteness_measured": false,
+    "audit": {
+      "passed": true,
+      "checks": 585,
+      "frozen_qualification_passed": true
+    },
+    "cleanup": {
+      "passed": true,
+      "API_off": true,
+      "sampled_peak_C": 83,
+      "final_maximum_C": 53
+    },
+    "evidence_sha256": {
+      "actual_review": "1c8eba4672acca5c06ad5b07d6181e72181b7f2976a04c4ab9f5021075c1a719",
+      "archive": "400bc51219620e578a392b4dc63bfa34167f99d3e4100d2e6b38a25d34efdaf8",
+      "collection": "9d2f3c7ef2d78b8883ac7c72d172b22ea5f5915c6d1cb08ed654797a98dc2b48",
+      "extraction": "ccca43bfdaf9457982a5d32493c4d0d7f8512b757f6ffab282a6cfed9b6b446e",
+      "runtime_manifest": "2fcbc705dc58af5d2c90a429b1b2f032ca727aaeb71a0148b392d50ceb6cd6cc",
+      "runtime_review": "cae829ca7a936dba01bbd51383414cc608092b4708ed32b6721aa721cbd04401",
+      "build_review": "89f7a9a9fa5c98cf325d4109c4f6d58e6d8dc0e57789a5fa756b340498741e2d",
+      "shadow_actual": "d0d9d3013558f706b15667d327faf96b238835e6afc880265ac660934e436dde",
+      "historical_exact": "fa0499acf2295fbad82a4d89ac7e7258edf157250c24d6d8197d2eb05faacc53",
+      "probe": "ba130bd3742f3f1d53cf0c65f38732400f2ceed4f5d78038aa0f84783d5bc863",
+      "summary": "556eb941769ccf90de711f17743643d7d791f227bb66f9f4056d8ea3d09e0624"
+    }
+  },
+  "prior_component_report": "../2026-10-12-gfx906-c183-hc-bf16-n4/README.md",
+  "limitations": [
+    "One fixed 64K/1024 fixture on the exact derived binary/profile/backend/hardware.",
+    "Exact output tokens and available work counters do not prove universal internal numerical equivalence or broad quality.",
+    "Internal tensor comparison was a separate reference-output-preserving shadow run, not part of timed production arms.",
+    "4K/200K qualification and any default promotion or PR are outside this report."
+  ],
+  "privacy": "Aggregate timings, counts, dimensions and hashes only; no tensor payloads, generated token arrays, pointer logs or private paths."
+}
