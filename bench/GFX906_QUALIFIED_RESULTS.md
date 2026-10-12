@@ -292,3 +292,8 @@ The [bounded 64K free-generation needle follow-on](results/2026-10-11-gfx906-c18
 
 
 The [final 200K needle step](results/2026-10-11-gfx906-c183-prompt-f16/README.md#final-synthetic-retrieval-step-200k-needle-pass-2026-10-12) passes both arms: three fixed answers at roughly **10/50/90% depth**, identical **35-token outputs including natural EOS**. Diagnostic prompt time **325,656.6→268,733.4 ms** and short decode **833.1→1,070.5 ms** are not balanced or TG benchmarks; decode work differs. Actual audit **233 checks PASS**, cleanup **55 C**, API stopped. The synthetic retrieval sequence is complete. All earlier findings remain; exact c183 stays the default and approximate F16 stays experimental, without broad-quality certification, promotion or PR.
+
+
+## 2026-10-12: PR #2016 cooperative radix scan, gfx906 resource rejection
+
+[Report](results/2026-10-12-gfx906-c183-radix-scan-resource/README.md) · [Metrics](results/2026-10-12-gfx906-c183-radix-scan-resource/metrics.json). A narrow [PR #2016](https://github.com/Niko1221/Strata/pull/2016)-derived c183 candidate fails all six frozen compiler-resource checks: FIT17 scratch **56→84 bytes/lane**, VGPR/SGPR spills **25→36 / 44→67**; guarded REG66 **1,048→1,120**, **468→500 / 539→549**. The inherited 13-symbol assumption was wrong: exact production has **12 kernels / 10 unchanged**, with historical-only block_scores_simt_kernel absent. Original failure remains intact; accounting correction does not remove resource rejection. Independent actual review verified **38 file hashes** and bounded ISA observations. **Park before GPU execution**; no measured slowdown, runtime correctness, model integration or rerun. Upstream other-hardware results are unaffected.
