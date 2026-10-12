@@ -1,0 +1,184 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-12",
+  "experiment": "gfx906 c183 prompt-F16 balanced ABBA",
+  "disposition": "PP criterion passes on the fixed fixture; optional approximate F16 remains experimental; exact c183 default unchanged",
+  "configuration": {
+    "original_binary_sha256": "c18316d678a669c309cb95e2f5de9af03fa5573256fd0e093aafc4b41000d049",
+    "existing_flag": "HIP_PROMPT_F16",
+    "modes": {
+      "OFF": 0,
+      "ON": 1
+    },
+    "new_engine_patch": false,
+    "run_order": [
+      "A1",
+      "B1",
+      "B2",
+      "A2"
+    ],
+    "mode_order": [
+      "OFF",
+      "ON",
+      "ON",
+      "OFF"
+    ],
+    "independent_engine_processes": 4,
+    "prompt_tokens_per_run": 65536,
+    "output_tokens_per_run": 1024,
+    "prompt_reused_tokens_per_run": 0,
+    "power_cap_w_unchanged": 190,
+    "original_binary_bytes": 21589440,
+    "suffix_drafts_enabled": false,
+    "scope": "Frozen original c183 full profile; existing prompt-F16 flag toggled explicitly."
+  },
+  "runs": {
+    "A1": {
+      "mode": "OFF",
+      "prompt_ms": 101824,
+      "decode_ms": 19007.3,
+      "PP_tokens_per_second": 643.6203645505971,
+      "TG_tokens_per_second": 53.874037869660604
+    },
+    "B1": {
+      "mode": "ON",
+      "prompt_ms": 82576.1,
+      "decode_ms": 18456.1,
+      "PP_tokens_per_second": 793.6436814041834,
+      "TG_tokens_per_second": 55.48301103700132
+    },
+    "B2": {
+      "mode": "ON",
+      "prompt_ms": 81953.8,
+      "decode_ms": 18443.8,
+      "PP_tokens_per_second": 799.6700580082925,
+      "TG_tokens_per_second": 55.52001214500266
+    },
+    "A2": {
+      "mode": "OFF",
+      "prompt_ms": 101309.4,
+      "decode_ms": 19013.1,
+      "PP_tokens_per_second": 646.889627221166,
+      "TG_tokens_per_second": 53.857603441837476
+    }
+  },
+  "prompt_processing": {
+    "rate_aggregation": "arithmetic mean of two per-arm rates per mode",
+    "OFF_mean_tokens_per_second": 645.2549958858815,
+    "ON_mean_tokens_per_second": 796.656869706238,
+    "mean_rate_gain_pct": 23.46388246285398,
+    "paired_rate_gain_pct": {
+      "B1/A1": 23.30928682754452,
+      "B2/A2": 23.61769679990433
+    },
+    "frozen_criterion": {
+      "mean_rate_gain_min_pct": 1,
+      "both_paired_rate_gains_strictly_positive": true,
+      "historical_OFF_outputs_required": true,
+      "arm_exclusions": 0
+    },
+    "all_four_runs_complete": true,
+    "both_OFF_historical_outputs_match": true,
+    "criterion_passed": true,
+    "scope": "One fixed 65536-token prompt; two runs per mode in balanced ABBA order.",
+    "total_prompt_ms": {
+      "OFF": 203133.4,
+      "ON": 164529.9,
+      "all": 367663.3
+    }
+  },
+  "generation": {
+    "scope": "Descriptive TG on different trajectories and work; not an equal-work TG speedup.",
+    "OFF_mean_tokens_per_second": 53.86582065574904,
+    "ON_mean_tokens_per_second": 55.501511591001986,
+    "mean_rate_change_pct": 3.0366026458716444,
+    "qualified_equal_work_TG_speedup": false,
+    "same_mode_reproducibility": {
+      "OFF": {
+        "all_1024_outputs_match": true,
+        "available_work_counters_match": true
+      },
+      "ON": {
+        "all_1024_outputs_match": true,
+        "available_work_counters_match": true
+      }
+    },
+    "each_cross_mode_pair": {
+      "mismatch_count": 986,
+      "first_divergence_index": 13,
+      "index_base": 0,
+      "matching_prefix_tokens": 13
+    },
+    "decode_work_per_run": {
+      "OFF": {
+        "accepted": 647,
+        "offered": 868,
+        "cache_hits": 580670,
+        "lookups": 598560
+      },
+      "ON": {
+        "accepted": 678,
+        "offered": 875,
+        "cache_hits": 557414,
+        "lookups": 587520
+      }
+    },
+    "counter_scope": "Accepted/offered and cache hit/lookup counters describe decode work; not a detailed PP-work equivalence test.",
+    "optional_chain_and_window_counters_available": false,
+    "disk_and_offload_counters_zero": true
+  },
+  "observed_cleanup": {
+    "passed": true,
+    "api_left_stopped": true,
+    "maximum_final_sensor_c": 53
+  },
+  "qualification_limits": {
+    "hidden_tensor_finiteness_proven": false,
+    "general_quality_qualified": false,
+    "numerical_equivalence": false,
+    "multi_prompt_generalization": false,
+    "default_changed": false,
+    "implementation_PR": false
+  },
+  "consolidated_option_verdict": {
+    "status": "Existing optional experimental approximation",
+    "positive_evidence": [
+      "Balanced PP criterion passes for this fixture",
+      "Both modes pass the fixed 16-task HumanEval base and base+extra pilot",
+      "Bounded assistant-copy sanity and 64K/200K synthetic retrieval pass"
+    ],
+    "retained_negative_evidence": [
+      "Cross-mode trajectory divergence",
+      "Earlier unconditional USER-text likelihood drift"
+    ],
+    "interpretation": "Narrow quality probes do not certify broad quality or erase likelihood drift; exact c183 stays default.",
+    "prior_f16_report": "../2026-10-11-gfx906-c183-prompt-f16/README.md",
+    "humaneval_pilot_report": "../2026-10-12-gfx906-c183-prompt-f16-humaneval-pilot/README.md"
+  },
+  "evidence_sha256": {
+    "summary": "82d543f9a97b36c28ffa36acadb72ce2b58aa5392772397da97912c044406911",
+    "author_audit": "b2205fd1197271130bd2526df3806251d56ae457cda4815eab895d4aff9c79b0",
+    "raw_archive": "98589627c7409826f10ba4c8244ff6943b66f369bf1c9e2ee6b07b7825984efe",
+    "collection_receipt": "4afb0c7fd0c19caf42e5d165c02956754fec30749fd7eb08ebde270446600a67",
+    "extraction_receipt": "9e4c3c5d988d42bbee8e521953cc7bc14bc5650bd1699ef9aff3459180cdceaa",
+    "runner_review": "649720e0667d6505aed09b87ebc242be0e19088047d6c05bdf637073f72f7b5c",
+    "actual_review": "7443359511cd421d2fd6f9286c08fb7b55ba3fa387261a5aea111be86ce5133a",
+    "fixture": "63ce3d4042027a00b2193feab143f1d9443b5c31a863a962ec9543ccb54d9695",
+    "historical_result": "7021b6532ee7ade54a22af07669208cf71db818fd3d1cbad1a7632eaf4ec3233",
+    "runtime_manifest": "ef5c32bafcbd862c150171a3b77fc94eace00397d102d3938c12ddaed3686a1a",
+    "runtime_archive": "859e35db6d3e1cc5598a4e0906508f4fd8f150edd90a936056df493f48d074ba",
+    "transport_review": "e4839ad1e4105c8c03b1bc41e2bcc3fb0df0d43b9ad0274f200da3c0deb0f307"
+  },
+  "independent_actual_review": {
+    "status": "PASS",
+    "collected_files_hash_verified": 64,
+    "archive_bytes": 158312,
+    "archive_expanded_bytes": 1133008,
+    "sole_extraction_verified": true,
+    "pure_parser_results_recomputed": true,
+    "four_distinct_processes_verified": true,
+    "all_positive_zero_exits": true,
+    "all_immutable_bindings_verified": true
+  },
+  "privacy": "Aggregate rates, counts and provenance hashes only; no raw token arrays, solution contents, private paths or process identifiers."
+}
