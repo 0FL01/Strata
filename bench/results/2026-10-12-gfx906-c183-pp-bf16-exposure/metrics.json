@@ -1,0 +1,237 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-12",
+  "experiment": "c183-derived gfx906 remaining-main-BF16 observer",
+  "disposition": "HC injection identified for source investigation; no optimization or exact-conversion result.",
+  "configuration": {
+    "host_observer_only": true,
+    "HIP_PROMPT_F16": 0,
+    "prompt_tokens": 65536,
+    "output_count": 1,
+    "expected_first_output_matched": true,
+    "tensor_capture": false,
+    "observed_main_records": 17,
+    "standalone_MTP_instrumented": false,
+    "GPU_objects_and_libraries_unchanged": true,
+    "original_binary_bytes_executed": false,
+    "observer_binary_sha256": "46e19af568503e6d3bc16e996bf65dd9dc7aa702a762be82f8dde4c83697c48f",
+    "observer_binary_bytes": 21594496
+  },
+  "measurement_scope": {
+    "interval": "Same-stream event intervals around original Gemm BF16 calls.",
+    "host_submission_gaps_included": true,
+    "nested_in_unchanged_inclusive_phase_timers": true,
+    "owners_or_nested_timers_summed_as_wall": false,
+    "rigorous_critical_path_bound": false,
+    "speedup_estimate": false,
+    "selected_census_not_all_BF16": true,
+    "excluded": [
+      "Already-optimized main HC down/up",
+      "Actual standalone MTP prefill BF16 path",
+      "Internal operations of any PLE serial fallback"
+    ],
+    "tensor_values_or_representability_measured": false,
+    "alternate_GEMM_parity_measured": false,
+    "inherited_label_correction": "Inherited result timing_scope text says shared-only; sealed manifest and analyzer define the actual selected BF16 census."
+  },
+  "pinned_denominator": {
+    "PP_ms": 101566.7,
+    "derivation": "Arithmetic mean of uninstrumented ABBA OFF prompt times 101824.0 and 101309.4 ms.",
+    "actual_review_sha256": "7443359511cd421d2fd6f9286c08fb7b55ba3fa387261a5aea111be86ce5133a",
+    "report": "../2026-10-12-gfx906-c183-prompt-f16-abba/README.md",
+    "observed_instrumented_PP_ms": 103043.3,
+    "instrumented_result_is_performance_comparison": false
+  },
+  "owners": {
+    "primary": {
+      "device_index": 0,
+      "records": 1,
+      "total_calls": 2624,
+      "subinterval_sum_ms": 7276.478745581,
+      "descriptive_pinned_PP_time_proxy_percent": 7.164236649985675,
+      "families": {
+        "hc_inject": {
+          "calls": 864,
+          "rows": 3538890,
+          "ms": 3443.180572748
+        },
+        "gdn_alpha": {
+          "calls": 336,
+          "rows": 1376235,
+          "ms": 337.010627031
+        },
+        "gdn_beta": {
+          "calls": 336,
+          "rows": 1376235,
+          "ms": 338.72903061
+        },
+        "qsa_index_k": {
+          "calls": 96,
+          "rows": 393210,
+          "ms": 86.46922189
+        },
+        "qsa_index_q": {
+          "calls": 96,
+          "rows": 393210,
+          "ms": 254.12829876
+        },
+        "router": {
+          "calls": 432,
+          "rows": 1769445,
+          "ms": 1144.487341166
+        },
+        "shared_scalar": {
+          "calls": 432,
+          "rows": 1769445,
+          "ms": 451.342544138
+        },
+        "ple_key": {
+          "calls": 16,
+          "rows": 65535,
+          "ms": 1009.402469635
+        },
+        "ple_value": {
+          "calls": 16,
+          "rows": 65535,
+          "ms": 211.728639603
+        }
+      }
+    },
+    "peer": {
+      "device_index": 1,
+      "records": 16,
+      "total_calls": 2016,
+      "subinterval_sum_ms": 4728.023566303,
+      "descriptive_pinned_PP_time_proxy_percent": 4.655092236237861,
+      "families": {
+        "hc_inject": {
+          "calls": 672,
+          "rows": 2752470,
+          "ms": 2671.397421836
+        },
+        "gdn_alpha": {
+          "calls": 240,
+          "rows": 983025,
+          "ms": 239.712448776
+        },
+        "gdn_beta": {
+          "calls": 240,
+          "rows": 983025,
+          "ms": 240.20557183
+        },
+        "qsa_index_k": {
+          "calls": 96,
+          "rows": 393210,
+          "ms": 84.31679052
+        },
+        "qsa_index_q": {
+          "calls": 96,
+          "rows": 393210,
+          "ms": 253.929725169
+        },
+        "router": {
+          "calls": 336,
+          "rows": 1376235,
+          "ms": 889.005337715
+        },
+        "shared_scalar": {
+          "calls": 336,
+          "rows": 1376235,
+          "ms": 349.456270457
+        }
+      }
+    }
+  },
+  "hc_injection": {
+    "N": 4,
+    "K": 10240,
+    "T_values": [
+      4096,
+      4095
+    ],
+    "ldx": 10240,
+    "ldy": 4,
+    "beta": 0,
+    "output_type": "FP32",
+    "primary": {
+      "T4096": {
+        "calls": 810,
+        "ms": 3227.949035883
+      },
+      "T4095": {
+        "calls": 54,
+        "ms": 215.231536865
+      }
+    },
+    "peer": {
+      "T4096": {
+        "calls": 630,
+        "ms": 2504.371181964
+      },
+      "T4095": {
+        "calls": 42,
+        "ms": 167.026239872
+      }
+    },
+    "primary_descriptive_time_proxy_percent": 3.390068371570604,
+    "interpretation": "Largest family in each observed owner's selected census; pinned-reference time fraction is not a realizable speedup or exact-conversion proof."
+  },
+  "primary_PLE_route": {
+    "BF16_rows": 65535,
+    "native_rows": 0,
+    "serial_rows": 0,
+    "batches": 16,
+    "key_calls": 16,
+    "value_calls": 16
+  },
+  "events": {
+    "pair_highwater": {
+      "primary": 8,
+      "peer": 6
+    },
+    "event_highwater": {
+      "primary": 16,
+      "peer": 12
+    },
+    "source_pair_bound_per_timer": 134,
+    "pair_capacity_per_timer": 256,
+    "event_capacity_per_timer": 512
+  },
+  "cleanup": {
+    "passed": true,
+    "API_left_stopped": true,
+    "final_maximum_temperature_C": 54,
+    "peak_sampled_temperature_C": 81
+  },
+  "evidence_sha256": {
+    "summary": "b8abcf528cd1d8a0911e7be843d79e4865cecc070edf9f6e5b8bea1d936fc1f9",
+    "raw_archive": "e2ae5e36f7111101184a7d9da1d732cdf51d392d67073b5e1d4da11d3e324f1c",
+    "stderr": "4a9118892aedc44250d695f33a9b279d90d5c0f6f8445948e563e40cb4be1e21",
+    "parser": "1c5382581839a25aec0259e8cc85747f09273ed7c99296c2ad545485d0e77550",
+    "actual_review": "c0339e091d8d85373b79f2b3eb7693c16d30940362ac0b92bc14e2ee0618bacd",
+    "source_review": "261c41a23dbc383857c08637129518193ee7317f00657f4ae5b0fbe1de9bdd64",
+    "actual_cpu_review": "784cb293da9a93340be930c58d0a1c134b44dd1287e1ba02ec09a64e0d9e34e7",
+    "runtime_review": "7d0392c10897287dd917adc682bebc6085ede3d9ee6854eb69924cc6777e5fcd",
+    "transport_review": "ac58e8cf9183d7c64639d4e9bed6275b77872f218a8982d6407346f9e44b1ede",
+    "runtime_manifest": "a116c38b4a14ccec363145d37c83b4374b3d925de5bccc1006d0768f3402a6a5",
+    "probe": "46e19af568503e6d3bc16e996bf65dd9dc7aa702a762be82f8dde4c83697c48f",
+    "extraction_receipt": "be44fabea0ae9cbf9a67915b3cf1940710892b282ded1b47ed43cc031b675f84",
+    "collection": "8df1eceba301b4981f6589330b6dac355f72f25b43bd35640aae84bb292b5712",
+    "raw_result": "ccffca792704a9829c4f864bb3a7386745428e72e05eaa673a77101334b62815",
+    "build_receipt": "7d2ca947654ae9fec0d83408bb85f18531e446a362b4b69972b33a5eaf8605c7"
+  },
+  "actual_review": {
+    "status": "PASS",
+    "checks_passed": 285,
+    "archive_members": 23,
+    "archive_expanded_bytes": 319615,
+    "all_observed_calls_validated": 4640
+  },
+  "raw_archive_bytes": 50036,
+  "limitations": [
+    "Single instrumented prompt and one output; no full-trajectory or general-quality claim.",
+    "Selected owner event exposure only; no critical-path attribution or owner sum.",
+    "Observer overhead is not a speed result. Kernel changes and alternative conversions were not tested."
+  ],
+  "privacy": "Aggregate timings, dimensions, counts and hashes only; no tensor payloads, generated IDs, private paths or process identifiers."
+}
