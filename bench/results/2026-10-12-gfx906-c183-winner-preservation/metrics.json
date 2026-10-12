@@ -1,0 +1,49 @@
+{
+  "schema": "gfx906.c183.winner_preservation_checkpoint.v1",
+  "date": "2026-10-12",
+  "historical_winner_rates": {
+    "PP": 672.137075656,
+    "TG": 53.728913301,
+    "units": "tokens/s",
+    "new_measurement": false
+  },
+  "secured": {
+    "executables": {
+      "winner_sha256": "48dba26a0951c85e44fe7124ef161e719495bad040b6d7d6d8e95f219b7100a8",
+      "winner_bytes": 21625872,
+      "baseline_sha256": "c18316d678a669c309cb95e2f5de9af03fa5573256fd0e093aafc4b41000d049",
+      "baseline_bytes": 21589440,
+      "review_sha256": "4a010ed722bce2d0e720e4f098c09dde32d96df5c52d0129a005077b1615951c"
+    },
+    "compiled_project_inputs": {
+      "archive_sha256": "4b32ad51a8fc4993ca4f6ee3a64a0a0715bb2cfa543270879609d94cb0962d4f",
+      "archive_bytes": 14633395,
+      "payload_files": 26,
+      "expanded_bytes": 53973595,
+      "literal_winner_link_inputs": 11,
+      "review_sha256": "50a87fffa7f00e3ce68086a26466320fba7657b7960846663edb0f2b4e01d9d2"
+    },
+    "campaign_sources": {
+      "archive_sha256": "dc118dd9434b1089e1c9931da9c87fe8c23606a80e6085401e211e5b6f4b8373",
+      "archive_bytes": 2194080,
+      "payload_files": 30,
+      "expanded_bytes": 4018347,
+      "manifest_sha256": "6b259706f05b08efc80cc0afe3c0037f0a1dc28f87d57fc87b0ec9ca936a1444",
+      "review_sha256": "136217f1ed39b833d0761a19e15dcda008a5a85554cdf4bc29280336c4fcac4d",
+      "full_checkout": false,
+      "git_history": false
+    },
+    "raw_experiment": {
+      "archive_sha256": "ee42a48082f4fc4ae2fab07d20aedc93f28fc99d61b5f978c41ea4c5341fa573",
+      "members": 121,
+      "review_sha256": "dd26a5916964a0780bd3f7ccee4325ca2c14141dd6cf19c2c02d0ab15250785c"
+    }
+  },
+  "reproduction_authority": "Actual B1 native arguments and environment, A1 control and sealed runtime; inherited release manifest has stale spec/suffix metadata.",
+  "open_limits": [
+    "Complete whole-project header/dependency correspondence is not verified.",
+    "External toolchain/runtime image and library export is not part of this checkpoint.",
+    "No recovery or source rebuild rehearsal has been performed.",
+    "Private binary/source payloads and deployment paths are not published in this report."
+  ]
+}
