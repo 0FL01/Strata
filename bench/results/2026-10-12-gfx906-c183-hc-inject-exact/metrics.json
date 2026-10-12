@@ -1,0 +1,140 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-12",
+  "experiment": "gfx906 c183 HC injection fixed-scale input-exact candidate",
+  "disposition": "Reject tested route on ordinary output parity; diagnostic execution incomplete, no timing or integration.",
+  "execution_status": {
+    "overall_complete": false,
+    "probe_exit_code": 1,
+    "usable_partial_parity_records": 98,
+    "ordinary_records": 96,
+    "actual_subnormal_onehot_records": 2,
+    "terminal_done_record": false,
+    "planned_parity_cases": 214
+  },
+  "fixture": {
+    "T": 4096,
+    "N": 4,
+    "K": 10240,
+    "ordinary_output_elements_per_case": 16384,
+    "ordinary_weight_tensors": 96,
+    "weight_source": "Target-local actual BF16 HC-injection weights; no weight payload exported.",
+    "activation_source": "One reused deterministic BF16 fixture with both signs, full7 mantissa bits and exponent fields101 through127.",
+    "activation_scale": 512,
+    "weight_scale": 4096,
+    "reference": "Literal archived BF16 GEMM with FP32 output",
+    "candidate": "Fixed-scale exact-input representation route with FP32 output.",
+    "target_geometry_T4095_reached": false
+  },
+  "operand_checks": {
+    "accepted_ordinary_CPU_GPU_guard_cases": 96,
+    "ordinary_finite_cases": 96,
+    "every_weight_converted_byte_checked": true,
+    "weight_tensor_checks": 96,
+    "reused_activation_full_converted_byte_check_cases": 2,
+    "activation_check_scope": "Full converted activation bytes checked at the first and last ordinary weight cases; the same activation fixture is reused throughout."
+  },
+  "ordinary_output_parity": {
+    "cases": 96,
+    "failed_cases": 96,
+    "passed_cases": 0,
+    "elements": 1572864,
+    "mismatches": 1519845,
+    "mismatch_percent": 96.62914276123047,
+    "per_case_mismatches": {
+      "min": 15723,
+      "max": 15972,
+      "median": 15820.5
+    },
+    "output_finite": true,
+    "exact_operand_representation_implies_output_parity": false,
+    "unique_internal_cause_established": false
+  },
+  "controls": {
+    "direct_BF16_control_mismatches": 0,
+    "actual_subnormal_weight_onehots": {
+      "cases": 2,
+      "full_byte_parity_passed": 2
+    }
+  },
+  "abort": {
+    "stage": "Source-inferred first signed-zero adversarial fixture; no adversarial parity record emitted.",
+    "diagnostic": "CPU GPU exact guard",
+    "operand_or_flag_detail_retained": false,
+    "exact_cause_established": false,
+    "unreached": [
+      "T4095 cases",
+      "Adversarial result records",
+      "Fallback completion",
+      "Timing",
+      "Terminal done record",
+      "Terminal postcheck and gate records"
+    ]
+  },
+  "performance": {
+    "timing_records": 0,
+    "speed_result": false,
+    "model_performance_claim": false,
+    "integration": false,
+    "numerical_error_magnitude_measured": false,
+    "model_quality_impact_measured": false
+  },
+  "cleanup": {
+    "passed": true,
+    "API_left_stopped": true,
+    "final_maximum_temperature_C": 46,
+    "peak_sampled_temperature_C": 51
+  },
+  "evidence_sha256": {
+    "extraction": "f5af0f33379dac004e2cbe8dabceb132ec1095abcf9300121eaf9645613f2b34",
+    "stdout": "2de7bf87f176adebd46c02dbf47bff59974e1429bf73e96e6067817c393bc7c6",
+    "summary": "3cb5b05fe321f351d14e2efc1ab5c088359921bc3a364a430cbd49dfff44eea8",
+    "archive": "67d1c345ffab5633aed56132b94133813a35d4e150e560acdc68f38435d17dbb",
+    "collection": "b409eab15215235c78e55a808a0ae97e507fc1e1a526898a3635005619257262",
+    "stderr": "a478f900592995a51186f3d2a07e97144dbda7a3822a1bbb04e9fd0705203b00",
+    "driver": "4d71509e3fe2b2a6811b0d194e92dc59363c4e5bf7c2cc88a5a8756e26536660",
+    "runtime_binding": "7b7e9944a022dc97051daaaadd63802f25631c55261c3feadaf9b0efe0cf7606",
+    "weight_receipt": "34be7c2379853a8d4cdfecea515afe75041a3e00459eb6bb358a692f85520728",
+    "runtime_manifest": "b818431840744eaefe364565a8f01889ed218f32d33d3705e482115331343310",
+    "runtime_review": "1819c3b7ee3bef0c740827169b2758b148e1c802d137abfc5917be035de83db5",
+    "actual_build_review": "908c8ef7480d091e5737a8ffd29da2cc7d18194646dc9e4e5a4bcc3a43c43551",
+    "transport_review": "40fe5812c6fa4b775c2c885ca215cd50de08e2a319f38e6f2fd397ac5e1d4982",
+    "independent_actual_review": "bc6664b7290a8dc9b76f3151a6bf100a9a4f963c4e376a6235b3686133e8748f"
+  },
+  "independent_actual_review": {
+    "status": "AUDIT_PASS_ON_REJECTED_INCOMPLETE_DIAGNOSTIC",
+    "audit_passed": true,
+    "diagnostic_completed": false,
+    "route_rejected": true,
+    "files_verified": 18,
+    "archive_bytes": 51822,
+    "archive_expanded_bytes": 404089,
+    "original_strict_complete_parser_retained": true,
+    "target_weight_payload_collected": false
+  },
+  "prior_observer_scope_correction": {
+    "report": "../2026-10-12-gfx906-c183-pp-bf16-exposure/README.md",
+    "clarification": "HC down/up were excluded because their existing guarded route was already under study; not every down/up call is optimized.",
+    "combined_down_up_counters": {
+      "primary": {
+        "attempts": 1728,
+        "takes": 531
+      },
+      "peer": {
+        "attempts": 1344,
+        "takes": 567
+      }
+    },
+    "separate_down_up_counts_available": false,
+    "remaining_fallback_exposure_measured": false,
+    "shared_input_reuse_coverage_established": false
+  },
+  "limitations": [
+    "Negative ordinary-case parity is usable despite the later abort; audit validation does not turn the incomplete diagnostic into a completed pass.",
+    "One deterministic activation family with96 actual weight tensors does not characterize all model activations.",
+    "The guard failure at the signed-zero fixture lacks operand/flag detail; its cause is unproven.",
+    "No timings, remaining adversarial coverage, fallback completion, model run or performance benefit is established.",
+    "Bit mismatch frequency does not quantify numerical error magnitude or model-quality impact."
+  ],
+  "privacy": "Aggregate counts and provenance only; no weights, tensors, generated solutions, private paths or process identifiers."
+}
