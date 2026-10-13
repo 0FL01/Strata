@@ -1,0 +1,381 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-13",
+  "result": "PASS_BOUNDED_Q2_COMPONENT_CORRECTNESS",
+  "scope": {
+    "base_commit": "a0116b2782a5b82622358c04a06496485d12b2d6",
+    "candidate_label": "Q1",
+    "architecture": "gfx906",
+    "physical_GPU_count": 2,
+    "order": [
+      0,
+      1
+    ],
+    "fresh_process_per_owner": true,
+    "both_devices_visible": true,
+    "comparison": "modes 7, 13 and 15 within one reviewed candidate component executable",
+    "separate_B0_executable_numerically_compared": false,
+    "actual_executed_device_route_observed": false,
+    "performance_timing_added": false,
+    "watchdog_elapsed_is_benchmark": false,
+    "model_results_included": false,
+    "performance_qualification": false,
+    "default_promotion": false
+  },
+  "component_actual_receipt_status": {
+    "decision": "PASS_Q2_COMPONENT_ACTUAL_REVIEW_V1",
+    "passed": true,
+    "complete_clean_exact": true,
+    "component_correctness_passed": true,
+    "component_numerical_parity_passed": true,
+    "baseline_mode7_preservation_proven": false,
+    "model_admission": false,
+    "model_qualification": false,
+    "performance_qualification": false,
+    "actual_route_observed": false
+  },
+  "component_matrix": {
+    "cases_per_owner": 72,
+    "grouped_calls_per_owner": 432,
+    "total_cases": 144,
+    "total_grouped_calls": 864,
+    "shapes": [
+      {
+        "shape": "q2-gu-and-down",
+        "H": 2560,
+        "FF": 640,
+        "gu_type": 42,
+        "down_type": 42,
+        "source_GU_13_15_applicable": true,
+        "source_down_15_applicable": true
+      },
+      {
+        "shape": "q2-gu-only",
+        "H": 2560,
+        "FF": 640,
+        "gu_type": 42,
+        "down_type": 20,
+        "source_GU_13_15_applicable": true,
+        "source_down_15_applicable": false
+      },
+      {
+        "shape": "q2-down-only-lds-gu",
+        "H": 2560,
+        "FF": 640,
+        "gu_type": 21,
+        "down_type": 42,
+        "source_GU_13_15_applicable": false,
+        "source_down_15_applicable": true
+      },
+      {
+        "shape": "neither-q2-lds-gu",
+        "H": 2560,
+        "FF": 640,
+        "gu_type": 21,
+        "down_type": 20,
+        "source_GU_13_15_applicable": false,
+        "source_down_15_applicable": false
+      },
+      {
+        "shape": "refuse-H-fast-path",
+        "H": 2304,
+        "FF": 640,
+        "gu_type": 42,
+        "down_type": 42,
+        "source_GU_13_15_applicable": false,
+        "source_down_15_applicable": false
+      },
+      {
+        "shape": "refuse-FF-fast-path",
+        "H": 2560,
+        "FF": 576,
+        "gu_type": 42,
+        "down_type": 42,
+        "source_GU_13_15_applicable": false,
+        "source_down_15_applicable": false
+      }
+    ],
+    "plans": [
+      "empty-offset",
+      "singleton",
+      "full-4-and-8",
+      "scattered-offset-3-and-6"
+    ],
+    "grid_settings": [
+      0,
+      1,
+      7
+    ],
+    "calls_per_case": 6,
+    "ordered_mode_phase_calls": [
+      [
+        7,
+        1
+      ],
+      [
+        13,
+        1
+      ],
+      [
+        13,
+        2
+      ],
+      [
+        15,
+        2
+      ],
+      [
+        7,
+        0
+      ],
+      [
+        15,
+        0
+      ]
+    ],
+    "comparisons": [
+      {
+        "reference_mode": 7,
+        "candidate_mode": 13,
+        "phase": 1,
+        "scope": "gate/up, h and complete q8 blocks"
+      },
+      {
+        "reference_mode": 13,
+        "candidate_mode": 15,
+        "phase": 2,
+        "scope": "down-only consumed output, scratch unchanged"
+      },
+      {
+        "reference_mode": 7,
+        "candidate_mode": 15,
+        "phase": 0,
+        "scope": "complete grouped path"
+      }
+    ],
+    "checks": [
+      "FP32 byte parity",
+      "full q8 blocks including metadata",
+      "finite writes",
+      "expected inactive zeros",
+      "immutable inputs",
+      "padding and guards preserved",
+      "down-only scratch immutability",
+      "alternate poison write coverage"
+    ],
+    "NaN_input_arithmetic_test": false,
+    "empty_plan_is_no_work": false,
+    "empty_plan_note": "separate h and q8 writes still occur",
+    "source_derived_input_quantizations_per_owner": 12,
+    "source_derived_input_quantizations_total": 24,
+    "input_quantizations_directly_counted_by_runtime": false,
+    "repetitions": 0,
+    "outcome_exclusions": 0
+  },
+  "per_owner": {
+    "0": {
+      "case_count": 72,
+      "grouped_calls": 432,
+      "native_exit": 0,
+      "physical_binding_verified": true,
+      "finite_matrix_and_parity_passed": true,
+      "all_ordered_cases_retained": true,
+      "stdout": {
+        "sha256": "f98c6c3cbbce208991b2541cf2e012d900c887730fa89ec99caf83873fbad4dd",
+        "bytes": 6926
+      },
+      "stderr": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      "analysis": {
+        "sha256": "c741251faff8f30440fea08fdb74c3f1f57743e416f9ecad65e5c683b0d256ee",
+        "bytes": 43814
+      },
+      "summary": {
+        "sha256": "7e29647085399c10f5c00ec57062074a537eb2e550b5c7c002585d84e696b2c8",
+        "bytes": 3704
+      }
+    },
+    "1": {
+      "case_count": 72,
+      "grouped_calls": 432,
+      "native_exit": 0,
+      "physical_binding_verified": true,
+      "finite_matrix_and_parity_passed": true,
+      "all_ordered_cases_retained": true,
+      "stdout": {
+        "sha256": "021a2b3e01f9adfaf99b6a15a51c9bfa29f81d0f86eb2a5392eb1178ac19b3a3",
+        "bytes": 6926
+      },
+      "stderr": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      "analysis": {
+        "sha256": "1dc1e27609a29f6e7f99183447a04a9dce0b7d4f98af58328737ad955e298452",
+        "bytes": 43814
+      },
+      "summary": {
+        "sha256": "9bc9164c440374161ff97cb0c383ca503853ef1d9b15400177ce9ce8916fb0a7",
+        "bytes": 3705
+      }
+    }
+  },
+  "independent_actual_checks_passed": 255,
+  "lifecycle": {
+    "cleanup_passed": true,
+    "API_left_stopped": true,
+    "final_max_sampled_temperature_C": 45.0,
+    "peak_sampled_temperature_C": 45.0,
+    "affinity_changed": false,
+    "power_settings_changed": false
+  },
+  "later_bounded_static_bridge": {
+    "decision": "PASS_Q2_BOUNDED_MODE7_BASELINE_STATIC_BRIDGE_V1",
+    "bounded_mode7_host_preservation_proven": true,
+    "bounded_mode7_selected_device_preservation_proven": true,
+    "mode": 7,
+    "phases": [
+      0,
+      1,
+      2
+    ],
+    "six_shape_scope": [
+      [
+        42,
+        42,
+        2560,
+        640
+      ],
+      [
+        42,
+        20,
+        2560,
+        640
+      ],
+      [
+        21,
+        42,
+        2560,
+        640
+      ],
+      [
+        21,
+        20,
+        2560,
+        640
+      ],
+      [
+        42,
+        42,
+        2304,
+        640
+      ],
+      [
+        42,
+        42,
+        2560,
+        576
+      ]
+    ],
+    "conditions": "same valid API inputs and nonoverflowing sizes, normal globals; only the reviewed absent overrides/default or explicit mode7",
+    "GPU_execution": false,
+    "actual_route_observed": false,
+    "all_baseline_device_bodies_proven_equivalent": false,
+    "other_changed_baseline_device_bodies_outside_equivalence_proof": 151,
+    "model_admission_in_this_receipt": false,
+    "preserves_original_component_baseline_preservation_false": true,
+    "scope_limit": "bounded static result; no B0 numerical comparison, whole-object identity or all-format equivalence"
+  },
+  "later_current_model_metadata_census": {
+    "decision": "PASS_Q2_CURRENT_MODEL_EXPERT_CENSUS_REVIEW_V1",
+    "H": 2560,
+    "FF": 640,
+    "GU_type": 42,
+    "down_type": 42,
+    "expert_layer_count": 48,
+    "expert_tensor_count": 144,
+    "experts_per_layer": 512,
+    "current_metadata_bound": true,
+    "all_expert_layers_match_bounded_bridge": true,
+    "independent_checks": 395,
+    "model_admission": false,
+    "model_numerical_qualification": false,
+    "performance_qualification": false,
+    "actual_route_observed": false,
+    "tensor_payload_identity_proven_by_census": false,
+    "scope_limit": "fresh model metadata binds the grouped-expert shape/format to the bridge; does not prove the other device bodies or runtime dispatch"
+  },
+  "pending_gates": [
+    "separate B0 mode7 versus Q1 mode15 model correctness",
+    "performance qualification"
+  ],
+  "limitations": [
+    "Finite component suite and the later static/metadata receipts have distinct scopes and do not retroactively rewrite earlier flags.",
+    "Requested mode and source-derived applicability are not per-call executed-device-route observations.",
+    "No model-wide, arbitrary-input, all-format or cross-backend numerical qualification.",
+    "No component speed measurement, speedup or default promotion.",
+    "The remaining 151 changed baseline device bodies are outside the bounded equivalence proof."
+  ],
+  "provenance": {
+    "reviews": {
+      "component_actual": {
+        "sha256": "c3c026846295c568a8fd24533786f32aab3ee033c2c14b7b67b301786bd5eb59",
+        "bytes": 69591
+      },
+      "CPU_ISA_actual": {
+        "sha256": "3e1302ffe18660a7072149baf179b324e418c2c063eff951f25929bb12e845a2",
+        "bytes": 116528
+      },
+      "bounded_mode7_bridge": {
+        "sha256": "cfec7c79dce0ae7164aaa88257442985a0607b63c70502bd4749f7c18fd3477e",
+        "bytes": 26195
+      },
+      "current_expert_census": {
+        "sha256": "1a64d72bc6130065f561b35df971bae55858b46563e114a3cf4acc3ed96cfb95",
+        "bytes": 60102
+      }
+    },
+    "component_executable": {
+      "sha256": "eca2027263a6bb83f86799fd6471e9d068cde6cf104ca98febc16f0d0f89d616",
+      "bytes": 2186376
+    },
+    "model_engine_build_only_not_executed_in_this_suite": {
+      "sha256": "f1dc45062304ee8ccd269c77eb0dc3d26a8c5872c2e170087c9d0a94c664e425",
+      "bytes": 22123200
+    },
+    "source_patch_sha256": "efcede70defad1dd68d04b9d4122049760a2f3eed0eaba4228cae63bfd8f9131",
+    "source_manifest_sha256": "fb6333bcd53e3303612f192f88768d613f59c72aae533b6af71ad15e5d9982e3",
+    "harness_source": {
+      "sha256": "37e278a0eae72102de88f766c041585123078dc2ff8aca65eff803b4a6b89ccf",
+      "bytes": 16997
+    },
+    "harness_header": {
+      "sha256": "e642ea2e8745bf566b60e229b8cfda416304ba4e8c9e073f211785908e517ffe",
+      "bytes": 22118
+    },
+    "host_object": {
+      "sha256": "e7f78de56ef6dd8bb83c94becb633b8d2e6472bddbe7e43e97b1241373daa464",
+      "bytes": 113024
+    },
+    "runtime_manifest_sha256": "8cc30f1fc40e1ad717bea450580d2736dfe8d82493e5bff4890a5e5bd5afbfa1",
+    "runtime_review_sha256": "df6fd484ff286aaeded34b5eb6ca323ca8b2145ad0d25ac7b5a8e1c89a8c40ce",
+    "terminal_archive": {
+      "sha256": "02183a49beb5f90483e49064d1e03ca4c5b5244296b61a2b33dbc76d6d0baabf",
+      "bytes": 181633
+    },
+    "collection": {
+      "sha256": "657603d7dacf2bc8ea9ec93b471a9d81eed7f4e8dd615aee1c02201cfddb9b58",
+      "bytes": 5906
+    },
+    "extraction": {
+      "sha256": "51164b2d89fc092b4c0d5aa321ef00576288961f75f3be4228cfb2a086e23ca4",
+      "bytes": 5453
+    },
+    "summary": {
+      "sha256": "e72ab187928bbd31ce7032f0a4c0449bac9ee0633edcee3a06ebb45289991a8d",
+      "bytes": 267540
+    }
+  }
+}
