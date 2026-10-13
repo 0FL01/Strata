@@ -1,0 +1,13 @@
+2026-10-13T15:11:20.828302174Z [ckpt-diag] req=78 event=before_selection source=active len=147657 kind=normal used=112 imgs=0 parts=1
+2026-10-13T15:11:20.828486371Z [ckpt-diag] req=78 event=candidate source=active_checkpoint len=147657 lcp=147657 length_ok=1 token_ok=1 image_ok=1 cvec_ok=1 state_ok=1 eligible=1
+2026-10-13T15:11:20.831762757Z [ckpt-diag] req=78 event=before_prune source=active len=147657 kind=normal used=112 imgs=0 parts=1
+2026-10-13T15:11:23.488605769Z [ckpt-diag] req=78 event=lru_evict source=active len=147657 kind=normal used=112 imgs=0 parts=1
+2026-10-13T15:15:43.846975682Z [ckpt-diag] req=82 event=request prompt_len=160711 req_imgs=0 req_cvec=1 req_ckpt=1
+2026-10-13T15:15:43.847073999Z [ckpt-diag] req=82 event=candidate source=active_live len=174228 lcp=147658 length_ok=0 token_ok=0 image_ok=1 cvec_ok=1 state_ok=1 eligible=0
+2026-10-13T15:15:43.847102429Z [ckpt-diag] req=82 event=candidate source=active_checkpoint len=10665 lcp=10665 length_ok=1 token_ok=1 image_ok=1 cvec_ok=1 state_ok=1 eligible=1
+2026-10-13T15:15:43.847266290Z [ckpt-diag] req=82 event=candidate source=active_checkpoint len=160069 lcp=147658 length_ok=1 token_ok=0 image_ok=1 cvec_ok=1 state_ok=1 eligible=0
+2026-10-13T15:15:43.847458505Z [ckpt-diag] req=82 event=candidate source=active_checkpoint len=162526 lcp=147658 length_ok=0 token_ok=0 image_ok=1 cvec_ok=1 state_ok=1 eligible=0
+2026-10-13T15:15:43.847642950Z [ckpt-diag] req=82 event=candidate source=active_checkpoint len=163968 lcp=147658 length_ok=0 token_ok=0 image_ok=1 cvec_ok=1 state_ok=1 eligible=0
+2026-10-13T15:15:43.847824661Z [ckpt-diag] req=82 event=candidate source=active_checkpoint len=165478 lcp=147658 length_ok=0 token_ok=0 image_ok=1 cvec_ok=1 state_ok=1 eligible=0
+2026-10-13T15:15:43.848008119Z [ckpt-diag] req=82 event=candidate source=active_checkpoint len=169818 lcp=147658 length_ok=0 token_ok=0 image_ok=1 cvec_ok=1 state_ok=1 eligible=0
+2026-10-13T15:15:44.461168770Z [ckpt-diag] req=82 event=resume_ready resume=10665 from_live=0

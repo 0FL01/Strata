@@ -1,0 +1,12 @@
+{
+  "base_commit": "a0116b2782a5b82622358c04a06496485d12b2d6",
+  "base_tree": "4c7ff5f7b5f844d8f7871f7c5dcfcce223941d93",
+  "branch": "fix/checkpoint-retention-20261013",
+  "upstream_spread_commit": "58cf9f4e6b9902b9a5334551110860c94e4f2202",
+  "upstream_spread_pr": "https://github.com/Niko1221/Strata/pull/1959",
+  "upstream_author": "xrip <xrip@xrip.ru>",
+  "gpu_validation": "Historical runtime:16/16 output-ID parity; history-dependent older-edit regression attributed; monitored opt-in rollout passed. Clean main GPU build/runtime not tested.",
+  "deployment_complete": true,
+  "deployment_finished_utc": "2026-10-13T16:06:47Z",
+  "deployment_live_sha256": "74aa76d48a4783991e60b7e25601125dc5dc2bfeeaa351a71b350c122476b662"
+}

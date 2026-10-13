@@ -384,5 +384,29 @@ int main() {
         check(tiny.put(std::move(p2)), "a pinned one fits an empty cache");
         check(!tiny.put(image({7,8,9})) && tiny.size() == 1, "nothing else fits beside it: parking is refused, the pin stays");
     }
+    {   // Coverage dominance: a deepest point does not replace an older recurrent state.
+        auto cp = [](std::initializer_list<int32_t> ids) {
+            ConversationCheckpoint c; c.ids = ids; c.gdn.resize(8, 1); return c;
+        };
+        ConversationCache cache(1 << 20, 8);
+        auto old = image({1,2,3,4,5});
+        old.checkpoints = {cp({1,2}), cp({1,2,3,4})};
+        check(cache.put(std::move(old)), "park two distinct restore points");
+        const auto bytes = cache.bytes();
+        auto chain = std::vector<ConversationCheckpoint>{cp({1,2,3,4})};
+        check(cache.drop_superseded({1,2,3,4,6}, {}, chain, true) == 0,
+              "matching deepest point preserves the unique older ancestor");
+        check(cache.size() == 1 && cache.bytes() == bytes, "preservation keeps accounting unchanged");
+        chain.insert(chain.begin(), cp({1,2}));
+        check(cache.drop_superseded({1,2,3,4,6}, {}, chain, false) == 0, "steering mismatch preserves entry");
+        chain[0].imgs = {{2,99}};
+        check(cache.drop_superseded({1,2,3,4,6}, {}, chain, true) == 0, "ancestor image mismatch preserves entry");
+        chain[0].imgs.clear(); chain[0].ids[0] = 9;
+        check(cache.drop_superseded({1,2,3,4,6}, {}, chain, true) == 0, "ancestor token mismatch preserves entry");
+        chain = {cp({1,2})};
+        check(cache.drop_superseded({1,2,3,4}, {}, chain, true) == 1,
+              "exact live state and retained ancestor cover every restore point");
+        check(cache.size() == 0 && cache.bytes() == 0, "full coverage deletion updates accounting");
+    }
     std::printf("conversation_cache_test: %d checks passed\n", checks);
 }

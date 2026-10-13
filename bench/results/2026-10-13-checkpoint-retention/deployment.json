@@ -1,0 +1,26 @@
+{
+  "passed": true,
+  "started_unix": 1791907563.333715,
+  "baseline_sha256": "85f8d642f42a52fa0e6402838e1755ea5ec3923155bd92fb3c2ac42415c02f56",
+  "candidate_sha256": "74aa76d48a4783991e60b7e25601125dc5dc2bfeeaa351a71b350c122476b662",
+  "backup": "configs/shefowl-hybrid-200k-c183-winner-live-20261013.json.before-cache-retention-fix-20261013",
+  "changed": [
+    "exe",
+    "args:+--prompt-cache-spread"
+  ],
+  "health": {
+    "status": "ok",
+    "loaded": true,
+    "max_context": 262144,
+    "images": true,
+    "api_key": true
+  },
+  "live_sha256": "74aa76d48a4783991e60b7e25601125dc5dc2bfeeaa351a71b350c122476b662",
+  "spread_enabled": true,
+  "diagnostics_enabled": true,
+  "unsafe_peer_flag_absent": true,
+  "finished_unix": 1791907607.2544112,
+  "started_utc": "2026-10-13T16:06:03.333715+00:00",
+  "finished_utc": "2026-10-13T16:06:47.254411+00:00",
+  "elapsed_seconds": 43.921
+}

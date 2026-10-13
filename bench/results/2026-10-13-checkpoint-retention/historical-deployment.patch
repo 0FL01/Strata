@@ -1,0 +1,165 @@
+--- a/include/strata/program/conv_cache.hpp
++++ b/include/strata/program/conv_cache.hpp
+@@ -54,4 +54,49 @@
+     return eviction_victim(stamps, n, cap);
+ }
+ 
++/// The pin=N shared prefixes (`pinned[i]`): they are never the victim, whatever their stamp - the queries that branch
++/// from one keep coming back to it, and a least-recently-used rule would drop it while they still do.  The root and
++/// the tail rule are as above.  When every other item is pinned too, the policy falls back to the oldest pinned one:
++/// the cache still keeps to its `cap` (the caller limits how many pins it takes, so this is a backstop).
++inline size_t eviction_victim(const uint64_t* stamps, size_t n, int64_t cap, const bool* tail, const bool* pinned) {
++    if (pinned == nullptr) return eviction_victim(stamps, n, cap, tail);
++    if (cap < 2 || n < 2) return 0;
++    size_t newest = 0;
++    for (size_t i = 1; i < n; ++i)
++        if (stamps[i] > stamps[newest]) newest = i;
++    if (tail != nullptr)
++        for (size_t i = 1; i < n; ++i)
++            if (tail[i] && !pinned[i] && i != newest) return i;
++    size_t v = n;                    // the least recently used among the unpinned non-root items
++    for (size_t i = 1; i < n; ++i)
++        if (!pinned[i] && (v == n || stamps[i] < stamps[v])) v = i;
++    if (v != n) return v;
++    v = 1;                           // all pinned: the oldest of them (never the root, index 0)
++    for (size_t i = 2; i < n; ++i)
++        if (stamps[i] < stamps[v]) v = i;
++    return v;
++}
++
++/// --prompt-cache-spread: the item whose removal leaves the smallest gap for its distance from the newest, so the kept
++/// points thin out geometrically towards the root and an edit d tokens before the end reads about d again.  `lens`:
++/// the chain's token counts.  Never the root, the newest or a pinned item; the tail rule first, as above.
++inline size_t spread_victim(const int64_t* lens, const uint64_t* stamps, size_t n, int64_t cap, const bool* tail,
++                            const bool* pinned) {
++    if (n >= 3 && cap >= 2) {
++        auto candidate = [&](size_t i) { return !(pinned && pinned[i]); };
++        if (tail != nullptr)
++            for (size_t i = 1; i + 1 < n; ++i)
++                if (tail[i] && candidate(i)) return i;
++        size_t v = n;
++        double best = 0;
++        for (size_t i = 1; i + 1 < n; ++i) {
++            if (!candidate(i)) continue;
++            const double gap = double(lens[i + 1] - lens[i - 1]) / double(lens[n - 1] - lens[i - 1]);
++            if (v == n || gap < best) { v = i; best = gap; }
++        }
++        if (v != n) return v;
++    }
++    return eviction_victim(stamps, n, cap, tail, pinned);
++}
++
+ }  // namespace strata::program::conv_cache
+--- a/include/strata/core/conversation_cache.hpp
++++ b/include/strata/core/conversation_cache.hpp
+@@ -252,13 +252,11 @@
+         return true;
+     }
+ 
+-    // #342: drop the parked entries an outgoing conversation (its live tokens and checkpoint chain) supersedes:
+-    // the same conversation a turn back, whose DEEPEST checkpoint the outgoing chain still holds, so all it adds
+-    // is the tail the client rewrote (the reply as it was generated, before the next request re-rendered it) and
+-    // checkpoints older than that one.  A subagent's successive turns parked one such copy each, and make_room's
+-    // oldest-first eviction then pushed the parent conversation out after `slots` turns.  An entry without
+-    // checkpoints, or whose deepest checkpoint the outgoing chain does not hold (another conversation that only
+-    // shares the system prompt's root with it), is kept.  Returns how many were dropped.
++    // Drop a stale parked copy only when every one of its checkpoint restore points
++    // is explicitly available in the outgoing chain/live state. A matching deepest
++    // checkpoint alone does not dominate an older unique ancestor after compaction.
++    // Positional token/image equality and steering mode remain mandatory. Parked
++    // byte/slot eviction still bounds memory when unique ancestors keep copies alive.
+     size_t drop_superseded(const std::vector<int32_t>& ids, const std::vector<ConversationImageKey>& images,
+                            const std::vector<ConversationCheckpoint>& checkpoints, bool cvec) {
+         auto held = [&](const ConversationCheckpoint& c) {
+@@ -270,10 +268,11 @@
+         size_t dropped = 0;
+         for (size_t i = 0; i < entries_.size();) {
+             const auto& e = entries_[i];
+-            const ConversationCheckpoint* deepest = nullptr;
+-            for (const auto& c : e.checkpoints)
+-                if (!deepest || c.ids.size() > deepest->ids.size()) deepest = &c;
+-            if (e.cvec == cvec && deepest && !deepest->ids.empty() && held(*deepest)) {
++            const bool covered = !e.checkpoints.empty() &&
++                std::all_of(e.checkpoints.begin(), e.checkpoints.end(), [&](const auto& c) {
++                    return !c.ids.empty() && held(c);
++                });
++            if (e.cvec == cvec && covered) {
+                 bytes_ -= e.bytes();
+                 entries_.erase(entries_.begin() + (std::ptrdiff_t) i);
+                 ++dropped;
+--- a/src/program/generate.cpp
++++ b/src/program/generate.cpp
+@@ -596,6 +596,7 @@
+     int64_t session_min_free_mib = 4096;
+     /// --serve: also keep a checkpoint every N freshly read prompt tokens (0 = only at the last turn boundary)
+     int64_t prompt_cache_every = 16384;
++    bool prompt_cache_spread = false; // opt-in geometric retention, upstream PR #1959
+     bool prompt_cache_tail = false;   // optional extra checkpoint at an existing near-tail chunk boundary
+     /// --serve: a prompt read from token 0 is also checkpointed at its first turn boundary - the end of the system
+     /// prompt, which every chat of the same client shares - when that is at least N tokens (0 = never)
+@@ -728,6 +729,8 @@
+                  "  --vision             --serve takes images too (GENI requests; embeddings from strata-vision)\n"
+                  "  --prompt-cache N     --serve: keep N conversation checkpoints between requests (default 6, ~118 MB\n"
+                  "                       of RAM each; 0 = read every prompt from the start)\n"
++                 "  --prompt-cache-spread  --serve: spread the N checkpoints across history instead of LRU\n"
++                 "                       (opt-in; unchanged memory cap; no maximum replay-gap guarantee)\n"
+                  "  --conversation-cache-mib N  --serve: RAM budget for parked conversations (default 0 = off)\n"
+                  "  --conversation-cache-slots N  --serve: at most N parked conversations (default 4)\n"
+                  "  --conversation-cache-min-free-mib N  --serve: physical RAM floor when parking or restoring a\n"
+@@ -1725,6 +1728,7 @@
+             else if (a == "--session-min-free-mib") o.session_min_free_mib = number;
+             else o.conversation_cache_slots = (int) number;
+         }
++        else if (a == "--prompt-cache-spread") o.prompt_cache_spread = true;
+         else if (a == "--prompt-cache-tail") o.prompt_cache_tail = true;
+         else if (a == "--prompt-cache-every") o.prompt_cache_every = std::max(0LL, std::atoll(next("--prompt-cache-every")));
+         else if (a == "--prompt-cache-root") o.prompt_cache_root = std::max(0LL, std::atoll(next("--prompt-cache-root")));
+@@ -6321,9 +6325,12 @@
+         };
+         auto ckpt_diag_inventory = [&](const char* event) {
+             if (!ckpt_diag) return;
+-            std::fprintf(stderr, "[ckpt-diag] req=%llu event=%s count=%zu live_len=%zu live_ok=%d cvec=%d tail_len=%lld\n",
++            size_t checkpoint_bytes = 0;
++            for (const auto& c : checks) checkpoint_bytes += c.bytes();
++            std::fprintf(stderr, "[ckpt-diag] req=%llu event=%s count=%zu live_len=%zu live_ok=%d cvec=%d tail_len=%lld spread=%d checkpoint_bytes=%zu\n",
+                          (unsigned long long) ckpt_diag_request, event, checks.size(), live.size(),
+-                         int(live_ok), int(cvec_cached), (long long) tail_ckpt_len);
++                         int(live_ok), int(cvec_cached), (long long) tail_ckpt_len,
++                         int(o.prompt_cache_spread), checkpoint_bytes);
+             for (const auto& c : checks) ckpt_diag_record(event, "active", c);
+         };
+         auto ckpt_diag_park = [&](const char* reason) {
+@@ -6426,8 +6433,7 @@
+             }
+ // CKPT_DIAG_END
+             if (!conversations.enabled() || !live_ok || live.empty()) return true;
+-            // #342: before make_room evicts oldest-first, the copies of this conversation a turn back go (they hold
+-            // nothing the outgoing chain does not, apart from the tail this conversation rewrote)
++            // Before budget eviction, remove only copies whose entire checkpoint coverage is retained.
+             if (const size_t dropped = conversations.drop_superseded(live, live_imgs, checks, cvec_cached))
+                 std::fprintf(stderr, "strata serve: conversation cache: dropped %zu superseded cop%s of this "
+                              "conversation; parked=%zu\n", dropped, dropped == 1 ? "y" : "ies", conversations.size());
+@@ -6673,16 +6679,21 @@
+             while ((int) checks.size() > o.prompt_cache) {
+                 std::vector<uint64_t> stamps;
+                 std::vector<char> is_tail;
++                std::vector<int64_t> lengths;
+                 stamps.reserve(checks.size());
+                 for (const ConvCheckpoint& k : checks) {
+                     stamps.push_back(k.used);
++                    lengths.push_back((int64_t) k.ids.size());
+                     is_tail.push_back(tail_ckpt_len >= 0 && (int64_t) k.ids.size() == tail_ckpt_len);
+                 }
+                 // the tail checkpoint serves only a branch of the last request: it leaves before a periodic one
+                 std::unique_ptr<bool[]> tail_flags(new bool[is_tail.size()]);
+                 for (size_t i = 0; i < is_tail.size(); ++i) tail_flags[i] = is_tail[i] != 0;
+-                const size_t victim = strata::program::conv_cache::eviction_victim(
+-                    stamps.data(), stamps.size(), o.prompt_cache, tail_flags.get());
++                const size_t victim = o.prompt_cache_spread
++                    ? strata::program::conv_cache::spread_victim(
++                        lengths.data(), stamps.data(), stamps.size(), o.prompt_cache, tail_flags.get(), nullptr)
++                    : strata::program::conv_cache::eviction_victim(
++                        stamps.data(), stamps.size(), o.prompt_cache, tail_flags.get());
+ // CKPT_DIAG_BEGIN
+                 ckpt_diag_record("lru_evict", "active", checks[victim]);
+ // CKPT_DIAG_END

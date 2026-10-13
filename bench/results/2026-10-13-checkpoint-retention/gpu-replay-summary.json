@@ -1,0 +1,70 @@
+{
+  "status": "monitored_opt_in_deployed",
+  "reported_at_utc": "2026-10-13T16:09:00Z",
+  "deployment_complete": true,
+  "requests_per_arm": 16,
+  "matching_output_id_sequences": 16,
+  "active_checkpoint_cap": 6,
+  "cases": [
+    {
+      "name": "rewrite65560",
+      "baseline": {
+        "reused_tokens": 16384,
+        "read_tokens": 49435,
+        "seconds": 78.1315
+      },
+      "candidate": {
+        "reused_tokens": 65536,
+        "read_tokens": 283,
+        "seconds": 3.1061
+      }
+    },
+    {
+      "name": "rewrite33024",
+      "baseline": {
+        "reused_tokens": 32768,
+        "read_tokens": 515,
+        "seconds": 3.6297
+      },
+      "candidate": {
+        "reused_tokens": 16384,
+        "read_tokens": 16899,
+        "seconds": 29.8804
+      }
+    }
+  ],
+  "final_parked_cache": {
+    "baseline": {
+      "entries": 2,
+      "evictions": 0
+    },
+    "candidate": {
+      "entries": 4,
+      "evictions": 6
+    }
+  },
+  "archive_consistency": {
+    "passed_gates": 6,
+    "objects": [
+      "conversation_state",
+      "conversation_file",
+      "conversation_snapshot"
+    ],
+    "baseline_and_candidate_byte_identical_to_pinned": true
+  },
+  "evidence_scope": "Coordinator-reported paired GPU replay and archive gate results; no raw prompts included.",
+  "timing_scope": "prompt phase, historical-runtime paired replay; clean main GPU not tested",
+  "aggregate": {
+    "baseline": {
+      "read_tokens": 118344,
+      "prompt_ms": 211824.3
+    },
+    "candidate": {
+      "read_tokens": 85576,
+      "prompt_ms": 165410.2
+    }
+  },
+  "attribution": "Baseline request11 reread recreated32768 used25, request12 parked it, request13 reused that exact point. Candidate avoided request11 reread and did not recreate32768 then. Geometric/history trade-off; parked pressure separately observed.",
+  "deployment_finished_utc": "2026-10-13T16:06:47Z",
+  "deployment_live_sha256": "74aa76d48a4783991e60b7e25601125dc5dc2bfeeaa351a71b350c122476b662"
+}
