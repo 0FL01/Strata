@@ -1,0 +1,229 @@
+{
+  "schema": 1,
+  "artifact_kind": "historical-runtime-preservation",
+  "public_repository": "https://github.com/0FL01/Strata",
+  "proposed_parent_commit": "236a6aac2da7c2df00b1510f8fe46270917e2334",
+  "baseline_binary_sha256": "74aa76d48a4783991e60b7e25601125dc5dc2bfeeaa351a71b350c122476b662",
+  "candidate_binary_sha256": "7b00d34c85181a2023862e01a5782c68c0403ba5b13a0e0eeec7280afa06b0e6",
+  "image_sha256": "bccb7ee7e7a78274519db9a43ba63c34ddd2e74bb60f8764a8f50aaee1f2c646",
+  "runtime_sources": {
+    "src/program/generate.cpp": {
+      "baseline_sha256": "614034787daa9e5c9a114dc36845cea821f01f44a84b7d1aa2fb6597fd0c671e",
+      "candidate_sha256": "f4f542c8b2fbadcbb09ee1a35cbf5de1206a07cbd6e3bdcc78c7a22692863c04"
+    },
+    "include/strata/core/conversation_cache.hpp": {
+      "baseline_sha256": "5d0feb469ffed2c0d01ea781dba06e864f4a29237646429261ff6ea3e56fdf2c",
+      "candidate_sha256": "a12ec3206f989e19821f1f1a450fef89605929547cdeefd9664cc8cd2e993e4f"
+    },
+    "include/strata/core/conversation_memory_budget.hpp": {
+      "baseline_sha256": null,
+      "candidate_sha256": "41838947d41d11f4b6c0f4b39999ec1e01f72e979383ef6704525a58008f4a63"
+    },
+    "include/strata/program/coverage.hpp": {
+      "baseline_sha256": null,
+      "candidate_sha256": "9e8da94aeeebb7254a25043f617fe0e5b530c83812249842eece8c4a9d14561b"
+    }
+  },
+  "historical_source_and_build_inputs": {
+    "include/strata/core/conversation_buffer.hpp": {
+      "baseline": "baseline/include/strata/core/conversation_buffer.hpp",
+      "baseline_sha256": "12f1abac2ec75cc71e8cf308a5a691923d8b617317560e009a41f713809f49d4",
+      "candidate": "candidate/include/strata/core/conversation_buffer.hpp",
+      "candidate_sha256": "12f1abac2ec75cc71e8cf308a5a691923d8b617317560e009a41f713809f49d4"
+    },
+    "include/strata/core/conversation_cache.hpp": {
+      "baseline": "baseline/include/strata/core/conversation_cache.hpp",
+      "baseline_sha256": "5d0feb469ffed2c0d01ea781dba06e864f4a29237646429261ff6ea3e56fdf2c",
+      "candidate": "candidate/include/strata/core/conversation_cache.hpp",
+      "candidate_sha256": "a12ec3206f989e19821f1f1a450fef89605929547cdeefd9664cc8cd2e993e4f"
+    },
+    "include/strata/core/conversation_file.hpp": {
+      "baseline": "baseline/include/strata/core/conversation_file.hpp",
+      "baseline_sha256": "2c6ddbb2bb1f44331297a2cf970504da67ce501180fe1513aeb59f71cef8f942"
+    },
+    "include/strata/core/conversation_memory.hpp": {
+      "baseline": "baseline/include/strata/core/conversation_memory.hpp",
+      "baseline_sha256": "b4c784080bfda39adb7a2fd4c64bac27a77bb7a6f4557b609e08c2afcb7f9954"
+    },
+    "include/strata/core/conversation_memory_budget.hpp": {
+      "candidate": "candidate/include/strata/core/conversation_memory_budget.hpp",
+      "candidate_sha256": "41838947d41d11f4b6c0f4b39999ec1e01f72e979383ef6704525a58008f4a63"
+    },
+    "include/strata/core/conversation_snapshot.hpp": {
+      "baseline": "baseline/include/strata/core/conversation_snapshot.hpp",
+      "baseline_sha256": "c403e99ab515566e1314a3c485f8974d25bb0194a181f1e8ab804fc76ce8f665"
+    },
+    "include/strata/core/verify.hpp": {
+      "baseline": "baseline/include/strata/core/verify.hpp",
+      "baseline_sha256": "5a959164cbaed0feee14463ea036c0002816993a21b2f987d6dc57566fceef13"
+    },
+    "include/strata/kernels/iq_kernels.hpp": {
+      "baseline": "baseline/include/strata/kernels/iq_kernels.hpp",
+      "baseline_sha256": "00e41a0b6d841cf6c532e012b113f5f0e4e9aa6b9e0d59a077b0e0bce2f1897a"
+    },
+    "include/strata/program/conv_cache.hpp": {
+      "baseline": "baseline/include/strata/program/conv_cache.hpp",
+      "baseline_sha256": "b98e3ce0086a009bd0eb7454e849b9bf3f6736a4f35f6b330627f8f6497b082a"
+    },
+    "include/strata/program/coverage.hpp": {
+      "candidate": "candidate/include/strata/program/coverage.hpp",
+      "candidate_sha256": "9e8da94aeeebb7254a25043f617fe0e5b530c83812249842eece8c4a9d14561b"
+    },
+    "src/core/conversation_file.cpp": {
+      "baseline": "baseline/src/core/conversation_file.cpp",
+      "baseline_sha256": "136afacb6896fdf788ac751da2531ffdb59505edb83e9dc9d3176099e7eeb559"
+    },
+    "src/core/conversation_snapshot.cpp": {
+      "baseline": "baseline/src/core/conversation_snapshot.cpp",
+      "baseline_sha256": "41c023e09357031eb548b6a6fc066605897079241af1766ff2ffd22961dc8737"
+    },
+    "src/core/conversation_state.cpp": {
+      "baseline": "baseline/src/core/conversation_state.cpp",
+      "baseline_sha256": "1118b3d783b46acd0e2d49d351cf6d14ba092a125b6ab355deea82f85c27ca0f"
+    },
+    "src/program/generate.cpp": {
+      "baseline": "baseline/src/program/generate.cpp",
+      "baseline_sha256": "614034787daa9e5c9a114dc36845cea821f01f44a84b7d1aa2fb6597fd0c671e",
+      "candidate": "candidate/src/program/generate.cpp",
+      "candidate_sha256": "f4f542c8b2fbadcbb09ee1a35cbf5de1206a07cbd6e3bdcc78c7a22692863c04"
+    }
+  },
+  "frozen_build_package_sha256sums_sha256": "7af7724d2d80ca369d48340b89401a96a4c871363886db651e1e146bea5fbae9",
+  "original_replay_seed_sha256": "63ce3d4042027a00b2193feab143f1d9443b5c31a863a962ec9543ccb54d9695",
+  "private_replay_seed_published": false,
+  "original_runtime_patch_sha256": "edbbcdf464236e9eacd0331115e3fff12503e8b2535e16c47bd148d045c94163",
+  "publication_provenance": [
+    {
+      "path": "runtime/protected-cache.patch",
+      "original_sha256": "edbbcdf464236e9eacd0331115e3fff12503e8b2535e16c47bd148d045c94163",
+      "published_sha256": "edbbcdf464236e9eacd0331115e3fff12503e8b2535e16c47bd148d045c94163",
+      "transformation": "none; byte-identical"
+    },
+    {
+      "path": "runtime/manifest.json",
+      "original_sha256": "646faadb61538d6f841698325e9208e74adb4b0024b4fb216105acb069ea3d59",
+      "published_sha256": "646faadb61538d6f841698325e9208e74adb4b0024b4fb216105acb069ea3d59",
+      "transformation": "none; byte-identical"
+    },
+    {
+      "path": "runtime/include/strata/core/conversation_buffer.hpp",
+      "original_sha256": "12f1abac2ec75cc71e8cf308a5a691923d8b617317560e009a41f713809f49d4",
+      "published_sha256": "12f1abac2ec75cc71e8cf308a5a691923d8b617317560e009a41f713809f49d4",
+      "transformation": "none; byte-identical"
+    },
+    {
+      "path": "runtime/include/strata/core/conversation_cache.hpp",
+      "original_sha256": "a12ec3206f989e19821f1f1a450fef89605929547cdeefd9664cc8cd2e993e4f",
+      "published_sha256": "a12ec3206f989e19821f1f1a450fef89605929547cdeefd9664cc8cd2e993e4f",
+      "transformation": "none; byte-identical"
+    },
+    {
+      "path": "runtime/include/strata/core/conversation_memory_budget.hpp",
+      "original_sha256": "41838947d41d11f4b6c0f4b39999ec1e01f72e979383ef6704525a58008f4a63",
+      "published_sha256": "41838947d41d11f4b6c0f4b39999ec1e01f72e979383ef6704525a58008f4a63",
+      "transformation": "none; byte-identical"
+    },
+    {
+      "path": "runtime/include/strata/program/coverage.hpp",
+      "original_sha256": "9e8da94aeeebb7254a25043f617fe0e5b530c83812249842eece8c4a9d14561b",
+      "published_sha256": "9e8da94aeeebb7254a25043f617fe0e5b530c83812249842eece8c4a9d14561b",
+      "transformation": "none; byte-identical"
+    },
+    {
+      "path": "tests/runtime_contract.cpp",
+      "original_sha256": "ba525d5eb44b229338d6ad819e65b4fe34256aface2461359804466f0099d4b8",
+      "published_sha256": "ba525d5eb44b229338d6ad819e65b4fe34256aface2461359804466f0099d4b8",
+      "transformation": "none; byte-identical"
+    },
+    {
+      "path": "tests/source_contract.py",
+      "original_sha256": "37b95895b07fa65fd22e27b6480197f4fb6b3093d09babd6152c60b72c63f871",
+      "published_sha256": "37b95895b07fa65fd22e27b6480197f4fb6b3093d09babd6152c60b72c63f871",
+      "transformation": "none; byte-identical"
+    },
+    {
+      "path": "tests/test_conversation_memory_budget.cpp",
+      "original_sha256": "b0127d2bfed7922fdf43703838c38a2c28f32ebdd99e291480d2798a8a9e3479",
+      "published_sha256": "b0127d2bfed7922fdf43703838c38a2c28f32ebdd99e291480d2798a8a9e3479",
+      "transformation": "none; byte-identical"
+    },
+    {
+      "path": "tests/coverage_test.cpp",
+      "original_sha256": "3bbafe3b060e462876e0fd92cad70474925842799ee93836d5d74af78b787ea7",
+      "published_sha256": "3bbafe3b060e462876e0fd92cad70474925842799ee93836d5d74af78b787ea7",
+      "transformation": "none; byte-identical"
+    },
+    {
+      "path": "tests/test_checkpoint_metadata.cpp",
+      "original_sha256": "54fec84d897a8e2c3190e64c48d43c315f301056194686d7638b035ff7b00f56",
+      "published_sha256": "54fec84d897a8e2c3190e64c48d43c315f301056194686d7638b035ff7b00f56",
+      "transformation": "none; byte-identical"
+    },
+    {
+      "path": "build/build_cache16.py",
+      "original_sha256": "d98ce6e75338b40127f6f92f4ca1cce7d49c7cfeca1e0ca0df8bdde83897ea73",
+      "published_sha256": "d98ce6e75338b40127f6f92f4ca1cce7d49c7cfeca1e0ca0df8bdde83897ea73",
+      "transformation": "none; byte-identical"
+    },
+    {
+      "path": "build/prior_recipe.py",
+      "original_sha256": "ea7e6a9b5361bad57ab0c15ff0764411026a6a21c7fa66a953fb63c11f5fbcfc",
+      "published_sha256": "ea7e6a9b5361bad57ab0c15ff0764411026a6a21c7fa66a953fb63c11f5fbcfc",
+      "transformation": "none; byte-identical"
+    },
+    {
+      "path": "build/dependencies.json",
+      "original_sha256": "48bc7970ddff82b61b21d35177376144900770f935401870b8fdca73a6792c98",
+      "published_sha256": "48bc7970ddff82b61b21d35177376144900770f935401870b8fdca73a6792c98",
+      "transformation": "none; byte-identical"
+    },
+    {
+      "path": "build/source-type-audit.json",
+      "original_sha256": "39fab1f12a1c02f5713a7b1781506a203f8da1d72d8b322a0fd029062245743a",
+      "published_sha256": "39fab1f12a1c02f5713a7b1781506a203f8da1d72d8b322a0fd029062245743a",
+      "transformation": "none; byte-identical"
+    },
+    {
+      "path": "build/package.template.json",
+      "original_sha256": "3c83c3d8bc9a6014f454130097ae8276a5e4f43c34fc492f37772c562917759e",
+      "published_sha256": "e62ed4bfc80115b1beddf6ebbf450cf7ab8f7da772e2298b4d3c9730504b5210",
+      "transformation": "host-path examples sanitized"
+    },
+    {
+      "path": "replay/replay.py",
+      "original_sha256": "c2e7026f24ebc4b80b6719547fd449aaeea7832fa780a9b9dbee870ce62d449e",
+      "published_sha256": "c2e7026f24ebc4b80b6719547fd449aaeea7832fa780a9b9dbee870ce62d449e",
+      "transformation": "none; byte-identical"
+    },
+    {
+      "path": "replay/run_gpu_replay.py",
+      "original_sha256": "4bc43433a49b15ce60c3701178d5fcc81bbac06e2bd83ccb6bfec5b965a82cbb",
+      "published_sha256": "0099c0bec6b1e5d3a4bd5a59500dbb47c064b200374582a8b5d4f0ce5dd6f4b0",
+      "transformation": "host-path examples sanitized"
+    },
+    {
+      "path": "replay/test_cpu.py",
+      "original_sha256": "7347c00d6fd66bf8513d6cd8edf65b9e0d67202b9dacb3816bc1437a152cc3fe",
+      "published_sha256": "ae55407ec100fe4505a9cc3d24ae1a533ac9bf8263b8d0448bcbe3a03d875843",
+      "transformation": "host-path examples sanitized"
+    },
+    {
+      "path": "replay/production-environment.json",
+      "original_sha256": "0500a8fd8df408dbb198fae1eef31850815fce4f4a1b2e8bddb7e46b0104e338",
+      "published_sha256": "0500a8fd8df408dbb198fae1eef31850815fce4f4a1b2e8bddb7e46b0104e338",
+      "transformation": "none; byte-identical"
+    },
+    {
+      "path": "policy/README.md",
+      "original_sha256": "e62f7590b087f0ed76aa9642a6a04c8432650d37a107f6caaaa7064ed5bf1e99",
+      "published_sha256": "e62f7590b087f0ed76aa9642a6a04c8432650d37a107f6caaaa7064ed5bf1e99",
+      "transformation": "none; byte-identical"
+    },
+    {
+      "path": "budget/README.md",
+      "original_sha256": "a6d940f8c5c1ce8e644a65eadaf614e6cb6d381de6c0adfaf5ec6bba0ca7274a",
+      "published_sha256": "a6d940f8c5c1ce8e644a65eadaf614e6cb6d381de6c0adfaf5ec6bba0ca7274a",
+      "transformation": "none; byte-identical"
+    }
+  ]
+}

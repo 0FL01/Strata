@@ -1,0 +1,110 @@
+{
+  "schema": 1,
+  "acceptance_passed": false,
+  "reason": "zero compaction read reduction; the initial baseline fixture did not reproduce the original root collapse",
+  "binary_sha256": {
+    "baseline": "74aa76d48a4783991e60b7e25601125dc5dc2bfeeaa351a71b350c122476b662",
+    "candidate": "7b00d34c85181a2023862e01a5782c68c0403ba5b13a0e0eeec7280afa06b0e6"
+  },
+  "gpu_execution": true,
+  "request_count_per_arm": 13,
+  "all_inputs_identical": true,
+  "all_comparable_output_ids_equal": true,
+  "baseline_protocol_passed": true,
+  "candidate_protocol_passed": true,
+  "candidate_protected_gates_passed": true,
+  "compaction_read_reduction": 0,
+  "decode_anchor_reuse": true,
+  "maximum_sampled_accounted_bytes": 13994425392,
+  "reported_high_water_bytes": 14121793268,
+  "memory_limit_bytes": 17179869184,
+  "ordinary_short_turns": {
+    "baseline": {
+      "request_count": 6,
+      "input_tokens": 709086,
+      "reused_tokens": 707480,
+      "read_tokens": 1606,
+      "output_tokens": 192,
+      "prompt_ms": 17170.7,
+      "decode_ms": 3145.2,
+      "total_wall_s": 20.455750901950523,
+      "first_token_ms_mean": 2917.3377958553224,
+      "first_token_ms_median": 2408.016426023096,
+      "prompt_read_tps": 93.5314227142749,
+      "decode_tps": 61.045402518122856,
+      "output_per_wall_second": 9.38611351498674,
+      "capture_count": 6,
+      "capture_ms": null,
+      "request_head_capture_count": 0,
+      "request_head_capture_ms": null
+    },
+    "candidate": {
+      "request_count": 6,
+      "input_tokens": 709086,
+      "reused_tokens": 707480,
+      "read_tokens": 1606,
+      "output_tokens": 192,
+      "prompt_ms": 17643.1,
+      "decode_ms": 3657.2999999999997,
+      "total_wall_s": 21.5315703881206,
+      "first_token_ms_mean": 3011.0577776407204,
+      "first_token_ms_median": 2431.679280474782,
+      "prompt_read_tps": 91.02708707653417,
+      "decode_tps": 52.4977442375523,
+      "output_per_wall_second": 8.917138719520906,
+      "capture_count": 12,
+      "capture_ms": 1019.642,
+      "request_head_capture_count": 6,
+      "request_head_capture_ms": 514.553
+    },
+    "changes": {
+      "prompt_ms": {
+        "candidate_minus_baseline": 472.3999999999978,
+        "percent_change": 2.751198262155869
+      },
+      "decode_ms": {
+        "candidate_minus_baseline": 512.0999999999999,
+        "percent_change": 16.28195345288058
+      },
+      "total_wall_s": {
+        "candidate_minus_baseline": 1.0758194861700758,
+        "percent_change": 5.259251988972416
+      },
+      "prompt_read_tps": {
+        "candidate_minus_baseline": -2.5043356377407235,
+        "percent_change": -2.677533993459193
+      },
+      "decode_tps": {
+        "candidate_minus_baseline": -8.547658280570559,
+        "percent_change": -14.002132720859645
+      },
+      "output_per_wall_second": {
+        "candidate_minus_baseline": -0.468974795465833,
+        "percent_change": -4.996474789240769
+      },
+      "first_token_ms_mean": {
+        "candidate_minus_baseline": 93.71998178539798,
+        "percent_change": 3.212517313509134
+      },
+      "first_token_ms_median": {
+        "candidate_minus_baseline": 23.662854451686144,
+        "percent_change": 0.9826699766648181
+      }
+    }
+  },
+  "owned_cleanup_passed": true,
+  "production_config_unchanged": true,
+  "binary_inputs_unchanged": true,
+  "api_start_requested": true,
+  "post_run_operator_verification": "Baseline API restored and healthy; separately verified by the operator. Wrapper api_start_requested alone is not health evidence.",
+  "candidate_deployed": false,
+  "mainline_integration": false,
+  "source_archive_sha256": "9667ce07f7d6886c77bf499e77890abadbb19f15def943eb510a764cf5f1c75a",
+  "capture_timing_note": "Captured-event ms excludes some earlier multipart save time; use end-to-end PP/TTFT/wall for overhead. Reported event bytes is bank size, not copy traffic.",
+  "limits": [
+    "one paired run, not statistical proof",
+    "synthetic text only",
+    "original historical defect not reproduced by this fixture",
+    "not a process RSS bound"
+  ]
+}

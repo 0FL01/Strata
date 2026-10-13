@@ -1,0 +1,12 @@
+{
+  "passed": true,
+  "patch_sha256": "edbbcdf464236e9eacd0331115e3fff12503e8b2535e16c47bd148d045c94163",
+  "reconstructed_candidate_files_match": {
+    "src/program/generate.cpp": true,
+    "include/strata/core/conversation_cache.hpp": true,
+    "include/strata/core/conversation_memory_budget.hpp": true,
+    "include/strata/program/coverage.hpp": true
+  },
+  "source_contract_passed": true,
+  "gpu_execution": false
+}

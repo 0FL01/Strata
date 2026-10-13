@@ -1,0 +1,943 @@
+[
+  {
+    "case": "long128561",
+    "input_sha256": "1513d286b2bb73ba000ceecb725639003e5f8e960588e954ae7bbfaf6a479eb6",
+    "input_tokens": 128561,
+    "prompt_ms": 201889.9,
+    "decode_ms": 730.3,
+    "finish": "length",
+    "reused": 0,
+    "read": 128561,
+    "wall_s": 202.64579870190937,
+    "done": "DONE 32 128561 201889.9 730.3 length 21 30 0 19920 20160 0 0 0.0 128561 0",
+    "request_index": 1,
+    "pp": [
+      "PP 4096 128561 10131 404.3",
+      "PP 8192 128561 15911 514.9",
+      "PP 10674 128561 18942 563.5",
+      "PP 14770 128561 29153 506.6",
+      "PP 18866 128561 35073 537.9",
+      "PP 22962 128561 40864 561.9",
+      "PP 27058 128561 46699 579.4",
+      "PP 31154 128561 52575 592.6",
+      "PP 35250 128561 58593 601.6",
+      "PP 39346 128561 64520 609.8",
+      "PP 43442 128561 70423 616.9",
+      "PP 47538 128561 76444 621.9",
+      "PP 51634 128561 82552 625.5",
+      "PP 55730 128561 88576 629.2",
+      "PP 59826 128561 94695 631.8",
+      "PP 63922 128561 100853 633.8",
+      "PP 68018 128561 107037 635.5",
+      "PP 72114 128561 113142 637.4",
+      "PP 76210 128561 119352 638.5",
+      "PP 80306 128561 125645 639.1",
+      "PP 84402 128561 132030 639.3",
+      "PP 88498 128561 138209 640.3",
+      "PP 92594 128561 144584 640.4",
+      "PP 96690 128561 150968 640.5",
+      "PP 100786 128561 157477 640.0",
+      "PP 104882 128561 163867 640.0",
+      "PP 108978 128561 170284 640.0",
+      "PP 113074 128561 176862 639.3",
+      "PP 117170 128561 183639 638.0",
+      "PP 121266 128561 190114 637.9",
+      "PP 125362 128561 196710 637.3",
+      "PP 128556 128561 201445 638.2",
+      "PP 128560 128561 201890 636.8"
+    ],
+    "stop_sent": false,
+    "first_token_ms": 201966.55890799593,
+    "declared_lcp": null,
+    "source_history_length": 128561,
+    "capture_events": [
+      {
+        "length": 10674,
+        "target": null,
+        "source": "active",
+        "ms": null,
+        "reported_bank_bytes": null
+      },
+      {
+        "length": 18866,
+        "target": null,
+        "source": "active",
+        "ms": null,
+        "reported_bank_bytes": null
+      },
+      {
+        "length": 35250,
+        "target": null,
+        "source": "active",
+        "ms": null,
+        "reported_bank_bytes": null
+      },
+      {
+        "length": 51634,
+        "target": null,
+        "source": "active",
+        "ms": null,
+        "reported_bank_bytes": null
+      },
+      {
+        "length": 68018,
+        "target": null,
+        "source": "active",
+        "ms": null,
+        "reported_bank_bytes": null
+      },
+      {
+        "length": 84402,
+        "target": null,
+        "source": "active",
+        "ms": null,
+        "reported_bank_bytes": null
+      },
+      {
+        "length": 100786,
+        "target": null,
+        "source": "active",
+        "ms": null,
+        "reported_bank_bytes": null
+      },
+      {
+        "length": 117170,
+        "target": null,
+        "source": "active",
+        "ms": null,
+        "reported_bank_bytes": null
+      },
+      {
+        "length": 128556,
+        "target": null,
+        "source": "active",
+        "ms": null,
+        "reported_bank_bytes": null
+      }
+    ],
+    "capture_count": 9,
+    "capture_ms": null,
+    "request_head_capture_count": 0,
+    "request_head_capture_ms": null,
+    "prompt_read_tps": 636.7876748663505,
+    "decode_tps": 43.817609201697934,
+    "output_per_wall_second": 0.15791099645283932,
+    "output_tokens": 32,
+    "output_ids_sha256": "3504c548c29909af3bfa4d7f12ccaba313b13c53391cc391244b1c7d67a34a86"
+  },
+  {
+    "case": "grow_recorded01",
+    "input_sha256": "3d76a84ab14441ba26e24fa370890276208684e179064183ff58e0ba050bf59c",
+    "input_tokens": 133477,
+    "prompt_ms": 15920.9,
+    "decode_ms": 572.9,
+    "finish": "length",
+    "reused": 128556,
+    "read": 4921,
+    "wall_s": 16.519353270996362,
+    "done": "DONE 32 133477 15920.9 572.9 length 22 25 128556 16972 17280 0 0 0.0 4921 0",
+    "request_index": 2,
+    "pp": [
+      "PP 132652 133477 13694 299.1",
+      "PP 133472 133477 15576 315.6",
+      "PP 133476 133477 15921 309.0"
+    ],
+    "stop_sent": false,
+    "first_token_ms": 15979.14064093493,
+    "declared_lcp": 128577,
+    "source_history_length": 128593,
+    "capture_events": [
+      {
+        "length": 133472,
+        "target": null,
+        "source": "active",
+        "ms": null,
+        "reported_bank_bytes": null
+      }
+    ],
+    "capture_count": 1,
+    "capture_ms": null,
+    "request_head_capture_count": 0,
+    "request_head_capture_ms": null,
+    "prompt_read_tps": 309.0905664880754,
+    "decode_tps": 55.856170361319606,
+    "output_per_wall_second": 1.9371218397625518,
+    "output_tokens": 32,
+    "output_ids_sha256": "ddd64b1a25ec00906a89e645e589e26d3afa4c5e7e140a6e3e968731e1e12c7e"
+  },
+  {
+    "case": "grow_recorded02",
+    "input_sha256": "b4a3f0c2e849aaf4d42ad54b190831fca0963a2d408ead658b9492c90d6064dc",
+    "input_tokens": 135697,
+    "prompt_ms": 9322.3,
+    "decode_ms": 545.5,
+    "finish": "length",
+    "reused": 133472,
+    "read": 2225,
+    "wall_s": 9.892452853964642,
+    "done": "DONE 32 135697 9322.3 545.5 length 25 25 133472 16119 16800 0 0 0.0 2225 0",
+    "request_index": 3,
+    "pp": [
+      "PP 135692 135697 9045 245.4",
+      "PP 135696 135697 9322 238.6"
+    ],
+    "stop_sent": false,
+    "first_token_ms": 9379.678371013142,
+    "declared_lcp": 133493,
+    "source_history_length": 133509,
+    "capture_events": [
+      {
+        "length": 135692,
+        "target": null,
+        "source": "active",
+        "ms": null,
+        "reported_bank_bytes": null
+      }
+    ],
+    "capture_count": 1,
+    "capture_ms": null,
+    "request_head_capture_count": 0,
+    "request_head_capture_ms": null,
+    "prompt_read_tps": 238.6750050953091,
+    "decode_tps": 58.661778185151235,
+    "output_per_wall_second": 3.234789235025287,
+    "output_tokens": 32,
+    "output_ids_sha256": "9a47a6147dcb4af16a0c0ba77071f702e7e54d80004f5d25d3bb51c0ce8a7f89"
+  },
+  {
+    "case": "grow_recorded03",
+    "input_sha256": "e28bd8fb2f5062dffdf14bafe681963ed7ce54ae4ad7e5c9396bbe98276b482a",
+    "input_tokens": 136094,
+    "prompt_ms": 4703.7,
+    "decode_ms": 668.6,
+    "finish": "length",
+    "reused": 135692,
+    "read": 402,
+    "wall_s": 5.3966717990115285,
+    "done": "DONE 32 136094 4703.7 668.6 length 19 20 135692 16412 16800 0 0 0.0 402 0",
+    "request_index": 4,
+    "pp": [
+      "PP 136089 136094 4496 88.3",
+      "PP 136093 136094 4704 85.3"
+    ],
+    "stop_sent": false,
+    "first_token_ms": 4760.920459055342,
+    "declared_lcp": 135713,
+    "source_history_length": 135729,
+    "capture_events": [
+      {
+        "length": 136089,
+        "target": null,
+        "source": "active",
+        "ms": null,
+        "reported_bank_bytes": null
+      }
+    ],
+    "capture_count": 1,
+    "capture_ms": null,
+    "request_head_capture_count": 0,
+    "request_head_capture_ms": null,
+    "prompt_read_tps": 85.46463422412144,
+    "decode_tps": 47.86120251271313,
+    "output_per_wall_second": 5.929580525141667,
+    "output_tokens": 32,
+    "output_ids_sha256": "4f000021fa2d5922122eb6c4c0560c93c17632e531b0f73dfbee20d82b704404"
+  },
+  {
+    "case": "grow_recorded04",
+    "input_sha256": "279b01f58cf6bf9be6bc5613c4f2e920ead402a744e377a16e29f96a27ebbf22",
+    "input_tokens": 147649,
+    "prompt_ms": 28032.1,
+    "decode_ms": 544.6,
+    "finish": "length",
+    "reused": 136089,
+    "read": 11560,
+    "wall_s": 28.615890220971778,
+    "done": "DONE 32 147649 28032.1 544.6 length 23 24 136089 15662 16320 0 0 0.0 11560 0",
+    "request_index": 5,
+    "pp": [
+      "PP 140185 147649 15648 261.8",
+      "PP 144281 147649 22444 365.0",
+      "PP 147644 147649 27687 417.3",
+      "PP 147648 147649 28032 412.3"
+    ],
+    "stop_sent": false,
+    "first_token_ms": 28104.64176395908,
+    "declared_lcp": 136110,
+    "source_history_length": 136126,
+    "capture_events": [
+      {
+        "length": 147644,
+        "target": null,
+        "source": "active",
+        "ms": null,
+        "reported_bank_bytes": null
+      }
+    ],
+    "capture_count": 1,
+    "capture_ms": null,
+    "request_head_capture_count": 0,
+    "request_head_capture_ms": null,
+    "prompt_read_tps": 412.38437362880416,
+    "decode_tps": 58.75872199779655,
+    "output_per_wall_second": 1.118259811345939,
+    "output_tokens": 32,
+    "output_ids_sha256": "9a47a6147dcb4af16a0c0ba77071f702e7e54d80004f5d25d3bb51c0ce8a7f89"
+  },
+  {
+    "case": "park_churn01",
+    "input_sha256": "cc250164cdadc3a1b590a4847dc729011c1641f0ad5124dfcde1b559b393063c",
+    "input_tokens": 147937,
+    "prompt_ms": 4486.3,
+    "decode_ms": 602.2,
+    "finish": "length",
+    "reused": 147644,
+    "read": 293,
+    "wall_s": 5.115253378986381,
+    "done": "DONE 32 147937 4486.3 602.2 length 24 27 147644 17236 18240 0 0 0.0 293 0",
+    "request_index": 6,
+    "pp": [
+      "PP 147932 147937 4283 67.2",
+      "PP 147936 147937 4486 65.1"
+    ],
+    "stop_sent": false,
+    "first_token_ms": 4546.272630919702,
+    "declared_lcp": 147665,
+    "source_history_length": 147681,
+    "capture_events": [
+      {
+        "length": 147932,
+        "target": null,
+        "source": "active",
+        "ms": null,
+        "reported_bank_bytes": null
+      }
+    ],
+    "capture_count": 1,
+    "capture_ms": null,
+    "request_head_capture_count": 0,
+    "request_head_capture_ms": null,
+    "prompt_read_tps": 65.30994360608965,
+    "decode_tps": 53.13849219528395,
+    "output_per_wall_second": 6.255799591757661,
+    "output_tokens": 32,
+    "output_ids_sha256": "a2e59489099bce81c8b8de17fc75c36216cdf3629993016a079d3fca7cc3e194"
+  },
+  {
+    "case": "park_churn02",
+    "input_sha256": "646dfc4b553f85abed8c50554734b7d07c8cd7e1db56727f73483e0dc0737dd3",
+    "input_tokens": 148225,
+    "prompt_ms": 4925.7,
+    "decode_ms": 616.2,
+    "finish": "length",
+    "reused": 147932,
+    "read": 293,
+    "wall_s": 5.569193402072415,
+    "done": "DONE 32 148225 4925.7 616.2 length 24 28 147932 17542 18720 0 0 0.0 293 0",
+    "request_index": 7,
+    "pp": [
+      "PP 148220 148225 4721 61.0",
+      "PP 148224 148225 4926 59.3"
+    ],
+    "stop_sent": false,
+    "first_token_ms": 4986.379033070989,
+    "declared_lcp": 147953,
+    "source_history_length": 147969,
+    "capture_events": [
+      {
+        "length": 148220,
+        "target": null,
+        "source": "active",
+        "ms": null,
+        "reported_bank_bytes": null
+      }
+    ],
+    "capture_count": 1,
+    "capture_ms": null,
+    "request_head_capture_count": 0,
+    "request_head_capture_ms": null,
+    "prompt_read_tps": 59.48393121789797,
+    "decode_tps": 51.9311911716975,
+    "output_per_wall_second": 5.745894906090372,
+    "output_tokens": 32,
+    "output_ids_sha256": "498308e5094339b1c68daf04a0da7ca94572408943de9d2c190d4c24954c651c"
+  },
+  {
+    "case": "park_churn03",
+    "input_sha256": "0c10e81ccda95fc63aae5ae2dca592c3b22f5f5fd07137b4c2e56aca03c5233f",
+    "input_tokens": 148513,
+    "prompt_ms": 4467.3,
+    "decode_ms": 1048.5,
+    "finish": "length",
+    "reused": 148220,
+    "read": 293,
+    "wall_s": 5.544021517969668,
+    "done": "DONE 32 148513 4467.3 1048.5 length 19 24 148220 17023 17760 0 0 0.0 293 0",
+    "request_index": 8,
+    "pp": [
+      "PP 148508 148513 4258 67.6",
+      "PP 148512 148513 4467 65.4"
+    ],
+    "stop_sent": false,
+    "first_token_ms": 4529.14261398837,
+    "declared_lcp": 148241,
+    "source_history_length": 148257,
+    "capture_events": [
+      {
+        "length": 148508,
+        "target": null,
+        "source": "active",
+        "ms": null,
+        "reported_bank_bytes": null
+      }
+    ],
+    "capture_count": 1,
+    "capture_ms": null,
+    "request_head_capture_count": 0,
+    "request_head_capture_ms": null,
+    "prompt_read_tps": 65.58771517471403,
+    "decode_tps": 30.519790176442537,
+    "output_per_wall_second": 5.771983369162507,
+    "output_tokens": 32,
+    "output_ids_sha256": "e461d3753a4d4fe7414ec9768c5f9d0131e9189e1808575bef15de7f7c588dbe"
+  },
+  {
+    "case": "compact117131",
+    "input_sha256": "9cd0a3e6ef7428a95fadb6e47fa8e98a811d1d03d2ef7858947b28ff3a7f6e3e",
+    "input_tokens": 134088,
+    "prompt_ms": 195967.1,
+    "decode_ms": 675.7,
+    "finish": "length",
+    "reused": 10674,
+    "read": 123414,
+    "wall_s": 196.66688825609162,
+    "done": "DONE 32 134088 195967.1 675.7 length 20 30 10674 20428 20640 0 0 0.0 123414 0",
+    "request_index": 9,
+    "pp": [
+      "PP 14770 134088 13338 307.1",
+      "PP 18866 134088 19114 428.6",
+      "PP 22962 134088 24984 491.8",
+      "PP 27058 134088 30961 529.2",
+      "PP 31154 134088 36719 557.8",
+      "PP 35250 134088 42666 576.0",
+      "PP 39346 134088 48637 589.5",
+      "PP 43442 134088 54641 599.7",
+      "PP 47538 134088 60612 608.2",
+      "PP 51634 134088 66607 615.0",
+      "PP 55730 134088 72694 619.8",
+      "PP 59826 134088 78926 622.8",
+      "PP 63922 134088 85009 626.4",
+      "PP 68018 134088 91090 629.5",
+      "PP 72114 134088 97300 631.5",
+      "PP 76210 134088 103627 632.4",
+      "PP 80306 134088 109840 633.9",
+      "PP 84402 134088 116120 634.9",
+      "PP 88498 134088 122385 635.9",
+      "PP 92594 134088 128908 635.5",
+      "PP 96690 134088 135242 636.0",
+      "PP 100786 134088 141622 636.3",
+      "PP 104882 134088 148111 636.1",
+      "PP 108978 134088 154669 635.6",
+      "PP 113074 134088 160982 636.1",
+      "PP 117170 134088 167505 635.8",
+      "PP 121266 134088 174380 634.2",
+      "PP 125362 134088 181095 633.3",
+      "PP 129458 134088 187618 633.1",
+      "PP 133554 134088 194154 632.9",
+      "PP 134083 134088 195620 630.9",
+      "PP 134087 134088 195967 629.8"
+    ],
+    "stop_sent": false,
+    "first_token_ms": 196023.79159408156,
+    "declared_lcp": 117131,
+    "source_history_length": 148545,
+    "capture_events": [
+      {
+        "length": 27058,
+        "target": null,
+        "source": "active",
+        "ms": null,
+        "reported_bank_bytes": null
+      },
+      {
+        "length": 43442,
+        "target": null,
+        "source": "active",
+        "ms": null,
+        "reported_bank_bytes": null
+      },
+      {
+        "length": 59826,
+        "target": null,
+        "source": "active",
+        "ms": null,
+        "reported_bank_bytes": null
+      },
+      {
+        "length": 76210,
+        "target": null,
+        "source": "active",
+        "ms": null,
+        "reported_bank_bytes": null
+      },
+      {
+        "length": 92594,
+        "target": null,
+        "source": "active",
+        "ms": null,
+        "reported_bank_bytes": null
+      },
+      {
+        "length": 108978,
+        "target": null,
+        "source": "active",
+        "ms": null,
+        "reported_bank_bytes": null
+      },
+      {
+        "length": 125362,
+        "target": null,
+        "source": "active",
+        "ms": null,
+        "reported_bank_bytes": null
+      },
+      {
+        "length": 134083,
+        "target": null,
+        "source": "active",
+        "ms": null,
+        "reported_bank_bytes": null
+      }
+    ],
+    "capture_count": 8,
+    "capture_ms": null,
+    "request_head_capture_count": 0,
+    "request_head_capture_ms": null,
+    "prompt_read_tps": 629.7689765271823,
+    "decode_tps": 47.35829510137635,
+    "output_per_wall_second": 0.16271168107531606,
+    "output_tokens": 32,
+    "output_ids_sha256": "3504c548c29909af3bfa4d7f12ccaba313b13c53391cc391244b1c7d67a34a86"
+  },
+  {
+    "case": "decode_cross131072",
+    "input_sha256": "c56d9dc6fbdf7b503cb3f5648c59ee018ca3823a3eaa1700edf83004ee8e0233",
+    "input_tokens": 130900,
+    "prompt_ms": 15708.5,
+    "decode_ms": 9071.4,
+    "finish": "length",
+    "reused": 125362,
+    "read": 5538,
+    "wall_s": 24.81314379000105,
+    "done": "DONE 512 130900 15708.5 9071.4 length 357 414 125362 251231 273120 0 0 0.0 5538 0",
+    "request_index": 10,
+    "pp": [
+      "PP 129458 130900 12883 317.9",
+      "PP 130895 130900 15367 360.1",
+      "PP 130899 130900 15708 352.5"
+    ],
+    "stop_sent": false,
+    "first_token_ms": 15774.188880925067,
+    "declared_lcp": 130894,
+    "source_history_length": 134120,
+    "capture_events": [
+      {
+        "length": 130895,
+        "target": null,
+        "source": "active",
+        "ms": null,
+        "reported_bank_bytes": null
+      }
+    ],
+    "capture_count": 1,
+    "capture_ms": null,
+    "request_head_capture_count": 0,
+    "request_head_capture_ms": null,
+    "prompt_read_tps": 352.54798357577107,
+    "decode_tps": 56.4411226492052,
+    "output_per_wall_second": 20.63422532562442,
+    "output_tokens": 512,
+    "output_ids_sha256": "9b585d7e54588e569166801b773abf961279ec223c5b4ad735d8bdf3b8be29ae"
+  },
+  {
+    "case": "decode_rewrite131100",
+    "input_sha256": "931a8a1cec474852ead0a219f564a669ec346131b27ee781511fcc8c24d4615a",
+    "input_tokens": 131359,
+    "prompt_ms": 3797.6,
+    "decode_ms": 567.7,
+    "finish": "length",
+    "reused": 130895,
+    "read": 464,
+    "wall_s": 4.389196393080056,
+    "done": "DONE 32 131359 3797.6 567.7 length 21 23 130895 15773 16320 0 0 0.0 464 0",
+    "request_index": 11,
+    "pp": [
+      "PP 131354 131359 3595 127.7",
+      "PP 131358 131359 3798 121.9"
+    ],
+    "stop_sent": false,
+    "first_token_ms": 3853.966584079899,
+    "declared_lcp": 131100,
+    "source_history_length": 131412,
+    "capture_events": [
+      {
+        "length": 131354,
+        "target": null,
+        "source": "active",
+        "ms": null,
+        "reported_bank_bytes": null
+      }
+    ],
+    "capture_count": 1,
+    "capture_ms": null,
+    "request_head_capture_count": 0,
+    "request_head_capture_ms": null,
+    "prompt_read_tps": 122.18243100905836,
+    "decode_tps": 56.36779989431037,
+    "output_per_wall_second": 7.290628428122,
+    "output_tokens": 32,
+    "output_ids_sha256": "b86b4445df7130cf7bc3d2f49be34b47c2af450fdc995704c0cdd5096d91dcaf"
+  },
+  {
+    "case": "cancel_decode",
+    "input_sha256": "374e152fe5677d933b9f6226b9ef60c5a91b0f6b1a6de941c8c9e85547575994",
+    "input_tokens": 131433,
+    "prompt_ms": 693.0,
+    "decode_ms": 194.3,
+    "finish": "cancel",
+    "reused": 131390,
+    "read": 43,
+    "wall_s": 0.9097787000937387,
+    "done": "DONE 10 131433 693.0 194.3 cancel 6 6 131390 4402 4800 0 0 0.0 43 0",
+    "request_index": 12,
+    "pp": [
+      "PP 131428 131433 549 69.2",
+      "PP 131432 131433 693 60.6"
+    ],
+    "stop_sent": true,
+    "first_token_ms": 748.0633549857885,
+    "declared_lcp": null,
+    "source_history_length": 131391,
+    "capture_events": [
+      {
+        "length": 131428,
+        "target": null,
+        "source": "active",
+        "ms": null,
+        "reported_bank_bytes": null
+      }
+    ],
+    "capture_count": 1,
+    "capture_ms": null,
+    "request_head_capture_count": 0,
+    "request_head_capture_ms": null,
+    "prompt_read_tps": 62.04906204906205,
+    "decode_tps": 51.46680391147709,
+    "output_per_wall_second": 10.991684020487238,
+    "output_tokens": 10,
+    "output_ids_sha256": "5268f12e691aa72e8f19aac7a9c009186e59c981a4ff6357a6abe563cdb0d864"
+  },
+  {
+    "case": "recover_cancel",
+    "input_sha256": "374e152fe5677d933b9f6226b9ef60c5a91b0f6b1a6de941c8c9e85547575994",
+    "input_tokens": 131433,
+    "prompt_ms": 761.4,
+    "decode_ms": 561.0,
+    "finish": "length",
+    "reused": 131428,
+    "read": 5,
+    "wall_s": 1.3446091319201514,
+    "done": "DONE 32 131433 761.4 561.0 length 23 24 131428 14878 16320 0 0 0.0 5 0",
+    "request_index": 13,
+    "pp": [
+      "PP 131432 131433 761 5.3"
+    ],
+    "stop_sent": false,
+    "first_token_ms": 815.9458989975974,
+    "declared_lcp": null,
+    "source_history_length": 131391,
+    "capture_events": [],
+    "capture_count": 0,
+    "capture_ms": 0,
+    "request_head_capture_count": 0,
+    "request_head_capture_ms": null,
+    "prompt_read_tps": 6.566850538481744,
+    "decode_tps": 57.040998217468804,
+    "output_per_wall_second": 23.79873767055473,
+    "output_tokens": 32,
+    "output_ids_sha256": "2683bc6b90c1567ee04442e463a8e55d32a97dcdf66d5d29a9ec954492e05936"
+  },
+  {
+    "case": "restore_ancestor",
+    "input_sha256": "b8a1a8dd9685d65785f64950fb19c4b02f58f2e21576db66ddf8d1866028b481",
+    "input_tokens": 148550,
+    "prompt_ms": 962.7,
+    "decode_ms": 552.3,
+    "finish": "length",
+    "reused": 148544,
+    "read": 6,
+    "wall_s": 1.5408989129355177,
+    "done": "DONE 32 148550 962.7 552.3 length 22 25 148544 16214 16800 0 0 0.0 6 0",
+    "request_index": 14,
+    "pp": [
+      "PP 148545 148550 821 1.2",
+      "PP 148549 148550 963 5.2"
+    ],
+    "stop_sent": false,
+    "first_token_ms": 1021.734828944318,
+    "declared_lcp": null,
+    "source_history_length": 131465,
+    "capture_events": [
+      {
+        "length": 148545,
+        "target": null,
+        "source": "active",
+        "ms": null,
+        "reported_bank_bytes": null
+      }
+    ],
+    "capture_count": 1,
+    "capture_ms": null,
+    "request_head_capture_count": 0,
+    "request_head_capture_ms": null,
+    "prompt_read_tps": 6.232471174820816,
+    "decode_tps": 57.93952562013399,
+    "output_per_wall_second": 20.767098822230857,
+    "output_tokens": 32,
+    "output_ids_sha256": "e461d3753a4d4fe7414ec9768c5f9d0131e9189e1808575bef15de7f7c588dbe"
+  },
+  {
+    "case": "short01",
+    "input_sha256": "e7b160943f195e4bac94eba16512cad747586a3351e5af57d6091b19435b6612",
+    "input_tokens": 148838,
+    "prompt_ms": 2338.2,
+    "decode_ms": 510.1,
+    "finish": "length",
+    "reused": 148581,
+    "read": 257,
+    "wall_s": 2.87361656606663,
+    "done": "DONE 32 148838 2338.2 510.1 length 23 24 148581 15186 15840 0 0 0.0 257 0",
+    "request_index": 15,
+    "pp": [
+      "PP 148833 148838 2164 116.4",
+      "PP 148837 148838 2338 109.5"
+    ],
+    "stop_sent": false,
+    "first_token_ms": 2396.6666330816224,
+    "declared_lcp": null,
+    "source_history_length": 148582,
+    "capture_events": [
+      {
+        "length": 148833,
+        "target": null,
+        "source": "active",
+        "ms": null,
+        "reported_bank_bytes": null
+      }
+    ],
+    "capture_count": 1,
+    "capture_ms": null,
+    "request_head_capture_count": 0,
+    "request_head_capture_ms": null,
+    "prompt_read_tps": 109.91360875887436,
+    "decode_tps": 62.7327974906881,
+    "output_per_wall_second": 11.135793264096188,
+    "output_tokens": 32,
+    "output_ids_sha256": "e461d3753a4d4fe7414ec9768c5f9d0131e9189e1808575bef15de7f7c588dbe"
+  },
+  {
+    "case": "short02",
+    "input_sha256": "55a476608a84936d6ec651f31e42feddcd151994149d02d8906c62eebbe10fce",
+    "input_tokens": 149126,
+    "prompt_ms": 2398.4,
+    "decode_ms": 510.7,
+    "finish": "length",
+    "reused": 148869,
+    "read": 257,
+    "wall_s": 2.934722280013375,
+    "done": "DONE 32 149126 2398.4 510.7 length 23 24 148869 15037 15840 0 0 0.0 257 0",
+    "request_index": 16,
+    "pp": [
+      "PP 149121 149126 2200 114.5",
+      "PP 149125 149126 2398 106.7"
+    ],
+    "stop_sent": false,
+    "first_token_ms": 2457.066464005038,
+    "declared_lcp": null,
+    "source_history_length": 148870,
+    "capture_events": [
+      {
+        "length": 149121,
+        "target": null,
+        "source": "active",
+        "ms": null,
+        "reported_bank_bytes": null
+      }
+    ],
+    "capture_count": 1,
+    "capture_ms": null,
+    "request_head_capture_count": 0,
+    "request_head_capture_ms": null,
+    "prompt_read_tps": 107.15476984656438,
+    "decode_tps": 62.659095359310754,
+    "output_per_wall_second": 10.903927849641077,
+    "output_tokens": 32,
+    "output_ids_sha256": "e461d3753a4d4fe7414ec9768c5f9d0131e9189e1808575bef15de7f7c588dbe"
+  },
+  {
+    "case": "short03",
+    "input_sha256": "fed353c3bbf51dab5c3b4665416f1b9e9ed6c029e0b598058278c5ad6d593436",
+    "input_tokens": 149414,
+    "prompt_ms": 2425.3,
+    "decode_ms": 514.2,
+    "finish": "length",
+    "reused": 149157,
+    "read": 257,
+    "wall_s": 2.965158198028803,
+    "done": "DONE 32 149414 2425.3 514.2 length 23 24 149157 14941 15840 0 0 0.0 257 0",
+    "request_index": 17,
+    "pp": [
+      "PP 149409 149414 2230 113.0",
+      "PP 149413 149414 2425 105.6"
+    ],
+    "stop_sent": false,
+    "first_token_ms": 2484.3758050119504,
+    "declared_lcp": null,
+    "source_history_length": 149158,
+    "capture_events": [
+      {
+        "length": 149409,
+        "target": null,
+        "source": "active",
+        "ms": null,
+        "reported_bank_bytes": null
+      }
+    ],
+    "capture_count": 1,
+    "capture_ms": null,
+    "request_head_capture_count": 0,
+    "request_head_capture_ms": null,
+    "prompt_read_tps": 105.96627221374675,
+    "decode_tps": 62.23259432127576,
+    "output_per_wall_second": 10.79200429213968,
+    "output_tokens": 32,
+    "output_ids_sha256": "e461d3753a4d4fe7414ec9768c5f9d0131e9189e1808575bef15de7f7c588dbe"
+  },
+  {
+    "case": "short04",
+    "input_sha256": "ab6b6058189d53a012955a8c137dd1086184d921b316e12fdb3cea70816b1953",
+    "input_tokens": 149702,
+    "prompt_ms": 2431.0,
+    "decode_ms": 515.9,
+    "finish": "length",
+    "reused": 149445,
+    "read": 257,
+    "wall_s": 2.971791284973733,
+    "done": "DONE 32 149702 2431.0 515.9 length 23 24 149445 14845 15840 0 0 0.0 257 0",
+    "request_index": 18,
+    "pp": [
+      "PP 149697 149702 2256 111.7",
+      "PP 149701 149702 2431 105.3"
+    ],
+    "stop_sent": false,
+    "first_token_ms": 2489.411757909693,
+    "declared_lcp": null,
+    "source_history_length": 149446,
+    "capture_events": [
+      {
+        "length": 149697,
+        "target": null,
+        "source": "active",
+        "ms": null,
+        "reported_bank_bytes": null
+      }
+    ],
+    "capture_count": 1,
+    "capture_ms": null,
+    "request_head_capture_count": 0,
+    "request_head_capture_ms": null,
+    "prompt_read_tps": 105.71781160016454,
+    "decode_tps": 62.02752471409188,
+    "output_per_wall_second": 10.767916361354711,
+    "output_tokens": 32,
+    "output_ids_sha256": "e461d3753a4d4fe7414ec9768c5f9d0131e9189e1808575bef15de7f7c588dbe"
+  },
+  {
+    "case": "short05",
+    "input_sha256": "54829a6d113878a0b3ac2b34c534ce7eb93ec51e71987c57fa14b158993d69b4",
+    "input_tokens": 149990,
+    "prompt_ms": 2469.7,
+    "decode_ms": 518.3,
+    "finish": "length",
+    "reused": 149733,
+    "read": 257,
+    "wall_s": 3.0135390899376944,
+    "done": "DONE 32 149990 2469.7 518.3 length 23 24 149733 14805 15840 0 0 0.0 257 0",
+    "request_index": 19,
+    "pp": [
+      "PP 149985 149990 2271 111.0",
+      "PP 149989 149990 2470 103.7"
+    ],
+    "stop_sent": false,
+    "first_token_ms": 2528.7052548956126,
+    "declared_lcp": null,
+    "source_history_length": 149734,
+    "capture_events": [
+      {
+        "length": 149985,
+        "target": null,
+        "source": "active",
+        "ms": null,
+        "reported_bank_bytes": null
+      }
+    ],
+    "capture_count": 1,
+    "capture_ms": null,
+    "request_head_capture_count": 0,
+    "request_head_capture_ms": null,
+    "prompt_read_tps": 104.06122201077055,
+    "decode_tps": 61.740304842755165,
+    "output_per_wall_second": 10.61874395684763,
+    "output_tokens": 32,
+    "output_ids_sha256": "e461d3753a4d4fe7414ec9768c5f9d0131e9189e1808575bef15de7f7c588dbe"
+  },
+  {
+    "case": "short06",
+    "input_sha256": "dfb00823ebb06677c3545102f53e54f1a0d0839a1f21305ddaf50b954f2d0975",
+    "input_tokens": 150278,
+    "prompt_ms": 2476.9,
+    "decode_ms": 518.9,
+    "finish": "length",
+    "reused": 150021,
+    "read": 257,
+    "wall_s": 3.02127148990985,
+    "done": "DONE 32 150278 2476.9 518.9 length 23 24 150021 14756 15840 0 0 0.0 257 0",
+    "request_index": 20,
+    "pp": [
+      "PP 150273 150278 2282 110.4",
+      "PP 150277 150278 2477 103.4"
+    ],
+    "stop_sent": false,
+    "first_token_ms": 2535.893112886697,
+    "declared_lcp": null,
+    "source_history_length": 150022,
+    "capture_events": [
+      {
+        "length": 150273,
+        "target": null,
+        "source": "active",
+        "ms": null,
+        "reported_bank_bytes": null
+      }
+    ],
+    "capture_count": 1,
+    "capture_ms": null,
+    "request_head_capture_count": 0,
+    "request_head_capture_ms": null,
+    "prompt_read_tps": 103.75873067140377,
+    "decode_tps": 61.668915012526504,
+    "output_per_wall_second": 10.591567195093358,
+    "output_tokens": 32,
+    "output_ids_sha256": "e461d3753a4d4fe7414ec9768c5f9d0131e9189e1808575bef15de7f7c588dbe"
+  }
+]

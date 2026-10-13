@@ -1,0 +1,18 @@
+{
+  "src/program/generate.cpp": {
+    "baseline_sha256": "614034787daa9e5c9a114dc36845cea821f01f44a84b7d1aa2fb6597fd0c671e",
+    "candidate_sha256": "f4f542c8b2fbadcbb09ee1a35cbf5de1206a07cbd6e3bdcc78c7a22692863c04"
+  },
+  "include/strata/core/conversation_cache.hpp": {
+    "baseline_sha256": "5d0feb469ffed2c0d01ea781dba06e864f4a29237646429261ff6ea3e56fdf2c",
+    "candidate_sha256": "a12ec3206f989e19821f1f1a450fef89605929547cdeefd9664cc8cd2e993e4f"
+  },
+  "include/strata/core/conversation_memory_budget.hpp": {
+    "baseline_sha256": null,
+    "candidate_sha256": "41838947d41d11f4b6c0f4b39999ec1e01f72e979383ef6704525a58008f4a63"
+  },
+  "include/strata/program/coverage.hpp": {
+    "baseline_sha256": null,
+    "candidate_sha256": "9e8da94aeeebb7254a25043f617fe0e5b530c83812249842eece8c4a9d14561b"
+  }
+}

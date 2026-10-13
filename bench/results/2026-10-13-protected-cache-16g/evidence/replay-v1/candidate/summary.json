@@ -1,0 +1,469 @@
+{
+  "protocol_passed": true,
+  "request_count": 13,
+  "protected_gates_passed": true,
+  "memory_evidence": {
+    "protected_event_count": 46,
+    "meter_samples": [
+      {
+        "total": 152076192,
+        "owned": 152076192,
+        "reserved": 0,
+        "accounted": 152076192,
+        "high_water": 153681272,
+        "req": 1,
+        "event": "captured"
+      },
+      {
+        "total": 270659120,
+        "owned": 270659120,
+        "reserved": 0,
+        "accounted": 270659120,
+        "high_water": 272690184,
+        "req": 1,
+        "event": "captured"
+      },
+      {
+        "total": 389373120,
+        "owned": 389373120,
+        "reserved": 0,
+        "accounted": 389373120,
+        "high_water": 392256152,
+        "req": 1,
+        "event": "captured"
+      },
+      {
+        "total": 508218192,
+        "owned": 508218192,
+        "reserved": 0,
+        "accounted": 508218192,
+        "high_water": 511953192,
+        "req": 1,
+        "event": "captured"
+      },
+      {
+        "total": 627194336,
+        "owned": 627194336,
+        "reserved": 0,
+        "accounted": 627194336,
+        "high_water": 631781304,
+        "req": 1,
+        "event": "captured"
+      },
+      {
+        "total": 746301552,
+        "owned": 746301552,
+        "reserved": 0,
+        "accounted": 746301552,
+        "high_water": 751740488,
+        "req": 1,
+        "event": "captured"
+      },
+      {
+        "total": 865539840,
+        "owned": 865539840,
+        "reserved": 0,
+        "accounted": 865539840,
+        "high_water": 871830744,
+        "req": 1,
+        "event": "captured"
+      },
+      {
+        "total": 984909200,
+        "owned": 984909200,
+        "reserved": 0,
+        "accounted": 984909200,
+        "high_water": 992052072,
+        "req": 1,
+        "event": "captured"
+      },
+      {
+        "total": 1104278856,
+        "owned": 1104278856,
+        "reserved": 0,
+        "accounted": 1104278856,
+        "high_water": 1111423652,
+        "req": 1,
+        "event": "captured"
+      },
+      {
+        "total": 1104278856,
+        "owned": 1104278856,
+        "reserved": 0,
+        "accounted": 1104278856,
+        "high_water": 1111423652,
+        "req": 1,
+        "event": "request_complete"
+      },
+      {
+        "total": 4083441824,
+        "owned": 4083441824,
+        "reserved": 0,
+        "accounted": 4083441824,
+        "high_water": 4090599672,
+        "req": 2,
+        "event": "captured"
+      },
+      {
+        "total": 4202813768,
+        "owned": 4202813768,
+        "reserved": 0,
+        "accounted": 4202813768,
+        "high_water": 4209973436,
+        "req": 2,
+        "event": "captured"
+      },
+      {
+        "total": 4202813768,
+        "owned": 4202813768,
+        "reserved": 0,
+        "accounted": 4202813768,
+        "high_water": 4209973436,
+        "req": 2,
+        "event": "request_complete"
+      },
+      {
+        "total": 4202816072,
+        "owned": 4202816072,
+        "reserved": 0,
+        "accounted": 4202816072,
+        "high_water": 4329360560,
+        "req": 3,
+        "event": "captured"
+      },
+      {
+        "total": 4202818376,
+        "owned": 4202818376,
+        "reserved": 0,
+        "accounted": 4202818376,
+        "high_water": 4329364964,
+        "req": 3,
+        "event": "captured"
+      },
+      {
+        "total": 4202818376,
+        "owned": 4202818376,
+        "reserved": 0,
+        "accounted": 4202818376,
+        "high_water": 4329364964,
+        "req": 3,
+        "event": "request_complete"
+      },
+      {
+        "total": 4202820680,
+        "owned": 4202820680,
+        "reserved": 0,
+        "accounted": 4202820680,
+        "high_water": 4329382448,
+        "req": 4,
+        "event": "captured"
+      },
+      {
+        "total": 4202822992,
+        "owned": 4202822992,
+        "reserved": 0,
+        "accounted": 4202822992,
+        "high_water": 4329386912,
+        "req": 4,
+        "event": "captured"
+      },
+      {
+        "total": 4202822992,
+        "owned": 4202822992,
+        "reserved": 0,
+        "accounted": 4202822992,
+        "high_water": 4329386912,
+        "req": 4,
+        "event": "request_complete"
+      },
+      {
+        "total": 7314564352,
+        "owned": 7314564352,
+        "reserved": 0,
+        "accounted": 7314564352,
+        "high_water": 7321767128,
+        "req": 5,
+        "event": "captured"
+      },
+      {
+        "total": 7314566936,
+        "owned": 7314566936,
+        "reserved": 0,
+        "accounted": 7314566936,
+        "high_water": 7441147804,
+        "req": 5,
+        "event": "captured"
+      },
+      {
+        "total": 7314566936,
+        "owned": 7314566936,
+        "reserved": 0,
+        "accounted": 7314566936,
+        "high_water": 7441147804,
+        "req": 5,
+        "event": "request_complete"
+      },
+      {
+        "total": 7314569240,
+        "owned": 7314569240,
+        "reserved": 0,
+        "accounted": 7314569240,
+        "high_water": 7441165568,
+        "req": 6,
+        "event": "captured"
+      },
+      {
+        "total": 7314571544,
+        "owned": 7314571544,
+        "reserved": 0,
+        "accounted": 7314571544,
+        "high_water": 7441169972,
+        "req": 6,
+        "event": "captured"
+      },
+      {
+        "total": 7314571544,
+        "owned": 7314571544,
+        "reserved": 0,
+        "accounted": 7314571544,
+        "high_water": 7441169972,
+        "req": 6,
+        "event": "request_complete"
+      },
+      {
+        "total": 7314573848,
+        "owned": 7314573848,
+        "reserved": 0,
+        "accounted": 7314573848,
+        "high_water": 7441187456,
+        "req": 7,
+        "event": "captured"
+      },
+      {
+        "total": 7314576152,
+        "owned": 7314576152,
+        "reserved": 0,
+        "accounted": 7314576152,
+        "high_water": 7441191860,
+        "req": 7,
+        "event": "captured"
+      },
+      {
+        "total": 7314576152,
+        "owned": 7314576152,
+        "reserved": 0,
+        "accounted": 7314576152,
+        "high_water": 7441191860,
+        "req": 7,
+        "event": "request_complete"
+      },
+      {
+        "total": 10200757664,
+        "owned": 10200757664,
+        "reserved": 0,
+        "accounted": 10200757664,
+        "high_water": 10444537460,
+        "req": 8,
+        "event": "captured"
+      },
+      {
+        "total": 10320128760,
+        "owned": 10320128760,
+        "reserved": 0,
+        "accounted": 10320128760,
+        "high_water": 10444537460,
+        "req": 8,
+        "event": "captured"
+      },
+      {
+        "total": 10439500128,
+        "owned": 10439500128,
+        "reserved": 0,
+        "accounted": 10439500128,
+        "high_water": 10446656052,
+        "req": 8,
+        "event": "captured"
+      },
+      {
+        "total": 10439500128,
+        "owned": 10439500128,
+        "reserved": 0,
+        "accounted": 10439500128,
+        "high_water": 10446656052,
+        "req": 8,
+        "event": "request_complete"
+      },
+      {
+        "total": 10439608208,
+        "owned": 10439608208,
+        "reserved": 0,
+        "accounted": 10439608208,
+        "high_water": 10566835980,
+        "req": 9,
+        "event": "captured"
+      },
+      {
+        "total": 10559088784,
+        "owned": 10559088784,
+        "reserved": 0,
+        "accounted": 10559088784,
+        "high_water": 10566954560,
+        "req": 9,
+        "event": "captured"
+      },
+      {
+        "total": 10559200720,
+        "owned": 10559200720,
+        "reserved": 0,
+        "accounted": 10559200720,
+        "high_water": 10686455596,
+        "req": 9,
+        "event": "captured"
+      },
+      {
+        "total": 10559200720,
+        "owned": 10559200720,
+        "reserved": 0,
+        "accounted": 10559200720,
+        "high_water": 10686455596,
+        "req": 9,
+        "event": "request_complete"
+      },
+      {
+        "total": 13994420512,
+        "owned": 13994420512,
+        "reserved": 0,
+        "accounted": 13994420512,
+        "high_water": 14002301056,
+        "req": 10,
+        "event": "captured"
+      },
+      {
+        "total": 13994424456,
+        "owned": 13994424456,
+        "reserved": 0,
+        "accounted": 13994424456,
+        "high_water": 14121785944,
+        "req": 10,
+        "event": "captured"
+      },
+      {
+        "total": 13994424456,
+        "owned": 13994424456,
+        "reserved": 0,
+        "accounted": 13994424456,
+        "high_water": 14121785944,
+        "req": 10,
+        "event": "request_complete"
+      },
+      {
+        "total": 13994425016,
+        "owned": 13994425016,
+        "reserved": 0,
+        "accounted": 13994425016,
+        "high_water": 14121792048,
+        "req": 11,
+        "event": "captured"
+      },
+      {
+        "total": 13994425392,
+        "owned": 13994425392,
+        "reserved": 0,
+        "accounted": 13994425392,
+        "high_water": 14121793268,
+        "req": 11,
+        "event": "captured"
+      },
+      {
+        "total": 13994425392,
+        "owned": 13994425392,
+        "reserved": 0,
+        "accounted": 13994425392,
+        "high_water": 14121793268,
+        "req": 11,
+        "event": "request_complete"
+      },
+      {
+        "total": 11339116472,
+        "owned": 11339116472,
+        "reserved": 0,
+        "accounted": 11339116472,
+        "high_water": 14121793268,
+        "req": 12,
+        "event": "captured"
+      },
+      {
+        "total": 11339116472,
+        "owned": 11339116472,
+        "reserved": 0,
+        "accounted": 11339116472,
+        "high_water": 14121793268,
+        "req": 12,
+        "event": "request_complete"
+      },
+      {
+        "total": 9910615992,
+        "owned": 9910615992,
+        "reserved": 0,
+        "accounted": 9910615992,
+        "high_water": 14121793268,
+        "req": 13,
+        "event": "captured"
+      },
+      {
+        "total": 9910615992,
+        "owned": 9910615992,
+        "reserved": 0,
+        "accounted": 9910615992,
+        "high_water": 14121793268,
+        "req": 13,
+        "event": "request_complete"
+      }
+    ],
+    "maximum_accounted_bytes": 13994425392,
+    "reported_high_water_bytes": 14121793268,
+    "memory_limit_bytes": 17179869184,
+    "protected_required": true,
+    "degraded_events": []
+  },
+  "clean_native_exit": true,
+  "aggregate": {
+    "request_count": 13,
+    "input_tokens": 1587702,
+    "reused_tokens": 1438508,
+    "read_tokens": 149194,
+    "output_tokens": 873,
+    "prompt_ms": 275025.9,
+    "decode_ms": 17206.3,
+    "total_wall_s": 292.71391865820624,
+    "first_token_ms_mean": 21226.34466060509,
+    "first_token_ms_median": 2441.672032000497,
+    "prompt_read_tps": 542.4725453130051,
+    "decode_tps": 50.73722996809308,
+    "output_per_wall_second": 2.98243419377463,
+    "capture_count": 33,
+    "capture_ms": 2132.059,
+    "request_head_capture_count": 13,
+    "request_head_capture_ms": 1116.062
+  },
+  "ordinary_short_turns": {
+    "request_count": 6,
+    "input_tokens": 709086,
+    "reused_tokens": 707480,
+    "read_tokens": 1606,
+    "output_tokens": 192,
+    "prompt_ms": 17643.1,
+    "decode_ms": 3657.2999999999997,
+    "total_wall_s": 21.5315703881206,
+    "first_token_ms_mean": 3011.0577776407204,
+    "first_token_ms_median": 2431.679280474782,
+    "prompt_read_tps": 91.02708707653417,
+    "decode_tps": 52.4977442375523,
+    "output_per_wall_second": 8.917138719520906,
+    "capture_count": 12,
+    "capture_ms": 1019.642,
+    "request_head_capture_count": 6,
+    "request_head_capture_ms": 514.553
+  },
+  "note": "Operator verifies binary hash, devices, API exclusion and owned container cleanup. No image/semantic quality or universal GPU-state claim."
+}

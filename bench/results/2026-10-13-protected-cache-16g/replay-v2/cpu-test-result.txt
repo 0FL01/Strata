@@ -1,0 +1,1 @@
+PASS: exact23-eviction retention and active+parked root proof; exact-LCP dynamic fixtures; 20-request native protocol per arm; bounded cancel/recovery; exact full/comparable-prefix parity; baseline global-root prerequisite; six288-token post-gate turns; single-count 16GiB memory validation; timeout/ERR/EOF cleanup and negative gates. CPU mock only; no GPU execution.

@@ -1,0 +1,20 @@
+--- a/src/program/generate.cpp
++++ b/src/program/generate.cpp
+@@ -10458,14 +10458,9 @@
+                 x = outv[(size_t) a];
+                 p += a + 1;
+             }
+-            // Two recent heads are checkpoint copies distinct from the protected anchor bank.
+-            if (protected_cache && coverage_request && !cancelled && !consumed.empty()) {
+-                if (!checkpoint_at((int64_t) consumed.size(), nullptr, true,
+-                        &consumed, nullptr, "request_head")) {
+-                    std::printf("ERR saving a request head failed%s\n", ckpt_why.c_str());
+-                    return 1;
+-                }
+-            }
++            // Keep the two most recent existing ordinary checkpoints (normally turn boundaries).
++            // The evaluated terminal state already remains in `live` and is captured as image.live when parked.
++            // Do not duplicate it on every request. Due decode anchors above still capture before EOS/cancel.
+             const double decode_ms = std::chrono::duration<double, std::milli>(Clock::now() - d0).count();
+             // the last commit (set_commit_async): the session is complete before anything reads or copies it
+             if (!ver.wait_commit(err)) {

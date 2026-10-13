@@ -1,0 +1,9 @@
+{
+  "generate.cpp": "f08929af779cc1d1fb6ac94d5a4adc1218ba091cf512ec69b146db887df88a5f",
+  "include/strata/core/conversation_buffer.hpp": "12f1abac2ec75cc71e8cf308a5a691923d8b617317560e009a41f713809f49d4",
+  "include/strata/core/conversation_cache.hpp": "a12ec3206f989e19821f1f1a450fef89605929547cdeefd9664cc8cd2e993e4f",
+  "include/strata/core/conversation_memory_budget.hpp": "41838947d41d11f4b6c0f4b39999ec1e01f72e979383ef6704525a58008f4a63",
+  "include/strata/program/coverage.hpp": "9e8da94aeeebb7254a25043f617fe0e5b530c83812249842eece8c4a9d14561b",
+  "tests/recent_retention_contract.cpp": "a2b4a62de9493aeb0df27e2d56bdb37bf60e54c1acd3305445b1540d7750ba34",
+  "tests/runtime_contract.cpp": "ba525d5eb44b229338d6ad819e65b4fe34256aface2461359804466f0099d4b8"
+}

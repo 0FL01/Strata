@@ -1,0 +1,180 @@
+{
+  "passed": true,
+  "command": [
+    "docker",
+    "run",
+    "--rm",
+    "--pull=never",
+    "--runtime=runc",
+    "--name",
+    "strata-cache16-0b68ac8bba90",
+    "--label",
+    "strata.cache16.cpu.owner=strata-cache16-0b68ac8bba90",
+    "--user",
+    "1000:1000",
+    "--network",
+    "none",
+    "--read-only",
+    "--cap-drop=ALL",
+    "--security-opt",
+    "no-new-privileges",
+    "--pids-limit",
+    "512",
+    "--cpus",
+    "2",
+    "--memory",
+    "12g",
+    "--memory-swap",
+    "12g",
+    "--ipc=private",
+    "--tmpfs",
+    "/tmp:rw,nosuid,nodev,size=2g",
+    "-e",
+    "HOME=/tmp",
+    "-e",
+    "TMPDIR=/tmp",
+    "-e",
+    "PYTHONDONTWRITEBYTECODE=1",
+    "--mount",
+    "type=bind,src=/srv/strata/logs/cache16g-protected-20261013-package,dst=/package,readonly",
+    "--mount",
+    "type=bind,src=/srv/strata-source,dst=/src,readonly",
+    "--mount",
+    "type=bind,src=/srv/strata/logs/cache-retention-20261013-results/build,dst=/donor,readonly",
+    "--mount",
+    "type=bind,src=/srv/strata/logs/cache16g-protected-20261013-results,dst=/out",
+    "--mount",
+    "type=bind,src=/srv/strata-source/build-906,dst=/dependency-donor,readonly",
+    "--mount",
+    "type=bind,src=/srv/strata/logs/cache16g-protected-20261013-results/build,dst=/src/build-906",
+    "--mount",
+    "type=bind,src=/srv/strata/logs/cache16g-protected-20261013-results/source/include,dst=/src/include",
+    "--mount",
+    "type=bind,src=/srv/strata/logs/cache16g-protected-20261013-results/source/src,dst=/src/src",
+    "-w",
+    "/src/build-906",
+    "--entrypoint",
+    "python3",
+    "sha256:bccb7ee7e7a78274519db9a43ba63c34ddd2e74bb60f8764a8f50aaee1f2c646",
+    "-B",
+    "/package/build_cache16.py",
+    "--inside",
+    "--manifest-sha",
+    "7af7724d2d80ca369d48340b89401a96a4c871363886db651e1e146bea5fbae9"
+  ],
+  "donor_before": {
+    "libstrata_engine.a": {
+      "sha256": "6999f03f57473776a99b72bf4ebe8766a9c6c751f74affd010a2fccf36412da9",
+      "bytes": 1961682
+    },
+    "libstrata_prefill.a": {
+      "sha256": "b3a508a2f5c0e67303e25c39eb2cac5478732b97d628ac52028e2fc9e8e3c7f8",
+      "bytes": 801970
+    },
+    "libstrata_spec.a": {
+      "sha256": "52b87c781c881a52880886d3598337a877d4a61051911f6a5f5ad93588e174b2",
+      "bytes": 34860
+    },
+    "libstrata_kernels.a": {
+      "sha256": "135bfd9e51c94d9596db56d69db956f0397ff088097b28950002b98c3b97af9b",
+      "bytes": 9869884
+    },
+    "libstrata_core.a": {
+      "sha256": "0a445cccbca385adcd0da1b15b7e4bb8e3bd4b7d2aa2de308becfb05d37871af",
+      "bytes": 236302
+    },
+    "libstrata_kernels_cpu.a": {
+      "sha256": "30579ab20c14b8cd9d8fa70a7c3eb7d2fefc9e214fa7ad4cc1c4787f8c80de8a",
+      "bytes": 1024826
+    },
+    "ggml/src/libggml-cpu.a": {
+      "sha256": "a9fc4bf801bb7143635f78337062abb20b67849d7f43b531d1c91604cee28c0f",
+      "bytes": 1692740
+    },
+    "libstrata_mmq.a": {
+      "sha256": "53bbd154dd4978422993c2e65eed982cfcac38278a82c88df6bc97fae5a56c10",
+      "bytes": 8342270
+    },
+    "ggml/src/libggml-base.a": {
+      "sha256": "bae60befac1bde1706241a530bd256eccf7552d2ba1c9dc260ac3eda750c9951",
+      "bytes": 1401626
+    },
+    "hc_bf16_n4.o": {
+      "sha256": "3e0b616ef7d8658a61dc26cbd6219e1ebd3233ab8afc1a34fe7b23e226bc7b68",
+      "bytes": 19312
+    },
+    "CMakeFiles/strata.dir/src/program/generate.cpp.o": {
+      "sha256": "f90e6142d7a5964be5e8bade7244f2893c8d2801fbc557b9bb3471e56190a4a1",
+      "bytes": 1235832
+    },
+    "strata": {
+      "sha256": "74aa76d48a4783991e60b7e25601125dc5dc2bfeeaa351a71b350c122476b662",
+      "bytes": 21635056
+    },
+    "build-receipt.json": {
+      "sha256": "673c0c798e665ea86d0cf925306fadbdeff96249132379c51fd1cd900ff030cb",
+      "bytes": 10253
+    }
+  },
+  "gpu_execution": false,
+  "returncode": 0,
+  "binary": {
+    "sha256": "7b00d34c85181a2023862e01a5782c68c0403ba5b13a0e0eeec7280afa06b0e6",
+    "bytes": 21669936
+  },
+  "owned_cleanup_passed": true,
+  "donor_after": {
+    "libstrata_engine.a": {
+      "sha256": "6999f03f57473776a99b72bf4ebe8766a9c6c751f74affd010a2fccf36412da9",
+      "bytes": 1961682
+    },
+    "libstrata_prefill.a": {
+      "sha256": "b3a508a2f5c0e67303e25c39eb2cac5478732b97d628ac52028e2fc9e8e3c7f8",
+      "bytes": 801970
+    },
+    "libstrata_spec.a": {
+      "sha256": "52b87c781c881a52880886d3598337a877d4a61051911f6a5f5ad93588e174b2",
+      "bytes": 34860
+    },
+    "libstrata_kernels.a": {
+      "sha256": "135bfd9e51c94d9596db56d69db956f0397ff088097b28950002b98c3b97af9b",
+      "bytes": 9869884
+    },
+    "libstrata_core.a": {
+      "sha256": "0a445cccbca385adcd0da1b15b7e4bb8e3bd4b7d2aa2de308becfb05d37871af",
+      "bytes": 236302
+    },
+    "libstrata_kernels_cpu.a": {
+      "sha256": "30579ab20c14b8cd9d8fa70a7c3eb7d2fefc9e214fa7ad4cc1c4787f8c80de8a",
+      "bytes": 1024826
+    },
+    "ggml/src/libggml-cpu.a": {
+      "sha256": "a9fc4bf801bb7143635f78337062abb20b67849d7f43b531d1c91604cee28c0f",
+      "bytes": 1692740
+    },
+    "libstrata_mmq.a": {
+      "sha256": "53bbd154dd4978422993c2e65eed982cfcac38278a82c88df6bc97fae5a56c10",
+      "bytes": 8342270
+    },
+    "ggml/src/libggml-base.a": {
+      "sha256": "bae60befac1bde1706241a530bd256eccf7552d2ba1c9dc260ac3eda750c9951",
+      "bytes": 1401626
+    },
+    "hc_bf16_n4.o": {
+      "sha256": "3e0b616ef7d8658a61dc26cbd6219e1ebd3233ab8afc1a34fe7b23e226bc7b68",
+      "bytes": 19312
+    },
+    "CMakeFiles/strata.dir/src/program/generate.cpp.o": {
+      "sha256": "f90e6142d7a5964be5e8bade7244f2893c8d2801fbc557b9bb3471e56190a4a1",
+      "bytes": 1235832
+    },
+    "strata": {
+      "sha256": "74aa76d48a4783991e60b7e25601125dc5dc2bfeeaa351a71b350c122476b662",
+      "bytes": 21635056
+    },
+    "build-receipt.json": {
+      "sha256": "673c0c798e665ea86d0cf925306fadbdeff96249132379c51fd1cd900ff030cb",
+      "bytes": 10253
+    }
+  }
+}

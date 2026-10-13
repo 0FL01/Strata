@@ -1,0 +1,526 @@
+[
+  {
+    "path": "src/core/conversation_state.cpp",
+    "sha256": "1118b3d783b46acd0e2d49d351cf6d14ba092a125b6ab355deea82f85c27ca0f",
+    "hits": [
+      {
+        "line": 1,
+        "text": "#include \"strata/core/conversation_snapshot.hpp\""
+      },
+      {
+        "line": 96,
+        "text": "bool metadata_bytes(const ConversationCheckpoint& c, size_t& total) {"
+      },
+      {
+        "line": 142,
+        "text": "bool conversation_checkpoint_validate(const ConversationCheckpoint& c, const SessionState& ss,"
+      },
+      {
+        "line": 154,
+        "text": "bool conversation_checkpoint_save(ConversationCheckpoint& c, const SessionState& ss,"
+      },
+      {
+        "line": 172,
+        "text": "bool conversation_checkpoint_restore(const ConversationCheckpoint& c, SessionState& ss,"
+      },
+      {
+        "line": 205,
+        "text": "!product(checkpoints, {view.checkpoints.size(), sizeof(ConversationCheckpoint)}) ||"
+      },
+      {
+        "line": 247,
+        "text": "bool conversation_snapshot_save(SavedConversation& image, const ConversationView& view,"
+      },
+      {
+        "line": 254,
+        "text": "SavedConversation captured;"
+      },
+      {
+        "line": 276,
+        "text": "bool conversation_snapshot_sources(SavedConversation& meta, std::vector<SessionKvSource>& sources,"
+      },
+      {
+        "line": 280,
+        "text": "SavedConversation captured;"
+      },
+      {
+        "line": 328,
+        "text": "bool conversation_snapshot_validate(const SavedConversation& image, const SessionState& ss,"
+      },
+      {
+        "line": 346,
+        "text": "ConversationRestore conversation_snapshot_restore(const SavedConversation& image, SessionState& ss,"
+      },
+      {
+        "line": 369,
+        "text": "bool conversation_snapshot_save(SavedConversation& image, const ConversationView& view, const SessionState& ss,"
+      },
+      {
+        "line": 374,
+        "text": "bool conversation_snapshot_validate(const SavedConversation& image, const SessionState& ss, const ModelGeometry& g,"
+      },
+      {
+        "line": 380,
+        "text": "ConversationRestore conversation_snapshot_restore(const SavedConversation& image, SessionState& ss,"
+      }
+    ]
+  },
+  {
+    "path": "src/core/conversation_file.cpp",
+    "sha256": "136afacb6896fdf788ac751da2531ffdb59505edb83e9dc9d3176099e7eeb559",
+    "hits": [
+      {
+        "line": 1,
+        "text": "#include \"strata/core/conversation_file.hpp\""
+      },
+      {
+        "line": 647,
+        "text": "void buffer(const ConversationBuffer& b) {"
+      },
+      {
+        "line": 681,
+        "text": "void put_checkpoint(Out& o, const ConversationCheckpoint& c) {"
+      },
+      {
+        "line": 689,
+        "text": "void put_payload(Out& o, const SavedConversation& s, const std::vector<SessionKvSource>* sources = nullptr) {"
+      },
+      {
+        "line": 744,
+        "text": "bool buffer(ConversationBuffer& b, size_t part) {"
+      },
+      {
+        "line": 754,
+        "text": "bool get_checkpoint(In& in, ConversationCheckpoint& c) {"
+      },
+      {
+        "line": 765,
+        "text": "bool get_payload(In& in, SavedConversation& s) {"
+      },
+      {
+        "line": 798,
+        "text": "bool has_stage_parts(const SavedConversation& s) {"
+      },
+      {
+        "line": 1027,
+        "text": "bool write_impl(const std::string& path, const SavedConversation& image, const std::vector<SessionKvSource>* sources,"
+      },
+      {
+        "line": 1103,
+        "text": "bool write_guarded(const std::string& path, const SavedConversation& image, const std::vector<SessionKvSource>* sources,"
+      },
+      {
+        "line": 1120,
+        "text": "std::vector<ConversationCheckpoint> session_checkpoints_to_save(const std::vector<ConversationCheckpoint>& chain) {"
+      },
+      {
+        "line": 1121,
+        "text": "const ConversationCheckpoint* deepest = session_deepest_checkpoint(chain);"
+      },
+      {
+        "line": 1126,
+        "text": "const ConversationCheckpoint* session_deepest_checkpoint(const std::vector<ConversationCheckpoint>& chain) {"
+      },
+      {
+        "line": 1127,
+        "text": "const ConversationCheckpoint* deepest = nullptr;"
+      },
+      {
+        "line": 1133,
+        "text": "uint64_t session_save_peak_bytes(const ConversationCheckpoint* deepest, const SessionSaveLive& live) {"
+      },
+      {
+        "line": 1143,
+        "text": "bool session_save_checkpoints(const std::vector<ConversationCheckpoint>& chain, const SessionSaveLive& live,"
+      },
+      {
+        "line": 1145,
+        "text": "std::vector<ConversationCheckpoint>& out, std::string& why) {"
+      },
+      {
+        "line": 1147,
+        "text": "const ConversationCheckpoint* deepest = session_deepest_checkpoint(chain);"
+      },
+      {
+        "line": 1157,
+        "text": "bool session_file_write(const std::string& path, const SavedConversation& meta, const std::vector<SessionKvSource>& kv,"
+      },
+      {
+        "line": 1163,
+        "text": "bool session_file_write(const std::string& path, const SavedConversation& image, const SessionFileIdentity& id,"
+      },
+      {
+        "line": 1169,
+        "text": "bool read_impl(const std::string& path, const SessionFileIdentity& id, SavedConversation& image,"
+      },
+      {
+        "line": 1219,
+        "text": "SavedConversation parsed;"
+      },
+      {
+        "line": 1236,
+        "text": "bool session_file_read(const std::string& path, const SessionFileIdentity& id, SavedConversation& image,"
+      }
+    ]
+  },
+  {
+    "path": "src/core/conversation_snapshot.cpp",
+    "sha256": "41c023e09357031eb548b6a6fc066605897079241af1766ff2ffd22961dc8737",
+    "hits": [
+      {
+        "line": 1,
+        "text": "#include \"strata/core/conversation_snapshot.hpp\""
+      },
+      {
+        "line": 128,
+        "text": "const std::array<const ConversationBuffer*,5> buffers = {&image.k, &image.v, &image.k_scale, &image.v_scale, &image.pooled};"
+      },
+      {
+        "line": 166,
+        "text": "const std::array<ConversationBuffer*,5> dst = {&image.k, &image.v, &image.k_scale, &image.v_scale, &image.pooled};"
+      },
+      {
+        "line": 188,
+        "text": "const std::array<const ConversationBuffer*,5> src = {&image.k, &image.v, &image.k_scale, &image.v_scale, &image.pooled};"
+      },
+      {
+        "line": 206,
+        "text": "const std::array<const ConversationBuffer*,5> src = {&image.k, &image.v, &image.k_scale, &image.v_scale, &image.pooled};"
+      },
+      {
+        "line": 274,
+        "text": "const std::array<const ConversationBuffer*, 5> saved = {&image.k, &image.v, &image.k_scale, &image.v_scale, &image.pooled};"
+      }
+    ]
+  },
+  {
+    "path": "src/program/generate.cpp",
+    "sha256": "2a1b3192b70fd56780fb6732c392abf54ff4f017279a6c3a463e0dac5b22d24e",
+    "hits": [
+      {
+        "line": 22,
+        "text": "#include \"strata/core/conversation_snapshot.hpp\""
+      },
+      {
+        "line": 23,
+        "text": "#include \"strata/core/conversation_file.hpp\""
+      },
+      {
+        "line": 1301,
+        "text": "using ConvCheckpoint = strata::core::ConversationCheckpoint;"
+      },
+      {
+        "line": 1862,
+        "text": "// parking with --layer-split saves every stage (SavedConversation::stage_images)"
+      },
+      {
+        "line": 6307,
+        "text": "// engine loaded, by role (conversation_file.hpp), once; the config fingerprint covers the RESOLVED settings"
+      },
+      {
+        "line": 6397,
+        "text": "strata::core::ConversationCheckpointSplit cs;"
+      },
+      {
+        "line": 6400,
+        "text": "strata::core::ConversationCheckpointSplit& cs; std::vector<ConvCheckpoint>& checks; bool on;"
+      },
+      {
+        "line": 6470,
+        "text": "strata::core::SavedConversation image;"
+      },
+      {
+        "line": 6479,
+        "text": "strata::core::SavedConversation part;"
+      },
+      {
+        "line": 7418,
+        "text": "strata::core::ConversationCheckpoint ck;"
+      },
+      {
+        "line": 7461,
+        "text": "strata::core::ConversationCheckpoint ck;"
+      },
+      {
+        "line": 7804,
+        "text": "// UTF-8).  The file holds what a parked conversation holds (conversation_file.hpp).  Answers: SAVED /"
+      },
+      {
+        "line": 7911,
+        "text": "strata::core::SavedConversation meta;"
+      },
+      {
+        "line": 7942,
+        "text": "strata::core::SavedConversation image;"
+      },
+      {
+        "line": 8256,
+        "text": "std::optional<strata::core::SavedConversation> incoming;"
+      },
+      {
+        "line": 8370,
+        "text": "strata::core::ConversationCheckpointSplit cs;"
+      }
+    ]
+  },
+  {
+    "path": "include/strata/core/conversation_buffer.hpp",
+    "sha256": "12f1abac2ec75cc71e8cf308a5a691923d8b617317560e009a41f713809f49d4",
+    "hits": [
+      {
+        "line": 16,
+        "text": "class ConversationBuffer {"
+      },
+      {
+        "line": 19,
+        "text": "ConversationBuffer() = default;"
+      },
+      {
+        "line": 20,
+        "text": "ConversationBuffer(std::initializer_list<uint8_t> values) {"
+      },
+      {
+        "line": 27,
+        "text": "ConversationBuffer(const ConversationBuffer&) = default;"
+      },
+      {
+        "line": 28,
+        "text": "ConversationBuffer& operator=(const ConversationBuffer&) = default;"
+      },
+      {
+        "line": 29,
+        "text": "ConversationBuffer(ConversationBuffer&& other) noexcept"
+      },
+      {
+        "line": 31,
+        "text": "ConversationBuffer& operator=(ConversationBuffer&& other) noexcept {"
+      },
+      {
+        "line": 106,
+        "text": "bool operator==(const ConversationBuffer& other) const {"
+      }
+    ]
+  },
+  {
+    "path": "include/strata/core/conversation_cache.hpp",
+    "sha256": "a6c2e017497d38663d391b290662e74b37aa99147e1ca7e12c02f2204f81168b",
+    "hits": [
+      {
+        "line": 5,
+        "text": "#include \"strata/core/conversation_buffer.hpp\""
+      },
+      {
+        "line": 23,
+        "text": "struct ConversationCheckpoint {"
+      },
+      {
+        "line": 30,
+        "text": "std::vector<ConversationCheckpoint> stage_parts;"
+      },
+      {
+        "line": 35,
+        "text": "stage_parts.capacity() * sizeof(ConversationCheckpoint);"
+      },
+      {
+        "line": 46,
+        "text": "ConversationBuffer k, v, k_scale, v_scale, pooled;"
+      },
+      {
+        "line": 71,
+        "text": "struct ConversationCheckpointSplit {"
+      },
+      {
+        "line": 72,
+        "text": "std::vector<ConversationCheckpoint> stage0;"
+      },
+      {
+        "line": 73,
+        "text": "std::vector<std::vector<ConversationCheckpoint>> parts;   ///< [stage][checkpoint]"
+      },
+      {
+        "line": 74,
+        "text": "std::vector<ConversationCheckpoint> rest;                 ///< not split (no complete set of stage parts)"
+      },
+      {
+        "line": 78,
+        "text": "inline ConversationCheckpointSplit conversation_checkpoints_split(std::vector<ConversationCheckpoint>&& checks,"
+      },
+      {
+        "line": 80,
+        "text": "ConversationCheckpointSplit out;"
+      },
+      {
+        "line": 97,
+        "text": "ConversationCheckpoint part;"
+      },
+      {
+        "line": 122,
+        "text": "inline bool conversation_checkpoints_merge(ConversationCheckpointSplit&& split, std::vector<ConversationCheckpoint>& out) {"
+      },
+      {
+        "line": 136,
+        "text": "ConversationCheckpoint cp = std::move(split.stage0[w]);"
+      },
+      {
+        "line": 144,
+        "text": "struct SavedConversation {"
+      },
+      {
+        "line": 149,
+        "text": "ConversationCheckpoint live;"
+      },
+      {
+        "line": 150,
+        "text": "std::vector<ConversationCheckpoint> checkpoints;"
+      },
+      {
+        "line": 154,
+        "text": "std::vector<SavedConversation> stage_images;"
+      },
+      {
+        "line": 157,
+        "text": "size_t n = live.bytes() + checkpoints.capacity() * sizeof(ConversationCheckpoint) +"
+      },
+      {
+        "line": 167,
+        "text": "int64_t conversation_prefix(const ConversationCheckpoint& c, const std::vector<Token>& prompt,"
+      },
+      {
+        "line": 225,
+        "text": "auto consider = [&](const ConversationCheckpoint& c, bool live) {"
+      },
+      {
+        "line": 235,
+        "text": "SavedConversation take(size_t index) {"
+      },
+      {
+        "line": 236,
+        "text": "SavedConversation out = std::move(entries_.at(index));"
+      },
+      {
+        "line": 263,
+        "text": "const std::vector<ConversationCheckpoint>& checkpoints, bool cvec) {"
+      },
+      {
+        "line": 264,
+        "text": "auto held = [&](const ConversationCheckpoint& c) {"
+      },
+      {
+        "line": 273,
+        "text": "const ConversationCheckpoint* deepest = nullptr;"
+      },
+      {
+        "line": 289,
+        "text": "bool put(SavedConversation&& image, size_t held = 0) {"
+      },
+      {
+        "line": 301,
+        "text": "std::deque<SavedConversation> entries_; // least recently active first"
+      }
+    ]
+  },
+  {
+    "path": "include/strata/core/conversation_snapshot.hpp",
+    "sha256": "c403e99ab515566e1314a3c485f8974d25bb0194a181f1e8ab804fc76ce8f665",
+    "hits": [
+      {
+        "line": 3,
+        "text": "#include \"strata/core/conversation_cache.hpp\""
+      },
+      {
+        "line": 4,
+        "text": "#include \"strata/core/conversation_file.hpp\""
+      },
+      {
+        "line": 57,
+        "text": "bool conversation_checkpoint_validate(const ConversationCheckpoint& checkpoint, const SessionState& session,"
+      },
+      {
+        "line": 59,
+        "text": "bool conversation_checkpoint_save(ConversationCheckpoint& checkpoint, const SessionState& session,"
+      },
+      {
+        "line": 61,
+        "text": "bool conversation_checkpoint_restore(const ConversationCheckpoint& checkpoint, SessionState& session,"
+      },
+      {
+        "line": 67,
+        "text": "const std::vector<ConversationCheckpoint>& checkpoints;"
+      },
+      {
+        "line": 80,
+        "text": "bool conversation_snapshot_save(SavedConversation& image, const ConversationView& view,"
+      },
+      {
+        "line": 87,
+        "text": "bool conversation_snapshot_sources(SavedConversation& meta, std::vector<SessionKvSource>& sources,"
+      },
+      {
+        "line": 90,
+        "text": "bool conversation_snapshot_validate(const SavedConversation& image, const SessionState& session,"
+      },
+      {
+        "line": 95,
+        "text": "ConversationRestore conversation_snapshot_restore(const SavedConversation& image, SessionState& session,"
+      },
+      {
+        "line": 108,
+        "text": "bool conversation_snapshot_save(SavedConversation& image, const ConversationView& view, const SessionState& session,"
+      },
+      {
+        "line": 111,
+        "text": "bool conversation_snapshot_validate(const SavedConversation& image, const SessionState& session,"
+      },
+      {
+        "line": 113,
+        "text": "ConversationRestore conversation_snapshot_restore(const SavedConversation& image, SessionState& session,"
+      }
+    ]
+  },
+  {
+    "path": "include/strata/core/conversation_file.hpp",
+    "sha256": "2c6ddbb2bb1f44331297a2cf970504da67ce501180fe1513aeb59f71cef8f942",
+    "hits": [
+      {
+        "line": 1,
+        "text": "// On-disk persistence of a conversation's state (SavedConversation): one file holding the running state, the"
+      },
+      {
+        "line": 10,
+        "text": "#include \"strata/core/conversation_cache.hpp\""
+      },
+      {
+        "line": 162,
+        "text": "bool session_file_write(const std::string& path, const SavedConversation& image, const SessionFileIdentity& id,"
+      },
+      {
+        "line": 178,
+        "text": "bool session_file_write(const std::string& path, const SavedConversation& meta, const std::vector<SessionKvSource>& kv,"
+      },
+      {
+        "line": 184,
+        "text": "std::vector<ConversationCheckpoint> session_checkpoints_to_save(const std::vector<ConversationCheckpoint>& chain);"
+      },
+      {
+        "line": 186,
+        "text": "const ConversationCheckpoint* session_deepest_checkpoint(const std::vector<ConversationCheckpoint>& chain);"
+      },
+      {
+        "line": 197,
+        "text": "uint64_t session_save_peak_bytes(const ConversationCheckpoint* deepest, const SessionSaveLive& live);"
+      },
+      {
+        "line": 201,
+        "text": "bool session_save_checkpoints(const std::vector<ConversationCheckpoint>& chain, const SessionSaveLive& live,"
+      },
+      {
+        "line": 203,
+        "text": "std::vector<ConversationCheckpoint>& out, std::string& why);"
+      },
+      {
+        "line": 234,
+        "text": "bool session_file_read(const std::string& path, const SessionFileIdentity& id, SavedConversation& image,"
+      }
+    ]
+  }
+]

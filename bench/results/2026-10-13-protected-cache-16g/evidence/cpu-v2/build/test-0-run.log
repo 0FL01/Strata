@@ -1,0 +1,7 @@
+recorded_req22: resume=100786 total_read=33302 anchors=9 retained=12
+coverage: 1048580 exhaustive LCP checks, 1600 branch/refill cases, 8457 short turns; context=262144
+roles: root/coverage/recent2/user-pin isolation and no-victim saturation passed
+failures: budget/incomplete preserve timer, sticky restore, branch repair, cancellation passed
+edge cases: multiple crossed targets, overflow endpoints, malformed metadata passed
+global budget: full 256K bank plus 13 GiB other owners fits 16 GiB; one-byte-short candidate rejected without protected loss
+PASS: host coverage policy only; no GPU/coherent-state/latency claim

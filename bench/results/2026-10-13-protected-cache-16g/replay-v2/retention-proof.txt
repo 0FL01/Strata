@@ -1,0 +1,43 @@
+parked_step=1 lcp=128577 turn=133472 entries=1 evictions=0 active_resume=100786
+parked_step=2 lcp=133493 turn=135692 entries=2 evictions=0 active_resume=84402
+parked_step=3 lcp=135713 turn=136089 entries=3 evictions=0 active_resume=10674
+parked_step=4 lcp=136110 turn=147644 entries=4 evictions=0 active_resume=10674
+parked_step=5 lcp=147665 turn=147932 entries=4 evictions=1 active_resume=10674
+parked_step=6 lcp=147953 turn=148220 entries=4 evictions=2 active_resume=10674
+parked_step=7 lcp=148241 turn=148508 entries=4 evictions=3 active_resume=10674
+whole_selection active=10674 parked=10674 chosen=10674 read=123414 slots=4 evictions=3
+trace_create req=1 len=10674 victim=-1 resume=10674 bank=10674,
+trace_create req=1 len=18866 victim=-1 resume=18866 bank=10674,18866,
+trace_create req=1 len=35250 victim=-1 resume=35250 bank=10674,18866,35250,
+trace_create req=1 len=51634 victim=-1 resume=51634 bank=10674,18866,35250,51634,
+trace_create req=1 len=68018 victim=-1 resume=68018 bank=10674,18866,35250,51634,68018,
+trace_create req=1 len=84402 victim=-1 resume=84402 bank=10674,18866,35250,51634,68018,84402,
+trace_create req=1 len=100786 victim=18866 resume=100786 bank=10674,35250,51634,68018,84402,100786,
+trace_create req=1 len=117170 victim=35250 resume=100786 bank=10674,51634,68018,84402,100786,117170,
+trace_create req=1 len=128556 victim=68018 resume=100786 bank=10674,51634,84402,100786,117170,128556,
+trace_create req=2 len=130649 victim=51634 resume=100786 bank=10674,84402,100786,117170,128556,130649,
+trace_create req=3 len=131843 victim=100786 resume=84402 bank=10674,84402,117170,128556,130649,131843,
+trace_create req=4 len=132390 victim=130649 resume=84402 bank=10674,84402,117170,128556,131843,132390,
+trace_create req=5 len=133472 victim=131843 resume=84402 bank=10674,84402,117170,128556,132390,133472,
+trace_create req=6 len=135692 victim=132390 resume=84402 bank=10674,84402,117170,128556,133472,135692,
+trace_create req=7 len=136089 victim=84402 resume=10674 bank=10674,117170,128556,133472,135692,136089,
+trace_create req=8 len=136224 victim=128556 resume=10674 bank=10674,117170,133472,135692,136089,136224,
+trace_create req=9 len=136708 victim=136089 resume=10674 bank=10674,117170,133472,135692,136224,136708,
+trace_create req=10 len=137671 victim=136224 resume=10674 bank=10674,117170,133472,135692,136708,137671,
+trace_create req=11 len=138898 victim=135692 resume=10674 bank=10674,117170,133472,136708,137671,138898,
+trace_create req=12 len=139699 victim=136708 resume=10674 bank=10674,117170,133472,137671,138898,139699,
+trace_create req=13 len=140588 victim=138898 resume=10674 bank=10674,117170,133472,137671,139699,140588,
+trace_create req=14 len=141351 victim=137671 resume=10674 bank=10674,117170,133472,139699,140588,141351,
+trace_create req=15 len=142059 victim=140588 resume=10674 bank=10674,117170,133472,139699,141351,142059,
+trace_create req=16 len=142574 victim=141351 resume=10674 bank=10674,117170,133472,139699,142059,142574,
+trace_create req=17 len=144744 victim=142059 resume=10674 bank=10674,117170,133472,139699,142574,144744,
+trace_create req=18 len=145209 victim=139699 resume=10674 bank=10674,117170,133472,142574,144744,145209,
+trace_create req=19 len=145658 victim=144744 resume=10674 bank=10674,117170,133472,142574,145209,145658,
+trace_create req=20 len=146409 victim=145209 resume=10674 bank=10674,117170,133472,142574,145658,146409,
+trace_create req=21 len=147644 victim=145658 resume=10674 bank=10674,117170,133472,142574,146409,147644,
+observed_verified=23 final_resume=10674 initial=10674,51634,84402,100786,117170,128556,
+search_count=1 evaluated=0 found=0
+search_count=2 evaluated=15 found=0
+search_count=3 evaluated=168 found=0
+search_count=4 evaluated=410 found=1
+minimal_turns=4 positions=133472,135692,136089,147644, bank=10674,117170,128556,133472,136089,147644, resume=10674 read=123414

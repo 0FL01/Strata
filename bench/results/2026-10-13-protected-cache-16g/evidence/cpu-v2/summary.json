@@ -1,0 +1,33 @@
+{
+  "passed": true,
+  "image": "sha256:bccb7ee7e7a78274519db9a43ba63c34ddd2e74bb60f8764a8f50aaee1f2c646",
+  "baseline_binary_sha256": "74aa76d48a4783991e60b7e25601125dc5dc2bfeeaa351a71b350c122476b662",
+  "manifest_sha256": "caf8d1a4724b82cece8103d6c2e3ac5a770f62819f44b2ad7425bc7dda8db0fa",
+  "gpu_execution": false,
+  "gpu_kernel_translation_units_compiled": 0,
+  "host_translation_units_compiled": 8,
+  "test_translation_units_compiled": 5,
+  "baseline_binary_reproduced": true,
+  "cpu_policy_tests_passed": true,
+  "only_reviewed_archive_members_replaced": true,
+  "binary": {
+    "sha256": "2cbcd0eafb1385e4a345bb405e8c677e9fb77f3cbba46088d04c760fdd246ef2",
+    "bytes": 21669776
+  },
+  "link_completed": true,
+  "donor_unchanged": true,
+  "gpu_object_unchanged": true,
+  "package_unchanged": true,
+  "candidate_sources_unchanged": true,
+  "rollback_binary_preserved": true,
+  "untouched_sources_unchanged": true,
+  "host_receipt_passed": true,
+  "owned_cleanup_passed": true,
+  "original_build_receipt_sha256": "715975c24244ae01718a6c79c4749b7c856d469288b7427b71f8c3866d03dc88",
+  "original_host_receipt_sha256": "a5e3d06ad4d596a51a9c809a78659ff87df2cf5eacdc1418a79392a0f916239f",
+  "source_archive_sha256": "4c187e9c7bdf24ba36ee5ab836fed82e363fbc5516ac75f962637ed189668257",
+  "gpu_validation": "separate v2 replay completed with test gate passed; deployment remains on hold; see evidence/replay-v2/summary.json",
+  "deployed": false,
+  "mainline_integration": false,
+  "upstream_ready": false
+}

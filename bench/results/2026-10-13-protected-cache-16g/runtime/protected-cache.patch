@@ -1,0 +1,1335 @@
+--- a/src/program/generate.cpp
++++ b/src/program/generate.cpp
+@@ -23,6 +23,8 @@
+ #include "strata/core/conversation_snapshot.hpp"
+ #include "strata/core/conversation_file.hpp"
+ #include "strata/core/conversation_memory.hpp"
++#include "strata/core/conversation_memory_budget.hpp"
++#include "strata/program/coverage.hpp"
+ #include "strata/core/coupled_draft.hpp"
+ #include "strata/core/expert_source.hpp"
+ #include "strata/core/pinned.hpp"
+@@ -589,6 +591,7 @@
+     /// prompt again, the v0.1.2 behaviour).  One is the GDN recurrence of the 36 layers, the QSA indexer tails and
+     /// the PLE history (~118 MB of host RAM); the KV cache itself is positional and stays where it is.
+     int prompt_cache = 6;
++    bool prompt_cache_protected = false; // opt-in: absolute 16K anchors, two recent heads, global 16 GiB cache accounting
+     int64_t conversation_cache_mib = 0; // opt-in host RAM for independent conversations
+     int conversation_cache_slots = 4;
+     int64_t conversation_cache_min_free_mib = 2560;
+@@ -731,6 +734,8 @@
+                  "                       of RAM each; 0 = read every prompt from the start)\n"
+                  "  --prompt-cache-spread  --serve: spread the N checkpoints across history instead of LRU\n"
+                  "                       (opt-in; unchanged memory cap; no maximum replay-gap guarantee)\n"
++                 "  --prompt-cache-protected  opt-in absolute 16K safe-boundary anchors + root + two recent heads;\n"
++                 "                       16 GiB global host cache allocation budget (not process RSS); no batch/pipeline/session files\n"
+                  "  --conversation-cache-mib N  --serve: RAM budget for parked conversations (default 0 = off)\n"
+                  "  --conversation-cache-slots N  --serve: at most N parked conversations (default 4)\n"
+                  "  --conversation-cache-min-free-mib N  --serve: physical RAM floor when parking or restoring a\n"
+@@ -1729,6 +1734,7 @@
+             else o.conversation_cache_slots = (int) number;
+         }
+         else if (a == "--prompt-cache-spread") o.prompt_cache_spread = true;
++        else if (a == "--prompt-cache-protected") o.prompt_cache_protected = true;
+         else if (a == "--prompt-cache-tail") o.prompt_cache_tail = true;
+         else if (a == "--prompt-cache-every") o.prompt_cache_every = std::max(0LL, std::atoll(next("--prompt-cache-every")));
+         else if (a == "--prompt-cache-root") o.prompt_cache_root = std::max(0LL, std::atoll(next("--prompt-cache-root")));
+@@ -1858,6 +1864,13 @@
+         else (void) cudaGetLastError();
+     }
+ #endif
++    if (o.prompt_cache_protected && (!o.serve || o.prompt_cache <= 0 || o.batch != 0 ||
++            o.pipeline_windows != 0 || o.max_context <= 0 || o.max_context > 262144 ||
++            o.conversation_cache_slots > 4 || o.prefill_chunk != 4096 || o.spec != 6)) {
++        std::fprintf(stderr, "strata generate: --prompt-cache-protected requires --serve, --prompt-cache > 0, "
++                             "--prefill 4096, --spec 6, context <= 262144, <=4 parked slots, no --batch and no --pipeline-windows\n");
++        return 1;
++    }
+     strata::core::set_coupled_draft(o.coupled_draft);
+     {   // --host-core / STRATA_HOST_CORE, before the pool and the session pin any thread
+         std::string hc = o.host_core;
+@@ -6344,6 +6357,120 @@
+         strata::core::ConversationCache conversations(
+             o.prompt_cache > 0 ? (size_t) o.conversation_cache_mib * 1024 * 1024 : 0,
+             (size_t) o.conversation_cache_slots);
++        const bool protected_cache = o.prompt_cache_protected;
++        if (protected_cache && (n_stages != 2 || stages.size() != 1 || !multi_gpu || pipe)) {
++            std::fprintf(stderr, "strata serve: protected cache currently requires the validated two-GPU, non-overlapped decode configuration\n");
++            return 1;
++        }
++        using CoverageState = strata::program::coverage::State;
++        using CoverageHole = strata::program::coverage::HoleReason;
++        using MemoryBudget = strata::core::ConversationMemoryBudget;
++        using MemoryInventory = strata::core::ConversationMemoryInventory;
++        CoverageState coverage(16384, o.max_context);
++        bool coverage_trusted = true, coverage_request = true;
++        // Protects inventories and multipart reservations. GPU snapshot copies are serialized only when enabled;
++        // kernel, PP chunk, verifier window and deferred commit scheduling are otherwise unchanged.
++        std::mutex part_mu;
++        // Reverse destruction: payloads, their tickets, then the controller (also on error/cancellation exits).
++        MemoryBudget cache_budget(size_t(16) << 30);
++        std::map<int64_t, MemoryBudget::Reservation> part_budget;
++        std::map<int64_t, std::vector<ConvCheckpoint>> part_at;
++        std::vector<int64_t> part_next(stages.size() + 1, INT64_MAX);
++        // Bounded envelope under the gated <=256K / two-stage / <=4-parked configuration:
++        // live+consumed old/new token capacities <=4 MiB, live image move/replacement <=16 MiB,
++        // checkpoint/map/deque/policy/merge descriptors <1 MiB. Round upward to 32 MiB.
++        // Split identity copies and checkpoint identities/payloads are separately reserved, never hidden here.
++        // This is an allocation-accounting envelope, not a promise about allocator/RSS overhead.
++        constexpr size_t cache_metadata_margin = size_t(32) << 20;
++        auto cache_add = [](size_t a, size_t b) {
++            return b > SIZE_MAX - a ? SIZE_MAX : a + b;
++        };
++        auto cache_mul = [](size_t a, size_t b) {
++            return a != 0 && b > SIZE_MAX / a ? SIZE_MAX : a * b;
++        };
++        auto bank_bytes = [&](const std::vector<ConvCheckpoint>& bank) {
++            size_t n = bank.capacity() * sizeof(ConvCheckpoint);
++            for (const auto& c : bank) n = cache_add(n, c.bytes());
++            return n;
++        };
++        auto inventory = [&](size_t held = 0, size_t active_override = SIZE_MAX, size_t temporary = 0) {
++            MemoryInventory inv;
++            inv.active = active_override == SIZE_MAX ? bank_bytes(checks) : active_override;
++            inv.parked = conversations.bytes(); // includes retained KV exactly once
++            inv.selected = held;
++            inv.temporary = temporary;
++            // Precharged even while identities and control directories are being moved/resized.
++            inv.metadata = cache_metadata_margin;
++            return inv;
++        };
++        auto checkpoint_peak = [&](int64_t L) {
++            size_t n = 0;
++            auto add_stage = [&](const strata::core::SessionState& state) {
++                const ConvStateSizes z = conv_state_sizes(g, state);
++                const size_t qsa = (size_t) std::max<int64_t>(0, state.qsa_alloc);
++                n = cache_add(n, z.gdn);
++                n = cache_add(n, state.ple_hist ? z.ple : 0);
++                n = cache_add(n, cache_mul(qsa, cache_add(cache_add(z.tail, z.dead), z.block_pos)));
++                n = cache_add(n, cache_mul((size_t) L, sizeof(int32_t)));
++                // At most one image key per input token. Bounds identity copies before allocation.
++                n = cache_add(n, cache_mul((size_t) L, sizeof(ImgKey)));
++                n = cache_add(n, sizeof(ConvCheckpoint) * 4);
++            };
++            add_stage(ss);
++            for (const auto& st : stages) add_stage(st->ss);
++            // Multipart assembly's first-stage identity exists until moved parts are discarded.
++            n = cache_add(n, cache_mul((size_t) L, sizeof(int32_t) + sizeof(ImgKey)));
++            return cache_add(n, size_t(1) << 20); // bounded <=21 checkpoint descriptors and policy scratch
++        };
++        // Planned growth is kept out of optional parking: 16 anchors + root + TWO recent + replacement.
++        // The controller still separately admits every real overlapping allocation before it begins.
++        const size_t protected_bank_plan = protected_cache ?
++            cache_mul(checkpoint_peak(o.max_context), (size_t) (o.max_context / 16384) + 4) : 0;
++        int64_t last_degraded_target = -1;
++        CoverageHole last_degraded_reason = CoverageHole::none;
++        auto coverage_degraded = [&](int64_t L, CoverageHole why) {
++            // An optional recent-head miss before the next target does not invalidate anchor coverage.
++            if (why == CoverageHole::budget && !coverage.due(L)) return;
++            coverage.failed(L, why);
++            if (last_degraded_target == coverage.next_target && last_degraded_reason == why) return;
++            last_degraded_target = coverage.next_target;
++            last_degraded_reason = why;
++            std::fprintf(stderr, "strata serve: protected cache degraded: reason=%s evaluated=%lld next_target=%lld "
++                                 "hole_target=%lld (no full-prefix coverage claim)\n",
++                         strata::program::coverage::reason_name(why), (long long) L,
++                         (long long) coverage.next_target, (long long) coverage.hole_target);
++        };
++        auto cache_reconcile = [&](size_t held = 0, size_t active_override = SIZE_MAX, size_t temporary = 0) {
++            if (!protected_cache) return true;
++            const bool ok = cache_budget.reconcile(inventory(held, active_override, temporary));
++            if (!ok) std::fprintf(stderr, "strata serve: protected cache accounting breach; further captures refused\n");
++            return ok;
++        };
++        auto cache_room = [&](size_t extra, size_t held = 0, size_t active_override = SIZE_MAX,
++                              size_t temporary = 0, bool plan_growth = false) {
++            if (!protected_cache) return true;
++            const size_t active = active_override == SIZE_MAX ? bank_bytes(checks) : active_override;
++            const size_t required_active = plan_growth ? std::max(active, protected_bank_plan) : active;
++            const size_t external = cache_add(cache_add(required_active, held),
++                cache_add(temporary, inventory().metadata));
++            const size_t reserve = cache_budget.snapshot().reserved;
++            if (!conversations.make_room_global(extra, cache_add(external, reserve), size_t(16) << 30)) return false;
++            return cache_reconcile(held, active_override, temporary);
++        };
++        if (protected_cache) {
++            if (protected_bank_plan == SIZE_MAX || protected_bank_plan > (size_t(16) << 30) - cache_metadata_margin) {
++                std::fprintf(stderr, "strata serve: protected checkpoint bank cannot fit the configured global budget\n");
++                return 1;
++            }
++            cache_reconcile();
++            auto directory = cache_budget.reserve(cache_mul((size_t) (o.max_context / 16384) + 5, sizeof(ConvCheckpoint)));
++            if (!directory) return 1;
++            checks.reserve((size_t) (o.max_context / 16384) + 5);
++            if (!directory.commit(inventory())) return 1;
++            std::fprintf(stderr, "strata serve: protected cache enabled: absolute targets=16384, root+two recent heads, "
++                                 "global=17179869184 bytes, planned_active=%zu, safe-boundary displacement retained; "
++                                 "payload capacity accounting, not total process RSS\n", protected_bank_plan);
++        }
+ // CKPT_DIAG_BEGIN
+         if (ckpt_diag) std::fprintf(stderr, "[ckpt-diag] req=0 event=enabled schema=1 request_scope=valid_native_prompt entries_visible=0\n");
+ // CKPT_DIAG_END
+@@ -6445,6 +6572,24 @@
+             // later stage (without it - the draft ring is saved once).  The checkpoints are MOVED apart into their
+             // stage parts for the capture and put back together whichever way this ends (no running state copied).
+             const size_t n_st = stages.size();
++            const size_t active_before = bank_bytes(checks);
++            // Declare final reconciliation first, so all temporary payloads and tickets die before it.
++            struct CacheParkFinish {
++                std::function<void()> done;
++                ~CacheParkFinish() { done(); }
++            } cache_park_finish{[&] { cache_reconcile(held); }};
++            MemoryBudget::Reservation split_allocation;
++            if (protected_cache) {
++                size_t split_peak = cache_mul(cache_mul(checks.capacity(), sizeof(ConvCheckpoint)), n_st + 3);
++                for (const auto& c : checks)
++                    split_peak = cache_add(split_peak, cache_mul(n_st,
++                        cache_add(cache_mul(c.ids.capacity(), sizeof(int32_t)), cache_mul(c.imgs.capacity(), sizeof(ImgKey)))));
++                split_peak = cache_add(split_peak, size_t(1) << 20);
++                if (!cache_room(split_peak, held) || !(split_allocation = cache_budget.reserve(split_peak))) {
++                    std::fprintf(stderr, "strata serve: protected cache skip parking: split/merge overlap exceeds global budget\n");
++                    return true;
++                }
++            }
+             // the draft layer's K/V lives on the last stage's GPU (the drafter is loaded there): with a split it is
+             // saved with that stage's image, under its device; stage 0's image holds none
+             const strata::core::QsaState* draft0 = n_st > 0 || !use_mtp ? nullptr : &mtp.kv_state();   // no --mtp: no draft K/V (snapshots accept null)
+@@ -6456,6 +6601,7 @@
+                 ~MergeBack() { if (on && !strata::core::conversation_checkpoints_merge(std::move(cs), checks)) checks.clear(); }
+             } merge_back{cs, checks, n_st > 0};
+             const strata::core::ConversationView view{live, live_imgs, n_st > 0 ? cs.stage0 : checks, cvec_cached};
++            MemoryBudget::Reservation park_allocation;
+             auto reuse = conversations.take_reuse();
+             std::vector<strata::core::ConversationKvReuse> stage_reuse = std::move(reuse.stages);
+             stage_reuse.resize(n_st);
+@@ -6505,7 +6651,9 @@
+                 estimate = fresh_estimate;
+                 err.clear();
+             }
+-            estimate += stage_estimate;
++            estimate = cache_add(estimate, stage_estimate);
++            if (protected_cache) estimate = cache_add(estimate,
++                n_st * sizeof(strata::core::SavedConversation) + (size_t(1) << 20));
+             // A park carrying its own retained K/V replaces memory the cache
+             // already held, so capacity is make_room's call - it runs next either
+             // way, and put()'s accounting still bounds the budget. The with-reuse
+@@ -6529,6 +6677,17 @@
+                 const uint64_t floor = (uint64_t) o.conversation_cache_min_free_mib * 1024 * 1024;
+                 const size_t retained = reuse.bytes() + stage_retained;
+                 const size_t additional = estimate > retained ? estimate - retained : 0;
++                if (protected_cache) {
++                    // `checks` has been split and retained KV detached; neither may disappear from accounting.
++                    // The split ticket covers metadata overlap over active_before until merge_back finishes.
++                    if (!cache_room(additional, held, active_before, retained, true) ||
++                        !(park_allocation = cache_budget.reserve(additional))) {
++                        std::fprintf(stderr, "strata serve: protected cache skip parking: global 16 GiB admission "
++                                             "need=%zu held=%zu active=%zu retained=%zu\n",
++                                     additional, held, active_before, retained);
++                        return true;
++                    }
++                }
+                 if (!strata::core::conversation_memory_admit(strata::core::conversation_available_memory(),
+                         additional, floor)) {
+ // CKPT_DIAG_BEGIN
+@@ -6560,7 +6719,19 @@
+                     std::fprintf(stderr, "strata serve: conversation cache: skip parking (physical RAM floor after capture, or telemetry unavailable)\n");
+                     return true;
+                 }
++                image.coverage_trusted = protected_cache && coverage_trusted;
++                image.coverage_hole = protected_cache ? (uint8_t) coverage.hole : 0;
++                image.coverage_hole_target = protected_cache ? coverage.hole_target : 0;
+                 const size_t snapshot_bytes = image.bytes();
++                if (protected_cache) {
++                    size_t leftovers = reuse.bytes();
++                    for (const auto& sr : stage_reuse) leftovers = cache_add(leftovers, sr.bytes());
++                    // Materialized but not yet published snapshot remains a charged temporary owner.
++                    if (!park_allocation.commit(inventory(held, active_before, cache_add(snapshot_bytes, leftovers)))) {
++                        std::fprintf(stderr, "strata serve: protected cache skip parking: actual capacities exceeded reservation\n");
++                        return true;
++                    }
++                }
+                 const bool stored = conversations.put(std::move(image), held);
+ // CKPT_DIAG_BEGIN
+                 if (ckpt_diag) std::fprintf(stderr, "[ckpt-diag] req=%llu event=park_result stored=%d parked=%zu bytes=%zu evictions=%zu snapshot_bytes=%zu\n",
+@@ -6595,6 +6766,8 @@
+         Clock::time_point pp_t0 = Clock::now();
+         auto imgs_below = [&](const std::vector<ImgKey>& all, int64_t L) {
+             std::vector<ImgKey> v;
++            if (protected_cache) v.reserve((size_t) std::count_if(all.begin(), all.end(),
++                [&](const ImgKey& k) { return k.start < L; }));
+             for (const ImgKey& k : all) if (k.start < L) v.push_back(k);
+             return v;
+         };
+@@ -6602,9 +6775,6 @@
+         // A layer split's mid-prompt checkpoints: when the last stage reports a chunk, the earlier ones already read
+         // the next, so each stage saves its own part when IT reaches a checkpoint position (the same rule as below:
+         // every `prompt_cache_every` tokens from where the request resumed), and the last stage puts them together.
+-        std::mutex part_mu;
+-        std::map<int64_t, std::vector<ConvCheckpoint>> part_at;   // position -> one part per stage
+-        std::vector<int64_t> part_next(stages.size() + 1, INT64_MAX);
+         // a checkpoint of the state after `cur[0, L)`; false only when the copy itself failed.  `parts`: the stages'
+         // states saved at L (a split's mid-prompt checkpoint); without, they are read now (everything is at L)
+         // #613: why the last checkpoint_at failed - a failed device sync is the GPU itself (a hang Windows then resets),
+@@ -6617,7 +6787,22 @@
+                        ") - a GPU hang; on Windows the driver is then reset";
+             return false;
+         };
+-        auto checkpoint_at = [&](int64_t L, std::vector<ConvCheckpoint>* parts = nullptr, bool as_tail = false) -> bool {
++        auto checkpoint_at = [&](int64_t L, std::vector<ConvCheckpoint>* parts = nullptr, bool as_tail = false,
++                                 const std::vector<int32_t>* committed_ids = nullptr,
++                                 MemoryBudget::Reservation* assembled_budget = nullptr,
++                                 const char* source = "prompt") -> bool {
++            std::unique_lock<std::mutex> cache_lock(part_mu, std::defer_lock);
++            if (protected_cache) cache_lock.lock();
++            const auto capture0 = Clock::now();
++            const size_t identity_size = committed_ids ? committed_ids->size() : cur.size();
++            if (L < 0 || (uint64_t) L > identity_size) {
++                ckpt_why = ": evaluated prefix is outside token identity";
++                return false;
++            }
++            if (protected_cache && !coverage_request) return true;
++            MemoryBudget::Reservation own_budget;
++            // Declared before the payload so destruction releases the reservation AFTER temporary copies.
++            MemoryBudget::Reservation* allocation = assembled_budget ? assembled_budget : &own_budget;
+             ckpt_why.clear();
+ // CKPT_DIAG_BEGIN
+             if (ckpt_diag) std::fprintf(stderr, "[ckpt-diag] req=%llu event=create_attempt len=%lld requested_kind=%s enabled=%d\n",
+@@ -6625,9 +6810,29 @@
+ // CKPT_DIAG_END
+ 
+             if (o.prompt_cache <= 0 || L < 1) return true;
++            auto same_identity = [&](const ConvCheckpoint& c) {
++                if ((int64_t) c.ids.size() != L) return false;
++                const bool tokens = committed_ids ? std::equal(c.ids.begin(), c.ids.end(), committed_ids->begin()) :
++                                                     std::equal(c.ids.begin(), c.ids.end(), cur.begin());
++                if (!tokens) return false;
++                size_t j = 0;
++                for (const auto& im : req_imgs) if (im.start < L) {
++                    if (j == c.imgs.size() || !(c.imgs[j++] == im)) return false;
++                }
++                return j == c.imgs.size();
++            };
+             for (ConvCheckpoint& c : checks)
+-                if ((int64_t) c.ids.size() == L) {
++                if (same_identity(c)) {
+                     c.used = ++check_clock;
++                    if (protected_cache && coverage.due(L)) {
++                        const int64_t target = coverage.saved(L);
++                        if (c.coverage_target == 0) c.coverage_target = target;
++                        else c.coverage_target = std::min(c.coverage_target, target);
++                    }
++                    if (protected_cache && parts == nullptr) {
++                        part_at.clear(); part_budget.clear();
++                        std::fill(part_next.begin(), part_next.end(), coverage.next_target > 0 ? coverage.next_target : INT64_MAX);
++                    }
+                     if (!as_tail && L == tail_ckpt_len) tail_ckpt_len = -1;   // a periodic one lands here: a normal item now
+ // CKPT_DIAG_BEGIN
+                     ckpt_diag_record("create_existing_touch", "active", c);
+@@ -6635,9 +6840,21 @@
+ 
+                     return true;
+                 }
++            if (protected_cache && !assembled_budget) {
++                const size_t peak = checkpoint_peak(L);
++                if (!cache_room(peak) || !(own_budget = cache_budget.reserve(peak)) ||
++                    !strata::core::conversation_memory_admit(strata::core::conversation_available_memory(), peak,
++                        (uint64_t) o.conversation_cache_min_free_mib * 1024 * 1024)) {
++                    coverage_degraded(L, CoverageHole::budget);
++                    return true; // admission misses reduce coverage, never corrupt the running request
++                }
++            }
+             ConvCheckpoint c;
+-            c.ids.assign(cur.begin(), cur.begin() + L);
++            try {
++            if (committed_ids) c.ids.assign(committed_ids->begin(), committed_ids->begin() + L);
++            else c.ids.assign(cur.begin(), cur.begin() + L);
+             c.imgs = imgs_below(req_imgs, L);
++            if (protected_cache) c.stage_parts.reserve(stages.size());
+             if (parts != nullptr) {
+                 if (parts->size() != stages.size() + 1) return false;
+                 c.gdn = std::move((*parts)[0].gdn);
+@@ -6646,7 +6863,9 @@
+                 c.dead = std::move((*parts)[0].dead);
+                 c.block_pos = std::move((*parts)[0].block_pos);
+                 for (size_t i = 1; i < parts->size(); ++i) c.stage_parts.push_back(std::move((*parts)[i]));
++                if (protected_cache) parts->clear(); // release stage0 identity before the whole-capture ticket commits
+             } else {
++                if (protected_cache && !ver.wait_commit(ckpt_why)) return false;
+                 if (!gpu_sync_ok() || !checkpoint_save(c, ss, g)) return false;
+                 for (auto& st : stages) {   // a layer split's later stages: their sessions' part
+                     const strata::core::OnDevice on(st->dev);
+@@ -6655,6 +6874,62 @@
+                     if (!gpu_sync_ok() || !checkpoint_save(part, st->ss, g)) return false;
+                     c.stage_parts.push_back(std::move(part));
+                 }
++            }
++            if (protected_cache) {
++                std::string validation;
++                bool complete = c.stage_parts.size() == stages.size() &&
++                    strata::core::conversation_checkpoint_validate(c, ss, g, validation);
++                for (size_t i = 0; complete && i < c.stage_parts.size(); ++i)
++                    complete = c.stage_parts[i].ids == c.ids &&
++                        strata::core::conversation_checkpoint_validate(c.stage_parts[i], stages[i]->ss, g, validation);
++                if (!complete) {
++                    coverage_degraded(L, CoverageHole::incomplete_snapshot);
++                    ckpt_why = ": incomplete or invalid all-stage state: " + validation;
++                    return false;
++                }
++                // Compare actual capacities with the pre-allocation reservation before publication.
++                if (!allocation || !*allocation || c.bytes() > allocation->bytes()) {
++                    coverage_degraded(L, CoverageHole::budget);
++                    return true;
++                }
++                c.used = ++check_clock;
++                // Only publishing the complete state advances the absolute schedule.
++                c.coverage_target = coverage.due(L) ? coverage.next_target : 0;
++                checks.push_back(std::move(c));
++                if (!allocation->commit(inventory())) {
++                    checks.pop_back();
++                    coverage_degraded(L, CoverageHole::budget);
++                    return true;
++                }
++                if (coverage.due(L)) (void) coverage.saved(L);
++                if (parts == nullptr) {
++                    // A settled short-read/turn/decode boundary supersedes stale per-stage target schedules.
++                    part_at.clear(); part_budget.clear();
++                    std::fill(part_next.begin(), part_next.end(), coverage.next_target > 0 ? coverage.next_target : INT64_MAX);
++                }
++                // Root, coverage anchors and TWO recent non-anchor heads are independent roles.
++                for (;;) {
++                    std::vector<int64_t> lengths, targets;
++                    std::vector<uint64_t> stamps;
++                    for (const auto& k : checks) {
++                        lengths.push_back((int64_t) k.ids.size()); targets.push_back(k.coverage_target); stamps.push_back(k.used);
++                    }
++                    const auto victim = strata::program::coverage::eviction_victim(
++                        lengths.data(), stamps.data(), targets.data(), checks.size());
++                    if (!victim) break;
++                    ckpt_diag_record("protected_recent_replace", "active", checks[*victim]);
++                    checks.erase(checks.begin() + (std::ptrdiff_t) *victim);
++                }
++                cache_reconcile();
++                const auto account = cache_budget.snapshot();
++                std::fprintf(stderr, "[protected-cache] event=captured req=%llu len=%lld target=%lld source=%s bytes=%zu "
++                                     "owned=%zu total=%zu reserved=%zu high_water=%zu limit=%zu coverage=%s ms=%.3f\n",
++                             (unsigned long long) ckpt_diag_request, (long long) L,
++                             (long long) checks.back().coverage_target, source, bank_bytes(checks),
++                             account.owned, account.total, account.reserved, account.high_water, account.limit,
++                             coverage.has_hole() ? "degraded" : "complete",
++                             std::chrono::duration<double, std::milli>(Clock::now() - capture0).count());
++                return true;
+             }
+             c.used = ++check_clock;
+             if (as_tail) {   // only one tail checkpoint stays alive: the previous request's goes
+@@ -6700,6 +6975,11 @@
+                 checks.erase(checks.begin() + (std::ptrdiff_t) victim);
+             }
+             return true;
++            } catch (const std::bad_alloc&) {
++                if (!protected_cache) throw;
++                coverage_degraded(L, CoverageHole::budget);
++                return true;
++            }
+         };
+         sp.on_chunk = [&](const float* R_rows, int64_t T, int64_t p0, std::string& e) -> bool {
+             std::vector<int32_t> nxt((size_t) T);
+@@ -6719,7 +6999,11 @@
+             strata::core::progress_at("reading the prompt (batched), done up to token", done);
+             strata::core::progress_beat();
+             std::fflush(stdout);
+-            const bool periodic_checkpoint = o.prompt_cache_every > 0 && done >= pp_next_check;
++            const bool periodic_checkpoint = [&] {
++                if (!protected_cache) return o.prompt_cache_every > 0 && done >= pp_next_check;
++                std::lock_guard<std::mutex> lk(part_mu);
++                return coverage_request && coverage.due(done);
++            }();
+             // Keep the prefill's existing chunk geometry. One extra near-tail checkpoint
+             // can serve a branch whose shared prefix ends before the final cached state.
+             const bool tail_checkpoint = o.prompt_cache_tail && o.prompt_cache > 0 && o.prompt_cache_every > 0 &&
+@@ -6728,21 +7012,46 @@
+             if (periodic_checkpoint || tail_checkpoint) {
+                 bool saved = false;
+                 if (multi_gpu) {   // the stages' parts, saved when each of them read this chunk
++                    MemoryBudget::Reservation assembled;
+                     std::vector<ConvCheckpoint> parts;
+                     {
+                         std::lock_guard<std::mutex> lk(part_mu);
+                         auto it = part_at.find(done);
+                         if (it != part_at.end()) parts = std::move(it->second);
++                        if (protected_cache) {
++                            auto ticket = part_budget.find(done);
++                            if (ticket != part_budget.end()) assembled = std::move(ticket->second);
++                        }
+                         part_at.erase(part_at.begin(), part_at.upper_bound(done));
++                        // Destroy covered payloads before releasing their reservations.
++                        part_budget.erase(part_budget.begin(), part_budget.upper_bound(done));
+                     }
+                     bool complete = parts.size() == stages.size() + 1;
+-                    for (const ConvCheckpoint& k : parts) complete = complete && !k.gdn.empty();
+-                    saved = !complete || checkpoint_at(done, &parts);   // an incomplete set: no checkpoint here
++                    if (protected_cache) {
++                        std::string validation;
++                        for (size_t i = 0; complete && i < parts.size(); ++i) {
++                            const auto& state = i == 0 ? ss : stages[i - 1]->ss;
++                            complete = (int64_t) parts[i].ids.size() == done &&
++                                strata::core::conversation_checkpoint_validate(parts[i], state, g, validation);
++                        }
++                        if (!complete) {
++                            std::lock_guard<std::mutex> lk(part_mu);
++                            coverage_degraded(done, CoverageHole::incomplete_snapshot);
++                            saved = true; // a real coverage hole, not a successful snapshot
++                        } else saved = checkpoint_at(done, &parts, false, nullptr, &assembled, "prefill");
++                    } else {
++                        for (const ConvCheckpoint& k : parts) complete = complete && !k.gdn.empty();
++                        saved = !complete || checkpoint_at(done, &parts); // historical off-path
++                    }
+                 } else {
+                     saved = checkpoint_at(done, nullptr, tail_checkpoint && !periodic_checkpoint);
+                 }
+                 if (!saved) { e = "saving a conversation checkpoint failed" + ckpt_why; return false; }
+-                if (periodic_checkpoint) pp_next_check = done + o.prompt_cache_every;
++                if (periodic_checkpoint) {
++                    std::lock_guard<std::mutex> lk(part_mu);
++                    pp_next_check = protected_cache ? (coverage.next_target > 0 ? coverage.next_target : INT64_MAX) :
++                        done + o.prompt_cache_every;
++                }
+                 if (tail_checkpoint) pp_tail_saved = true;
+             }
+             return true;
+@@ -6754,6 +7063,46 @@
+                 strata::prefill::Prefill& stage_sp = i == 0 ? sp : stages[i - 1]->sp;
+                 strata::core::SessionState& stage_ss = i == 0 ? ss : stages[i - 1]->ss;
+                 stage_sp.on_stage_chunk = [&, i](int64_t done, std::string& e) -> bool {
++                    if (protected_cache) {
++                        std::lock_guard<std::mutex> lk(part_mu);
++                        if (!coverage_request || done < part_next[i]) return true;
++                        const int64_t next = coverage.target_after(done);
++                        part_next[i] = next > 0 ? next : INT64_MAX;
++                        try {
++                        auto ticket = part_budget.find(done);
++                        if (ticket == part_budget.end()) {
++                            const size_t peak = checkpoint_peak(done);
++                            if (part_budget.size() >= 2 || !cache_room(peak)) {
++                                coverage_degraded(done, CoverageHole::budget);
++                                return true;
++                            }
++                            auto reservation = cache_budget.reserve(peak);
++                            if (!reservation || !strata::core::conversation_memory_admit(
++                                    strata::core::conversation_available_memory(), peak,
++                                    (uint64_t) o.conversation_cache_min_free_mib * 1024 * 1024)) {
++                                coverage_degraded(done, CoverageHole::budget);
++                                return true;
++                            }
++                            ticket = part_budget.emplace(done, std::move(reservation)).first;
++                        }
++                            ConvCheckpoint part;
++                            part.ids.assign(cur.begin(), cur.begin() + done);
++                            part.imgs = imgs_below(req_imgs, done);
++                            if (!checkpoint_save(part, stage_ss, g)) {
++                                coverage_degraded(done, CoverageHole::transfer_failed);
++                                e = "saving a protected checkpoint part failed";
++                                return false;
++                            }
++                            auto& v = part_at[done];
++                            v.resize(stages.size() + 1);
++                            v[i] = std::move(part);
++                        } catch (const std::bad_alloc&) {
++                            part_at.erase(done);
++                            part_budget.erase(done);
++                            coverage_degraded(done, CoverageHole::budget);
++                        }
++                        return true;
++                    }
+                     if (o.prompt_cache <= 0 || o.prompt_cache_every <= 0 || done < part_next[i]) return true;
+                     part_next[i] = done + o.prompt_cache_every;
+                     ConvCheckpoint part;   // this stage's state at `done` (its stream is synchronized)
+@@ -7916,6 +8265,11 @@
+             // that step is allowed <seconds> (session_phase_limit_s) by the watchdog and by the server, no more.
+             // (A verifier commit that fails before the command still answers ERR and exits, as for a request.)
+             if (line.rfind("SAVE ", 0) == 0 || line.rfind("RESTORE ", 0) == 0) {
++                if (protected_cache) {
++                    std::printf("SERR invalid 0 session files are unsupported with --prompt-cache-protected\n");
++                    std::fflush(stdout);
++                    continue;
++                }
+                 const bool save = line[0] == 'S';
+                 const std::string path = line.substr(save ? 5 : 8);
+                 const auto t0 = Clock::now();
+@@ -8274,7 +8628,9 @@
+                 mrope_identity = !geni;
+             }
+             sp.embd_rows = geni ? row_ptr.data() : nullptr;
+-            if (n + max_new + 8 > o.max_context) {
++            // The protected-mode identity envelope requires overflow-safe request admission.
++            if (protected_cache ? (n > o.max_context - 8 || max_new > o.max_context - n - 8) :
++                                  (n + max_new + 8 > o.max_context)) {
+                 std::printf("ERR prompt (%lld tokens) + max_new (%lld) exceeds the context (%lld)\n", (long long) n,
+                             (long long) max_new, (long long) o.max_context);
+                 continue;
+@@ -8299,8 +8655,8 @@
+             }
+             cur = ids;
+ // CKPT_DIAG_BEGIN
++            if (ckpt_diag || protected_cache) ++ckpt_diag_request;
+             if (ckpt_diag) {
+-                ++ckpt_diag_request;
+                 std::fprintf(stderr, "[ckpt-diag] req=%llu event=request prompt_len=%zu req_imgs=%zu req_cvec=%d req_ckpt=%d\n",
+                              (unsigned long long) ckpt_diag_request, ids.size(), req_imgs.size(), req_cvec, int(req_ckpt));
+             }
+@@ -8401,8 +8757,19 @@
+                                        (long long) slot_tokens, (long long) parked.tokens, int(parked.live), parked.index, conversations.size());
+ // CKPT_DIAG_END
+ 
++            MemoryBudget::Reservation restore_allocation;
+             std::optional<strata::core::SavedConversation> incoming;
+             if (parked.tokens > std::max(resume, slot_tokens)) incoming.emplace(conversations.take(parked.index));
++            if (protected_cache && incoming) {
++                // Detach FIRST: cache_room may evict/deindex other entries. The selected identity and its
++                // exact matching token count are now stable, and held charges it throughout outgoing parking.
++                const size_t merge_peak = (size_t(2) << 20);
++                if (!cache_room(merge_peak, incoming->bytes()) || !(restore_allocation = cache_budget.reserve(merge_peak))) {
++                    std::fprintf(stderr, "strata serve: protected cache skipped selected restore: merge admission\n");
++                    incoming.reset();
++                    cache_reconcile();
++                }
++            }
+             if (incoming) slot_source = -1;
+ // CKPT_DIAG_BEGIN
+             if (ckpt_diag && incoming) {
+@@ -8539,6 +8906,12 @@
+                     if (!strata::core::conversation_checkpoints_merge(std::move(cs), checks)) checks.clear();
+                 }
+                 cvec_cached = incoming->cvec;
++                if (protected_cache) {
++                    coverage = CoverageState(16384, o.max_context);
++                    coverage_trusted = incoming->coverage_trusted;
++                    coverage.hole = (CoverageHole) incoming->coverage_hole;
++                    coverage.hole_target = incoming->coverage_hole_target;
++                }
+                 resume = parked.tokens;
+                 from_live = parked.live;
+                 if (std::getenv("STRATA_SNAPSHOT_FULL_CAPTURE") == nullptr) {
+@@ -8547,6 +8920,15 @@
+                     conversations.retain(std::move(incoming->kv), int64_t(live.size()), std::move(stage_kv));
+                 }
+                 incoming.reset(); // Running-state/checkpoint copies are no longer needed.
++                if (protected_cache) {
++                    // Before restore, the selected image was charged via parked or held; no recurrent bytes were copied.
++                    // reconcile transfers ownership after the moved-from image is destroyed.
++                    restore_allocation.reset();
++                    if (!cache_reconcile()) {
++                        std::printf("ERR protected cache ownership accounting failed after restore\n");
++                        return 1;
++                    }
++                }
+                 std::fprintf(stderr, "strata serve: conversation cache: restored %lld tokens (%s) in %.1f ms; parked=%zu bytes=%zu\n",
+                              (long long) resume, from_live ? "live" : "checkpoint",
+                              std::chrono::duration<double, std::milli>(Clock::now() - t0).count(),
+@@ -8655,13 +9037,24 @@
+             pp_from = read_from;
+             pp_reached = read_from;
+             pp_t0 = r0;
+-            pp_next_check = reread_to > 0 || !req_ckpt ? INT64_MAX : resume + o.prompt_cache_every;   // ckpt=0: none
++            coverage_request = reread_to <= 0 && req_ckpt;
++            if (protected_cache) {
++                if (read_from == 0) { coverage = CoverageState(16384, o.max_context); coverage_trusted = true; }
++                std::vector<int64_t> lengths, targets;
++                for (const auto& c : checks) { lengths.push_back((int64_t) c.ids.size()); targets.push_back(c.coverage_target); }
++                if (!coverage.rebuild(lengths.data(), targets.data(), lengths.size(), read_from, coverage_trusted))
++                    coverage_degraded(read_from, coverage.hole);
++            }
++            pp_next_check = reread_to > 0 || !req_ckpt ? INT64_MAX : protected_cache ?
++                (coverage.next_target > 0 ? coverage.next_target : INT64_MAX) : resume + o.prompt_cache_every; // ckpt=0: none
+             pp_tail_saved = reread_to > 0 || !req_ckpt;   // ckpt=0 (#861): no tail checkpoint either
+             if(!strata_peer_affinity_begin(n,n_stages)){std::printf("ERR peer affinity PP census/scope start\n");return 1;}
+             {
+                 std::lock_guard<std::mutex> lk(part_mu);
+                 part_at.clear();
++                part_budget.clear();
+                 std::fill(part_next.begin(), part_next.end(), pp_next_check);
++                cache_reconcile();
+             }
+             std::printf("RESUME %lld\n", (long long) resume);   // before reading: this many prompt tokens are reused
+             strata::core::progress_at("reading the prompt, from token", read_from);
+@@ -8839,6 +9232,12 @@
+                     if (!ver.commit(T, e) || (use_mtp && !mtp.prefill(ver.final_R_all(), nxt.data(), T, q, e))) return false;
+                     q += T;
+                     pp_reached = q;   // #471
++                    if (protected_cache && coverage_request && coverage.due(q)) {
++                        if (!checkpoint_at(q, nullptr, false, nullptr, nullptr, "short_verify")) {
++                            if (e.empty()) e = "saving a short-read checkpoint failed" + ckpt_why;
++                            return false;
++                        }
++                    }
+                 }
+                 // the batched prompt path (other streams), checkpoints and snapshots may follow: the last commit first
+                 if (!ver.wait_commit(e)) return false;
+@@ -10047,10 +10446,25 @@
+                 else if (timed_round && !eos)   // a chained window: its MTP part, its chain, its cost
+                     policy.observe_chain(T_mtp, chain_n, a, cm,
+                                          std::chrono::duration<double, std::milli>(Clock::now() - round0).count());
++                if (protected_cache && coverage_request && coverage.due((int64_t) consumed.size())) {
++                    if (!checkpoint_at((int64_t) consumed.size(), nullptr, false,
++                            &consumed, nullptr, "decode")) {
++                        std::printf("ERR saving a decode checkpoint failed%s\n", ckpt_why.c_str());
++                        return 1;
++                    }
++                }
+                 if (eos) { finish = "stop"; break; }
+                 if (stop_req.load()) { finish = "cancel"; break; }
+                 x = outv[(size_t) a];
+                 p += a + 1;
++            }
++            // Two recent heads are checkpoint copies distinct from the protected anchor bank.
++            if (protected_cache && coverage_request && !cancelled && !consumed.empty()) {
++                if (!checkpoint_at((int64_t) consumed.size(), nullptr, true,
++                        &consumed, nullptr, "request_head")) {
++                    std::printf("ERR saving a request head failed%s\n", ckpt_why.c_str());
++                    return 1;
++                }
+             }
+             const double decode_ms = std::chrono::duration<double, std::milli>(Clock::now() - d0).count();
+             // the last commit (set_commit_async): the session is complete before anything reads or copies it
+@@ -10084,6 +10498,18 @@
+                 live.swap(consumed);
+                 live_imgs = imgs_below(req_imgs, (int64_t) live.size());
+                 live_ok = o.prompt_cache > 0 && req_ckpt;   // ckpt=0: nothing to continue or park (#830)
++            }
++            if (protected_cache) {
++                std::lock_guard<std::mutex> lk(part_mu);
++                part_at.clear();
++                part_budget.clear();
++                cache_reconcile();
++                const auto account = cache_budget.snapshot();
++                std::fprintf(stderr, "[protected-cache] event=request_complete req=%llu owned=%zu total=%zu "
++                                     "reserved=%zu high_water=%zu limit=%zu coverage=%s next_target=%lld\n",
++                             (unsigned long long) ckpt_diag_request, account.owned, account.total, account.reserved,
++                             account.high_water, account.limit, coverage.has_hole() ? "degraded" : "complete",
++                             (long long) coverage.next_target);
+             }
+             static const bool state_hash = std::getenv("STRATA_STATE_HASH") != nullptr;
+             if (state_hash && !cancelled && o.prompt_cache > 0) {   // every finished request, ckpt=0 too (parity gates)
+--- a/include/strata/core/conversation_cache.hpp
++++ b/include/strata/core/conversation_cache.hpp
+@@ -14,6 +14,13 @@
+ 
+ namespace strata::core {
+ 
++inline size_t conversation_cache_add(size_t a, size_t b) {
++    return b > SIZE_MAX - a ? SIZE_MAX : a + b;
++}
++inline size_t conversation_cache_product(size_t a, size_t b) {
++    return a && b > SIZE_MAX / a ? SIZE_MAX : a * b;
++}
++
+ struct ConversationImageKey {
+     int64_t start = 0;
+     uint64_t hash = 0;
+@@ -25,15 +32,19 @@
+     std::vector<ConversationImageKey> imgs;
+     std::vector<uint8_t> gdn, ple, tails, dead, block_pos;
+     uint64_t used = 0; // upstream root-pinned/LRU checkpoint retention
++    int64_t coverage_target = 0; // earliest absolute target represented, 0 = ordinary root/recent
+     // Ordinary layer-split checkpoints retain each device's running state.
+     // Whole-session parking is currently single-GPU and rejects these parts.
+     std::vector<ConversationCheckpoint> stage_parts;
+ 
+     size_t bytes() const {
+-        size_t n = ids.capacity() * sizeof(int32_t) + imgs.capacity() * sizeof(ConversationImageKey) +
+-               gdn.capacity() + ple.capacity() + tails.capacity() + dead.capacity() + block_pos.capacity() +
+-               stage_parts.capacity() * sizeof(ConversationCheckpoint);
+-        for (const auto& part : stage_parts) n += part.bytes();
++        size_t n = 0;
++        for (size_t x : {conversation_cache_product(ids.capacity(), sizeof(int32_t)),
++                        conversation_cache_product(imgs.capacity(), sizeof(ConversationImageKey)),
++                        gdn.capacity(), ple.capacity(), tails.capacity(), dead.capacity(), block_pos.capacity(),
++                        conversation_cache_product(stage_parts.capacity(), sizeof(ConversationCheckpoint))})
++            n = conversation_cache_add(n, x);
++        for (const auto& part : stage_parts) n = conversation_cache_add(n, part.bytes());
+         return n;
+     }
+ };
+@@ -45,7 +56,10 @@
+     int64_t cells = 0, heads = 0, head_dim = 0, page_size = 0, pooled_rows = 0, idx_dim = 0;
+     ConversationBuffer k, v, k_scale, v_scale, pooled;
+     size_t bytes() const {
+-        return k.bytes() + v.bytes() + k_scale.bytes() + v_scale.bytes() + pooled.bytes();
++        size_t n = 0;
++        for (size_t x : {k.bytes(), v.bytes(), k_scale.bytes(), v_scale.bytes(), pooled.bytes()})
++            n = conversation_cache_add(n, x);
++        return n;
+     }
+ };
+ 
+@@ -56,9 +70,10 @@
+     // With a layer split: the later stages' own retained K/V, one per stage, same extents (empty: none)
+     std::vector<ConversationKvReuse> stages;
+     size_t bytes() const {
+-        size_t n = kv.capacity() * sizeof(ConversationKv) + stages.capacity() * sizeof(ConversationKvReuse);
+-        for (const auto& layer : kv) n += layer.bytes();
+-        for (const auto& s : stages) n += s.bytes();
++        size_t n = conversation_cache_add(conversation_cache_product(kv.capacity(), sizeof(ConversationKv)),
++            conversation_cache_product(stages.capacity(), sizeof(ConversationKvReuse)));
++        for (const auto& layer : kv) n = conversation_cache_add(n, layer.bytes());
++        for (const auto& s : stages) n = conversation_cache_add(n, s.bytes());
+         return n;
+     }
+ };
+@@ -96,6 +111,7 @@
+         for (size_t k = 0; k < stages; ++k) {
+             ConversationCheckpoint part;
+             part.ids = c.ids; part.imgs = c.imgs; part.used = c.used;
++            part.coverage_target = c.coverage_target;
+             out.parts[k].push_back(std::move(part));
+         }
+     }
+@@ -129,7 +145,8 @@
+     if (split.complete.empty()) split.complete.assign(split.stage0.size(), true);   // a restored image: all whole
+     for (size_t j = 0; j < split.stage0.size(); ++j)
+         for (const auto& p : split.parts)
+-            if (p[j].ids != split.stage0[j].ids) return false;
++            if (p[j].ids != split.stage0[j].ids || p[j].imgs != split.stage0[j].imgs ||
++                p[j].coverage_target != split.stage0[j].coverage_target) return false;
+     size_t w = 0, r = 0;
+     for (bool c : split.complete) {
+         if (!c) { out.push_back(std::move(split.rest[r++])); continue; }
+@@ -150,15 +167,22 @@
+     std::vector<ConversationCheckpoint> checkpoints;
+     std::vector<ConversationKv> kv; // main layers followed by the draft layer
+     bool cvec = true;
++    // Runtime-only coverage provenance. Session file commands are rejected in protected mode.
++    bool coverage_trusted = false;
++    uint8_t coverage_hole = 0;
++    int64_t coverage_hole_target = 0;
+     // with a layer split, the later stages' own images, one per stage, in stage order
+     std::vector<SavedConversation> stage_images;
+ 
+     size_t bytes() const {
+-        size_t n = live.bytes() + checkpoints.capacity() * sizeof(ConversationCheckpoint) +
+-                   kv.capacity() * sizeof(ConversationKv);
+-        for (const auto& s : stage_images) n += s.bytes();
+-        for (const auto& c : checkpoints) n += c.bytes();
+-        for (const auto& k : kv) n += k.bytes();
++        size_t n = live.bytes();
++        for (size_t x : {conversation_cache_product(checkpoints.capacity(), sizeof(ConversationCheckpoint)),
++                        conversation_cache_product(kv.capacity(), sizeof(ConversationKv)),
++                        conversation_cache_product(stage_images.capacity(), sizeof(SavedConversation))})
++            n = conversation_cache_add(n, x);
++        for (const auto& s : stage_images) n = conversation_cache_add(n, s.bytes());
++        for (const auto& c : checkpoints) n = conversation_cache_add(n, c.bytes());
++        for (const auto& k : kv) n = conversation_cache_add(n, k.bytes());
+         return n;
+     }
+ };
+@@ -188,7 +212,7 @@
+ 
+     ConversationCache(size_t budget, size_t slots) : budget_(budget), slots_(slots) {}
+     bool enabled() const { return budget_ != 0 && slots_ != 0; }
+-    size_t bytes() const { return bytes_ + reuse_.bytes(); }
++    size_t bytes() const { return conversation_cache_add(bytes_, reuse_.bytes()); }
+     size_t size() const { return entries_.size(); }
+     size_t evictions() const { return evictions_; }
+ 
+@@ -250,6 +274,20 @@
+             ++evictions_;
+         }
+         return true;
++    }
++
++    // Global opt-in admission, independent of the subordinate parked budget. Reclaim optional retained KV and
++    // oldest whole parked lineages; active protected checkpoints never enter this victim set.
++    bool make_room_global(size_t extra, size_t external, size_t total) {
++        if (external > total || extra > total - external) return false;
++        const size_t room = total - external - extra;
++        if (bytes() > room) reuse_ = {};
++        while (!entries_.empty() && bytes_ > room) {
++            bytes_ -= entries_.front().bytes();
++            entries_.pop_front();
++            ++evictions_;
++        }
++        return bytes() <= room;
+     }
+ 
+     // Drop a stale parked copy only when every one of its checkpoint restore points
+--- /dev/null
++++ b/include/strata/core/conversation_memory_budget.hpp
+@@ -0,0 +1,273 @@
++// Host-cache ownership admission, independent of the physical-RAM floor.
++// This bounds accounted capacities + pre-allocation reservations, NOT RSS.
++#pragma once
++
++#include <algorithm>
++#include <cassert>
++#include <cstddef>
++#include <cstdint>
++#include <initializer_list>
++#include <limits>
++#include <mutex>
++#include <utility>
++
++namespace strata::core {
++
++inline bool conversation_memory_add(size_t a, size_t b, size_t& out) noexcept {
++    if (b > std::numeric_limits<size_t>::max() - a) return false;
++    out = a + b;
++    return true;
++}
++
++inline bool conversation_memory_multiply(size_t a, size_t b, size_t& out) noexcept {
++    if (a && b > std::numeric_limits<size_t>::max() / a) return false;
++    out = a * b;
++    return true;
++}
++
++// Categories are mutually exclusive OWNERS, not references to the same data.
++// parked excludes retained KV; selected is a detached take() result; inflight
++// contains committed stage parts. A part covered by a live Reservation must
++// not appear here until that reservation is committed. Charge spare vector
++// capacity and directory capacity, including directories whose size is zero.
++struct ConversationMemoryInventory {
++    size_t active = 0;
++    size_t parked = 0;
++    size_t retained = 0;
++    size_t selected = 0;
++    size_t inflight = 0;
++    size_t temporary = 0;
++    size_t metadata = 0;
++
++    bool bytes(size_t& out) const noexcept {
++        size_t total = 0;
++        for (size_t n : {active, parked, retained, selected, inflight, temporary, metadata})
++            if (!conversation_memory_add(total, n, total)) return false;
++        out = total;
++        return true;
++    }
++
++    size_t bytes() const noexcept {
++        size_t out = 0;
++        return bytes(out) ? out : std::numeric_limits<size_t>::max();
++    }
++};
++
++class ConversationMemoryBudget {
++public:
++    // 16 GiB = 16,777,216 KiB. This is separate from a subordinate parked cap.
++    static constexpr uint64_t default_limit_bytes = UINT64_C(16) * 1024 * 1024 * 1024;
++
++    enum class Failure {
++        none,
++        no_room,
++        arithmetic_overflow,
++        inventory_over_budget,
++        reservation_underestimated,
++        unreconciled_inventory
++    };
++
++    struct Snapshot {
++        ConversationMemoryInventory inventory;
++        size_t limit = 0, owned = 0, reserved = 0, total = 0, high_water = 0;
++        size_t outstanding = 0;
++        bool breached = false;
++        Failure last_failure = Failure::none;
++    };
++
++    class Reservation {
++    public:
++        Reservation() noexcept = default;
++        Reservation(const Reservation&) = delete;
++        Reservation& operator=(const Reservation&) = delete;
++        Reservation(Reservation&& other) noexcept
++            : owner_(std::exchange(other.owner_, nullptr)), bytes_(std::exchange(other.bytes_, 0)) {}
++        Reservation& operator=(Reservation&& other) noexcept {
++            if (this != &other) {
++                reset();
++                owner_ = std::exchange(other.owner_, nullptr);
++                bytes_ = std::exchange(other.bytes_, 0);
++            }
++            return *this;
++        }
++        ~Reservation() { reset(); }
++
++        explicit operator bool() const noexcept { return owner_ != nullptr; }
++        size_t bytes() const noexcept { return bytes_; }
++
++        // Call only after uncommitted allocations are destroyed, or after the
++        // same allocation has been transferred to another accounting owner.
++        void reset() noexcept {
++            if (owner_) {
++                owner_->release(bytes_);
++                owner_ = nullptr;
++                bytes_ = 0;
++            }
++        }
++
++        // Atomically replace this reservation by a complete owned inventory.
++        // Growth above the reservation is rejected even if spare room exists.
++        // This is a final-capacity audit, not a peak measurement: simultaneous
++        // frees can hide temporary growth. The caller must separately bound
++        // every pre-allocation peak (old+new directories, copies, all stages).
++        // Failure leaves the token intact for destruction/rollback; no partially
++        // built multi-stage checkpoint may be published on failure.
++        bool commit(const ConversationMemoryInventory& inventory) noexcept {
++            if (!owner_ || !owner_->commit(*this, inventory)) return false;
++            owner_ = nullptr;
++            bytes_ = 0;
++            return true;
++        }
++
++        // Return excess reservation only after the corresponding temporary
++        // allocation is gone or its remaining maximum has been established.
++        bool shrink(size_t bytes) noexcept {
++            if (!owner_ || bytes > bytes_) return false;
++            owner_->shrink(bytes_ - bytes);
++            bytes_ = bytes;
++            return true;
++        }
++
++    private:
++        friend class ConversationMemoryBudget;
++        Reservation(ConversationMemoryBudget* owner, size_t bytes) noexcept : owner_(owner), bytes_(bytes) {}
++        ConversationMemoryBudget* owner_ = nullptr;
++        size_t bytes_ = 0;
++    };
++
++    explicit ConversationMemoryBudget(size_t limit = static_cast<size_t>(default_limit_bytes)) noexcept
++        : limit_(limit) {
++        static_assert(sizeof(size_t) >= sizeof(uint64_t), "host-cache budget requires 64-bit size_t");
++    }
++    ConversationMemoryBudget(const ConversationMemoryBudget&) = delete;
++    ConversationMemoryBudget& operator=(const ConversationMemoryBudget&) = delete;
++    ~ConversationMemoryBudget() { assert(outstanding_ == 0 && "budget must outlive its reservations"); }
++
++    // Rebuild the inventory at serialized ownership boundaries, including
++    // after release/move/eviction and initially before enabling admission.
++    // This is an audit, never permission to allocate before reserve(). A failed
++    // audit preserves the last valid ledger, marks it unreliable, and blocks
++    // admission until rollback is followed by a successful reconciliation.
++    bool reconcile(const ConversationMemoryInventory& inventory) noexcept {
++        std::lock_guard<std::mutex> lock(mutex_);
++        size_t n = 0;
++        if (!inventory.bytes(n)) return breach_locked(Failure::arithmetic_overflow);
++        if (n > limit_ || reserved_ > limit_ - n) return breach_locked(Failure::inventory_over_budget);
++        inventory_ = inventory;
++        owned_ = n;
++        breached_ = false;
++        failure_ = Failure::none;
++        observe_locked();
++        return true;
++    }
++
++    // Reserve ALL additional peak capacity before the first allocation. Keep
++    // old owners charged throughout replacement, checkpoint splitting, restore,
++    // and deep copies. Concurrent captures each need their own reservation.
++    Reservation reserve(size_t additional_peak) noexcept {
++        std::lock_guard<std::mutex> lock(mutex_);
++        if (breached_) {
++            failure_ = Failure::unreconciled_inventory;
++            return {};
++        }
++        if (additional_peak > limit_ - owned_ - reserved_) {
++            failure_ = Failure::no_room;
++            return {};
++        }
++        if (outstanding_ == std::numeric_limits<size_t>::max()) {
++            failure_ = Failure::arithmetic_overflow;
++            return {};
++        }
++        reserved_ += additional_peak;
++        ++outstanding_;
++        failure_ = Failure::none;
++        observe_locked();
++        return Reservation(this, additional_peak);
++    }
++
++    Snapshot snapshot() const noexcept {
++        std::lock_guard<std::mutex> lock(mutex_);
++        assert_invariant_locked();
++        return {inventory_, limit_, owned_, reserved_, owned_ + reserved_, high_water_,
++                outstanding_, breached_, failure_};
++    }
++
++    size_t available() const noexcept {
++        std::lock_guard<std::mutex> lock(mutex_);
++        return breached_ ? 0 : limit_ - owned_ - reserved_;
++    }
++
++    // Current TOTAL allowance for parked + retained owners, not additional
++    // bytes. Selected/inflight/active/reserved ownership reduces it. Caller
++    // must still reserve before allocation; this number is only a snapshot.
++    size_t parked_headroom(size_t subordinate_cap) const noexcept {
++        std::lock_guard<std::mutex> lock(mutex_);
++        if (breached_) return 0;
++        const size_t parked = inventory_.parked + inventory_.retained; // part of checked owned_
++        const size_t nonparked = owned_ - parked;
++        return std::min(subordinate_cap, limit_ - nonparked - reserved_);
++    }
++
++private:
++    bool breach_locked(Failure reason) noexcept {
++        breached_ = true;
++        failure_ = reason;
++        assert_invariant_locked();
++        return false;
++    }
++
++    bool commit(Reservation& reservation, const ConversationMemoryInventory& inventory) noexcept {
++        std::lock_guard<std::mutex> lock(mutex_);
++        assert(reservation.owner_ == this && reservation.bytes_ <= reserved_ && outstanding_ != 0);
++        if (breached_) {
++            failure_ = Failure::unreconciled_inventory;
++            return false;
++        }
++        size_t n = 0;
++        if (!inventory.bytes(n)) return breach_locked(Failure::arithmetic_overflow);
++        if (n > owned_ && n - owned_ > reservation.bytes_)
++            return breach_locked(Failure::reservation_underestimated);
++        const size_t other_reserved = reserved_ - reservation.bytes_;
++        if (n > limit_ || other_reserved > limit_ - n)
++            return breach_locked(Failure::inventory_over_budget);
++        inventory_ = inventory;
++        owned_ = n;
++        reserved_ = other_reserved;
++        --outstanding_;
++        failure_ = Failure::none;
++        observe_locked();
++        return true;
++    }
++
++    void release(size_t bytes) noexcept {
++        std::lock_guard<std::mutex> lock(mutex_);
++        assert(bytes <= reserved_ && outstanding_ != 0);
++        reserved_ -= bytes;
++        --outstanding_;
++        assert_invariant_locked();
++    }
++
++    void shrink(size_t bytes) noexcept {
++        std::lock_guard<std::mutex> lock(mutex_);
++        assert(bytes <= reserved_);
++        reserved_ -= bytes;
++        assert_invariant_locked();
++    }
++
++    void observe_locked() noexcept {
++        assert_invariant_locked();
++        high_water_ = std::max(high_water_, owned_ + reserved_);
++    }
++    void assert_invariant_locked() const noexcept {
++        assert(owned_ <= limit_ && reserved_ <= limit_ - owned_);
++    }
++
++    mutable std::mutex mutex_;
++    const size_t limit_;
++    ConversationMemoryInventory inventory_;
++    size_t owned_ = 0, reserved_ = 0, high_water_ = 0, outstanding_ = 0;
++    bool breached_ = false;
++    Failure failure_ = Failure::none;
++};
++
++} // namespace strata::core
+--- /dev/null
++++ b/include/strata/program/coverage.hpp
+@@ -0,0 +1,203 @@
++// Host-only, opt-in coverage metadata. No tensor copies, allocations, user-pin
++// changes, global-budget ownership, or modifications of evaluation geometry.
++#pragma once
++
++#include <cstddef>
++#include <cstdint>
++#include <optional>
++
++namespace strata::program::coverage {
++
++inline constexpr int64_t default_spacing = 16384;
++inline constexpr int64_t default_max_context = 262144;
++
++enum class HoleReason : uint8_t {
++    none, budget, incomplete_snapshot, transfer_failed, unsupported_mode,
++    legacy_restore, missing_anchor, opportunity_gap, invalid_metadata,
++    no_eligible_victim
++};
++
++inline const char* reason_name(HoleReason reason) noexcept {
++    switch (reason) {
++    case HoleReason::none: return "none";
++    case HoleReason::budget: return "budget";
++    case HoleReason::incomplete_snapshot: return "incomplete_snapshot";
++    case HoleReason::transfer_failed: return "transfer_failed";
++    case HoleReason::unsupported_mode: return "unsupported_mode";
++    case HoleReason::legacy_restore: return "legacy_restore";
++    case HoleReason::missing_anchor: return "missing_anchor";
++    case HoleReason::opportunity_gap: return "opportunity_gap";
++    case HoleReason::invalid_metadata: return "invalid_metadata";
++    case HoleReason::no_eligible_victim: return "no_eligible_victim";
++    }
++    return "invalid_reason";
++}
++
++// Move/copy this value along with its checkpoint bank when parking/restoring.
++// A disk format that does not carry this value must reload as untrusted history.
++// "No hole" certifies metadata history only, NOT snapshot correctness or an
++// opportunity-gap bound; the caller must verify both before advertising a bound.
++struct State {
++    int64_t spacing = default_spacing;
++    int64_t max_context = default_max_context;
++    int64_t next_target = default_spacing;  // 0 means all in-context targets covered
++    int64_t frontier = 0;
++    int64_t hole_target = 0;                // earliest affected absolute threshold
++    HoleReason hole = HoleReason::none;
++
++    explicit State(int64_t step = default_spacing,
++                   int64_t maximum = default_max_context) noexcept
++        : spacing(step), max_context(maximum),
++          next_target(step > 0 && maximum >= step ? step : 0) {
++        if (step <= 0 || maximum <= 0) {
++            hole = HoleReason::invalid_metadata;
++        }
++    }
++
++    bool valid_config() const noexcept { return spacing > 0 && max_context > 0; }
++    bool has_hole() const noexcept { return hole != HoleReason::none; }
++    bool due(int64_t length) const noexcept {
++        return valid_config() && next_target > 0 && length >= next_target &&
++               length <= max_context;
++    }
++
++    // Does not overflow at INT64_MAX and does not invent a target past context.
++    int64_t target_after(int64_t length) const noexcept {
++        if (!valid_config() || length < 0 || length > max_context) return 0;
++        const int64_t base = (length / spacing) * spacing;
++        return max_context - base < spacing ? 0 : base + spacing;
++    }
++
++    void failed(int64_t length, HoleReason reason) noexcept {
++        if (reason == HoleReason::none) return;
++        const int64_t target = next_target > 0 ? next_target :
++            (valid_config() && length > 0 ? (length / spacing) * spacing : 0);
++        mark_hole(target, reason);
++    }
++
++    // Call ONLY after complete exact-state capture/promotion AND global memory
++    // admission have succeeded. Store the returned value in coverage_target.
++    // A single endpoint can satisfy multiple targets when opportunity gap > B:
++    // it represents every absolute target in [returned, floor(length/B)*B].
++    // Its real saved length remains length, never the nominal target.
++    int64_t saved(int64_t length) noexcept {
++        if (!valid_config() || length < 0 || length > max_context) {
++            failed(length, HoleReason::invalid_metadata);
++            return 0;
++        }
++        if (length > frontier) frontier = length;
++        if (!due(length)) return 0;
++        const int64_t target = next_target;
++        next_target = target_after(length);
++        // A later successful snapshot cannot retroactively repair a missed one.
++        return target;
++    }
++
++    // Rebuild after prefix/identity pruning, before continuing a restored bank.
++    // Arrays may be unsorted. They must describe ONLY compatible, coherent states
++    // at or before evaluated_through. A coverage target of zero is an ordinary
++    // root/recent/user-pin snapshot. It is not silently promoted by this function.
++    // trusted_history means history originated at zero and its State was retained;
++    // passing true does not erase a retained hole. Legacy restores should pass false.
++    // Returns metadata coverage availability, not numerical-state validation.
++    bool rebuild(const int64_t* lengths, const int64_t* targets, size_t n,
++                 int64_t evaluated_through, bool trusted_history) noexcept {
++        const HoleReason previous_hole = hole;
++        const int64_t previous_target = hole_target;
++        hole = HoleReason::none;
++        hole_target = 0;
++        frontier = evaluated_through;
++        next_target = valid_config() && spacing <= max_context ? spacing : 0;
++        if (!valid_config() || evaluated_through < 0 ||
++            evaluated_through > max_context || (n != 0 && (!lengths || !targets))) {
++            mark_hole(0, HoleReason::invalid_metadata);
++            return false;
++        }
++        for (size_t i = 0; i < n; ++i) {
++            if (lengths[i] <= 0 || lengths[i] > evaluated_through ||
++                targets[i] < 0 || targets[i] > lengths[i] ||
++                (targets[i] != 0 && targets[i] % spacing != 0)) {
++                mark_hole(0, HoleReason::invalid_metadata);
++                return false;
++            }
++        }
++        // Union all explicitly represented target ranges. No synthetic target
++        // is filled by a recent checkpoint or by an unrelated later anchor.
++        bool advanced = true;
++        while (next_target != 0 && advanced) {
++            advanced = false;
++            for (size_t i = 0; i < n; ++i) {
++                if (targets[i] == 0 || targets[i] > next_target ||
++                    lengths[i] < next_target) continue;
++                next_target = target_after(lengths[i]);
++                advanced = true;
++                if (next_target == 0) break;
++            }
++        }
++        // Rewinding strictly before the affected threshold permits genuine
++        // replay to repair that failure. Otherwise retain it across park/restore.
++        if (previous_hole != HoleReason::none &&
++            ((previous_target == 0 && evaluated_through > 0) ||
++             (previous_target > 0 && previous_target <= evaluated_through))) {
++            mark_hole(previous_target, previous_hole);
++        }
++        if (!trusted_history && evaluated_through > 0) {
++            mark_hole(0, HoleReason::legacy_restore);
++        }
++        if (next_target != 0 && next_target <= evaluated_through) {
++            mark_hole(next_target, HoleReason::missing_anchor);
++        }
++        return !has_hole();
++    }
++
++private:
++    void mark_hole(int64_t target, HoleReason reason) noexcept {
++        if (!has_hole() || target < hole_target) {
++            hole_target = target;
++            hole = reason;
++        }
++    }
++};
++
++// Return no victim when all snapshots are protected. NEVER fall back to the old
++// pin-victim rule. Root is minimum length, independent of container order. Recent
++// points are the two highest used/capture stamps among otherwise unprotected
++// snapshots (length then index break ties). User pins remain independent flags.
++// A nonzero coverage tag is conservatively protected even if metadata is invalid.
++inline std::optional<size_t> eviction_victim(
++    const int64_t* lengths, const uint64_t* stamps, const int64_t* targets,
++    size_t n, const bool* user_pins = nullptr, size_t recent_count = 2,
++    const bool* tails = nullptr) noexcept {
++    if (n == 0 || !lengths || !stamps || !targets) return std::nullopt;
++    size_t root = 0;
++    for (size_t i = 1; i < n; ++i)
++        if (lengths[i] < lengths[root]) root = i;
++    auto newer = [&](size_t a, size_t b) {
++        return stamps[a] > stamps[b] ||
++            (stamps[a] == stamps[b] && (lengths[a] > lengths[b] ||
++              (lengths[a] == lengths[b] && a > b)));
++    };
++    auto fixed_role = [&](size_t i) {
++        return i == root || targets[i] != 0 || (user_pins && user_pins[i]);
++    };
++    auto protected_item = [&](size_t i) {
++        if (fixed_role(i)) return true;
++        size_t newer_count = 0;
++        for (size_t j = 0; j < n && newer_count < recent_count; ++j)
++            if (!fixed_role(j) && newer(j, i)) ++newer_count;
++        return newer_count < recent_count;
++    };
++    std::optional<size_t> result;
++    for (size_t i = 0; i < n; ++i) {
++        if (protected_item(i)) continue;
++        if (!result || (tails && tails[i] && !tails[*result]) ||
++            ((!tails || tails[i] == tails[*result]) &&
++             (stamps[i] < stamps[*result] ||
++              (stamps[i] == stamps[*result] && lengths[i] < lengths[*result])))) {
++            result = i;
++        }
++    }
++    return result;
++}
++
++}  // namespace strata::program::coverage

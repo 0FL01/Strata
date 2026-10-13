@@ -1,0 +1,656 @@
+[
+  {
+    "case": "long117173",
+    "input_sha256": "7b7936eb6c98119ee7a7f061fe2cdfb6e02a1ed65c0e4279d3ce597dd199f2d1",
+    "input_tokens": 117173,
+    "prompt_ms": 183862.5,
+    "decode_ms": 854.2,
+    "finish": "length",
+    "reused": 0,
+    "read": 117173,
+    "wall_s": 184.73779889394064,
+    "done": "DONE 32 117173 183862.5 854.2 length 22 32 0 21358 21600 0 0 0.0 117173 0",
+    "request_index": 1,
+    "pp": [
+      "PP 4096 117173 10096 405.7",
+      "PP 8192 117173 15863 516.4",
+      "PP 10674 117173 18892 565.0",
+      "PP 14770 117173 29118 507.2",
+      "PP 18866 117173 35067 538.0",
+      "PP 22962 117173 40831 562.4",
+      "PP 27058 117173 46654 580.0",
+      "PP 31154 117173 52496 593.5",
+      "PP 35250 117173 58498 602.6",
+      "PP 39346 117173 64371 611.2",
+      "PP 43442 117173 70305 617.9",
+      "PP 47538 117173 76288 623.1",
+      "PP 51634 117173 82440 626.3",
+      "PP 55730 117173 88430 630.2",
+      "PP 59826 117173 94438 633.5",
+      "PP 63922 117173 100563 635.6",
+      "PP 68018 117173 106892 636.3",
+      "PP 72114 117173 113006 638.1",
+      "PP 76210 117173 119226 639.2",
+      "PP 80306 117173 125503 639.9",
+      "PP 84402 117173 131855 640.1",
+      "PP 88498 117173 138175 640.5",
+      "PP 92594 117173 144542 640.6",
+      "PP 96690 117173 150986 640.4",
+      "PP 100786 117173 157480 640.0",
+      "PP 104882 117173 164088 639.2",
+      "PP 108978 117173 170593 638.8",
+      "PP 113074 117173 177059 638.6",
+      "PP 117170 117173 183524 638.4",
+      "PP 117172 117173 183862 637.3"
+    ],
+    "stop_sent": false,
+    "first_token_ms": 183933.42345091514,
+    "capture_events": [
+      {
+        "length": 10674,
+        "target": 0,
+        "source": "prompt",
+        "ms": 81.311,
+        "reported_bank_bytes": 118521760
+      },
+      {
+        "length": 18866,
+        "target": 16384,
+        "source": "prefill",
+        "ms": 0.045,
+        "reported_bank_bytes": 237104688
+      },
+      {
+        "length": 35250,
+        "target": 32768,
+        "source": "prefill",
+        "ms": 0.06,
+        "reported_bank_bytes": 355818688
+      },
+      {
+        "length": 51634,
+        "target": 49152,
+        "source": "prefill",
+        "ms": 0.084,
+        "reported_bank_bytes": 474663760
+      },
+      {
+        "length": 68018,
+        "target": 65536,
+        "source": "prefill",
+        "ms": 0.115,
+        "reported_bank_bytes": 593639904
+      },
+      {
+        "length": 84402,
+        "target": 81920,
+        "source": "prefill",
+        "ms": 0.122,
+        "reported_bank_bytes": 712747120
+      },
+      {
+        "length": 100786,
+        "target": 98304,
+        "source": "prefill",
+        "ms": 0.148,
+        "reported_bank_bytes": 831985408
+      },
+      {
+        "length": 117170,
+        "target": 114688,
+        "source": "prefill",
+        "ms": 0.177,
+        "reported_bank_bytes": 951354768
+      },
+      {
+        "length": 117207,
+        "target": 0,
+        "source": "request_head",
+        "ms": 83.235,
+        "reported_bank_bytes": 1070724424
+      }
+    ],
+    "capture_count": 9,
+    "capture_ms": 165.297,
+    "request_head_capture_count": 1,
+    "request_head_capture_ms": 83.235,
+    "prompt_read_tps": 637.2860153647426,
+    "decode_tps": 37.461952704284705,
+    "output_per_wall_second": 0.17321847608659363,
+    "output_tokens": 32,
+    "output_ids_sha256": "425c97330f566ed9f29c551b618ccdee9a8c187703c4dfef98c04b8019b6df25"
+  },
+  {
+    "case": "short01",
+    "input_sha256": "2c2aaa2249c654a6bc62e43c97bfcccc84042fe8a4f3b79a63b6981f81a638f7",
+    "input_tokens": 117461,
+    "prompt_ms": 4107.2,
+    "decode_ms": 673.0,
+    "finish": "length",
+    "reused": 117170,
+    "read": 291,
+    "wall_s": 4.819627925986424,
+    "done": "DONE 32 117461 4107.2 673.0 length 22 28 117170 18391 18720 0 0 0.0 291 0",
+    "request_index": 2,
+    "pp": [
+      "PP 117458 117461 3927 73.3",
+      "PP 117460 117461 4107 70.6"
+    ],
+    "stop_sent": false,
+    "first_token_ms": 4178.477379959077,
+    "capture_events": [
+      {
+        "length": 117458,
+        "target": 0,
+        "source": "prompt",
+        "ms": 81.385,
+        "reported_bank_bytes": 1070726432
+      },
+      {
+        "length": 117493,
+        "target": 0,
+        "source": "request_head",
+        "ms": 81.922,
+        "reported_bank_bytes": 1190098376
+      }
+    ],
+    "capture_count": 2,
+    "capture_ms": 163.30700000000002,
+    "request_head_capture_count": 1,
+    "request_head_capture_ms": 81.922,
+    "prompt_read_tps": 70.85118815738217,
+    "decode_tps": 47.548291233283805,
+    "output_per_wall_second": 6.639516678759102,
+    "output_tokens": 32,
+    "output_ids_sha256": "ca999e71b9a3d521757262f83469487c870b9c0c9f6af7c54ad715a85c53444f"
+  },
+  {
+    "case": "short02",
+    "input_sha256": "7d715e204224b2a0f71428aafd3f6efa14d292a028a1bf4bf93ab7dc4a3aef94",
+    "input_tokens": 117749,
+    "prompt_ms": 2261.1,
+    "decode_ms": 583.8,
+    "finish": "length",
+    "reused": 117493,
+    "read": 256,
+    "wall_s": 2.880963640054688,
+    "done": "DONE 32 117749 2261.1 583.8 length 24 24 117493 15403 15840 0 0 0.0 256 0",
+    "request_index": 3,
+    "pp": [
+      "PP 117746 117749 2083 121.5",
+      "PP 117748 117749 2261 112.8"
+    ],
+    "stop_sent": false,
+    "first_token_ms": 2328.929834999144,
+    "capture_events": [
+      {
+        "length": 117746,
+        "target": 0,
+        "source": "prompt",
+        "ms": 85.89,
+        "reported_bank_bytes": 1190100680
+      },
+      {
+        "length": 117781,
+        "target": 0,
+        "source": "request_head",
+        "ms": 87.104,
+        "reported_bank_bytes": 1190102984
+      }
+    ],
+    "capture_count": 2,
+    "capture_ms": 172.994,
+    "request_head_capture_count": 1,
+    "request_head_capture_ms": 87.104,
+    "prompt_read_tps": 113.21922957852374,
+    "decode_tps": 54.81329222336417,
+    "output_per_wall_second": 11.107394607518392,
+    "output_tokens": 32,
+    "output_ids_sha256": "ca999e71b9a3d521757262f83469487c870b9c0c9f6af7c54ad715a85c53444f"
+  },
+  {
+    "case": "short03",
+    "input_sha256": "46aec8338f6545c05f57e33b66d63142b90e8779112a3234213d39d5d74f53c6",
+    "input_tokens": 118037,
+    "prompt_ms": 2306.5,
+    "decode_ms": 632.8,
+    "finish": "length",
+    "reused": 117781,
+    "read": 256,
+    "wall_s": 2.978410111973062,
+    "done": "DONE 32 118037 2306.5 632.8 length 24 26 117781 16650 17280 0 0 0.0 256 0",
+    "request_index": 4,
+    "pp": [
+      "PP 118034 118037 2129 118.8",
+      "PP 118036 118037 2306 110.6"
+    ],
+    "stop_sent": false,
+    "first_token_ms": 2377.6530189206824,
+    "capture_events": [
+      {
+        "length": 118034,
+        "target": 0,
+        "source": "prompt",
+        "ms": 85.219,
+        "reported_bank_bytes": 1190105288
+      },
+      {
+        "length": 118070,
+        "target": 0,
+        "source": "request_head",
+        "ms": 85.638,
+        "reported_bank_bytes": 1190107600
+      }
+    ],
+    "capture_count": 2,
+    "capture_ms": 170.857,
+    "request_head_capture_count": 1,
+    "request_head_capture_ms": 85.638,
+    "prompt_read_tps": 110.9906785172339,
+    "decode_tps": 50.56890012642226,
+    "output_per_wall_second": 10.743987159915141,
+    "output_tokens": 32,
+    "output_ids_sha256": "ca999e71b9a3d521757262f83469487c870b9c0c9f6af7c54ad715a85c53444f"
+  },
+  {
+    "case": "short04",
+    "input_sha256": "58f22d0225f99563d24af75121d5c1c2afc726174f2ee902aa9c153f6465cc52",
+    "input_tokens": 118325,
+    "prompt_ms": 4248.5,
+    "decode_ms": 587.3,
+    "finish": "length",
+    "reused": 118034,
+    "read": 291,
+    "wall_s": 4.873147914069705,
+    "done": "DONE 32 118325 4248.5 587.3 length 24 24 118034 15183 15840 0 0 0.0 291 0",
+    "request_index": 5,
+    "pp": [
+      "PP 118322 118325 4069 70.8",
+      "PP 118324 118325 4249 68.3"
+    ],
+    "stop_sent": false,
+    "first_token_ms": 4317.927871015854,
+    "capture_events": [
+      {
+        "length": 118322,
+        "target": 0,
+        "source": "prompt",
+        "ms": 81.261,
+        "reported_bank_bytes": 1190109616
+      },
+      {
+        "length": 118357,
+        "target": 0,
+        "source": "request_head",
+        "ms": 86.858,
+        "reported_bank_bytes": 1190112200
+      }
+    ],
+    "capture_count": 2,
+    "capture_ms": 168.119,
+    "request_head_capture_count": 1,
+    "request_head_capture_ms": 86.858,
+    "prompt_read_tps": 68.49476285747912,
+    "decode_tps": 54.48663374765878,
+    "output_per_wall_second": 6.56659731333209,
+    "output_tokens": 32,
+    "output_ids_sha256": "ca999e71b9a3d521757262f83469487c870b9c0c9f6af7c54ad715a85c53444f"
+  },
+  {
+    "case": "short05",
+    "input_sha256": "4a2593a65395ee980dc05140afcdc86d5cf33b15481c8bc6906d11fa2853f511",
+    "input_tokens": 118613,
+    "prompt_ms": 2351.7,
+    "decode_ms": 588.4,
+    "finish": "length",
+    "reused": 118357,
+    "read": 256,
+    "wall_s": 2.977964894962497,
+    "done": "DONE 32 118613 2351.7 588.4 length 24 24 118357 15045 15840 0 0 0.0 256 0",
+    "request_index": 6,
+    "pp": [
+      "PP 118610 118613 2174 116.4",
+      "PP 118612 118613 2352 108.4"
+    ],
+    "stop_sent": false,
+    "first_token_ms": 2421.686528949067,
+    "capture_events": [
+      {
+        "length": 118610,
+        "target": 0,
+        "source": "prompt",
+        "ms": 85.68,
+        "reported_bank_bytes": 1190114504
+      },
+      {
+        "length": 118645,
+        "target": 0,
+        "source": "request_head",
+        "ms": 85.808,
+        "reported_bank_bytes": 1190116808
+      }
+    ],
+    "capture_count": 2,
+    "capture_ms": 171.488,
+    "request_head_capture_count": 1,
+    "request_head_capture_ms": 85.808,
+    "prompt_read_tps": 108.85742229025811,
+    "decode_tps": 54.384772263766145,
+    "output_per_wall_second": 10.745593426615256,
+    "output_tokens": 32,
+    "output_ids_sha256": "ca999e71b9a3d521757262f83469487c870b9c0c9f6af7c54ad715a85c53444f"
+  },
+  {
+    "case": "short06",
+    "input_sha256": "187b53641ebc8f8d336338d8df0efc4e4ac4722e2f628c3fd80b5f1cb5360a98",
+    "input_tokens": 118901,
+    "prompt_ms": 2368.1,
+    "decode_ms": 592.0,
+    "finish": "length",
+    "reused": 118645,
+    "read": 256,
+    "wall_s": 3.001455901074223,
+    "done": "DONE 32 118901 2368.1 592.0 length 24 24 118645 14993 15840 0 0 0.0 256 0",
+    "request_index": 7,
+    "pp": [
+      "PP 118898 118901 2190 115.5",
+      "PP 118900 118901 2368 107.7"
+    ],
+    "stop_sent": false,
+    "first_token_ms": 2441.672032000497,
+    "capture_events": [
+      {
+        "length": 118898,
+        "target": 0,
+        "source": "prompt",
+        "ms": 85.654,
+        "reported_bank_bytes": 1190119112
+      },
+      {
+        "length": 118933,
+        "target": 0,
+        "source": "request_head",
+        "ms": 87.223,
+        "reported_bank_bytes": 1190121416
+      }
+    ],
+    "capture_count": 2,
+    "capture_ms": 172.877,
+    "request_head_capture_count": 1,
+    "request_head_capture_ms": 87.223,
+    "prompt_read_tps": 108.10354292470758,
+    "decode_tps": 54.054054054054056,
+    "output_per_wall_second": 10.66149264047064,
+    "output_tokens": 32,
+    "output_ids_sha256": "ca999e71b9a3d521757262f83469487c870b9c0c9f6af7c54ad715a85c53444f"
+  },
+  {
+    "case": "compact117131",
+    "input_sha256": "1a86ccaf9a98097abd55029f8dccf1f1f69ed1090c41dd7026a063746588ec0e",
+    "input_tokens": 117390,
+    "prompt_ms": 35669.3,
+    "decode_ms": 788.2,
+    "finish": "length",
+    "reused": 100786,
+    "read": 16604,
+    "wall_s": 36.47877816099208,
+    "done": "DONE 32 117390 35669.3 788.2 length 19 34 100786 22301 22560 0 0 0.0 16604 0",
+    "request_index": 8,
+    "pp": [
+      "PP 104882 117390 14969 273.6",
+      "PP 108978 117390 21512 380.8",
+      "PP 113074 117390 27942 439.8",
+      "PP 117170 117390 34449 475.6",
+      "PP 117387 117390 35345 469.7",
+      "PP 117389 117390 35669 465.5"
+    ],
+    "stop_sent": false,
+    "first_token_ms": 35722.20765298698,
+    "capture_events": [
+      {
+        "length": 117170,
+        "target": 114688,
+        "source": "prefill",
+        "ms": 0.279,
+        "reported_bank_bytes": 951354768
+      },
+      {
+        "length": 117387,
+        "target": 0,
+        "source": "prompt",
+        "ms": 84.568,
+        "reported_bank_bytes": 1070725864
+      },
+      {
+        "length": 117421,
+        "target": 0,
+        "source": "request_head",
+        "ms": 84.607,
+        "reported_bank_bytes": 1190097232
+      }
+    ],
+    "capture_count": 3,
+    "capture_ms": 169.454,
+    "request_head_capture_count": 1,
+    "request_head_capture_ms": 84.607,
+    "prompt_read_tps": 465.49834171121944,
+    "decode_tps": 40.59883278355747,
+    "output_per_wall_second": 0.8772223636102654,
+    "output_tokens": 32,
+    "output_ids_sha256": "235b15ae4a44e88f50a8e40a9c550c92efe4753c0f57776acc75325bc0387e99"
+  },
+  {
+    "case": "decode_cross131072",
+    "input_sha256": "ea0cdc74c8ba02ddf651a9d0bc14753ae1f617a492448e54ab4061bf71f2ebff",
+    "input_tokens": 130900,
+    "prompt_ms": 27733.4,
+    "decode_ms": 9741.5,
+    "finish": "length",
+    "reused": 117421,
+    "read": 13479,
+    "wall_s": 37.518825503997505,
+    "done": "DONE 512 130900 27733.4 9741.5 length 346 439 117421 272122 291360 0 0 0.0 13479 0",
+    "request_index": 9,
+    "pp": [
+      "PP 121517 130900 12084 339.0",
+      "PP 125613 130900 18651 439.2",
+      "PP 129709 130900 25218 487.3",
+      "PP 130897 130900 27404 491.8",
+      "PP 130899 130900 27733 486.0"
+    ],
+    "stop_sent": false,
+    "first_token_ms": 27809.63169701863,
+    "capture_events": [
+      {
+        "length": 130897,
+        "target": 0,
+        "source": "prompt",
+        "ms": 88.956,
+        "reported_bank_bytes": 1190205312
+      },
+      {
+        "length": 131072,
+        "target": 131072,
+        "source": "decode",
+        "ms": 85.234,
+        "reported_bank_bytes": 1309685888
+      },
+      {
+        "length": 131413,
+        "target": 0,
+        "source": "request_head",
+        "ms": 89.401,
+        "reported_bank_bytes": 1309797824
+      }
+    ],
+    "capture_count": 3,
+    "capture_ms": 263.591,
+    "request_head_capture_count": 1,
+    "request_head_capture_ms": 89.401,
+    "prompt_read_tps": 486.020466296956,
+    "decode_tps": 52.558640866396345,
+    "output_per_wall_second": 13.646482615652458,
+    "output_tokens": 512,
+    "output_ids_sha256": "326668003952e2124412997b8c357cceaf1cf443593181491ddec9b3442e953f"
+  },
+  {
+    "case": "decode_rewrite131100",
+    "input_sha256": "856a5489eb6a8cd05c1a5960431bcfa8222eff35f1b50c6e7e63918c8952b34d",
+    "input_tokens": 131359,
+    "prompt_ms": 4992.5,
+    "decode_ms": 579.5,
+    "finish": "length",
+    "reused": 131072,
+    "read": 287,
+    "wall_s": 5.608433961053379,
+    "done": "DONE 32 131359 4992.5 579.5 length 23 23 131072 15008 15360 0 0 0.0 287 0",
+    "request_index": 10,
+    "pp": [
+      "PP 131356 131359 4812 59.0",
+      "PP 131358 131359 4992 57.3"
+    ],
+    "stop_sent": false,
+    "first_token_ms": 5061.357315047644,
+    "capture_events": [
+      {
+        "length": 131356,
+        "target": 0,
+        "source": "prompt",
+        "ms": 81.453,
+        "reported_bank_bytes": 1309797368
+      },
+      {
+        "length": 131390,
+        "target": 0,
+        "source": "request_head",
+        "ms": 87.562,
+        "reported_bank_bytes": 1309801312
+      }
+    ],
+    "capture_count": 2,
+    "capture_ms": 169.015,
+    "request_head_capture_count": 1,
+    "request_head_capture_ms": 87.562,
+    "prompt_read_tps": 57.486229344016024,
+    "decode_tps": 55.220017256255396,
+    "output_per_wall_second": 5.705692573402388,
+    "output_tokens": 32,
+    "output_ids_sha256": "235b15ae4a44e88f50a8e40a9c550c92efe4753c0f57776acc75325bc0387e99"
+  },
+  {
+    "case": "cancel_decode",
+    "input_sha256": "1855e964a3153d947e44a2b5e491e9a8c44b07f3d38d6f20db6f3bd496229db7",
+    "input_tokens": 131429,
+    "prompt_ms": 629.3,
+    "decode_ms": 241.3,
+    "finish": "cancel",
+    "reused": 131390,
+    "read": 39,
+    "wall_s": 0.9148591510020196,
+    "done": "DONE 9 131429 629.3 241.3 cancel 6 6 131390 4097 4320 0 0 0.0 39 0",
+    "request_index": 11,
+    "pp": [
+      "PP 131426 131429 503 71.6",
+      "PP 131428 131429 629 60.4"
+    ],
+    "stop_sent": true,
+    "first_token_ms": 705.6710739852861,
+    "capture_events": [
+      {
+        "length": 131426,
+        "target": 0,
+        "source": "prompt",
+        "ms": 88.356,
+        "reported_bank_bytes": 1309801872
+      },
+      {
+        "length": 131437,
+        "target": 0,
+        "source": "request_head",
+        "ms": 87.062,
+        "reported_bank_bytes": 1309802248
+      }
+    ],
+    "capture_count": 2,
+    "capture_ms": 175.418,
+    "request_head_capture_count": 1,
+    "request_head_capture_ms": 87.062,
+    "prompt_read_tps": 61.97362148418878,
+    "decode_tps": 37.29796933278077,
+    "output_per_wall_second": 9.83757990521552,
+    "output_tokens": 9,
+    "output_ids_sha256": "a5b87f51cbbe830bacf5ec838dc3f75a88d7f2b3e372adf15b8be6c674978b86"
+  },
+  {
+    "case": "recover_cancel",
+    "input_sha256": "1855e964a3153d947e44a2b5e491e9a8c44b07f3d38d6f20db6f3bd496229db7",
+    "input_tokens": 131429,
+    "prompt_ms": 2155.8,
+    "decode_ms": 617.4,
+    "finish": "length",
+    "reused": 131426,
+    "read": 3,
+    "wall_s": 2.8166178020182997,
+    "done": "DONE 32 131429 2155.8 617.4 length 22 24 131426 15850 16320 0 0 0.0 3 0",
+    "request_index": 12,
+    "pp": [
+      "PP 131428 131429 2156 0.9"
+    ],
+    "stop_sent": false,
+    "first_token_ms": 2231.169339036569,
+    "capture_events": [
+      {
+        "length": 131460,
+        "target": 0,
+        "source": "request_head",
+        "ms": 81.442,
+        "reported_bank_bytes": 1309802432
+      }
+    ],
+    "capture_count": 1,
+    "capture_ms": 81.442,
+    "request_head_capture_count": 1,
+    "request_head_capture_ms": 81.442,
+    "prompt_read_tps": 1.3915947676036737,
+    "decode_tps": 51.830255911888564,
+    "output_per_wall_second": 11.361143843183058,
+    "output_tokens": 32,
+    "output_ids_sha256": "235b15ae4a44e88f50a8e40a9c550c92efe4753c0f57776acc75325bc0387e99"
+  },
+  {
+    "case": "restore_ancestor",
+    "input_sha256": "a1b14c825842c29c4c5ef366581b92ee9d37fdcd902439e5c85ded3c1b48774f",
+    "input_tokens": 118936,
+    "prompt_ms": 2340.0,
+    "decode_ms": 726.9,
+    "finish": "length",
+    "reused": 118933,
+    "read": 3,
+    "wall_s": 3.107034797081724,
+    "done": "DONE 32 118936 2340.0 726.9 length 24 27 118933 14513 17760 0 0 0.0 3 0",
+    "request_index": 13,
+    "pp": [
+      "PP 118935 118936 2340 0.9"
+    ],
+    "stop_sent": false,
+    "first_token_ms": 2412.6733930315822,
+    "capture_events": [
+      {
+        "length": 118969,
+        "target": 0,
+        "source": "request_head",
+        "ms": 88.2,
+        "reported_bank_bytes": 1190121984
+      }
+    ],
+    "capture_count": 1,
+    "capture_ms": 88.2,
+    "request_head_capture_count": 1,
+    "request_head_capture_ms": 88.2,
+    "prompt_read_tps": 1.2820512820512822,
+    "decode_tps": 44.02256156280094,
+    "output_per_wall_second": 10.29920876008725,
+    "output_tokens": 32,
+    "output_ids_sha256": "8df01e626622d5594e33930bb3a4f9e211f276e2dcd43300c037bbd4ce782ea4"
+  }
+]

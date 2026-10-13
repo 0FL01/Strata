@@ -1,0 +1,43 @@
+{
+  "schema": 1,
+  "version": "v2",
+  "candidate_generate_sha256": "f08929af779cc1d1fb6ac94d5a4adc1218ba091cf512ec69b146db887df88a5f",
+  "v1_generate_sha256": "f4f542c8b2fbadcbb09ee1a35cbf5de1206a07cbd6e3bdcc78c7a22692863c04",
+  "candidate_binary_sha256": "2cbcd0eafb1385e4a345bb405e8c677e9fb77f3cbba46088d04c760fdd246ef2",
+  "headers_identical_to_v1": true,
+  "exact_v1_to_v2_patch_reconstruction_passed": true,
+  "sealed_build_package_sha256sums_sha256": "caf8d1a4724b82cece8103d6c2e3ac5a770f62819f44b2ad7425bc7dda8db0fa",
+  "build_recipe_identical_to_v1": true,
+  "host_build_status": "passed",
+  "gpu_replay_status": "completed; test gate passed; deployment on hold for ancestor-return regression",
+  "deployed": false,
+  "mainline_integration": false,
+  "publication_provenance": [
+    {
+      "path": "runtime-v2/manifest.json",
+      "original_sha256": "3915f64cb02483c3c37d13bd17b7c7b16fbe693640178a6708e68959f13ce950",
+      "published_sha256": "3915f64cb02483c3c37d13bd17b7c7b16fbe693640178a6708e68959f13ce950",
+      "transformation": "none; byte-identical"
+    },
+    {
+      "path": "runtime-v2/request-head-elision.patch",
+      "original_sha256": "1f3b84f1be1bb1d13d6cb1cdc714468d6418ba04b96c02490c2af886dcb3d832",
+      "published_sha256": "1f3b84f1be1bb1d13d6cb1cdc714468d6418ba04b96c02490c2af886dcb3d832",
+      "transformation": "none; byte-identical"
+    },
+    {
+      "path": "runtime-v2/tests/recent_retention_contract.cpp",
+      "original_sha256": "a2b4a62de9493aeb0df27e2d56bdb37bf60e54c1acd3305445b1540d7750ba34",
+      "published_sha256": "a2b4a62de9493aeb0df27e2d56bdb37bf60e54c1acd3305445b1540d7750ba34",
+      "transformation": "none; byte-identical"
+    },
+    {
+      "path": "runtime-v2/package.template.json",
+      "original_sha256": "9987a0b9e259f1628b9a67d2674d3d9014d5a290b9744e50fab79d2ca1ad0b5b",
+      "published_sha256": "aa47b7ccecc9b409806bb194941322c5579e2f3716f3780b98e99b5483778cb2",
+      "transformation": "host-path examples sanitized"
+    }
+  ],
+  "candidate_binary_bytes": 21669776,
+  "cpu_build_receipt_sha256": "715975c24244ae01718a6c79c4749b7c856d469288b7427b71f8c3866d03dc88"
+}

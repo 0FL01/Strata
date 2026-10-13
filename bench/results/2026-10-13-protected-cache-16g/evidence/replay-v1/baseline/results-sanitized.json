@@ -1,0 +1,556 @@
+[
+  {
+    "case": "long117173",
+    "input_sha256": "7b7936eb6c98119ee7a7f061fe2cdfb6e02a1ed65c0e4279d3ce597dd199f2d1",
+    "input_tokens": 117173,
+    "prompt_ms": 183839.8,
+    "decode_ms": 772.6,
+    "finish": "length",
+    "reused": 0,
+    "read": 117173,
+    "wall_s": 184.6333403910976,
+    "done": "DONE 32 117173 183839.8 772.6 length 22 32 0 21358 21600 0 0 0.0 117173 0",
+    "request_index": 1,
+    "pp": [
+      "PP 4096 117173 10092 405.9",
+      "PP 8192 117173 15865 516.3",
+      "PP 10674 117173 18892 565.0",
+      "PP 14770 117173 29127 507.1",
+      "PP 18866 117173 35079 537.8",
+      "PP 22962 117173 40820 562.5",
+      "PP 27058 117173 46675 579.7",
+      "PP 31154 117173 52513 593.3",
+      "PP 35250 117173 58519 602.4",
+      "PP 39346 117173 64394 611.0",
+      "PP 43442 117173 70321 617.8",
+      "PP 47538 117173 76295 623.1",
+      "PP 51634 117173 82475 626.1",
+      "PP 55730 117173 88476 629.9",
+      "PP 59826 117173 94488 633.2",
+      "PP 63922 117173 100609 635.4",
+      "PP 68018 117173 106905 636.2",
+      "PP 72114 117173 113024 638.0",
+      "PP 76210 117173 119215 639.3",
+      "PP 80306 117173 125521 639.8",
+      "PP 84402 117173 131850 640.1",
+      "PP 88498 117173 138138 640.7",
+      "PP 92594 117173 144537 640.6",
+      "PP 96690 117173 150990 640.4",
+      "PP 100786 117173 157455 640.1",
+      "PP 104882 117173 164087 639.2",
+      "PP 108978 117173 170594 638.8",
+      "PP 113074 117173 177040 638.7",
+      "PP 117170 117173 183497 638.5",
+      "PP 117172 117173 183840 637.4"
+    ],
+    "stop_sent": false,
+    "first_token_ms": 183911.3493770128,
+    "capture_events": [
+      {
+        "length": 10674,
+        "target": null,
+        "source": "active",
+        "ms": null,
+        "reported_bank_bytes": null
+      },
+      {
+        "length": 18866,
+        "target": null,
+        "source": "active",
+        "ms": null,
+        "reported_bank_bytes": null
+      },
+      {
+        "length": 35250,
+        "target": null,
+        "source": "active",
+        "ms": null,
+        "reported_bank_bytes": null
+      },
+      {
+        "length": 51634,
+        "target": null,
+        "source": "active",
+        "ms": null,
+        "reported_bank_bytes": null
+      },
+      {
+        "length": 68018,
+        "target": null,
+        "source": "active",
+        "ms": null,
+        "reported_bank_bytes": null
+      },
+      {
+        "length": 84402,
+        "target": null,
+        "source": "active",
+        "ms": null,
+        "reported_bank_bytes": null
+      },
+      {
+        "length": 100786,
+        "target": null,
+        "source": "active",
+        "ms": null,
+        "reported_bank_bytes": null
+      },
+      {
+        "length": 117170,
+        "target": null,
+        "source": "active",
+        "ms": null,
+        "reported_bank_bytes": null
+      }
+    ],
+    "capture_count": 8,
+    "capture_ms": null,
+    "request_head_capture_count": 0,
+    "request_head_capture_ms": null,
+    "prompt_read_tps": 637.3647055751802,
+    "decode_tps": 41.41858659073259,
+    "output_per_wall_second": 0.1733164764945288,
+    "output_tokens": 32,
+    "output_ids_sha256": "425c97330f566ed9f29c551b618ccdee9a8c187703c4dfef98c04b8019b6df25"
+  },
+  {
+    "case": "short01",
+    "input_sha256": "2c2aaa2249c654a6bc62e43c97bfcccc84042fe8a4f3b79a63b6981f81a638f7",
+    "input_tokens": 117461,
+    "prompt_ms": 3904.2,
+    "decode_ms": 591.5,
+    "finish": "length",
+    "reused": 117170,
+    "read": 291,
+    "wall_s": 4.516166779911146,
+    "done": "DONE 32 117461 3904.2 591.5 length 22 28 117170 18391 18720 0 0 0.0 291 0",
+    "request_index": 2,
+    "pp": [
+      "PP 117458 117461 3720 77.4",
+      "PP 117460 117461 3904 74.3"
+    ],
+    "stop_sent": false,
+    "first_token_ms": 3956.7345259711146,
+    "capture_events": [
+      {
+        "length": 117458,
+        "target": null,
+        "source": "active",
+        "ms": null,
+        "reported_bank_bytes": null
+      }
+    ],
+    "capture_count": 1,
+    "capture_ms": null,
+    "request_head_capture_count": 0,
+    "request_head_capture_ms": null,
+    "prompt_read_tps": 74.53511602889196,
+    "decode_tps": 54.099746407438715,
+    "output_per_wall_second": 7.085655060911987,
+    "output_tokens": 32,
+    "output_ids_sha256": "ca999e71b9a3d521757262f83469487c870b9c0c9f6af7c54ad715a85c53444f"
+  },
+  {
+    "case": "short02",
+    "input_sha256": "7d715e204224b2a0f71428aafd3f6efa14d292a028a1bf4bf93ab7dc4a3aef94",
+    "input_tokens": 117749,
+    "prompt_ms": 2261.1,
+    "decode_ms": 497.5,
+    "finish": "length",
+    "reused": 117493,
+    "read": 256,
+    "wall_s": 2.797783380956389,
+    "done": "DONE 32 117749 2261.1 497.5 length 24 24 117493 15403 15840 0 0 0.0 256 0",
+    "request_index": 3,
+    "pp": [
+      "PP 117746 117749 2083 121.4",
+      "PP 117748 117749 2261 112.8"
+    ],
+    "stop_sent": false,
+    "first_token_ms": 2332.5485889799893,
+    "capture_events": [
+      {
+        "length": 117746,
+        "target": null,
+        "source": "active",
+        "ms": null,
+        "reported_bank_bytes": null
+      }
+    ],
+    "capture_count": 1,
+    "capture_ms": null,
+    "request_head_capture_count": 0,
+    "request_head_capture_ms": null,
+    "prompt_read_tps": 113.21922957852374,
+    "decode_tps": 64.321608040201,
+    "output_per_wall_second": 11.437626021304473,
+    "output_tokens": 32,
+    "output_ids_sha256": "ca999e71b9a3d521757262f83469487c870b9c0c9f6af7c54ad715a85c53444f"
+  },
+  {
+    "case": "short03",
+    "input_sha256": "46aec8338f6545c05f57e33b66d63142b90e8779112a3234213d39d5d74f53c6",
+    "input_tokens": 118037,
+    "prompt_ms": 2301.9,
+    "decode_ms": 547.8,
+    "finish": "length",
+    "reused": 117781,
+    "read": 256,
+    "wall_s": 2.869754543993622,
+    "done": "DONE 32 118037 2301.9 547.8 length 24 26 117781 16650 17280 0 0 0.0 256 0",
+    "request_index": 4,
+    "pp": [
+      "PP 118034 118037 2124 119.1",
+      "PP 118036 118037 2302 110.8"
+    ],
+    "stop_sent": false,
+    "first_token_ms": 2354.291992029175,
+    "capture_events": [
+      {
+        "length": 118034,
+        "target": null,
+        "source": "active",
+        "ms": null,
+        "reported_bank_bytes": null
+      }
+    ],
+    "capture_count": 1,
+    "capture_ms": null,
+    "request_head_capture_count": 0,
+    "request_head_capture_ms": null,
+    "prompt_read_tps": 111.21247664972414,
+    "decode_tps": 58.41548010222709,
+    "output_per_wall_second": 11.150779451495527,
+    "output_tokens": 32,
+    "output_ids_sha256": "ca999e71b9a3d521757262f83469487c870b9c0c9f6af7c54ad715a85c53444f"
+  },
+  {
+    "case": "short04",
+    "input_sha256": "58f22d0225f99563d24af75121d5c1c2afc726174f2ee902aa9c153f6465cc52",
+    "input_tokens": 118325,
+    "prompt_ms": 3992.8,
+    "decode_ms": 500.9,
+    "finish": "length",
+    "reused": 118034,
+    "read": 291,
+    "wall_s": 4.513067576102912,
+    "done": "DONE 32 118325 3992.8 500.9 length 24 24 118034 15183 15840 0 0 0.0 291 0",
+    "request_index": 5,
+    "pp": [
+      "PP 118322 118325 3808 75.6",
+      "PP 118324 118325 3993 72.6"
+    ],
+    "stop_sent": false,
+    "first_token_ms": 4044.4188161054626,
+    "capture_events": [
+      {
+        "length": 118322,
+        "target": null,
+        "source": "active",
+        "ms": null,
+        "reported_bank_bytes": null
+      }
+    ],
+    "capture_count": 1,
+    "capture_ms": null,
+    "request_head_capture_count": 0,
+    "request_head_capture_ms": null,
+    "prompt_read_tps": 72.88118613504308,
+    "decode_tps": 63.88500698742264,
+    "output_per_wall_second": 7.0905209063216335,
+    "output_tokens": 32,
+    "output_ids_sha256": "ca999e71b9a3d521757262f83469487c870b9c0c9f6af7c54ad715a85c53444f"
+  },
+  {
+    "case": "short05",
+    "input_sha256": "4a2593a65395ee980dc05140afcdc86d5cf33b15481c8bc6906d11fa2853f511",
+    "input_tokens": 118613,
+    "prompt_ms": 2347.8,
+    "decode_ms": 503.0,
+    "finish": "length",
+    "reused": 118357,
+    "read": 256,
+    "wall_s": 2.8713625349337235,
+    "done": "DONE 32 118613 2347.8 503.0 length 24 24 118357 15045 15840 0 0 0.0 256 0",
+    "request_index": 6,
+    "pp": [
+      "PP 118610 118613 2170 116.6",
+      "PP 118612 118613 2348 108.6"
+    ],
+    "stop_sent": false,
+    "first_token_ms": 2400.695762014948,
+    "capture_events": [
+      {
+        "length": 118610,
+        "target": null,
+        "source": "active",
+        "ms": null,
+        "reported_bank_bytes": null
+      }
+    ],
+    "capture_count": 1,
+    "capture_ms": null,
+    "request_head_capture_count": 0,
+    "request_head_capture_ms": null,
+    "prompt_read_tps": 109.03824857313228,
+    "decode_tps": 63.618290258449306,
+    "output_per_wall_second": 11.144534906574805,
+    "output_tokens": 32,
+    "output_ids_sha256": "ca999e71b9a3d521757262f83469487c870b9c0c9f6af7c54ad715a85c53444f"
+  },
+  {
+    "case": "short06",
+    "input_sha256": "187b53641ebc8f8d336338d8df0efc4e4ac4722e2f628c3fd80b5f1cb5360a98",
+    "input_tokens": 118901,
+    "prompt_ms": 2362.9,
+    "decode_ms": 504.5,
+    "finish": "length",
+    "reused": 118645,
+    "read": 256,
+    "wall_s": 2.8876160860527307,
+    "done": "DONE 32 118901 2362.9 504.5 length 24 24 118645 14993 15840 0 0 0.0 256 0",
+    "request_index": 7,
+    "pp": [
+      "PP 118898 118901 2185 115.8",
+      "PP 118900 118901 2363 107.9"
+    ],
+    "stop_sent": false,
+    "first_token_ms": 2415.337090031244,
+    "capture_events": [
+      {
+        "length": 118898,
+        "target": null,
+        "source": "active",
+        "ms": null,
+        "reported_bank_bytes": null
+      }
+    ],
+    "capture_count": 1,
+    "capture_ms": null,
+    "request_head_capture_count": 0,
+    "request_head_capture_ms": null,
+    "prompt_read_tps": 108.34144483473698,
+    "decode_tps": 63.429137760158575,
+    "output_per_wall_second": 11.081805560843398,
+    "output_tokens": 32,
+    "output_ids_sha256": "ca999e71b9a3d521757262f83469487c870b9c0c9f6af7c54ad715a85c53444f"
+  },
+  {
+    "case": "compact117131",
+    "input_sha256": "1a86ccaf9a98097abd55029f8dccf1f1f69ed1090c41dd7026a063746588ec0e",
+    "input_tokens": 117390,
+    "prompt_ms": 33972.5,
+    "decode_ms": 704.0,
+    "finish": "length",
+    "reused": 100786,
+    "read": 16604,
+    "wall_s": 34.69718572299462,
+    "done": "DONE 32 117390 33972.5 704.0 length 19 34 100786 22301 22560 0 0 0.0 16604 0",
+    "request_index": 8,
+    "pp": [
+      "PP 104882 117390 13287 308.3",
+      "PP 108978 117390 19808 413.6",
+      "PP 113074 117390 26274 467.7",
+      "PP 117170 117390 32753 500.2",
+      "PP 117387 117390 33652 493.3",
+      "PP 117389 117390 33972 488.7"
+    ],
+    "stop_sent": false,
+    "first_token_ms": 34025.1109310193,
+    "capture_events": [
+      {
+        "length": 117170,
+        "target": null,
+        "source": "active",
+        "ms": null,
+        "reported_bank_bytes": null
+      },
+      {
+        "length": 117387,
+        "target": null,
+        "source": "active",
+        "ms": null,
+        "reported_bank_bytes": null
+      }
+    ],
+    "capture_count": 2,
+    "capture_ms": null,
+    "request_head_capture_count": 0,
+    "request_head_capture_ms": null,
+    "prompt_read_tps": 488.7482522628597,
+    "decode_tps": 45.45454545454545,
+    "output_per_wall_second": 0.9222650002646431,
+    "output_tokens": 32,
+    "output_ids_sha256": "235b15ae4a44e88f50a8e40a9c550c92efe4753c0f57776acc75325bc0387e99"
+  },
+  {
+    "case": "decode_cross131072",
+    "input_sha256": "ea0cdc74c8ba02ddf651a9d0bc14753ae1f617a492448e54ab4061bf71f2ebff",
+    "input_tokens": 130900,
+    "prompt_ms": 27742.3,
+    "decode_ms": 9575.2,
+    "finish": "length",
+    "reused": 117421,
+    "read": 13479,
+    "wall_s": 37.34034789202269,
+    "done": "DONE 512 130900 27742.3 9575.2 length 346 439 117421 272122 291360 0 0 0.0 13479 0",
+    "request_index": 9,
+    "pp": [
+      "PP 121517 130900 12083 339.0",
+      "PP 125613 130900 18667 438.9",
+      "PP 129709 130900 25237 486.9",
+      "PP 130897 130900 27420 491.5",
+      "PP 130899 130900 27742 485.8"
+    ],
+    "stop_sent": false,
+    "first_token_ms": 27797.547198017128,
+    "capture_events": [
+      {
+        "length": 130897,
+        "target": null,
+        "source": "active",
+        "ms": null,
+        "reported_bank_bytes": null
+      }
+    ],
+    "capture_count": 1,
+    "capture_ms": null,
+    "request_head_capture_count": 0,
+    "request_head_capture_ms": null,
+    "prompt_read_tps": 485.86454619840464,
+    "decode_tps": 53.471467958893804,
+    "output_per_wall_second": 13.711709421683844,
+    "output_tokens": 512,
+    "output_ids_sha256": "326668003952e2124412997b8c357cceaf1cf443593181491ddec9b3442e953f"
+  },
+  {
+    "case": "decode_rewrite131100",
+    "input_sha256": "856a5489eb6a8cd05c1a5960431bcfa8222eff35f1b50c6e7e63918c8952b34d",
+    "input_tokens": 131359,
+    "prompt_ms": 4631.7,
+    "decode_ms": 550.7,
+    "finish": "length",
+    "reused": 130897,
+    "read": 462,
+    "wall_s": 5.2065962459892035,
+    "done": "DONE 32 131359 4631.7 550.7 length 22 26 130897 16917 17280 0 0 0.0 462 0",
+    "request_index": 10,
+    "pp": [
+      "PP 131356 131359 4451 103.1",
+      "PP 131358 131359 4632 99.5"
+    ],
+    "stop_sent": false,
+    "first_token_ms": 4688.412657007575,
+    "capture_events": [
+      {
+        "length": 131356,
+        "target": null,
+        "source": "active",
+        "ms": null,
+        "reported_bank_bytes": null
+      }
+    ],
+    "capture_count": 1,
+    "capture_ms": null,
+    "request_head_capture_count": 0,
+    "request_head_capture_ms": null,
+    "prompt_read_tps": 99.74739296586567,
+    "decode_tps": 58.10786272017432,
+    "output_per_wall_second": 6.146049835273967,
+    "output_tokens": 32,
+    "output_ids_sha256": "235b15ae4a44e88f50a8e40a9c550c92efe4753c0f57776acc75325bc0387e99"
+  },
+  {
+    "case": "cancel_decode",
+    "input_sha256": "1855e964a3153d947e44a2b5e491e9a8c44b07f3d38d6f20db6f3bd496229db7",
+    "input_tokens": 131429,
+    "prompt_ms": 626.8,
+    "decode_ms": 154.9,
+    "finish": "cancel",
+    "reused": 131390,
+    "read": 39,
+    "wall_s": 0.8055492599960417,
+    "done": "DONE 9 131429 626.8 154.9 cancel 6 6 131390 4095 4320 0 0 0.0 39 0",
+    "request_index": 11,
+    "pp": [
+      "PP 131426 131429 499 72.1",
+      "PP 131428 131429 627 60.6"
+    ],
+    "stop_sent": true,
+    "first_token_ms": 683.2065449561924,
+    "capture_events": [
+      {
+        "length": 131426,
+        "target": null,
+        "source": "active",
+        "ms": null,
+        "reported_bank_bytes": null
+      }
+    ],
+    "capture_count": 1,
+    "capture_ms": null,
+    "request_head_capture_count": 0,
+    "request_head_capture_ms": null,
+    "prompt_read_tps": 62.2208040842374,
+    "decode_tps": 58.10200129115558,
+    "output_per_wall_second": 11.172501108180802,
+    "output_tokens": 9,
+    "output_ids_sha256": "a5b87f51cbbe830bacf5ec838dc3f75a88d7f2b3e372adf15b8be6c674978b86"
+  },
+  {
+    "case": "recover_cancel",
+    "input_sha256": "1855e964a3153d947e44a2b5e491e9a8c44b07f3d38d6f20db6f3bd496229db7",
+    "input_tokens": 131429,
+    "prompt_ms": 1697.2,
+    "decode_ms": 542.2,
+    "finish": "length",
+    "reused": 131426,
+    "read": 3,
+    "wall_s": 2.262430688017048,
+    "done": "DONE 32 131429 1697.2 542.2 length 22 25 131426 16320 16800 0 0 0.0 3 0",
+    "request_index": 12,
+    "pp": [
+      "PP 131428 131429 1697 1.2"
+    ],
+    "stop_sent": false,
+    "first_token_ms": 1752.4431310594082,
+    "capture_events": [],
+    "capture_count": 0,
+    "capture_ms": 0,
+    "request_head_capture_count": 0,
+    "request_head_capture_ms": null,
+    "prompt_read_tps": 1.767617251944379,
+    "decode_tps": 59.018812246403535,
+    "output_per_wall_second": 14.14407971456886,
+    "output_tokens": 32,
+    "output_ids_sha256": "235b15ae4a44e88f50a8e40a9c550c92efe4753c0f57776acc75325bc0387e99"
+  },
+  {
+    "case": "restore_ancestor",
+    "input_sha256": "a1b14c825842c29c4c5ef366581b92ee9d37fdcd902439e5c85ded3c1b48774f",
+    "input_tokens": 118936,
+    "prompt_ms": 1077.6,
+    "decode_ms": 640.0,
+    "finish": "length",
+    "reused": 118933,
+    "read": 3,
+    "wall_s": 1.7389511289075017,
+    "done": "DONE 32 118936 1077.6 640.0 length 24 27 118933 14513 17760 0 0 0.0 3 0",
+    "request_index": 13,
+    "pp": [
+      "PP 118935 118936 1078 1.9"
+    ],
+    "stop_sent": false,
+    "first_token_ms": 1131.7761789541692,
+    "capture_events": [],
+    "capture_count": 0,
+    "capture_ms": 0,
+    "request_head_capture_count": 0,
+    "request_head_capture_ms": null,
+    "prompt_read_tps": 2.783964365256125,
+    "decode_tps": 50.0,
+    "output_per_wall_second": 18.401897251766954,
+    "output_tokens": 32,
+    "output_ids_sha256": "8df01e626622d5594e33930bb3a4f9e211f276e2dcd43300c037bbd4ce782ea4"
+  }
+]

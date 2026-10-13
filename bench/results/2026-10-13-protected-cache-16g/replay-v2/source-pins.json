@@ -1,0 +1,77 @@
+{
+  "version": "replay-v2",
+  "request_count": 20,
+  "source_package_sha256sums_sha256": "9237fbf296fb45b7ee22eed87bfece50dd8aef748bbce90a2a25e7a41b860455",
+  "seed_sha256": "63ce3d4042027a00b2193feab143f1d9443b5c31a863a962ec9543ccb54d9695",
+  "seed_included": false,
+  "synthetic_failure_mechanism_reproduction": true,
+  "byte_exact_user_traffic": false,
+  "publication_provenance": [
+    {
+      "path": "replay.py",
+      "original_sha256": "13889de4341edfcac56a39236d445a8f4ec76fb0a4f8e1a72c2b3ba441866e71",
+      "published_sha256": "13889de4341edfcac56a39236d445a8f4ec76fb0a4f8e1a72c2b3ba441866e71",
+      "transformation": "none; byte-identical"
+    },
+    {
+      "path": "run_gpu_replay.py",
+      "original_sha256": "37b3d3427367c121ef5fe552bede6c6f0db76cdde24dbf9364f83e24b53841da",
+      "published_sha256": "523aa21f86ed06ba4ca754e6b56b7dc7e15cc5e10fe0eb349c1acb2fa42cf4dc",
+      "transformation": "host-path examples sanitized"
+    },
+    {
+      "path": "test_cpu.py",
+      "original_sha256": "31d948927fd620d517599780b2cd8b487ae03b98e8b92e32fe5d8eba19a62f2e",
+      "published_sha256": "cfa2cf4adbe08f249173c1df744fe41e4ef8087b54ef164a399d7828803344b8",
+      "transformation": "host-path examples sanitized"
+    },
+    {
+      "path": "production-environment.json",
+      "original_sha256": "0500a8fd8df408dbb198fae1eef31850815fce4f4a1b2e8bddb7e46b0104e338",
+      "published_sha256": "0500a8fd8df408dbb198fae1eef31850815fce4f4a1b2e8bddb7e46b0104e338",
+      "transformation": "none; byte-identical"
+    },
+    {
+      "path": "retention_proof.cpp",
+      "original_sha256": "916a4d182557bddfe2fad8c76556b811225d14fd1b49f184722c48388d5c0a1e",
+      "published_sha256": "916a4d182557bddfe2fad8c76556b811225d14fd1b49f184722c48388d5c0a1e",
+      "transformation": "none; byte-identical"
+    },
+    {
+      "path": "proof-conv_cache.hpp",
+      "original_sha256": "b98e3ce0086a009bd0eb7454e849b9bf3f6736a4f35f6b330627f8f6497b082a",
+      "published_sha256": "b98e3ce0086a009bd0eb7454e849b9bf3f6736a4f35f6b330627f8f6497b082a",
+      "transformation": "none; byte-identical"
+    },
+    {
+      "path": "proof-conversation_cache.hpp",
+      "original_sha256": "5d0feb469ffed2c0d01ea781dba06e864f4a29237646429261ff6ea3e56fdf2c",
+      "published_sha256": "5d0feb469ffed2c0d01ea781dba06e864f4a29237646429261ff6ea3e56fdf2c",
+      "transformation": "none; byte-identical"
+    },
+    {
+      "path": "proof-include/strata/core/conversation_buffer.hpp",
+      "original_sha256": "12f1abac2ec75cc71e8cf308a5a691923d8b617317560e009a41f713809f49d4",
+      "published_sha256": "12f1abac2ec75cc71e8cf308a5a691923d8b617317560e009a41f713809f49d4",
+      "transformation": "none; byte-identical"
+    },
+    {
+      "path": "historical-trace.tsv",
+      "original_sha256": "3f0e42d02095e9183e6df53f8ce2423f1d23f15255c7f0a5468e352ae7a6b3a3",
+      "published_sha256": "3f0e42d02095e9183e6df53f8ce2423f1d23f15255c7f0a5468e352ae7a6b3a3",
+      "transformation": "none; byte-identical"
+    },
+    {
+      "path": "retention-proof.txt",
+      "original_sha256": "55d109b840c71a439ca91c54505480feee90f5b80877482d671a6692a9c3c9fd",
+      "published_sha256": "55d109b840c71a439ca91c54505480feee90f5b80877482d671a6692a9c3c9fd",
+      "transformation": "none; byte-identical"
+    },
+    {
+      "path": "cpu-test-result.txt",
+      "original_sha256": "7cdee8f919ae807e3b959417e96c13ee639a6c55205231dd743ed8ab6e59fd5c",
+      "published_sha256": "7cdee8f919ae807e3b959417e96c13ee639a6c55205231dd743ed8ab6e59fd5c",
+      "transformation": "none; byte-identical"
+    }
+  ]
+}

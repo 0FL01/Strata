@@ -1,0 +1,14 @@
+recorded_req22: resume=100786 total_read=33302 anchors=9 retained=12
+coverage: 1048580 exhaustive LCP checks, 1600 branch/refill cases, 8457 short turns; context=262144
+roles: root/coverage/recent2/user-pin isolation and no-victim saturation passed
+failures: budget/incomplete preserve timer, sticky restore, branch repair, cancellation passed
+edge cases: multiple crossed targets, overflow endpoints, malformed metadata passed
+global budget: full 256K bank plus 13 GiB other owners fits 16 GiB; one-byte-short candidate rejected without protected loss
+PASS: host coverage policy only; no GPU/coherent-state/latency claim
+conversation_memory_budget: 8 CPU test groups passed
+checkpoint split/merge and parked metadata copy/move passed
+runtime host integration contracts: PASS
+recent retention v2 contracts: PASS
+PASS: exact-LCP dynamic fixtures; 13-request native protocol per arm; bounded cancel/recovery; exact full/comparable-prefix parity; single-count 16GiB memory validation; timeout/ERR/EOF cleanup and negative gates. CPU mock only; no GPU execution.
+PASS: exact23-eviction retention and active+parked root proof; exact-LCP dynamic fixtures; 20-request native protocol per arm; bounded cancel/recovery; exact full/comparable-prefix parity; baseline global-root prerequisite; six288-token post-gate turns; single-count 16GiB memory validation; timeout/ERR/EOF cleanup and negative gates. CPU mock only; no GPU execution.
+PASS: public CPU/metadata/protocol rerun; synthetic seed; no GPU execution

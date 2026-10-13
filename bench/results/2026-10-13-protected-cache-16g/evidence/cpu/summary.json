@@ -1,0 +1,138 @@
+{
+  "passed": true,
+  "image": "sha256:bccb7ee7e7a78274519db9a43ba63c34ddd2e74bb60f8764a8f50aaee1f2c646",
+  "baseline_binary_sha256": "74aa76d48a4783991e60b7e25601125dc5dc2bfeeaa351a71b350c122476b662",
+  "manifest_sha256": "7af7724d2d80ca369d48340b89401a96a4c871363886db651e1e146bea5fbae9",
+  "gpu_execution": false,
+  "gpu_kernel_translation_units_compiled": 0,
+  "host_translation_units_compiled": 8,
+  "test_translation_units_compiled": 4,
+  "baseline_binary_reproduced": true,
+  "cpu_policy_tests_passed": true,
+  "only_reviewed_archive_members_replaced": true,
+  "binary": {
+    "sha256": "7b00d34c85181a2023862e01a5782c68c0403ba5b13a0e0eeec7280afa06b0e6",
+    "bytes": 21669936
+  },
+  "link_completed": true,
+  "donor_unchanged": true,
+  "gpu_object_unchanged": true,
+  "package_unchanged": true,
+  "candidate_sources_unchanged": true,
+  "rollback_binary_preserved": true,
+  "untouched_sources_unchanged": true,
+  "host_receipt_passed": true,
+  "owned_cleanup_passed": true,
+  "original_build_receipt_sha256": "266065d3b15fb3dade4c30d8d3254824402ee315374830d3856869c94ef3b7f9",
+  "original_host_receipt_sha256": "b07a2a40a05449c4c9fad06159d294c9004cbca75d2365f85a4f6a9216af915e",
+  "steps": [
+    {
+      "name": "baseline-0-generate",
+      "returncode": 0,
+      "seconds": 23.209576454013586
+    },
+    {
+      "name": "baseline-1-conversation_state",
+      "returncode": 0,
+      "seconds": 6.275399806094356
+    },
+    {
+      "name": "baseline-2-conversation_file",
+      "returncode": 0,
+      "seconds": 6.326687651919201
+    },
+    {
+      "name": "baseline-3-conversation_snapshot",
+      "returncode": 0,
+      "seconds": 3.4710412139538676
+    },
+    {
+      "name": "baseline-link",
+      "returncode": 0,
+      "seconds": 0.11435740604065359
+    },
+    {
+      "name": "test-0-compile",
+      "returncode": 0,
+      "seconds": 1.7675289930775762
+    },
+    {
+      "name": "test-0-run",
+      "returncode": 0,
+      "seconds": 0.2645619820104912
+    },
+    {
+      "name": "test-1-compile",
+      "returncode": 0,
+      "seconds": 1.5670933820074424
+    },
+    {
+      "name": "test-1-run",
+      "returncode": 0,
+      "seconds": 0.0038207260658964515
+    },
+    {
+      "name": "test-2-compile",
+      "returncode": 0,
+      "seconds": 1.8177022910676897
+    },
+    {
+      "name": "test-2-run",
+      "returncode": 0,
+      "seconds": 0.003959491034038365
+    },
+    {
+      "name": "test-3-compile",
+      "returncode": 0,
+      "seconds": 2.368472181027755
+    },
+    {
+      "name": "test-3-run",
+      "returncode": 0,
+      "seconds": 0.003576932940632105
+    },
+    {
+      "name": "candidate-0-generate",
+      "returncode": 0,
+      "seconds": 27.063291936996393
+    },
+    {
+      "name": "candidate-1-conversation_state",
+      "returncode": 0,
+      "seconds": 6.224994626012631
+    },
+    {
+      "name": "archive-1",
+      "returncode": 0,
+      "seconds": 0.01635769207496196
+    },
+    {
+      "name": "candidate-2-conversation_file",
+      "returncode": 0,
+      "seconds": 7.575653301086277
+    },
+    {
+      "name": "archive-2",
+      "returncode": 0,
+      "seconds": 0.01583145500626415
+    },
+    {
+      "name": "candidate-3-conversation_snapshot",
+      "returncode": 0,
+      "seconds": 5.57354173110798
+    },
+    {
+      "name": "archive-3",
+      "returncode": 0,
+      "seconds": 0.015877780970185995
+    },
+    {
+      "name": "candidate-link",
+      "returncode": 0,
+      "seconds": 0.1166976960375905
+    }
+  ],
+  "gpu_validation": "Separate v1 replay completed; acceptance failed. See evidence/replay-v1/summary.json.",
+  "deployment": "candidate not deployed",
+  "mainline_integration": "not performed"
+}

@@ -1,0 +1,54 @@
+{
+  "source_log_sha256": {
+    "baseline": "0deec286dd578fcceb75da25927ae6dbf2b14b2121aa629daddc013320af4ff8",
+    "candidate": "5bd82c183833588dfcb6d59f901b8c979ea7e6aa7431ad6a147a8141e85dd59f"
+  },
+  "rows": {
+    "2": {
+      "baseline": {
+        "checkpoint_count": 6,
+        "park_attempt_line": "[ckpt-diag] req=2 event=park reason=attempt live_len=117207 live_ok=1 checks=6",
+        "tokens": 117207,
+        "parking_ms": 1419.1,
+        "snapshot_bytes": 2622493200,
+        "park_result_line": "strata serve: conversation cache: parked 117207 tokens in 1419.1 ms; parked=1 bytes=2622493200 evictions=0 snapshot_bytes=2622493200 reused_kv_bytes=0"
+      },
+      "candidate": {
+        "checkpoint_count": 9,
+        "park_attempt_line": "[ckpt-diag] req=2 event=park reason=attempt live_len=117207 live_ok=1 checks=9",
+        "tokens": 117207,
+        "parking_ms": 1612.3,
+        "snapshot_bytes": 2979160960,
+        "park_result_line": "strata serve: conversation cache: parked 117207 tokens in 1612.3 ms; parked=1 bytes=2979160960 evictions=0 snapshot_bytes=2979160960 reused_kv_bytes=0"
+      },
+      "case": "short01",
+      "parking_ms_increase": 193.2,
+      "snapshot_bytes_increase": 356667760,
+      "prompt_ms_increase": 203.0
+    },
+    "5": {
+      "baseline": {
+        "checkpoint_count": 6,
+        "park_attempt_line": "[ckpt-diag] req=5 event=park reason=attempt live_len=118070 live_ok=1 checks=6",
+        "tokens": 118070,
+        "parking_ms": 1426.2,
+        "snapshot_bytes": 2636617224,
+        "park_result_line": "strata serve: conversation cache: parked 118070 tokens in 1426.2 ms; parked=2 bytes=5259110424 evictions=0 snapshot_bytes=2636617224 reused_kv_bytes=0"
+      },
+      "candidate": {
+        "checkpoint_count": 10,
+        "park_attempt_line": "[ckpt-diag] req=5 event=park reason=attempt live_len=118070 live_ok=1 checks=10",
+        "tokens": 118070,
+        "parking_ms": 1679.5,
+        "snapshot_bytes": 3111739344,
+        "park_result_line": "strata serve: conversation cache: parked 118070 tokens in 1679.5 ms; parked=2 bytes=6090900304 evictions=0 snapshot_bytes=3111739344 reused_kv_bytes=0"
+      },
+      "case": "short04",
+      "parking_ms_increase": 253.3,
+      "snapshot_bytes_increase": 475122120,
+      "prompt_ms_increase": 255.7
+    }
+  },
+  "interpretation": "The larger protected checkpoint bank is deep-copied during parking. These two parking deltas account for most of the associated prompt-time increases in this single pair. Removing unconditional request-head captures addresses a separate decode-overhead component and does not remove protected-bank parking overhead.",
+  "scope": "No immutable-sharing refactor; no promise of zero parking overhead or statistical causal proof."
+}

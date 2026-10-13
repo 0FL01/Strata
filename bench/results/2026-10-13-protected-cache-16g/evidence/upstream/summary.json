@@ -1,0 +1,24 @@
+{
+  "observed_at": "2026-10-13T18:24:10Z",
+  "upstream": "Niko1221/Strata",
+  "main_sha": "a0116b2782a5b82622358c04a06496485d12b2d6",
+  "preservation_parent_sha": "236a6aac2da7c2df00b1510f8fe46270917e2334",
+  "preservation_parent_ahead": 1,
+  "preservation_parent_behind": 0,
+  "historical_apply_check_exit": 1,
+  "historical_apply_failed_files": [
+    "src/program/generate.cpp",
+    "include/strata/core/conversation_cache.hpp"
+  ],
+  "open_pr_records_screened": 518,
+  "relevant_changed_file_lists_inspected": 27,
+  "non_null_source_patches_inspected": 41,
+  "priority_heads_refreshed": 12,
+  "actual_other_pr_merge_attempted": false,
+  "current_main_port_implemented": false,
+  "upstream_pr_opened": false,
+  "upstream_ready": false,
+  "review_limit": "Metadata and selected-patch inspection plus one historical-to-main apply check; no universal conflict or novelty guarantee.",
+  "original_apply_check_sha256": "bb340dd88e7733fc7f7129c8b9c93d311e03e8858fa701748ae5a27cc610b042",
+  "original_head_metadata_sha256": "f79a2eb59ed15ebad1d638aec820f5ff273fa6f8b469a67210b9e85b83efed04"
+}

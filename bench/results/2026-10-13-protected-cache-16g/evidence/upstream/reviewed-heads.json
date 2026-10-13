@@ -1,0 +1,356 @@
+{
+  "observed_at": "2026-10-13T18:24:10Z",
+  "note": "mergeable and mergeable_state describe each PR against its GitHub base, NOT composition with the proposed cache fix",
+  "pulls": [
+    {
+      "number": 1959,
+      "url": "https://github.com/Niko1221/Strata/pull/1959",
+      "head_sha": "58cf9f4e6b9902b9a5334551110860c94e4f2202",
+      "base_sha": "61b3fb5dd3f1e8ec09cf7e4e05208bc6d3c46406",
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "updated_at": "2026-10-11T14:20:13Z",
+      "mergeable": true,
+      "mergeable_state": "clean",
+      "head_committed_at": "2026-10-11T14:19:45Z",
+      "head_authored_at": "2026-10-11T14:19:45Z"
+    },
+    {
+      "number": 2265,
+      "url": "https://github.com/Niko1221/Strata/pull/2265",
+      "head_sha": "58ca3f2929b4e357ce2867b8981a246fdb881ac5",
+      "base_sha": "a0116b2782a5b82622358c04a06496485d12b2d6",
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "updated_at": "2026-10-13T13:20:43Z",
+      "mergeable": true,
+      "mergeable_state": "clean",
+      "head_committed_at": "2026-10-13T12:33:25Z",
+      "head_authored_at": "2026-10-13T12:33:25Z"
+    },
+    {
+      "number": 2253,
+      "url": "https://github.com/Niko1221/Strata/pull/2253",
+      "head_sha": "ab963c964998e2396ba37a505fea3a07e0341657",
+      "base_sha": "a0116b2782a5b82622358c04a06496485d12b2d6",
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "updated_at": "2026-10-13T09:45:38Z",
+      "mergeable": true,
+      "mergeable_state": "clean",
+      "head_committed_at": "2026-10-13T09:44:29Z",
+      "head_authored_at": "2026-10-13T09:44:29Z"
+    },
+    {
+      "number": 2082,
+      "url": "https://github.com/Niko1221/Strata/pull/2082",
+      "head_sha": "dca7cdfb4e7126619d984986234519583b24b7ae",
+      "base_sha": "7695859aa13afb248bdb4d36f9b2e95707db079d",
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "updated_at": "2026-10-12T17:22:01Z",
+      "mergeable": true,
+      "mergeable_state": "clean",
+      "head_committed_at": "2026-10-12T01:29:33Z",
+      "head_authored_at": "2026-10-12T01:29:33Z"
+    },
+    {
+      "number": 1503,
+      "url": "https://github.com/Niko1221/Strata/pull/1503",
+      "head_sha": "cef12c872b5d84adc1db2373f99ed7854e3d0689",
+      "base_sha": "d5ea7133741e67743c0e886bb426c0ce8d69cf6c",
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "updated_at": "2026-10-11T17:13:30Z",
+      "mergeable": true,
+      "mergeable_state": "clean",
+      "head_committed_at": "2026-10-08T06:58:19Z",
+      "head_authored_at": "2026-10-08T06:20:37Z"
+    },
+    {
+      "number": 1559,
+      "url": "https://github.com/Niko1221/Strata/pull/1559",
+      "head_sha": "ee0340355664db84fd5199046834923a8e277faa",
+      "base_sha": "61b3fb5dd3f1e8ec09cf7e4e05208bc6d3c46406",
+      "state": "open",
+      "merged": false,
+      "draft": true,
+      "updated_at": "2026-10-11T01:34:12Z",
+      "mergeable": true,
+      "mergeable_state": "clean",
+      "head_committed_at": "2026-10-11T01:24:09Z",
+      "head_authored_at": "2026-10-11T01:24:09Z"
+    },
+    {
+      "number": 1537,
+      "url": "https://github.com/Niko1221/Strata/pull/1537",
+      "head_sha": "3012d6e37139153f05cc7f828a427efdf973931f",
+      "base_sha": "6674a0065fb96bacde33e3eb10f91a1df86f95f2",
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "updated_at": "2026-10-08T10:24:39Z",
+      "mergeable": true,
+      "mergeable_state": "clean",
+      "head_committed_at": "2026-10-08T10:24:26Z",
+      "head_authored_at": "2026-10-08T08:56:45Z"
+    },
+    {
+      "number": 1511,
+      "url": "https://github.com/Niko1221/Strata/pull/1511",
+      "head_sha": "bd6d3bf62c116b105bf7fd44d2e172f3ffb4b212",
+      "base_sha": "6674a0065fb96bacde33e3eb10f91a1df86f95f2",
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "updated_at": "2026-10-10T19:26:18Z",
+      "mergeable": false,
+      "mergeable_state": "dirty",
+      "head_committed_at": "2026-10-08T09:24:25Z",
+      "head_authored_at": "2026-10-08T09:24:25Z"
+    },
+    {
+      "number": 2247,
+      "url": "https://github.com/Niko1221/Strata/pull/2247",
+      "head_sha": "2274c1c482249cf5ddb9249a230b961e730d3328",
+      "base_sha": "a0116b2782a5b82622358c04a06496485d12b2d6",
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "updated_at": "2026-10-13T16:13:43Z",
+      "mergeable": true,
+      "mergeable_state": "clean",
+      "head_committed_at": "2026-10-13T16:13:40Z",
+      "head_authored_at": "2026-10-13T16:13:40Z"
+    },
+    {
+      "number": 1752,
+      "url": "https://github.com/Niko1221/Strata/pull/1752",
+      "head_sha": "c7fae0cc906179be1f4471d252ee608b49ee8951",
+      "base_sha": "7695859aa13afb248bdb4d36f9b2e95707db079d",
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "updated_at": "2026-10-13T06:19:10Z",
+      "mergeable": true,
+      "mergeable_state": "clean",
+      "head_committed_at": "2026-10-12T08:43:01Z",
+      "head_authored_at": "2026-10-09T18:27:34Z"
+    },
+    {
+      "number": 1937,
+      "url": "https://github.com/Niko1221/Strata/pull/1937",
+      "head_sha": "f731322ca3c0688fc43be718f7052e984f83dc7b",
+      "base_sha": "a0116b2782a5b82622358c04a06496485d12b2d6",
+      "state": "open",
+      "merged": false,
+      "draft": false,
+      "updated_at": "2026-10-13T05:14:17Z",
+      "mergeable": true,
+      "mergeable_state": "clean",
+      "head_committed_at": "2026-10-13T05:11:55Z",
+      "head_authored_at": "2026-10-13T05:11:55Z"
+    },
+    {
+      "number": 2094,
+      "url": "https://github.com/Niko1221/Strata/pull/2094",
+      "head_sha": "3445371f6b127575c44fd6e108c2b6683fea4ffa",
+      "base_sha": "7695859aa13afb248bdb4d36f9b2e95707db079d",
+      "state": "open",
+      "merged": false,
+      "draft": true,
+      "updated_at": "2026-10-13T08:15:30Z",
+      "mergeable": true,
+      "mergeable_state": "clean",
+      "head_committed_at": "2026-10-12T10:25:15Z",
+      "head_authored_at": "2026-10-12T10:25:15Z"
+    }
+  ],
+  "preservation_compare": {
+    "repository_full_name": "0FL01/Strata",
+    "base": "a0116b2782a5b82622358c04a06496485d12b2d6",
+    "head": "236a6aac2da7c2df00b1510f8fe46270917e2334",
+    "status": "ahead",
+    "ahead_by": 1,
+    "behind_by": 0,
+    "total_commits": 1,
+    "too_large": null,
+    "base_commit": {
+      "sha": "a0116b2782a5b82622358c04a06496485d12b2d6",
+      "url": "https://api.github.com/repos/0FL01/Strata/commits/a0116b2782a5b82622358c04a06496485d12b2d6",
+      "html_url": "https://github.com/0FL01/Strata/commit/a0116b2782a5b82622358c04a06496485d12b2d6"
+    },
+    "merge_base_commit": {
+      "sha": "a0116b2782a5b82622358c04a06496485d12b2d6",
+      "url": "https://api.github.com/repos/0FL01/Strata/commits/a0116b2782a5b82622358c04a06496485d12b2d6",
+      "html_url": "https://github.com/0FL01/Strata/commit/a0116b2782a5b82622358c04a06496485d12b2d6"
+    },
+    "files": [
+      {
+        "filename": "bench/results/2026-10-13-checkpoint-retention/README.md",
+        "status": "added",
+        "additions": 145,
+        "deletions": 0,
+        "changes": 145,
+        "previous_filename": null
+      },
+      {
+        "filename": "bench/results/2026-10-13-checkpoint-retention/SHA256SUMS",
+        "status": "added",
+        "additions": 19,
+        "deletions": 0,
+        "changes": 19,
+        "previous_filename": null
+      },
+      {
+        "filename": "bench/results/2026-10-13-checkpoint-retention/conv_cache_test.log",
+        "status": "added",
+        "additions": 26,
+        "deletions": 0,
+        "changes": 26,
+        "previous_filename": null
+      },
+      {
+        "filename": "bench/results/2026-10-13-checkpoint-retention/conversation_cache_test.log",
+        "status": "added",
+        "additions": 1,
+        "deletions": 0,
+        "changes": 1,
+        "previous_filename": null
+      },
+      {
+        "filename": "bench/results/2026-10-13-checkpoint-retention/conversation_cache_test_sanitized.log",
+        "status": "added",
+        "additions": 1,
+        "deletions": 0,
+        "changes": 1,
+        "previous_filename": null
+      },
+      {
+        "filename": "bench/results/2026-10-13-checkpoint-retention/deployment.json",
+        "status": "added",
+        "additions": 26,
+        "deletions": 0,
+        "changes": 26,
+        "previous_filename": null
+      },
+      {
+        "filename": "bench/results/2026-10-13-checkpoint-retention/gpu-replay-attribution.json",
+        "status": "added",
+        "additions": 234,
+        "deletions": 0,
+        "changes": 234,
+        "previous_filename": null
+      },
+      {
+        "filename": "bench/results/2026-10-13-checkpoint-retention/gpu-replay-summary.json",
+        "status": "added",
+        "additions": 70,
+        "deletions": 0,
+        "changes": 70,
+        "previous_filename": null
+      },
+      {
+        "filename": "bench/results/2026-10-13-checkpoint-retention/historical-deployment.patch",
+        "status": "added",
+        "additions": 165,
+        "deletions": 0,
+        "changes": 165,
+        "previous_filename": null
+      },
+      {
+        "filename": "bench/results/2026-10-13-checkpoint-retention/incident-checkpoint-metadata.log",
+        "status": "added",
+        "additions": 13,
+        "deletions": 0,
+        "changes": 13,
+        "previous_filename": null
+      },
+      {
+        "filename": "bench/results/2026-10-13-checkpoint-retention/incident_comparison.txt",
+        "status": "added",
+        "additions": 3,
+        "deletions": 0,
+        "changes": 3,
+        "previous_filename": null
+      },
+      {
+        "filename": "bench/results/2026-10-13-checkpoint-retention/provenance.json",
+        "status": "added",
+        "additions": 12,
+        "deletions": 0,
+        "changes": 12,
+        "previous_filename": null
+      },
+      {
+        "filename": "bench/results/2026-10-13-checkpoint-retention/spread_regression_test.cpp",
+        "status": "added",
+        "additions": 75,
+        "deletions": 0,
+        "changes": 75,
+        "previous_filename": null
+      },
+      {
+        "filename": "bench/results/2026-10-13-checkpoint-retention/spread_regression_test.log",
+        "status": "added",
+        "additions": 1,
+        "deletions": 0,
+        "changes": 1,
+        "previous_filename": null
+      },
+      {
+        "filename": "docs/DETAILS.md",
+        "status": "modified",
+        "additions": 14,
+        "deletions": 0,
+        "changes": 14,
+        "previous_filename": null
+      },
+      {
+        "filename": "include/strata/core/conversation_cache.hpp",
+        "status": "modified",
+        "additions": 10,
+        "deletions": 11,
+        "changes": 21,
+        "previous_filename": null
+      },
+      {
+        "filename": "include/strata/program/conv_cache.hpp",
+        "status": "modified",
+        "additions": 22,
+        "deletions": 0,
+        "changes": 22,
+        "previous_filename": null
+      },
+      {
+        "filename": "src/core/conversation_cache_test.cpp",
+        "status": "modified",
+        "additions": 24,
+        "deletions": 0,
+        "changes": 24,
+        "previous_filename": null
+      },
+      {
+        "filename": "src/program/conv_cache_test.cpp",
+        "status": "modified",
+        "additions": 45,
+        "deletions": 0,
+        "changes": 45,
+        "previous_filename": null
+      },
+      {
+        "filename": "src/program/generate.cpp",
+        "status": "modified",
+        "additions": 12,
+        "deletions": 2,
+        "changes": 14,
+        "previous_filename": null
+      }
+    ]
+  }
+}

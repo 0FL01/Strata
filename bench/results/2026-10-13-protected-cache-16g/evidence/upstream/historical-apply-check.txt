@@ -1,0 +1,7 @@
+READ-ONLY applicability check, no source modified
+command: git apply --check historical-v2.patch
+exit=1
+error: patch failed: src/program/generate.cpp:23
+error: src/program/generate.cpp: patch does not apply
+error: patch failed: include/strata/core/conversation_cache.hpp:25
+error: include/strata/core/conversation_cache.hpp: patch does not apply

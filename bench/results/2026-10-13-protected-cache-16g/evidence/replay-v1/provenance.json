@@ -1,0 +1,38 @@
+[
+  {
+    "path": "comparison.json",
+    "original_sha256": "a2bb2b01dc98f321ed6cb403eaf2bd6b82d19a657c417d24966dd72262da79fc",
+    "published_sha256": "a2bb2b01dc98f321ed6cb403eaf2bd6b82d19a657c417d24966dd72262da79fc",
+    "transformation": "JSON formatting only; no content removed"
+  },
+  {
+    "path": "status.json",
+    "original_sha256": "c7107be18c9a2a3bcb096fb3e946dcfca91fcbe75994a70c22ec52cdd6a4e0c0",
+    "published_sha256": "39812b73fefb389465a3880b92c4a04ff8adfbe2187a1c7953509a7ab33a486c",
+    "transformation": "JSON formatting; ephemeral container owner ID removed"
+  },
+  {
+    "path": "baseline/summary.json",
+    "original_sha256": "9fec8f728548c02821f457d0abeb37602b57004ae7e5e8eb4af1d9287a4286cd",
+    "published_sha256": "9fec8f728548c02821f457d0abeb37602b57004ae7e5e8eb4af1d9287a4286cd",
+    "transformation": "JSON formatting only; no content removed"
+  },
+  {
+    "path": "candidate/summary.json",
+    "original_sha256": "5e78b2f4a5477d59024ee2097844297773ae7b9b8518b3d675679ce6be447346",
+    "published_sha256": "5e78b2f4a5477d59024ee2097844297773ae7b9b8518b3d675679ce6be447346",
+    "transformation": "JSON formatting only; no content removed"
+  },
+  {
+    "path": "baseline/results-sanitized.json",
+    "original_sha256": "589d3f8831763286344a766b41c7f95f210ce275d884999201514bed76c609dc",
+    "published_sha256": "c1c7cae48e96c3b394802529b187f6ca69f4d1792559eb97960ae2199fd3bba7",
+    "transformation": "output ID arrays replaced with count and SHA256 of compact JSON; no prompt IDs present"
+  },
+  {
+    "path": "candidate/results-sanitized.json",
+    "original_sha256": "283abc97851e0ae5bee59a6e769f7bae303f02220d63a184a2a6408adb50e84c",
+    "published_sha256": "39e49137cd851936f2285f4b4fa0feda6c2b4da6f1a0d6b9ea9aa6a80bf7a7be",
+    "transformation": "output ID arrays replaced with count and SHA256 of compact JSON; no prompt IDs present"
+  }
+]

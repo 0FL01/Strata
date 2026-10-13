@@ -1,0 +1,3393 @@
+{
+  "passed": true,
+  "image": "sha256:bccb7ee7e7a78274519db9a43ba63c34ddd2e74bb60f8764a8f50aaee1f2c646",
+  "baseline_binary_sha256": "74aa76d48a4783991e60b7e25601125dc5dc2bfeeaa351a71b350c122476b662",
+  "manifest_sha256": "7af7724d2d80ca369d48340b89401a96a4c871363886db651e1e146bea5fbae9",
+  "gpu_execution": false,
+  "gpu_kernel_translation_units_compiled": 0,
+  "host_translation_units_compiled": 8,
+  "test_translation_units_compiled": 4,
+  "steps": [
+    {
+      "name": "baseline-0-generate",
+      "argv": [
+        "/opt/rocm/llvm/bin/clang++",
+        "-DSTRATA_HIP_GFX906=1",
+        "-DSTRATA_NATIVE_EXPERTS=1",
+        "-DSTRATA_PREFILL_FUSED=1",
+        "-DSTRATA_PREFILL_MMQ=1",
+        "-DSTRATA_VERSION=\"0.1.40\"",
+        "-DUSE_PROF_API=1",
+        "-D__HIP_PLATFORM_AMD__=1",
+        "-I/src/include",
+        "-I/src/third_party/llama.cpp/ggml/src/../include",
+        "-isystem",
+        "/src/include/strata/platform/hip_compat",
+        "-isystem",
+        "/opt/rocm/include",
+        "-isystem",
+        "/opt/rocm/core-7.14/include",
+        "-O3",
+        "-DNDEBUG",
+        "-std=c++20",
+        "-Wall",
+        "-Wextra",
+        "-MD",
+        "-MT",
+        "CMakeFiles/strata.dir/src/program/generate.cpp.o",
+        "-MF",
+        "CMakeFiles/strata.dir/src/program/generate.cpp.o.d",
+        "-o",
+        "CMakeFiles/strata.dir/src/program/generate.cpp.o",
+        "-c",
+        "/src/src/program/generate.cpp"
+      ],
+      "returncode": 0,
+      "seconds": 23.209576454013586
+    },
+    {
+      "name": "baseline-1-conversation_state",
+      "argv": [
+        "/opt/rocm/llvm/bin/clang++",
+        "-DSTRATA_HIP_GFX906=1",
+        "-DSTRATA_NATIVE_EXPERTS=1",
+        "-DSTRATA_VERSION=\"0.1.40\"",
+        "-DUSE_PROF_API=1",
+        "-D__HIP_PLATFORM_AMD__=1",
+        "-I/src/include",
+        "-I/src/third_party/llama.cpp/ggml/src/../include",
+        "-isystem",
+        "/src/include/strata/platform/hip_compat",
+        "-isystem",
+        "/opt/rocm/include",
+        "-O3",
+        "-DNDEBUG",
+        "-std=c++20",
+        "-Wall",
+        "-Wextra",
+        "-MD",
+        "-MT",
+        "CMakeFiles/strata_engine.dir/src/core/conversation_state.cpp.o",
+        "-MF",
+        "CMakeFiles/strata_engine.dir/src/core/conversation_state.cpp.o.d",
+        "-o",
+        "CMakeFiles/strata_engine.dir/src/core/conversation_state.cpp.o",
+        "-c",
+        "/src/src/core/conversation_state.cpp"
+      ],
+      "returncode": 0,
+      "seconds": 6.275399806094356
+    },
+    {
+      "name": "baseline-2-conversation_file",
+      "argv": [
+        "/opt/rocm/llvm/bin/clang++",
+        "-DSTRATA_HIP_GFX906=1",
+        "-DSTRATA_NATIVE_EXPERTS=1",
+        "-DSTRATA_VERSION=\"0.1.40\"",
+        "-DUSE_PROF_API=1",
+        "-D__HIP_PLATFORM_AMD__=1",
+        "-I/src/include",
+        "-I/src/third_party/llama.cpp/ggml/src/../include",
+        "-isystem",
+        "/src/include/strata/platform/hip_compat",
+        "-isystem",
+        "/opt/rocm/include",
+        "-O3",
+        "-DNDEBUG",
+        "-std=c++20",
+        "-Wall",
+        "-Wextra",
+        "-MD",
+        "-MT",
+        "CMakeFiles/strata_engine.dir/src/core/conversation_file.cpp.o",
+        "-MF",
+        "CMakeFiles/strata_engine.dir/src/core/conversation_file.cpp.o.d",
+        "-o",
+        "CMakeFiles/strata_engine.dir/src/core/conversation_file.cpp.o",
+        "-c",
+        "/src/src/core/conversation_file.cpp"
+      ],
+      "returncode": 0,
+      "seconds": 6.326687651919201
+    },
+    {
+      "name": "baseline-3-conversation_snapshot",
+      "argv": [
+        "/opt/rocm/llvm/bin/clang++",
+        "-DSTRATA_HIP_GFX906=1",
+        "-DSTRATA_NATIVE_EXPERTS=1",
+        "-DSTRATA_VERSION=\"0.1.40\"",
+        "-DUSE_PROF_API=1",
+        "-D__HIP_PLATFORM_AMD__=1",
+        "-I/src/include",
+        "-I/src/third_party/llama.cpp/ggml/src/../include",
+        "-isystem",
+        "/src/include/strata/platform/hip_compat",
+        "-isystem",
+        "/opt/rocm/include",
+        "-O3",
+        "-DNDEBUG",
+        "-std=c++20",
+        "-Wall",
+        "-Wextra",
+        "-MD",
+        "-MT",
+        "CMakeFiles/strata_engine.dir/src/core/conversation_snapshot.cpp.o",
+        "-MF",
+        "CMakeFiles/strata_engine.dir/src/core/conversation_snapshot.cpp.o.d",
+        "-o",
+        "CMakeFiles/strata_engine.dir/src/core/conversation_snapshot.cpp.o",
+        "-c",
+        "/src/src/core/conversation_snapshot.cpp"
+      ],
+      "returncode": 0,
+      "seconds": 3.4710412139538676
+    },
+    {
+      "name": "baseline-link",
+      "argv": [
+        "/opt/rocm/lib/llvm/bin/clang++",
+        "--hip-link",
+        "/out/build/hc_bf16_n4.o",
+        "-O3",
+        "-DNDEBUG",
+        "--offload-arch=gfx906",
+        "CMakeFiles/strata.dir/src/program/generate.cpp.o",
+        "-o",
+        "strata",
+        "libstrata_engine.a",
+        "libstrata_prefill.a",
+        "libstrata_spec.a",
+        "libstrata_engine.a",
+        "libstrata_kernels.a",
+        "libstrata_core.a",
+        "libstrata_kernels_cpu.a",
+        "ggml/src/libggml-cpu.a",
+        "/opt/rocm/core-7.14/lib/libhipblas.so.3.5",
+        "libstrata_mmq.a",
+        "/opt/rocm/lib/libamdhip64.so.7.14.60850-0000000",
+        "/opt/rocm/core-7.14/lib/llvm/lib/clang/23/lib/linux/libclang_rt.builtins-x86_64.a",
+        "/opt/rocm/lib/libamdhip64.so.7.14.60850-0000000",
+        "ggml/src/libggml-base.a",
+        "-lm",
+        "-Wl,-Map,/out/build/link.map",
+        "-Wl,--cref"
+      ],
+      "returncode": 0,
+      "seconds": 0.11435740604065359
+    },
+    {
+      "name": "test-0-compile",
+      "argv": [
+        "/opt/rocm/llvm/bin/clang++",
+        "-std=c++20",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pthread",
+        "-I/src/include",
+        "-I/src/include/strata/program",
+        "-DCOVERAGE_WITH_BUDGET_TESTS",
+        "/package/tests/coverage_test.cpp",
+        "-o",
+        "/out/build/coverage_test"
+      ],
+      "returncode": 0,
+      "seconds": 1.7675289930775762
+    },
+    {
+      "name": "test-0-run",
+      "argv": [
+        "/out/build/coverage_test"
+      ],
+      "returncode": 0,
+      "seconds": 0.2645619820104912
+    },
+    {
+      "name": "test-1-compile",
+      "argv": [
+        "/opt/rocm/llvm/bin/clang++",
+        "-std=c++20",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pthread",
+        "-I/src/include",
+        "-I/src/include/strata/program",
+        "/package/tests/test_conversation_memory_budget.cpp",
+        "-o",
+        "/out/build/test_conversation_memory_budget"
+      ],
+      "returncode": 0,
+      "seconds": 1.5670933820074424
+    },
+    {
+      "name": "test-1-run",
+      "argv": [
+        "/out/build/test_conversation_memory_budget"
+      ],
+      "returncode": 0,
+      "seconds": 0.0038207260658964515
+    },
+    {
+      "name": "test-2-compile",
+      "argv": [
+        "/opt/rocm/llvm/bin/clang++",
+        "-std=c++20",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pthread",
+        "-I/src/include",
+        "-I/src/include/strata/program",
+        "/package/tests/test_checkpoint_metadata.cpp",
+        "-o",
+        "/out/build/test_checkpoint_metadata"
+      ],
+      "returncode": 0,
+      "seconds": 1.8177022910676897
+    },
+    {
+      "name": "test-2-run",
+      "argv": [
+        "/out/build/test_checkpoint_metadata"
+      ],
+      "returncode": 0,
+      "seconds": 0.003959491034038365
+    },
+    {
+      "name": "test-3-compile",
+      "argv": [
+        "/opt/rocm/llvm/bin/clang++",
+        "-std=c++20",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pthread",
+        "-I/src/include",
+        "-I/src/include/strata/program",
+        "/package/tests/runtime_contract.cpp",
+        "-o",
+        "/out/build/runtime_contract"
+      ],
+      "returncode": 0,
+      "seconds": 2.368472181027755
+    },
+    {
+      "name": "test-3-run",
+      "argv": [
+        "/out/build/runtime_contract"
+      ],
+      "returncode": 0,
+      "seconds": 0.003576932940632105
+    },
+    {
+      "name": "candidate-0-generate",
+      "argv": [
+        "/opt/rocm/llvm/bin/clang++",
+        "-DSTRATA_HIP_GFX906=1",
+        "-DSTRATA_NATIVE_EXPERTS=1",
+        "-DSTRATA_PREFILL_FUSED=1",
+        "-DSTRATA_PREFILL_MMQ=1",
+        "-DSTRATA_VERSION=\"0.1.40\"",
+        "-DUSE_PROF_API=1",
+        "-D__HIP_PLATFORM_AMD__=1",
+        "-I/src/include",
+        "-I/src/third_party/llama.cpp/ggml/src/../include",
+        "-isystem",
+        "/src/include/strata/platform/hip_compat",
+        "-isystem",
+        "/opt/rocm/include",
+        "-isystem",
+        "/opt/rocm/core-7.14/include",
+        "-O3",
+        "-DNDEBUG",
+        "-std=c++20",
+        "-Wall",
+        "-Wextra",
+        "-MD",
+        "-MT",
+        "CMakeFiles/strata.dir/src/program/generate.cpp.o",
+        "-MF",
+        "CMakeFiles/strata.dir/src/program/generate.cpp.o.d",
+        "-o",
+        "CMakeFiles/strata.dir/src/program/generate.cpp.o",
+        "-c",
+        "/src/src/program/generate.cpp"
+      ],
+      "returncode": 0,
+      "seconds": 27.063291936996393
+    },
+    {
+      "name": "candidate-1-conversation_state",
+      "argv": [
+        "/opt/rocm/llvm/bin/clang++",
+        "-DSTRATA_HIP_GFX906=1",
+        "-DSTRATA_NATIVE_EXPERTS=1",
+        "-DSTRATA_VERSION=\"0.1.40\"",
+        "-DUSE_PROF_API=1",
+        "-D__HIP_PLATFORM_AMD__=1",
+        "-I/src/include",
+        "-I/src/third_party/llama.cpp/ggml/src/../include",
+        "-isystem",
+        "/src/include/strata/platform/hip_compat",
+        "-isystem",
+        "/opt/rocm/include",
+        "-O3",
+        "-DNDEBUG",
+        "-std=c++20",
+        "-Wall",
+        "-Wextra",
+        "-MD",
+        "-MT",
+        "CMakeFiles/strata_engine.dir/src/core/conversation_state.cpp.o",
+        "-MF",
+        "CMakeFiles/strata_engine.dir/src/core/conversation_state.cpp.o.d",
+        "-o",
+        "CMakeFiles/strata_engine.dir/src/core/conversation_state.cpp.o",
+        "-c",
+        "/src/src/core/conversation_state.cpp"
+      ],
+      "returncode": 0,
+      "seconds": 6.224994626012631
+    },
+    {
+      "name": "archive-1",
+      "argv": [
+        "/opt/rocm/llvm/bin/llvm-ar",
+        "rD",
+        "/out/build/libstrata_engine.a",
+        "/out/build/CMakeFiles/strata_engine.dir/src/core/conversation_state.cpp.o"
+      ],
+      "returncode": 0,
+      "seconds": 0.01635769207496196
+    },
+    {
+      "name": "candidate-2-conversation_file",
+      "argv": [
+        "/opt/rocm/llvm/bin/clang++",
+        "-DSTRATA_HIP_GFX906=1",
+        "-DSTRATA_NATIVE_EXPERTS=1",
+        "-DSTRATA_VERSION=\"0.1.40\"",
+        "-DUSE_PROF_API=1",
+        "-D__HIP_PLATFORM_AMD__=1",
+        "-I/src/include",
+        "-I/src/third_party/llama.cpp/ggml/src/../include",
+        "-isystem",
+        "/src/include/strata/platform/hip_compat",
+        "-isystem",
+        "/opt/rocm/include",
+        "-O3",
+        "-DNDEBUG",
+        "-std=c++20",
+        "-Wall",
+        "-Wextra",
+        "-MD",
+        "-MT",
+        "CMakeFiles/strata_engine.dir/src/core/conversation_file.cpp.o",
+        "-MF",
+        "CMakeFiles/strata_engine.dir/src/core/conversation_file.cpp.o.d",
+        "-o",
+        "CMakeFiles/strata_engine.dir/src/core/conversation_file.cpp.o",
+        "-c",
+        "/src/src/core/conversation_file.cpp"
+      ],
+      "returncode": 0,
+      "seconds": 7.575653301086277
+    },
+    {
+      "name": "archive-2",
+      "argv": [
+        "/opt/rocm/llvm/bin/llvm-ar",
+        "rD",
+        "/out/build/libstrata_engine.a",
+        "/out/build/CMakeFiles/strata_engine.dir/src/core/conversation_file.cpp.o"
+      ],
+      "returncode": 0,
+      "seconds": 0.01583145500626415
+    },
+    {
+      "name": "candidate-3-conversation_snapshot",
+      "argv": [
+        "/opt/rocm/llvm/bin/clang++",
+        "-DSTRATA_HIP_GFX906=1",
+        "-DSTRATA_NATIVE_EXPERTS=1",
+        "-DSTRATA_VERSION=\"0.1.40\"",
+        "-DUSE_PROF_API=1",
+        "-D__HIP_PLATFORM_AMD__=1",
+        "-I/src/include",
+        "-I/src/third_party/llama.cpp/ggml/src/../include",
+        "-isystem",
+        "/src/include/strata/platform/hip_compat",
+        "-isystem",
+        "/opt/rocm/include",
+        "-O3",
+        "-DNDEBUG",
+        "-std=c++20",
+        "-Wall",
+        "-Wextra",
+        "-MD",
+        "-MT",
+        "CMakeFiles/strata_engine.dir/src/core/conversation_snapshot.cpp.o",
+        "-MF",
+        "CMakeFiles/strata_engine.dir/src/core/conversation_snapshot.cpp.o.d",
+        "-o",
+        "CMakeFiles/strata_engine.dir/src/core/conversation_snapshot.cpp.o",
+        "-c",
+        "/src/src/core/conversation_snapshot.cpp"
+      ],
+      "returncode": 0,
+      "seconds": 5.57354173110798
+    },
+    {
+      "name": "archive-3",
+      "argv": [
+        "/opt/rocm/llvm/bin/llvm-ar",
+        "rD",
+        "/out/build/libstrata_engine.a",
+        "/out/build/CMakeFiles/strata_engine.dir/src/core/conversation_snapshot.cpp.o"
+      ],
+      "returncode": 0,
+      "seconds": 0.015877780970185995
+    },
+    {
+      "name": "candidate-link",
+      "argv": [
+        "/opt/rocm/lib/llvm/bin/clang++",
+        "--hip-link",
+        "/out/build/hc_bf16_n4.o",
+        "-O3",
+        "-DNDEBUG",
+        "--offload-arch=gfx906",
+        "CMakeFiles/strata.dir/src/program/generate.cpp.o",
+        "-o",
+        "strata",
+        "libstrata_engine.a",
+        "libstrata_prefill.a",
+        "libstrata_spec.a",
+        "libstrata_engine.a",
+        "libstrata_kernels.a",
+        "libstrata_core.a",
+        "libstrata_kernels_cpu.a",
+        "ggml/src/libggml-cpu.a",
+        "/opt/rocm/core-7.14/lib/libhipblas.so.3.5",
+        "libstrata_mmq.a",
+        "/opt/rocm/lib/libamdhip64.so.7.14.60850-0000000",
+        "/opt/rocm/core-7.14/lib/llvm/lib/clang/23/lib/linux/libclang_rt.builtins-x86_64.a",
+        "/opt/rocm/lib/libamdhip64.so.7.14.60850-0000000",
+        "ggml/src/libggml-base.a",
+        "-lm",
+        "-Wl,-Map,/out/build/link.map",
+        "-Wl,--cref"
+      ],
+      "returncode": 0,
+      "seconds": 0.1166976960375905
+    }
+  ],
+  "changed_translation_units": [
+    {
+      "source": "src/program/generate.cpp",
+      "object": "CMakeFiles/strata.dir/src/program/generate.cpp.o",
+      "baseline_object_sha256": "f90e6142d7a5964be5e8bade7244f2893c8d2801fbc557b9bb3471e56190a4a1",
+      "command": [
+        "/opt/rocm/llvm/bin/clang++",
+        "-DSTRATA_HIP_GFX906=1",
+        "-DSTRATA_NATIVE_EXPERTS=1",
+        "-DSTRATA_PREFILL_FUSED=1",
+        "-DSTRATA_PREFILL_MMQ=1",
+        "-DSTRATA_VERSION=\"0.1.40\"",
+        "-DUSE_PROF_API=1",
+        "-D__HIP_PLATFORM_AMD__=1",
+        "-I/src/include",
+        "-I/src/third_party/llama.cpp/ggml/src/../include",
+        "-isystem",
+        "/src/include/strata/platform/hip_compat",
+        "-isystem",
+        "/opt/rocm/include",
+        "-isystem",
+        "/opt/rocm/core-7.14/include",
+        "-O3",
+        "-DNDEBUG",
+        "-std=c++20",
+        "-Wall",
+        "-Wextra",
+        "-MD",
+        "-MT",
+        "CMakeFiles/strata.dir/src/program/generate.cpp.o",
+        "-MF",
+        "CMakeFiles/strata.dir/src/program/generate.cpp.o.d",
+        "-o",
+        "CMakeFiles/strata.dir/src/program/generate.cpp.o",
+        "-c",
+        "/src/src/program/generate.cpp"
+      ],
+      "language": "CXX",
+      "rebuild": true,
+      "dependencies": [
+        "include/strata/artifact/gguf_reader.hpp",
+        "include/strata/artifact/gguf_split.hpp",
+        "include/strata/core/arch_defaults.hpp",
+        "include/strata/core/conversation_buffer.hpp",
+        "include/strata/core/conversation_cache.hpp",
+        "include/strata/core/conversation_file.hpp",
+        "include/strata/core/conversation_memory.hpp",
+        "include/strata/core/conversation_snapshot.hpp",
+        "include/strata/core/coupled_draft.hpp",
+        "include/strata/core/device.hpp",
+        "include/strata/core/dma_batch.hpp",
+        "include/strata/core/emulate.hpp",
+        "include/strata/core/exchange_storage.hpp",
+        "include/strata/core/expert_cache.hpp",
+        "include/strata/core/expert_source.hpp",
+        "include/strata/core/hit_hook.hpp",
+        "include/strata/core/layer.hpp",
+        "include/strata/core/layout.hpp",
+        "include/strata/core/mtp.hpp",
+        "include/strata/core/native_dense.hpp",
+        "include/strata/core/native_head.hpp",
+        "include/strata/core/on_device.hpp",
+        "include/strata/core/peer_experts.hpp",
+        "include/strata/core/pinned.hpp",
+        "include/strata/core/progress.hpp",
+        "include/strata/core/remote_expert_opt.hpp",
+        "include/strata/core/remote_experts.hpp",
+        "include/strata/core/session.hpp",
+        "include/strata/core/verify.hpp",
+        "include/strata/core/vmm.hpp",
+        "include/strata/core/weights.hpp",
+        "include/strata/kernels/cpu/expert.hpp",
+        "include/strata/kernels/cpu/expert_layout.hpp",
+        "include/strata/kernels/cpu/native_expert.hpp",
+        "include/strata/kernels/cpu/pool.hpp",
+        "include/strata/kernels/cvec.hpp",
+        "include/strata/kernels/elementwise.hpp",
+        "include/strata/kernels/gdn.hpp",
+        "include/strata/kernels/gfx_arch.hpp",
+        "include/strata/kernels/gr.hpp",
+        "include/strata/kernels/iq_kernels.hpp",
+        "include/strata/kernels/kv_q4.hpp",
+        "include/strata/kernels/kv_stream.hpp",
+        "include/strata/kernels/mrope.hpp",
+        "include/strata/kernels/native_gdn.hpp",
+        "include/strata/kernels/native_moe.hpp",
+        "include/strata/kernels/native_qsa.hpp",
+        "include/strata/kernels/native_qsa_indexer.hpp",
+        "include/strata/kernels/native_rope.hpp",
+        "include/strata/kernels/native_router.hpp",
+        "include/strata/kernels/ngram.hpp",
+        "include/strata/kernels/ple.hpp",
+        "include/strata/kernels/qsa.hpp",
+        "include/strata/kernels/qsa_decode_attn.hpp",
+        "include/strata/kernels/rope_scaling.hpp",
+        "include/strata/kernels/s2_expert_grouped.hpp",
+        "include/strata/kernels/s_gemv.hpp",
+        "include/strata/kernels/sampler.hpp",
+        "include/strata/kernels/shared_expert.hpp",
+        "include/strata/kernels/verify_kernels.hpp",
+        "include/strata/platform/hip_compat/cuda_runtime.h",
+        "include/strata/platform/hip_compat/strata_hip.h",
+        "include/strata/prefill/prefill.hpp",
+        "include/strata/program/conv_cache.hpp",
+        "include/strata/program/logits_selection.hpp",
+        "include/strata/program/message_boundary.hpp",
+        "include/strata/spec/draft_policy.hpp",
+        "include/strata/spec/draft_source.hpp",
+        "include/strata/spec/suffix_drafter.hpp",
+        "src/program/generate.cpp"
+      ],
+      "dependency_evidence": "build-906/CMakeFiles/strata.dir/src/program/generate.cpp.o.d",
+      "changed_dependencies": [
+        "include/strata/core/conversation_cache.hpp",
+        "src/program/generate.cpp"
+      ]
+    },
+    {
+      "source": "src/core/conversation_state.cpp",
+      "object": "CMakeFiles/strata_engine.dir/src/core/conversation_state.cpp.o",
+      "archive": "libstrata_engine.a",
+      "member": "conversation_state.cpp.o",
+      "baseline_object_sha256": "2b9fab3ad487530daae79095c9f5ef177cf920be674156a621a6c11343eddfd3",
+      "command": [
+        "/opt/rocm/llvm/bin/clang++",
+        "-DSTRATA_HIP_GFX906=1",
+        "-DSTRATA_NATIVE_EXPERTS=1",
+        "-DSTRATA_VERSION=\"0.1.40\"",
+        "-DUSE_PROF_API=1",
+        "-D__HIP_PLATFORM_AMD__=1",
+        "-I/src/include",
+        "-I/src/third_party/llama.cpp/ggml/src/../include",
+        "-isystem",
+        "/src/include/strata/platform/hip_compat",
+        "-isystem",
+        "/opt/rocm/include",
+        "-O3",
+        "-DNDEBUG",
+        "-std=c++20",
+        "-Wall",
+        "-Wextra",
+        "-MD",
+        "-MT",
+        "CMakeFiles/strata_engine.dir/src/core/conversation_state.cpp.o",
+        "-MF",
+        "CMakeFiles/strata_engine.dir/src/core/conversation_state.cpp.o.d",
+        "-o",
+        "CMakeFiles/strata_engine.dir/src/core/conversation_state.cpp.o",
+        "-c",
+        "/src/src/core/conversation_state.cpp"
+      ],
+      "language": "CXX",
+      "rebuild": true,
+      "dependencies": [
+        "include/strata/core/conversation_buffer.hpp",
+        "include/strata/core/conversation_cache.hpp",
+        "include/strata/core/conversation_file.hpp",
+        "include/strata/core/conversation_snapshot.hpp",
+        "include/strata/core/hit_hook.hpp",
+        "include/strata/core/layer.hpp",
+        "include/strata/core/layout.hpp",
+        "include/strata/core/session.hpp",
+        "include/strata/core/vmm.hpp",
+        "include/strata/core/weights.hpp",
+        "include/strata/kernels/cpu/expert.hpp",
+        "include/strata/kernels/cpu/native_expert.hpp",
+        "include/strata/kernels/cpu/pool.hpp",
+        "include/strata/kernels/gr.hpp",
+        "include/strata/kernels/kv_stream.hpp",
+        "include/strata/kernels/ngram.hpp",
+        "include/strata/kernels/ple.hpp",
+        "include/strata/kernels/qsa.hpp",
+        "include/strata/kernels/qsa_decode_attn.hpp",
+        "include/strata/platform/hip_compat/cuda_runtime.h",
+        "include/strata/platform/hip_compat/strata_hip.h",
+        "src/core/conversation_checked.hpp",
+        "src/core/conversation_state.cpp"
+      ],
+      "dependency_evidence": "build-906/CMakeFiles/strata_engine.dir/src/core/conversation_state.cpp.o.d",
+      "changed_dependencies": [
+        "include/strata/core/conversation_cache.hpp"
+      ]
+    },
+    {
+      "source": "src/core/conversation_file.cpp",
+      "object": "CMakeFiles/strata_engine.dir/src/core/conversation_file.cpp.o",
+      "archive": "libstrata_engine.a",
+      "member": "conversation_file.cpp.o",
+      "baseline_object_sha256": "194a77eea7a4e07d6161d0b4fd55721b42f03f84a72e69c5a1063f02c03378ff",
+      "command": [
+        "/opt/rocm/llvm/bin/clang++",
+        "-DSTRATA_HIP_GFX906=1",
+        "-DSTRATA_NATIVE_EXPERTS=1",
+        "-DSTRATA_VERSION=\"0.1.40\"",
+        "-DUSE_PROF_API=1",
+        "-D__HIP_PLATFORM_AMD__=1",
+        "-I/src/include",
+        "-I/src/third_party/llama.cpp/ggml/src/../include",
+        "-isystem",
+        "/src/include/strata/platform/hip_compat",
+        "-isystem",
+        "/opt/rocm/include",
+        "-O3",
+        "-DNDEBUG",
+        "-std=c++20",
+        "-Wall",
+        "-Wextra",
+        "-MD",
+        "-MT",
+        "CMakeFiles/strata_engine.dir/src/core/conversation_file.cpp.o",
+        "-MF",
+        "CMakeFiles/strata_engine.dir/src/core/conversation_file.cpp.o.d",
+        "-o",
+        "CMakeFiles/strata_engine.dir/src/core/conversation_file.cpp.o",
+        "-c",
+        "/src/src/core/conversation_file.cpp"
+      ],
+      "language": "CXX",
+      "rebuild": true,
+      "dependencies": [
+        "include/strata/core/conversation_buffer.hpp",
+        "include/strata/core/conversation_cache.hpp",
+        "include/strata/core/conversation_file.hpp",
+        "src/core/conversation_file.cpp"
+      ],
+      "dependency_evidence": "build-906/CMakeFiles/strata_engine.dir/src/core/conversation_file.cpp.o.d",
+      "changed_dependencies": [
+        "include/strata/core/conversation_cache.hpp"
+      ]
+    },
+    {
+      "source": "src/core/conversation_snapshot.cpp",
+      "object": "CMakeFiles/strata_engine.dir/src/core/conversation_snapshot.cpp.o",
+      "archive": "libstrata_engine.a",
+      "member": "conversation_snapshot.cpp.o",
+      "baseline_object_sha256": "ddf93628358799f60e9968d5e57936e5c3a5a8088a197309757dd871a53b5ad1",
+      "command": [
+        "/opt/rocm/llvm/bin/clang++",
+        "-DSTRATA_HIP_GFX906=1",
+        "-DSTRATA_NATIVE_EXPERTS=1",
+        "-DSTRATA_VERSION=\"0.1.40\"",
+        "-DUSE_PROF_API=1",
+        "-D__HIP_PLATFORM_AMD__=1",
+        "-I/src/include",
+        "-I/src/third_party/llama.cpp/ggml/src/../include",
+        "-isystem",
+        "/src/include/strata/platform/hip_compat",
+        "-isystem",
+        "/opt/rocm/include",
+        "-O3",
+        "-DNDEBUG",
+        "-std=c++20",
+        "-Wall",
+        "-Wextra",
+        "-MD",
+        "-MT",
+        "CMakeFiles/strata_engine.dir/src/core/conversation_snapshot.cpp.o",
+        "-MF",
+        "CMakeFiles/strata_engine.dir/src/core/conversation_snapshot.cpp.o.d",
+        "-o",
+        "CMakeFiles/strata_engine.dir/src/core/conversation_snapshot.cpp.o",
+        "-c",
+        "/src/src/core/conversation_snapshot.cpp"
+      ],
+      "language": "CXX",
+      "rebuild": true,
+      "dependencies": [
+        "include/strata/core/conversation_buffer.hpp",
+        "include/strata/core/conversation_cache.hpp",
+        "include/strata/core/conversation_file.hpp",
+        "include/strata/core/conversation_snapshot.hpp",
+        "include/strata/core/hit_hook.hpp",
+        "include/strata/core/layer.hpp",
+        "include/strata/core/layout.hpp",
+        "include/strata/core/session.hpp",
+        "include/strata/core/vmm.hpp",
+        "include/strata/core/weights.hpp",
+        "include/strata/kernels/cpu/expert.hpp",
+        "include/strata/kernels/cpu/native_expert.hpp",
+        "include/strata/kernels/cpu/pool.hpp",
+        "include/strata/kernels/gr.hpp",
+        "include/strata/kernels/kv_q4.hpp",
+        "include/strata/kernels/kv_stream.hpp",
+        "include/strata/kernels/ngram.hpp",
+        "include/strata/kernels/ple.hpp",
+        "include/strata/kernels/qsa.hpp",
+        "include/strata/kernels/qsa_decode_attn.hpp",
+        "include/strata/platform/hip_compat/cuda_runtime.h",
+        "include/strata/platform/hip_compat/strata_hip.h",
+        "src/core/conversation_checked.hpp",
+        "src/core/conversation_snapshot.cpp"
+      ],
+      "dependency_evidence": "build-906/CMakeFiles/strata_engine.dir/src/core/conversation_snapshot.cpp.o.d",
+      "changed_dependencies": [
+        "include/strata/core/conversation_cache.hpp"
+      ]
+    }
+  ],
+  "dependency_closure": {
+    "CMakeFiles/strata_engine.dir/src/core/conversation_state.cpp.o": [
+      "include/strata/core/conversation_cache.hpp"
+    ],
+    "CMakeFiles/strata_engine.dir/src/core/conversation_file.cpp.o": [
+      "include/strata/core/conversation_cache.hpp"
+    ],
+    "CMakeFiles/strata_engine.dir/src/core/conversation_snapshot.cpp.o": [
+      "include/strata/core/conversation_cache.hpp"
+    ],
+    "CMakeFiles/strata.dir/src/program/generate.cpp.o": [
+      "include/strata/core/conversation_cache.hpp",
+      "src/program/generate.cpp"
+    ]
+  },
+  "source_type_audit_before": {
+    "src/core/conversation_state.cpp": {
+      "sha256": "1118b3d783b46acd0e2d49d351cf6d14ba092a125b6ab355deea82f85c27ca0f",
+      "hits": [
+        "#include \"strata/core/conversation_snapshot.hpp\"",
+        "bool metadata_bytes(const ConversationCheckpoint& c, size_t& total) {",
+        "bool conversation_checkpoint_validate(const ConversationCheckpoint& c, const SessionState& ss,",
+        "bool conversation_checkpoint_save(ConversationCheckpoint& c, const SessionState& ss,",
+        "bool conversation_checkpoint_restore(const ConversationCheckpoint& c, SessionState& ss,",
+        "!product(checkpoints, {view.checkpoints.size(), sizeof(ConversationCheckpoint)}) ||",
+        "bool conversation_snapshot_save(SavedConversation& image, const ConversationView& view,",
+        "SavedConversation captured;",
+        "bool conversation_snapshot_sources(SavedConversation& meta, std::vector<SessionKvSource>& sources,",
+        "SavedConversation captured;",
+        "bool conversation_snapshot_validate(const SavedConversation& image, const SessionState& ss,",
+        "ConversationRestore conversation_snapshot_restore(const SavedConversation& image, SessionState& ss,",
+        "bool conversation_snapshot_save(SavedConversation& image, const ConversationView& view, const SessionState& ss,",
+        "bool conversation_snapshot_validate(const SavedConversation& image, const SessionState& ss, const ModelGeometry& g,",
+        "ConversationRestore conversation_snapshot_restore(const SavedConversation& image, SessionState& ss,"
+      ]
+    },
+    "src/core/conversation_file.cpp": {
+      "sha256": "136afacb6896fdf788ac751da2531ffdb59505edb83e9dc9d3176099e7eeb559",
+      "hits": [
+        "#include \"strata/core/conversation_file.hpp\"",
+        "void buffer(const ConversationBuffer& b) {",
+        "void put_checkpoint(Out& o, const ConversationCheckpoint& c) {",
+        "void put_payload(Out& o, const SavedConversation& s, const std::vector<SessionKvSource>* sources = nullptr) {",
+        "bool buffer(ConversationBuffer& b, size_t part) {",
+        "bool get_checkpoint(In& in, ConversationCheckpoint& c) {",
+        "bool get_payload(In& in, SavedConversation& s) {",
+        "bool has_stage_parts(const SavedConversation& s) {",
+        "bool write_impl(const std::string& path, const SavedConversation& image, const std::vector<SessionKvSource>* sources,",
+        "bool write_guarded(const std::string& path, const SavedConversation& image, const std::vector<SessionKvSource>* sources,",
+        "std::vector<ConversationCheckpoint> session_checkpoints_to_save(const std::vector<ConversationCheckpoint>& chain) {",
+        "const ConversationCheckpoint* deepest = session_deepest_checkpoint(chain);",
+        "const ConversationCheckpoint* session_deepest_checkpoint(const std::vector<ConversationCheckpoint>& chain) {",
+        "const ConversationCheckpoint* deepest = nullptr;",
+        "uint64_t session_save_peak_bytes(const ConversationCheckpoint* deepest, const SessionSaveLive& live) {",
+        "bool session_save_checkpoints(const std::vector<ConversationCheckpoint>& chain, const SessionSaveLive& live,",
+        "std::vector<ConversationCheckpoint>& out, std::string& why) {",
+        "const ConversationCheckpoint* deepest = session_deepest_checkpoint(chain);",
+        "bool session_file_write(const std::string& path, const SavedConversation& meta, const std::vector<SessionKvSource>& kv,",
+        "bool session_file_write(const std::string& path, const SavedConversation& image, const SessionFileIdentity& id,",
+        "bool read_impl(const std::string& path, const SessionFileIdentity& id, SavedConversation& image,",
+        "SavedConversation parsed;",
+        "bool session_file_read(const std::string& path, const SessionFileIdentity& id, SavedConversation& image,"
+      ]
+    },
+    "src/core/conversation_snapshot.cpp": {
+      "sha256": "41c023e09357031eb548b6a6fc066605897079241af1766ff2ffd22961dc8737",
+      "hits": [
+        "#include \"strata/core/conversation_snapshot.hpp\"",
+        "const std::array<const ConversationBuffer*,5> buffers = {&image.k, &image.v, &image.k_scale, &image.v_scale, &image.pooled};",
+        "const std::array<ConversationBuffer*,5> dst = {&image.k, &image.v, &image.k_scale, &image.v_scale, &image.pooled};",
+        "const std::array<const ConversationBuffer*,5> src = {&image.k, &image.v, &image.k_scale, &image.v_scale, &image.pooled};",
+        "const std::array<const ConversationBuffer*,5> src = {&image.k, &image.v, &image.k_scale, &image.v_scale, &image.pooled};",
+        "const std::array<const ConversationBuffer*, 5> saved = {&image.k, &image.v, &image.k_scale, &image.v_scale, &image.pooled};"
+      ]
+    },
+    "src/program/generate.cpp": {
+      "sha256": "614034787daa9e5c9a114dc36845cea821f01f44a84b7d1aa2fb6597fd0c671e",
+      "hits": [
+        "#include \"strata/core/conversation_snapshot.hpp\"",
+        "#include \"strata/core/conversation_file.hpp\"",
+        "using ConvCheckpoint = strata::core::ConversationCheckpoint;",
+        "// parking with --layer-split saves every stage (SavedConversation::stage_images)",
+        "// engine loaded, by role (conversation_file.hpp), once; the config fingerprint covers the RESOLVED settings",
+        "strata::core::ConversationCheckpointSplit cs;",
+        "strata::core::ConversationCheckpointSplit& cs; std::vector<ConvCheckpoint>& checks; bool on;",
+        "strata::core::SavedConversation image;",
+        "strata::core::SavedConversation part;",
+        "strata::core::ConversationCheckpoint ck;",
+        "strata::core::ConversationCheckpoint ck;",
+        "// UTF-8).  The file holds what a parked conversation holds (conversation_file.hpp).  Answers: SAVED /",
+        "strata::core::SavedConversation meta;",
+        "strata::core::SavedConversation image;",
+        "std::optional<strata::core::SavedConversation> incoming;",
+        "strata::core::ConversationCheckpointSplit cs;"
+      ]
+    },
+    "include/strata/core/conversation_buffer.hpp": {
+      "sha256": "12f1abac2ec75cc71e8cf308a5a691923d8b617317560e009a41f713809f49d4",
+      "hits": [
+        "class ConversationBuffer {",
+        "ConversationBuffer() = default;",
+        "ConversationBuffer(std::initializer_list<uint8_t> values) {",
+        "ConversationBuffer(const ConversationBuffer&) = default;",
+        "ConversationBuffer& operator=(const ConversationBuffer&) = default;",
+        "ConversationBuffer(ConversationBuffer&& other) noexcept",
+        "ConversationBuffer& operator=(ConversationBuffer&& other) noexcept {",
+        "bool operator==(const ConversationBuffer& other) const {"
+      ]
+    },
+    "include/strata/core/conversation_cache.hpp": {
+      "sha256": "5d0feb469ffed2c0d01ea781dba06e864f4a29237646429261ff6ea3e56fdf2c",
+      "hits": [
+        "#include \"strata/core/conversation_buffer.hpp\"",
+        "struct ConversationCheckpoint {",
+        "std::vector<ConversationCheckpoint> stage_parts;",
+        "stage_parts.capacity() * sizeof(ConversationCheckpoint);",
+        "ConversationBuffer k, v, k_scale, v_scale, pooled;",
+        "struct ConversationCheckpointSplit {",
+        "std::vector<ConversationCheckpoint> stage0;",
+        "std::vector<std::vector<ConversationCheckpoint>> parts;   ///< [stage][checkpoint]",
+        "std::vector<ConversationCheckpoint> rest;                 ///< not split (no complete set of stage parts)",
+        "inline ConversationCheckpointSplit conversation_checkpoints_split(std::vector<ConversationCheckpoint>&& checks,",
+        "ConversationCheckpointSplit out;",
+        "ConversationCheckpoint part;",
+        "inline bool conversation_checkpoints_merge(ConversationCheckpointSplit&& split, std::vector<ConversationCheckpoint>& out) {",
+        "ConversationCheckpoint cp = std::move(split.stage0[w]);",
+        "struct SavedConversation {",
+        "ConversationCheckpoint live;",
+        "std::vector<ConversationCheckpoint> checkpoints;",
+        "std::vector<SavedConversation> stage_images;",
+        "size_t n = live.bytes() + checkpoints.capacity() * sizeof(ConversationCheckpoint) +",
+        "int64_t conversation_prefix(const ConversationCheckpoint& c, const std::vector<Token>& prompt,",
+        "auto consider = [&](const ConversationCheckpoint& c, bool live) {",
+        "SavedConversation take(size_t index) {",
+        "SavedConversation out = std::move(entries_.at(index));",
+        "const std::vector<ConversationCheckpoint>& checkpoints, bool cvec) {",
+        "auto held = [&](const ConversationCheckpoint& c) {",
+        "bool put(SavedConversation&& image, size_t held = 0) {",
+        "std::deque<SavedConversation> entries_; // least recently active first"
+      ]
+    },
+    "include/strata/core/conversation_snapshot.hpp": {
+      "sha256": "c403e99ab515566e1314a3c485f8974d25bb0194a181f1e8ab804fc76ce8f665",
+      "hits": [
+        "#include \"strata/core/conversation_cache.hpp\"",
+        "#include \"strata/core/conversation_file.hpp\"",
+        "bool conversation_checkpoint_validate(const ConversationCheckpoint& checkpoint, const SessionState& session,",
+        "bool conversation_checkpoint_save(ConversationCheckpoint& checkpoint, const SessionState& session,",
+        "bool conversation_checkpoint_restore(const ConversationCheckpoint& checkpoint, SessionState& session,",
+        "const std::vector<ConversationCheckpoint>& checkpoints;",
+        "bool conversation_snapshot_save(SavedConversation& image, const ConversationView& view,",
+        "bool conversation_snapshot_sources(SavedConversation& meta, std::vector<SessionKvSource>& sources,",
+        "bool conversation_snapshot_validate(const SavedConversation& image, const SessionState& session,",
+        "ConversationRestore conversation_snapshot_restore(const SavedConversation& image, SessionState& session,",
+        "bool conversation_snapshot_save(SavedConversation& image, const ConversationView& view, const SessionState& session,",
+        "bool conversation_snapshot_validate(const SavedConversation& image, const SessionState& session,",
+        "ConversationRestore conversation_snapshot_restore(const SavedConversation& image, SessionState& session,"
+      ]
+    },
+    "include/strata/core/conversation_file.hpp": {
+      "sha256": "2c6ddbb2bb1f44331297a2cf970504da67ce501180fe1513aeb59f71cef8f942",
+      "hits": [
+        "// On-disk persistence of a conversation's state (SavedConversation): one file holding the running state, the",
+        "#include \"strata/core/conversation_cache.hpp\"",
+        "bool session_file_write(const std::string& path, const SavedConversation& image, const SessionFileIdentity& id,",
+        "bool session_file_write(const std::string& path, const SavedConversation& meta, const std::vector<SessionKvSource>& kv,",
+        "std::vector<ConversationCheckpoint> session_checkpoints_to_save(const std::vector<ConversationCheckpoint>& chain);",
+        "const ConversationCheckpoint* session_deepest_checkpoint(const std::vector<ConversationCheckpoint>& chain);",
+        "uint64_t session_save_peak_bytes(const ConversationCheckpoint* deepest, const SessionSaveLive& live);",
+        "bool session_save_checkpoints(const std::vector<ConversationCheckpoint>& chain, const SessionSaveLive& live,",
+        "std::vector<ConversationCheckpoint>& out, std::string& why);",
+        "bool session_file_read(const std::string& path, const SessionFileIdentity& id, SavedConversation& image,"
+      ]
+    }
+  },
+  "source_snapshot_before": {
+    "src/ngram/ple_reader_test.cpp": {
+      "sha256": "2f5d2fe5243888220546b7db821604b1717c8a027326c6e67087a5e6457b901d",
+      "bytes": 25809
+    },
+    "src/ngram/ple_reader.cpp": {
+      "sha256": "ddec6dbcc8afd8186c724403d5aaa54b70b9fbd551fea733ce422974131ede9e",
+      "bytes": 21322
+    },
+    "src/core/conversation_file_test.cpp": {
+      "sha256": "7ee3204911a424397524ae1f20d4b9ac206c598581dd5c86e86e702aaca5f993",
+      "bytes": 43378
+    },
+    "src/core/layer.cpp": {
+      "sha256": "e17d92b37dfb04bc917df30bbd349550c4ef13fea10d87e1ae5496ccd4f85b68",
+      "bytes": 114032
+    },
+    "src/core/conversation_validation_test.cpp": {
+      "sha256": "206a0b2e764cec8211be66bebbedee726b6814d47e990df21f2672ce39b8d9da",
+      "bytes": 14930
+    },
+    "src/core/weights.cpp": {
+      "sha256": "4915312246d4ebb21f33e533fedf8337fca09ef5a1b291cd6f26e34cae89f77e",
+      "bytes": 22938
+    },
+    "src/core/vmm.cpp": {
+      "sha256": "a7bc1b4eb00e8dcb902611f4dd61bea86983eb45ea36c8c63425f14b9ff1283b",
+      "bytes": 5511
+    },
+    "src/core/verify.cpp": {
+      "sha256": "938579652a136f14d4a01dc66da0035fca93863c66a89f01348b9bbf4a30c364",
+      "bytes": 160399
+    },
+    "src/core/conversation_state.cpp": {
+      "sha256": "1118b3d783b46acd0e2d49d351cf6d14ba092a125b6ab355deea82f85c27ca0f",
+      "bytes": 22334
+    },
+    "src/core/pinned_shared_test.cpp": {
+      "sha256": "0dd0cfe5f3e4d48631b5d95b0ce45e4b52d3e1701cddb231986606ef59b3ec02",
+      "bytes": 2096
+    },
+    "src/core/native_dense.cpp": {
+      "sha256": "be99905ce791264f70c045f3fa2da9b66a666dfafcb390d76bc7f0b1e824ec07",
+      "bytes": 17999
+    },
+    "src/core/peer_experts.cpp": {
+      "sha256": "c82b9764c6b5eb2fe907f3f99e427bbcb0b9168ba50ab626021e85724484f500",
+      "bytes": 15503
+    },
+    "src/core/conversation_file.cpp": {
+      "sha256": "136afacb6896fdf788ac751da2531ffdb59505edb83e9dc9d3176099e7eeb559",
+      "bytes": 56551
+    },
+    "src/core/layout.cpp": {
+      "sha256": "f1e166c91025710fe318c85f7fba27a721291ca2d27ececd797abafa5a5cc7eb",
+      "bytes": 8362
+    },
+    "src/core/conversation_snapshot.cpp": {
+      "sha256": "41c023e09357031eb548b6a6fc066605897079241af1766ff2ffd22961dc8737",
+      "bytes": 15845
+    },
+    "src/core/concurrent_main.cpp": {
+      "sha256": "06d919aab9a1687d4bb0b5f9be0c69273b7af5857d81718ff50a2fd351a7c582",
+      "bytes": 9958
+    },
+    "src/core/load_main.cpp": {
+      "sha256": "83ea314dd762cf37c7ea9249842bc10613f16e7ba17715ee8b2dadae320fa008",
+      "bytes": 6675
+    },
+    "src/core/overlap_main.cpp": {
+      "sha256": "d48e5d20cf224301da6ff05cfc67fedf6fe40b8c6b17a39e8a191192f03e03c4",
+      "bytes": 8737
+    },
+    "src/core/pinned.cu": {
+      "sha256": "c95210765d3d2257767b8c679e35fe82179f9afd9ddff80495813ff46810f7a7",
+      "bytes": 39455
+    },
+    "src/core/remote_experts.cpp": {
+      "sha256": "02e72fbcca1a6e9151a650dac2c4714f057b78cd60197a65791e7d1f38270ae5",
+      "bytes": 17082
+    },
+    "src/core/conversation_cache_test.cpp": {
+      "sha256": "a0bcfa4fd3c6cc682208f999be06370153a4553022a574d3d604849244c948de",
+      "bytes": 18405
+    },
+    "src/core/graph.cpp": {
+      "sha256": "ac8b1de9372b6755bb5c9be30b83c76fef2f89186b0f7e5316676448f66483c3",
+      "bytes": 6576
+    },
+    "src/core/mtp.cpp": {
+      "sha256": "3f214dd53f23565f885f19fecd74cd3bbe4d00f22336b5940a70494396f57648",
+      "bytes": 79014
+    },
+    "src/core/native_head.cpp": {
+      "sha256": "f0fc2046888bf2a9bb75f6cd7c5c6fba9de8bc6d96200b776e2cca26bd27a89b",
+      "bytes": 9931
+    },
+    "src/core/arch_defaults_test.cpp": {
+      "sha256": "db62c9f6ae515cc952251fe9fdf9eb5bebea16503f8b26270a02d7e61567c768",
+      "bytes": 2374
+    },
+    "src/core/remote_expert_opt.cu": {
+      "sha256": "6e2212c17f2fdfeb09b780c73dc8faaef6979d27f04b91ba6f6d205705df1aa9",
+      "bytes": 8752
+    },
+    "src/core/conversation_snapshot_test.cpp": {
+      "sha256": "e0cbfd61e581f49e01efaf0208df90244c0e3f29ea30ad8d8be75bdb7439c7ee",
+      "bytes": 23819
+    },
+    "src/core/coupled_draft_test.cpp": {
+      "sha256": "d5be5618fef9255ff04499723893bc1538d7238166255de62ba7092678ab2a55",
+      "bytes": 6467
+    },
+    "src/core/conversation_split_failure_test.cpp": {
+      "sha256": "6a214fc27c99fdaf453721d108e20b29300daad7b835b17189fbcaeb3c8f62e7",
+      "bytes": 3397
+    },
+    "src/core/expert_source.cpp": {
+      "sha256": "1f079f39adc8866bb7ef7bfb7fe69c47db05001c4372f6841230d57fb99ef8f4",
+      "bytes": 171685
+    },
+    "src/core/expert_cache.cpp": {
+      "sha256": "ce70571b427331920efaca7ff7e4a111a4a155fe55f83f56d63e0f80fdae5161",
+      "bytes": 32848
+    },
+    "src/core/device_main.cpp": {
+      "sha256": "60a66b6b2c05527f5cb59d6c5397370c4740205551d74d04db2202989d7f3584",
+      "bytes": 6169
+    },
+    "src/core/conversation_memory.cpp": {
+      "sha256": "2654582ed22f147a3e83073664d74ff67f3f8a550d58c30654a417e8aa5b2b2a",
+      "bytes": 1519
+    },
+    "src/core/device.cu": {
+      "sha256": "3ebcdcdc351aa8d5c80ead514a7d0a3af8c4936305a273d7247ed66717b81e9a",
+      "bytes": 15818
+    },
+    "src/core/conversation_checked.hpp": {
+      "sha256": "8fb6f2734b3b96d3590644133ccd07f09befda6ef2243325ef8ea3f1c6a972ad",
+      "bytes": 704
+    },
+    "src/core/arch_defaults.cpp": {
+      "sha256": "b931498f28897f3816a1beca378f50968ddc193b850cf824727f8342d4927b27",
+      "bytes": 3441
+    },
+    "src/core/session.cpp": {
+      "sha256": "b1479da93e913a0c944b1c61bb1fd623935cf68d7d02ae9ee1e32d7bb567625f",
+      "bytes": 50607
+    },
+    "src/core/conversation_memory_test.cpp": {
+      "sha256": "24c8ccc575ecf8290eb14a06a9d8b23de58b2c708c70dd6ecc4fd5ac1591b1bf",
+      "bytes": 3464
+    },
+    "src/artifact/dequant.cpp": {
+      "sha256": "944edf278c6d9858ed63998976b50d2b7913385d4a832de6d76bd32cd1090f26",
+      "bytes": 5732
+    },
+    "src/artifact/gguf_reader.cpp": {
+      "sha256": "90e6a1a664645075d4a946a84a498cf05cd9947ab11c4036aee577a3b8632431",
+      "bytes": 3605
+    },
+    "src/artifact/gguf_reader_test.cpp": {
+      "sha256": "3fe4c7e31303e70b4428a89d25a9a147baceef3abcad792b3a1d0e847d660932",
+      "bytes": 3705
+    },
+    "src/kernels/shared_expert_parity.cpp": {
+      "sha256": "fc6ed4bbcf0ad9902298e748aa3c580ebd63ee5d518d525b5ea55aed1d8a3b0e",
+      "bytes": 29261
+    },
+    "src/kernels/rope_parity.cpp": {
+      "sha256": "e1faa8d016de4487e15f1e9acd84d6d7aa071ee912060847a4de05c3c9f9df7c",
+      "bytes": 32970
+    },
+    "src/kernels/cvec_parity.cpp": {
+      "sha256": "cadfaa08778a4db2254e714940b3cbc23e08c3b366f02c4b07a0d756717ce8e7",
+      "bytes": 9581
+    },
+    "src/kernels/route_window_parity.cpp": {
+      "sha256": "ad6057c9632cb66606b46f07fcdf5c247e03c88f7a7664b0d050d4b08842dc5d",
+      "bytes": 4347
+    },
+    "src/kernels/elementwise_parity.cpp": {
+      "sha256": "4e8a5efb2cade6675d8d0687e63bdc1edc1b712914834a65870e00571a571098",
+      "bytes": 27090
+    },
+    "src/kernels/s2_gemv_q8_parity.cpp": {
+      "sha256": "33b0372c74e09a429987d154130394db47e203bca15a6d9a4fbd4f9821e02935",
+      "bytes": 9042
+    },
+    "src/kernels/kv_stream_parity.cpp": {
+      "sha256": "e0ada4be116973ba7a165fa081df0be9c13f9ffa6865540913218bbe5c35ea11",
+      "bytes": 14108
+    },
+    "src/kernels/native_expert_bench.cpp": {
+      "sha256": "ff0fd2044690d598e7ebe8c94d23384d35ec0e7f0f328cc97110a28fbcb233bc",
+      "bytes": 10713
+    },
+    "src/kernels/iq_parity.cpp": {
+      "sha256": "21bba170ff91d80d5b0f1db877af96d4c57e3b70957eb7fae27e238a39851b8a",
+      "bytes": 6507
+    },
+    "src/kernels/native_expert_parity.cpp": {
+      "sha256": "55cc087df065b93b3f7ecfd13107bf62910fe879bc4f0c640afa3e412a6ce790",
+      "bytes": 34145
+    },
+    "src/kernels/resident_plan_parity.cpp": {
+      "sha256": "c95791c38c80e3416eff60292323327d5a4936b52d3600acc6ccb504cb076a3e",
+      "bytes": 7523
+    },
+    "src/kernels/qsa_select_bench.cpp": {
+      "sha256": "e905c67c69ee11d2af906ba6c229462b767da6b2b5b2edaad3d8099c1155a715",
+      "bytes": 10011
+    },
+    "src/kernels/qsa_topk_parity.cpp": {
+      "sha256": "a8ea1d17a188ed8cd2c3f8e1a57376d5c9e60ed840a28c32acc9334f25118a1c",
+      "bytes": 10572
+    },
+    "src/kernels/dequant_s2_parity.cpp": {
+      "sha256": "456935d009abf36b7d8ff3f620094ea281210e077f234b5ceba74d3634d84679",
+      "bytes": 6745
+    },
+    "src/kernels/fused_gr_bench.cpp": {
+      "sha256": "c373745539620cd6682af5f309235b520d74444e9405e2457b2d3d46bf011588",
+      "bytes": 5965
+    },
+    "src/kernels/quantize_act_parity.cpp": {
+      "sha256": "435da59b51f4279e1b479fffb5e705245390295639618b533311f9372a709ea8",
+      "bytes": 21905
+    },
+    "src/kernels/native_multi_parity.cpp": {
+      "sha256": "482274f66a6ac73381168cb79521e1808d598e5d249c59219456b506bb1bc17b",
+      "bytes": 7280
+    },
+    "src/kernels/sampler_parity.cpp": {
+      "sha256": "fdda0b8d83761b0272f3511a0c6ee81106b6cbd184406e95c8ba382087df2331",
+      "bytes": 71187
+    },
+    "src/kernels/ple_q5_parity.cpp": {
+      "sha256": "8f8540c618dfefd05bf5b8e62dd98970d4c69b222c9725234f611e6051f2b869",
+      "bytes": 3542
+    },
+    "src/kernels/bf16_bits_test.cpp": {
+      "sha256": "e26ebb9239946d0416e81cb212ba24618386ed3da15522c8ed1af9995b586d97",
+      "bytes": 3644
+    },
+    "src/kernels/s2_expert_grouped_parity.cpp": {
+      "sha256": "2a83a46766172baa4690fc2310a09fe6575ac1faf45d18fdf0ecb039dbdbbc55",
+      "bytes": 32314
+    },
+    "src/kernels/s_gemv_parity.cpp": {
+      "sha256": "e936521ff789e93ef7052594f41e90eb8af165394ef3a8f170aa8e0fdad876ba",
+      "bytes": 34518
+    },
+    "src/kernels/verify_parity.cpp": {
+      "sha256": "22a29523ed932dbdb6b0c536444ba56f7a664e9415ef8ddbb9e0e4095a800f6b",
+      "bytes": 5333
+    },
+    "src/kernels/gr_multi_parity.cpp": {
+      "sha256": "96327cad5f493dbd5a1c7cf20892fafa2bae2cbc3e506bd3b14fef2be26c01c8",
+      "bytes": 6433
+    },
+    "src/kernels/kv_q4_parity.cpp": {
+      "sha256": "2b5dece46df2c1448735ac78e5f81c7fa1108b9d4827f5ec75190b504681af63",
+      "bytes": 14276
+    },
+    "src/kernels/dequant_bf16_test.cpp": {
+      "sha256": "65d9c5fad2d3e887020917aeeabe741593a2678b96b9ba49ac6071097d24273f",
+      "bytes": 4838
+    },
+    "src/kernels/q5_projection_parity.cpp": {
+      "sha256": "efc674248722919c1c2daafeaee07cc6fe104955a7b8fe58106d6e94dba202dd",
+      "bytes": 2838
+    },
+    "src/kernels/bf16_gemv_parity.cpp": {
+      "sha256": "a7c6de83f57b333865e5fefb7f790573db6de6d8a88d79c950280f56c2f5e44e",
+      "bytes": 7325
+    },
+    "src/kernels/decode_cluster_parity.cpp": {
+      "sha256": "89957dbd82f2921663da5e97cb6051bc298661d18600098e2f088aaf8e915d95",
+      "bytes": 20624
+    },
+    "src/kernels/ple_oracle_vectors.inc": {
+      "sha256": "81db49806af4a3c8d333cb00ad0353a322b61f34f62e96a1eaffe4b782611fd3",
+      "bytes": 7639
+    },
+    "src/kernels/qsa_oracle_vectors.inc": {
+      "sha256": "214122dd83b2b36d8945848e5d3ebd74eae5238d82ce769110881aa2775406c3",
+      "bytes": 10414
+    },
+    "src/kernels/kv_steps_parity.cpp": {
+      "sha256": "726597d93f053470f6d72340b70a52c802f109e74eb4e3393b69fe5bcb19ab2a",
+      "bytes": 7258
+    },
+    "src/kernels/ple_parity.cpp": {
+      "sha256": "418dcaff1185bde55cf693c69f35a58727724fb39f99aa9f746ea1f2a13a4531",
+      "bytes": 71244
+    },
+    "src/kernels/kv_hybrid_parity.cpp": {
+      "sha256": "f315eedf6ce80ce12d9862644dee92d0bb99253e5eb2e744715627c689b3d7f3",
+      "bytes": 19463
+    },
+    "src/kernels/router_top10_parity.cpp": {
+      "sha256": "987983c10f5035d919d26853f068ea45007296c5a3fe22df2c0bc3a694b086d9",
+      "bytes": 7718
+    },
+    "src/kernels/qsa_topk_active_parity.cpp": {
+      "sha256": "ad514dfaf2d773b89f25f7b209615e26c81c4c5e42d4f6472488eca231eda2d3",
+      "bytes": 4502
+    },
+    "src/kernels/iq_multi_parity.cpp": {
+      "sha256": "df320364c11b04fc4e952b98eaac0fad712e2a0515c4bae89e125ce1af36f976",
+      "bytes": 21079
+    },
+    "src/kernels/gdn_parity.cpp": {
+      "sha256": "ff09f13f08acebcfc2bc7746d6f231444e60f4a65f7bceae34eda60216c6cff8",
+      "bytes": 30140
+    },
+    "src/kernels/qsa_prompt_attn_parity.cpp": {
+      "sha256": "63d0179f96822a24b6ece7b02eac8aa3a3b673e9c30263da4b20dc47e9ee445c",
+      "bytes": 17652
+    },
+    "src/kernels/gr_parity.cpp": {
+      "sha256": "2df8544e464257b3bd8ebdad906544f0d8c7016bdc0b9abd8bd1a3c5c966d494",
+      "bytes": 47591
+    },
+    "src/kernels/qsa_parity.cpp": {
+      "sha256": "f01051eda54857dc88a3c1aff29434b1ec0eae2811066c8b2f2d7e18489dc3ef",
+      "bytes": 91805
+    },
+    "src/kernels/s2_gemv_parity.cpp": {
+      "sha256": "3b7f7f5b1fdbcb24962ceb4cfc659e8660a002f538bc181fb2f791560a2fcacc",
+      "bytes": 8202
+    },
+    "src/kernels/native_grouped_parity.cpp": {
+      "sha256": "1dfda31cc3f469b3de7e641657f3b189b099acd027eaf894e75335ae4f388cd5",
+      "bytes": 17490
+    },
+    "src/kernels/mmvq_multi_parity.cpp": {
+      "sha256": "012120687ed2970c7f6be152477ee279aa4240663a08bcdc5e076998e3021b8a",
+      "bytes": 13227
+    },
+    "src/kernels/ple_fp8_parity.cpp": {
+      "sha256": "cc9f2003628c6169a38464d2e65b28237311d92fa92f6b4fdbb8984d775a168e",
+      "bytes": 4406
+    },
+    "src/kernels/mmvf_rows_parity.cpp": {
+      "sha256": "1ee1c71a01e306fc619958ea0a9e36517db248afadb30668f3931ce8ec2be225",
+      "bytes": 4306
+    },
+    "src/kernels/ngram.cpp": {
+      "sha256": "a457b8b5d90668ec1bdb87301915029ea1f3c075c99c7afc7ef1d4dbd8e6c460",
+      "bytes": 28626
+    },
+    "src/kernels/s_gemv_q8k_parity.cpp": {
+      "sha256": "da527cedd708f376a2fed8ecd62859fa5e462dd853f1fab72e39a15cc07de566",
+      "bytes": 17733
+    },
+    "src/kernels/kv_q8_parity.cpp": {
+      "sha256": "acb2310d93f60f5638941e350d1dd29b860c9575202bf264dc03c37efe95c04f",
+      "bytes": 8622
+    },
+    "src/plan/plan_main.cpp": {
+      "sha256": "8687284d95632f2908af9b9ff6680448d3e48726cecfa17211339cde36ce094a",
+      "bytes": 3406
+    },
+    "src/prefill/prefill.cpp": {
+      "sha256": "1a8855dd4e1d6116f10060f2be2110014ecc2afb9e80c9164fc0689c8f175b42",
+      "bytes": 218451
+    },
+    "src/prefill/wmma_gemm.h": {
+      "sha256": "57bd2a9caf6e179b837680b908d830d3c28c2bcab82c6f3b7d7c71f7e7cad0de",
+      "bytes": 3556
+    },
+    "src/prefill/gemm_bf16_parity.cu": {
+      "sha256": "6000971002b62f82786e8ef9e259c4bd98c7b39dc51273638453fcd6df999213",
+      "bytes": 7338
+    },
+    "src/prefill/moe_fused_iq.cu": {
+      "sha256": "07bb482fe3a77bc7987dfd6aac84aa561a9e15e6963d491b4ec6c025eda1c9b7",
+      "bytes": 60118
+    },
+    "src/prefill/hipblaslt_tuning.hpp": {
+      "sha256": "929ddb10da613a526652af7ca000775576d424caec729ebc294ebed2891518de",
+      "bytes": 5498
+    },
+    "src/prefill/ggml_cuda_host.cu": {
+      "sha256": "6ea66ed71f8ea15c6f7bada00f8aef2b603c29bd2686ceecbc69c2bbf15dd630",
+      "bytes": 5874
+    },
+    "src/prefill/moe_mmq.cu": {
+      "sha256": "f166f920c9434af7d816e0d973af366888086b29a21744b6ecb6a7aa1f2a95f1",
+      "bytes": 15405
+    },
+    "src/prefill/gdn_rec_parity.cu": {
+      "sha256": "95d482c4d73bbd8caaac7131e55352933f3902d709ae633828c345b15a4a58d0",
+      "bytes": 45732
+    },
+    "src/prefill/wmma_gemm.cu": {
+      "sha256": "5e5f2266d652971a0d0cb294b4731a8b198e6949c9c0781f89d95b0d51970672",
+      "bytes": 37370
+    },
+    "src/prefill/moe_fused.cu": {
+      "sha256": "08f0a5a410f6e130a3fd740e2350cb0d729141be9189a5b0eeb719d957ad9ddc",
+      "bytes": 36746
+    },
+    "src/prefill/mmq_resident_sort.hpp": {
+      "sha256": "a9f3302e6fffba281134a4a1d101f671da9fe4e834c4bc2a22f6928b41bacc29",
+      "bytes": 2606
+    },
+    "src/prefill/kernels.cu": {
+      "sha256": "8a1510fdb614ca941a1cb16abfe863b160aae8c373af684e99936275ddd2d31c",
+      "bytes": 94642
+    },
+    "src/prefill/gemm.cu": {
+      "sha256": "6f73546e4b654a9cc81f4b333a09530c7425e13f6ce33ac16ecb88a05b07fabd",
+      "bytes": 56320
+    },
+    "src/program/generate.cpp": {
+      "sha256": "614034787daa9e5c9a114dc36845cea821f01f44a84b7d1aa2fb6597fd0c671e",
+      "bytes": 753210
+    },
+    "src/program/conv_cache_test.cpp": {
+      "sha256": "cc4f1115f93c0ed503abb7a373c3c423317ab05ae41df1d70988d52803f9aece",
+      "bytes": 4122
+    },
+    "src/program/message_boundary_test.cpp": {
+      "sha256": "0ea5a682eb01ad3f6407617897b428eb8bc1111ba6cd04b2f8fc6b7995799951",
+      "bytes": 1455
+    },
+    "src/spec/draft_policy_test.cpp": {
+      "sha256": "bc61c48e38e72a89203bdba71fafff7d0dbf49badbe372a08e5e2d392dbd4937",
+      "bytes": 4390
+    },
+    "src/spec/suffix_drafter_test.cpp": {
+      "sha256": "f3bcb731e7afae5350e849116d115def713507e5d1e636f90b35966ed59fe9ae",
+      "bytes": 7490
+    },
+    "src/spec/draft_source.cpp": {
+      "sha256": "ed2669b4dccf7a1686af56776520b237a50d6244e543078c916c19a6a4660474",
+      "bytes": 1155
+    },
+    "src/spec/controller.cpp": {
+      "sha256": "9ea393b4d369ddce11315032695899a51deeb697e1a7745dc397724f4db7351f",
+      "bytes": 3479
+    },
+    "src/spec/draft_policy.cpp": {
+      "sha256": "815e3d141418791d58064e129960958f5d5a005acbc3a4475d8500a07730e25e",
+      "bytes": 6199
+    },
+    "src/spec/controller_test.cpp": {
+      "sha256": "8c7674086900898bb67afced50e76812b5e6848f490c95526397497475a1d7b4",
+      "bytes": 3947
+    },
+    "src/spec/suffix_drafter.cpp": {
+      "sha256": "aeee3eb16627642e9e07c9765fd4946938b5c764f51304500403908d75e67325",
+      "bytes": 3512
+    },
+    "src/platform/direct_file.cpp": {
+      "sha256": "be3fa0296a934b797744e365b9848fcfa6d3a48f8304defbcb30298c7140465b",
+      "bytes": 12461
+    },
+    "src/platform/memory_test.cpp": {
+      "sha256": "61c97fc02e353f5f070918708bb7b03a1988f65c0fd5a4024ddd5e0797f0dbcc",
+      "bytes": 3260
+    },
+    "src/platform/memory.cpp": {
+      "sha256": "83d5ee07206e13247c30513127cd69e0102df2870a700aef87e36eb28892e30b",
+      "bytes": 6686
+    },
+    "src/kernels/cpu/iq_avx2_parity.cpp": {
+      "sha256": "fb4e0b0629e749b816c4ec71da836f383330cf93aed49a11d03607937e1232d9",
+      "bytes": 26145
+    },
+    "src/kernels/cpu/router_dot_parity.cpp": {
+      "sha256": "1d14ce8bef7dd769bdd4ada8ba97caad67be28a86651e96b2b8a7bb219f8c19e",
+      "bytes": 3201
+    },
+    "src/kernels/cpu/iq_avx512.cpp": {
+      "sha256": "c57d176884fcd34ab730e4684fb560a21aa1ec2a5dde8759a1705c0344658b96",
+      "bytes": 15360
+    },
+    "src/kernels/cpu/pool_affinity_test.cpp": {
+      "sha256": "579f024bb699958e592225053fe48a355c9a8d6303a2abab528c4742f5c14fa5",
+      "bytes": 7197
+    },
+    "src/kernels/cpu/kq_avx2.cpp": {
+      "sha256": "9bdade163b90b219ab3be746818cb2e6e9bca93813f69e2cb4e8e448b633c4f1",
+      "bytes": 13259
+    },
+    "src/kernels/cpu/q2_avx2_rows.inl": {
+      "sha256": "efc28c0975d03c276924dff7f29c26e3b6725c2718604db57e3dbe4250b8b7db",
+      "bytes": 3195
+    },
+    "src/kernels/cpu/iq_avx2_rows.inl": {
+      "sha256": "94da07f977ef20288d65747604f9c3a7a87cba3237f36d216dbb624bddd9be23",
+      "bytes": 16472
+    },
+    "src/kernels/cpu/expert_layout.cpp": {
+      "sha256": "dee83ec3931f1002a314c93b2a463cf0400e0e089cd3b7931c48f7ee5fc0f43a",
+      "bytes": 16941
+    },
+    "src/kernels/cpu/expert_parity.cpp": {
+      "sha256": "75bd21e3e73d294669dd795832cb174eaecee286c75bb813f80af8d52e135031",
+      "bytes": 8348
+    },
+    "src/kernels/cpu/q2_unpack_spread_check.cpp": {
+      "sha256": "8ceaa35bb1e37f2bc8a2282332e77729906347cae26df62d5dddb0439ab1021b",
+      "bytes": 3869
+    },
+    "src/kernels/cpu/q2_avx2.cpp": {
+      "sha256": "77c58185b203f9f2fc1bdd435e1acc85baeab2ebb98d39e5e7db9fd9fc82ff78",
+      "bytes": 15640
+    },
+    "src/kernels/cpu/q2_bitplane_parity.cpp": {
+      "sha256": "914670576a4e4e7ad8a349133eaabdca62a9b66547267e580a37fca51bb856e8",
+      "bytes": 4906
+    },
+    "src/kernels/cpu/expert_multi_test.cpp": {
+      "sha256": "b39500f0d1084f2843cdbba4700a79b608f053a1a8625afd724174300c48fea7",
+      "bytes": 3853
+    },
+    "src/kernels/cpu/expert.cpp": {
+      "sha256": "9bcf5d889818ef3cb9619df6536e8844d151714803ac8930eada115a61b62e48",
+      "bytes": 34941
+    },
+    "src/kernels/cpu/kq_avx1.cpp": {
+      "sha256": "3e7b6c1dcc4b2df972704c0d69da5703cf4adad2aff391a151c336c9ee060640",
+      "bytes": 3128
+    },
+    "src/kernels/cpu/pool_affinity_linux_test.cpp": {
+      "sha256": "33305144a4d15b4bd74027f42d0a7daee05aeac01053b377fe02f848f90de465",
+      "bytes": 11355
+    },
+    "src/kernels/cpu/pool_stress.cpp": {
+      "sha256": "21fdb493bc6aab804583c38a3f8befba418becb67243452d61a6fa3b8a32d88b",
+      "bytes": 4193
+    },
+    "src/kernels/cpu/pool_affinity_linux.hpp": {
+      "sha256": "931848c9fb4a4bdb1ebbe9db47bff05428595231bcca65b66a5b7ec301f7cae0",
+      "bytes": 2549
+    },
+    "src/kernels/cpu/pool.cpp": {
+      "sha256": "c91ba11d4ee91adffe07387506e44825ef89839a8112c7802aba2959aedbef54",
+      "bytes": 38852
+    },
+    "src/kernels/cpu/pool_affinity_win.hpp": {
+      "sha256": "63a3e8d6346d2887b6e139638ad74ab5ce005be20f6c0d4664c16938a84abe6f",
+      "bytes": 2796
+    },
+    "src/kernels/cpu/iq_avx2.cpp": {
+      "sha256": "bbcaeacfdb185527811640254e832bf04da1ce87ca22012603a8898a27cf91bd",
+      "bytes": 21307
+    },
+    "src/kernels/cpu/native_expert.cpp": {
+      "sha256": "74ee06c644527081a51c141d4b2bd3fa6ca1006a10eed69e25c3bf92ab1a2c13",
+      "bytes": 10355
+    },
+    "src/kernels/cpu/pool_test.cpp": {
+      "sha256": "d1f225f1b5f5e4ec2805843fc3a49cfc3a53788f15e243c76c63b02f2ed913ef",
+      "bytes": 10399
+    },
+    "src/kernels/cuda/cvec.cu": {
+      "sha256": "bc81bc52db8c2889756ff63bea6e3312dfa7cc3251a400e63fbbac5084e7335d",
+      "bytes": 7119
+    },
+    "src/kernels/cuda/fused_gr.cu": {
+      "sha256": "af5c1e5d6db24d50b1e550f9de73802ed2aa1b66aaf3c0d8f8a4dea2e431e314",
+      "bytes": 96472
+    },
+    "src/kernels/cuda/s26_tsum.cuh": {
+      "sha256": "9d48c241a67096c4d57d10e0a0e7f8f20197ac91754c32889527c0550ce0a695",
+      "bytes": 3159
+    },
+    "src/kernels/cuda/native_qsa.cu": {
+      "sha256": "91a21d493e9896b486e106ab53b26a4df9dfebb369880842a1a9add79c7604b4",
+      "bytes": 8423
+    },
+    "src/kernels/cuda/native_qsa_score.cu": {
+      "sha256": "ca180366923d56e77f68cf7ab4999edc8222894af3e4534b010e7e6f8d156e2c",
+      "bytes": 9615
+    },
+    "src/kernels/cuda/native_gdn_preprocess.cu": {
+      "sha256": "940aa60cd42e77ad7f4b5a6e2fd8177b80016975d2aaf55ed7a620f6437f27c4",
+      "bytes": 9303
+    },
+    "src/kernels/cuda/native_gr_postops.cu": {
+      "sha256": "9b30bb62ee11847af7ba030d3249de3924a1e8ec235c17b5f3f490fda93f67d8",
+      "bytes": 6795
+    },
+    "src/kernels/cuda/s2_gemv_fast.cu": {
+      "sha256": "ff3ab5c5b0da5b25aa73f7da3a86894c93960efef3b8c71463d501c1e8adaafe",
+      "bytes": 7297
+    },
+    "src/kernels/cuda/native_mmvq.cu": {
+      "sha256": "c482de8c55586edb15bde392281cbd29ead3e9f02289321a58d61172859de556",
+      "bytes": 102319
+    },
+    "src/kernels/cuda/qsa.cu": {
+      "sha256": "dc7ff0992355ec744bcdcb919f50cf8925a340438e0c5209ae917177d938295a",
+      "bytes": 44124
+    },
+    "src/kernels/cuda/dequant_bf16.cu": {
+      "sha256": "c28f2909195bab3dba10ec7ca3589410b44484b777f259e80ee0e11b61c2b765",
+      "bytes": 17032
+    },
+    "src/kernels/cuda/elementwise.cu": {
+      "sha256": "39b69fed53a204e6805550f9ed57f3ab6d93dc84ef6aff8d9332f9c015e99ed2",
+      "bytes": 22275
+    },
+    "src/kernels/cuda/s2_expert_grouped.cu": {
+      "sha256": "63a9920708746ed2511a28a6a356ee48a49f75c4d2c77f35b824771a1f57d7b7",
+      "bytes": 66657
+    },
+    "src/kernels/cuda/bf16_gemv.cu": {
+      "sha256": "1408ce4707d9d03bc3d752773401afbb1170b0cf1fc3b53fb95cab9aff652c53",
+      "bytes": 7138
+    },
+    "src/kernels/cuda/native_router.cu": {
+      "sha256": "9ae53693e258ccaf352b5ba284421f4ce84672a868daddb46db7feeafacd7b01",
+      "bytes": 8112
+    },
+    "src/kernels/cuda/router_top10.cu": {
+      "sha256": "4fa8260d101ba1d5c82e9ee1ee6260ca3f8a7d8020493254682dd0e597c5e94a",
+      "bytes": 24728
+    },
+    "src/kernels/cuda/qsa_prompt_attn.cu": {
+      "sha256": "966a91bb55ff49b5b99eaf8e0fcb98bfab2727887b2fb5bd4a72bd2b68ce421e",
+      "bytes": 76340
+    },
+    "src/kernels/cuda/native_rope.cu": {
+      "sha256": "afd49a84a3a4f0dc8cd618329b07b44c2fb59c11212d05919e7ffc6345961768",
+      "bytes": 12716
+    },
+    "src/kernels/cuda/native_qsa_indexer.cu": {
+      "sha256": "36491c68a69d04f5a73608f89a845488b6770b3b0913dca8fbe653bc06c1fc43",
+      "bytes": 18230
+    },
+    "src/kernels/cuda/gdn.cu": {
+      "sha256": "0ed432dfd55d3d758fe0661fb7f4bc951bd57cd23adf73c2dfbe323ba1c0bbfd",
+      "bytes": 11877
+    },
+    "src/kernels/cuda/gr.cu": {
+      "sha256": "452c9b6f1b49130f15eaa84c6470a346604579f973633de453faecff91d32b0c",
+      "bytes": 27311
+    },
+    "src/kernels/cuda/qsa_decode_attn.cu": {
+      "sha256": "c2dad92763333743b6c76cf05948c6fdcf706e28a8884353f78f8abd3de5cfa3",
+      "bytes": 33727
+    },
+    "src/kernels/cuda/verify_kernels.cu": {
+      "sha256": "1f7a650452510af9892b9636534c8086fd80578ddee1733022e926f3285ae15c",
+      "bytes": 58124
+    },
+    "src/kernels/cuda/ple.cu": {
+      "sha256": "ca887e5837f70ee4198a7a24329daf4f028744d443e898edb53febe7ba016382",
+      "bytes": 21748
+    },
+    "src/kernels/cuda/s2_gemv_q8.cu": {
+      "sha256": "c5123b1a7373acad6e62c701bac3ed04f90c1ed5702104008892125de052733d",
+      "bytes": 4735
+    },
+    "src/kernels/cuda/native_gr_norm.cu": {
+      "sha256": "15648e96fadfa771cb68f96ef0dfe6aab9c7c4e3b91d0271d2122cd246df80b6",
+      "bytes": 4611
+    },
+    "src/kernels/cuda/native_flash_attn.cu": {
+      "sha256": "d848cc229226e499405b50050e6baacd4ca6031087b45983065319c16b06b9bf",
+      "bytes": 10153
+    },
+    "src/kernels/cuda/shared_expert.cu": {
+      "sha256": "da071b470c5caa2e00d838d3d3dc9ebf0e2080bc4a02bd103fb1340e6e8da25f",
+      "bytes": 23020
+    },
+    "src/kernels/cuda/sampler.cu": {
+      "sha256": "0804c1e735be50dde1b99816553a8ec3c70f48cf0f9cade447d7080a9f048530",
+      "bytes": 58609
+    },
+    "src/kernels/cuda/native_gdn.cu": {
+      "sha256": "0478b434053e080890ceed248581bbc67f4ce6b92ce29c09706180fd33bd7270",
+      "bytes": 5813
+    },
+    "src/kernels/cuda/iq_kernels.cu": {
+      "sha256": "fd30a4ae7f69136430b12a1b6f4ad7b829c96522123d669ab710794a0839c4f0",
+      "bytes": 193516
+    },
+    "src/kernels/cuda/s2_gemv_quads.cu": {
+      "sha256": "3633ad7b7006fdfc96e7b1aa06733168e2292a5b700c49ece60e121c3db4280c",
+      "bytes": 4712
+    },
+    "src/kernels/cuda/fused_gdn.cu": {
+      "sha256": "0b840f8583c28bb16b7e8bd7a77fbb379bc9c5d331f061a5f31f459f97236abc",
+      "bytes": 8343
+    },
+    "src/kernels/cuda/quantize_act.cu": {
+      "sha256": "207d0e2ec4b0fca136d03bc6bee10b625fe01683f996eb317af1ca5a5f25eb67",
+      "bytes": 17199
+    },
+    "src/kernels/cuda/kv_q4.cu": {
+      "sha256": "e055aebc0316c219d0a005b84824d8991b23107ba264c80c7090dc1c52574427",
+      "bytes": 12205
+    },
+    "src/kernels/cuda/dequant_s2.cu": {
+      "sha256": "a32870e7c7fb7deab1bb93e36ba15d6679ba3b5b2055ea0ab0b3e88c421d2f63",
+      "bytes": 2244
+    },
+    "src/kernels/cuda/s_gemv.cu": {
+      "sha256": "46c946cff34b50f252a5d4a6b2f99e0d30b78a6ad741919417566ccb43017e40",
+      "bytes": 40810
+    },
+    "src/kernels/cuda/s2_gemv.cu": {
+      "sha256": "4d21a4e14e166b02652719c095b25fa7f346c3d0b3dd1009e050e793b2167b9b",
+      "bytes": 2337
+    },
+    "src/kernels/cuda/qsa_select.cu": {
+      "sha256": "10fd2dca11007b515da1fbb9192616cb63e67491a30bcb8e4754284628846a5b",
+      "bytes": 67352
+    },
+    "src/kernels/cuda/rope.cu": {
+      "sha256": "8b72c00ff58b885e06561f01c3474cd9d9731c0b42abdc635fba7cef84d262ba",
+      "bytes": 7070
+    },
+    "src/kernels/cuda/kv_q8.cu": {
+      "sha256": "52610aee08ddf7597a921f76a02270811d967beb2c5091a089fa0e45281a7b8a",
+      "bytes": 8030
+    },
+    "src/kernels/cuda/kv_stream.cu": {
+      "sha256": "1e4b9c67666b4f460898429a684f4ce7a3c8fc506538450f99da46adaccd66fc",
+      "bytes": 12980
+    },
+    "src/kernels/cuda/native_ple_postops.cu": {
+      "sha256": "91849f4257d6ee9c85b1dc04cb16397963eac51d725aa31575e63c8f0d0f56f4",
+      "bytes": 11262
+    },
+    "src/kernels/cuda/native_bf16.cu": {
+      "sha256": "7cec51c3e6babe0a9fad3b2d317eddfc64e893223d05c460c8a2495a7f906fde",
+      "bytes": 18903
+    },
+    "src/kernels/cuda/native_moe.cu": {
+      "sha256": "45940b697cfde1d8032bd42ef206de548756429c0c472a61766837986224cc77",
+      "bytes": 9581
+    },
+    "include/strata/ngram/ple_reader.hpp": {
+      "sha256": "d19b99a681a533f47144293bb170913c1496b5e0c344aed097ad1418375f7498",
+      "bytes": 5338
+    },
+    "include/strata/core/graph.hpp": {
+      "sha256": "21fb807b9c3cbd8665b14145ca19d4d9a93fa897d378042254f4e4cb1f9060a4",
+      "bytes": 5749
+    },
+    "include/strata/core/exchange_storage.hpp": {
+      "sha256": "30e4c42ac268fc30af4501ee2036d040173a5fbb67de3429caddd8285f2eeaed",
+      "bytes": 5345
+    },
+    "include/strata/core/vmm.hpp": {
+      "sha256": "39ebc6f9baeded618ca453171d7c9c5b45da6c97c43d965f5a66f09949920852",
+      "bytes": 3209
+    },
+    "include/strata/core/emulate.hpp": {
+      "sha256": "eb3df4efe89642f069420e0f68ec526b33d4cc66f9a6b26de0583492b5758a77",
+      "bytes": 1639
+    },
+    "include/strata/core/on_device.hpp": {
+      "sha256": "f9317a4c19eb32924462b8aa9829a97528064f6a8fcdb64a746bb13a60c773a2",
+      "bytes": 843
+    },
+    "include/strata/core/expert_source.hpp": {
+      "sha256": "468e02520927f189b80f8e0ccb499ac1ae95820b9c19585fc1764e71e4f3e654",
+      "bytes": 51566
+    },
+    "include/strata/core/native_dense.hpp": {
+      "sha256": "68127467942b068966834c615c6c681c2ce5ff6a12890f1b3974c3b4ba14199b",
+      "bytes": 2601
+    },
+    "include/strata/core/coupled_draft.hpp": {
+      "sha256": "9b1773764c3867599a42a48aa41444bf79441254e9250de542d5427f093f599b",
+      "bytes": 5109
+    },
+    "include/strata/core/verify.hpp": {
+      "sha256": "5a959164cbaed0feee14463ea036c0002816993a21b2f987d6dc57566fceef13",
+      "bytes": 31969
+    },
+    "include/strata/core/expert_cache.hpp": {
+      "sha256": "ff3cd4357e397ff944bc8c814e769975ecd243b3445b050234cbb62d9260bd54",
+      "bytes": 17437
+    },
+    "include/strata/core/pinned.hpp": {
+      "sha256": "a6a90004da834203e2e27180cda3d55f1b0a8245cc552c161a90371c06b36e1f",
+      "bytes": 11633
+    },
+    "include/strata/core/conversation_buffer.hpp": {
+      "sha256": "12f1abac2ec75cc71e8cf308a5a691923d8b617317560e009a41f713809f49d4",
+      "bytes": 6741
+    },
+    "include/strata/core/conversation_cache.hpp": {
+      "sha256": "5d0feb469ffed2c0d01ea781dba06e864f4a29237646429261ff6ea3e56fdf2c",
+      "bytes": 13763
+    },
+    "include/strata/core/remote_expert_opt.hpp": {
+      "sha256": "76e7d8de1ab76f1130609bc84edeefcf9ca77952d4448dbd625d8a5c3b36c4df",
+      "bytes": 2059
+    },
+    "include/strata/core/session.hpp": {
+      "sha256": "ffe954333948aee170399252afaad2e8b2b1e81fb31ed9c4358597eba4ca2e3b",
+      "bytes": 30344
+    },
+    "include/strata/core/layer.hpp": {
+      "sha256": "b273603e633e63f93c877b278dd7f21dd4bb2909b4e94d8f174d84b2a975bfa2",
+      "bytes": 43276
+    },
+    "include/strata/core/dma_batch.hpp": {
+      "sha256": "9b485734a866bee6ef0c927b838905ab7770cfdc1f7a7b19b97c4dea4fbbb07a",
+      "bytes": 5861
+    },
+    "include/strata/core/conversation_snapshot.hpp": {
+      "sha256": "c403e99ab515566e1314a3c485f8974d25bb0194a181f1e8ab804fc76ce8f665",
+      "bytes": 9145
+    },
+    "include/strata/core/native_head.hpp": {
+      "sha256": "d80052035aeba3dbbc90cf84549d8424a10335d28fb04140e2265ba7819d27dc",
+      "bytes": 2695
+    },
+    "include/strata/core/remote_experts.hpp": {
+      "sha256": "5760445905fdfdc0adb652be9817ea317e5b69ad7b9d5c91a3077d9efe5ba2e1",
+      "bytes": 3814
+    },
+    "include/strata/core/conversation_file.hpp": {
+      "sha256": "2c6ddbb2bb1f44331297a2cf970504da67ce501180fe1513aeb59f71cef8f942",
+      "bytes": 15876
+    },
+    "include/strata/core/weights.hpp": {
+      "sha256": "071d07c9f15d122265d7b1b90ff96125559a7d6ebbd8ec3f3a2b6e94dc17aef1",
+      "bytes": 8139
+    },
+    "include/strata/core/peer_experts.hpp": {
+      "sha256": "02ef10cd0b6a9c0ee8b6de3a4489e5fdabb108f0182539fd4ab49705428e7f59",
+      "bytes": 5871
+    },
+    "include/strata/core/layout.hpp": {
+      "sha256": "20afe27849aa28de7ec2f19fbf4be212240504008c643331eadbc10934821c0b",
+      "bytes": 4392
+    },
+    "include/strata/core/arch_defaults.hpp": {
+      "sha256": "a867fca72e9d1d839c6f6bb48bac4340d13a59ea8818d5e6857149cad3c7faf9",
+      "bytes": 1668
+    },
+    "include/strata/core/mtp.hpp": {
+      "sha256": "66ac9203593bc33ad5d74db11617d41df4802986b7acce315b47090bd68f2282",
+      "bytes": 17359
+    },
+    "include/strata/core/device.hpp": {
+      "sha256": "382f04df3a95349bf03dfce47402753aa2ed7e958dc6b12d0830ff1bab40d059",
+      "bytes": 4647
+    },
+    "include/strata/core/hit_hook.hpp": {
+      "sha256": "4c006f473d71a79cf03d9ce07cb246dc8b5ec10269fd335960a27733d51bc033",
+      "bytes": 2531
+    },
+    "include/strata/core/conversation_memory.hpp": {
+      "sha256": "b4c784080bfda39adb7a2fd4c64bac27a77bb7a6f4557b609e08c2afcb7f9954",
+      "bytes": 642
+    },
+    "include/strata/core/progress.hpp": {
+      "sha256": "cf0376eb23e2fd43a062c1fb40d3ac7885ef8283975051af51034f3f7182d622",
+      "bytes": 3704
+    },
+    "include/strata/artifact/dequant.hpp": {
+      "sha256": "084ee6d3cb5056cca5dce6a6c40b9047d01f2560b033afb35eb56c64985a69f1",
+      "bytes": 14449
+    },
+    "include/strata/artifact/gguf_split.hpp": {
+      "sha256": "6280aabf7e4b77447caa5d046d7b7389c82af08b2d02c004897d0d4826a09760",
+      "bytes": 2425
+    },
+    "include/strata/artifact/gguf_reader.hpp": {
+      "sha256": "fc8453a95677e797c8fb1198bfb47d715b73a53446d39a29920c372180ca5ee0",
+      "bytes": 21441
+    },
+    "include/strata/kernels/quantize_act.hpp": {
+      "sha256": "baad6fe6c691f8f5aee2d6dbbb3513eead12c754b485ee41af4618d5035772f7",
+      "bytes": 3813
+    },
+    "include/strata/kernels/qsa_prompt_attn.hpp": {
+      "sha256": "a535cf4bf4fd5770e8726327f5dd64145e22478b2d711441d066ad3082f79d55",
+      "bytes": 2226
+    },
+    "include/strata/kernels/native_qsa.hpp": {
+      "sha256": "119fd52ad31c7151c1061af997e41e0db43c7312fc644c5d156a732b8f441ea9",
+      "bytes": 2013
+    },
+    "include/strata/kernels/f16_bits.hpp": {
+      "sha256": "0f74e6dd832da427b681c9971265a0af1a91198694fdef3654d860b98863fc8c",
+      "bytes": 5334
+    },
+    "include/strata/kernels/native_moe.hpp": {
+      "sha256": "170dbcaf0d71c1cb1edfdc6fb8407636160218fee1db28c9aa9a74ed17207e93",
+      "bytes": 2137
+    },
+    "include/strata/kernels/s2_gemv_q8.hpp": {
+      "sha256": "5c2ccbdc5b3f3a66b9afef5bc799ae2a83bcb2103b258bb84e8d82aad06b4eb1",
+      "bytes": 1059
+    },
+    "include/strata/kernels/elementwise.hpp": {
+      "sha256": "374e7d13d2c7b76544ff9a1367a7300343389372fa90f4b7f3a6a9216a5cdd8e",
+      "bytes": 9740
+    },
+    "include/strata/kernels/bf16_gemv.hpp": {
+      "sha256": "97e5fac5c5b8dbd86b4e104bf4b69155424bc6d28d0a991240bd9912349f6e6f",
+      "bytes": 4460
+    },
+    "include/strata/kernels/kv_q4.hpp": {
+      "sha256": "f6e35e2764934c0c4949f2651513dc9a90c5b4cf764c92916de4b0ea9a80a22d",
+      "bytes": 3705
+    },
+    "include/strata/kernels/shared_expert.hpp": {
+      "sha256": "1aab416f17dd889456f43286d1d4ed40b9a5af2df68543fb3e3026306fab8cad",
+      "bytes": 7147
+    },
+    "include/strata/kernels/gfx_arch.hpp": {
+      "sha256": "ef3e926c0b0e6efa8d17e87e2ccec573e85c63feba30acd3db137b108ef9609d",
+      "bytes": 1579
+    },
+    "include/strata/kernels/rope.hpp": {
+      "sha256": "bd9094c0f0f761971a6760fde2b84a5660c934ce9a654dc287c686acd284a65a",
+      "bytes": 3707
+    },
+    "include/strata/kernels/native_gdn_preprocess.hpp": {
+      "sha256": "7533d8464b6ae8e2800e43ee3036d23f21181c2472c069d19bacf115beeafc69",
+      "bytes": 2004
+    },
+    "include/strata/kernels/qsa.hpp": {
+      "sha256": "87c02222284f842fcecb46a422b119af769c72c3914edc8da5b2ee782456dc74",
+      "bytes": 25547
+    },
+    "include/strata/kernels/s2_expert_grouped.hpp": {
+      "sha256": "74802f312c20daa90b7fbacba4a3357c8e94c7ecdab75f402be507dd303a8193",
+      "bytes": 10871
+    },
+    "include/strata/kernels/native_qsa_indexer.hpp": {
+      "sha256": "5f29b2ebbf392bdc0419c651b515b447d57b935fce4af300bf621a72e039e2d6",
+      "bytes": 3325
+    },
+    "include/strata/kernels/gr.hpp": {
+      "sha256": "a6d4cf421b8e30d7ecc436c011fd6a8bbe8768c82cb815d9483724085efbdc5a",
+      "bytes": 8523
+    },
+    "include/strata/kernels/fused_gdn.hpp": {
+      "sha256": "595205dcf531d8fb758bcd7b2d3ac4e4158bd06f20160199e592824d530e2078",
+      "bytes": 2197
+    },
+    "include/strata/kernels/native_flash_attn.hpp": {
+      "sha256": "6cc7bb288fc263ee800f5b5329bcc8d139ddde7e31a022364850cf80b1e5f7ff",
+      "bytes": 1990
+    },
+    "include/strata/kernels/mrope.hpp": {
+      "sha256": "f7add5611f54af2434daa1ad711fe441e214693bd33524a12c56058807fd381c",
+      "bytes": 3820
+    },
+    "include/strata/kernels/bf16_bits.hpp": {
+      "sha256": "813b51f17c5c264d642f4d77b3d6e5f35e7ea7310ba87b18b3a2a5bc9185198f",
+      "bytes": 2660
+    },
+    "include/strata/kernels/kv_q8.hpp": {
+      "sha256": "7c70db0cbc1726e244b7085a319e1f0be5c8a3a415a6b0de7db7d0cdbe70e26e",
+      "bytes": 3093
+    },
+    "include/strata/kernels/verify_kernels.hpp": {
+      "sha256": "c6f2a0ac82f90108661bfb591195aca368a04c31258ded645cb987b8ba7205f0",
+      "bytes": 10406
+    },
+    "include/strata/kernels/qsa_select.hpp": {
+      "sha256": "fbd2dea4eebe9c6b1684957f5843abbf7d36630b526c4ecc6f68bb0fbd79d517",
+      "bytes": 4568
+    },
+    "include/strata/kernels/dequant_bf16.hpp": {
+      "sha256": "87597018553357e3df3310b262447420ba7e81f8123fe3fe18a0fec7087c9bbb",
+      "bytes": 1733
+    },
+    "include/strata/kernels/sampler.hpp": {
+      "sha256": "2fadb4618763906f7bb6718db199628e22522f266a52b1ab03f8c87a4e5b9a0e",
+      "bytes": 5727
+    },
+    "include/strata/kernels/ngram.hpp": {
+      "sha256": "46094ecfa258c43b75e9c921379c0decd7c15b060a636bcf1d7ae0ffc8a22829",
+      "bytes": 15850
+    },
+    "include/strata/kernels/s2_gemv.hpp": {
+      "sha256": "cc146b9c652f1ee0c89be65ce179ea4cb31d4b4d32366c07f06b45644bbb8eb0",
+      "bytes": 1460
+    },
+    "include/strata/kernels/native_gr_postops.hpp": {
+      "sha256": "ee47d3a68e720944988bf1151c738fdc68f3696270b47e89ff1f47d404862be7",
+      "bytes": 1854
+    },
+    "include/strata/kernels/fused_gr.hpp": {
+      "sha256": "e8055ea3311bfc0c49ef464141713842da5fdad1e5cddf6a2f573fbf5353ab3a",
+      "bytes": 5070
+    },
+    "include/strata/kernels/router_top10.hpp": {
+      "sha256": "cd0d8e91e702bfa2cfd681d4ccf4f6c4c62af2cd612d2d109e5369845ddf362d",
+      "bytes": 1434
+    },
+    "include/strata/kernels/cvec.hpp": {
+      "sha256": "9f8effb3704845cb294983af4a9737f3066f730adcf15a2894a7597b52d2b3de",
+      "bytes": 3997
+    },
+    "include/strata/kernels/native_qsa_score.hpp": {
+      "sha256": "d57ba2509e97093ed2bfa3cbe73886407211a5d476a0b629ed925dd992369354",
+      "bytes": 1648
+    },
+    "include/strata/kernels/dequant_s2.hpp": {
+      "sha256": "d8f3aa8d610887451f177f05ada1135d52daf21b95a8c2c58686c07403c8013d",
+      "bytes": 937
+    },
+    "include/strata/kernels/native_mmvq.hpp": {
+      "sha256": "86584ee49edc27ad84989b2737eb61c8f0e5b0a477e1b1b2af36494c0b497a97",
+      "bytes": 7854
+    },
+    "include/strata/kernels/qsa_decode_attn.hpp": {
+      "sha256": "6fa4b817f835c43783774d5946d14938f2867d7af16abb4db0f4b75d4622a915",
+      "bytes": 2651
+    },
+    "include/strata/kernels/native_gr_norm.hpp": {
+      "sha256": "12c20abec1952f23f825eefc9e2f676e812417d46922005ce42416212caab535",
+      "bytes": 1256
+    },
+    "include/strata/kernels/dp4a.hpp": {
+      "sha256": "6f8c5d9d502f0d7bcd286a56c1bbaea2c3a55ab2f0d8cea6f0c27db45c7f8ce6",
+      "bytes": 2448
+    },
+    "include/strata/kernels/q8_1_finite.hpp": {
+      "sha256": "6789c75d692ef1cf21a07d8d602e5cf35ad40657b715f8d510cf7ddad1162598",
+      "bytes": 1652
+    },
+    "include/strata/kernels/rope_scaling.hpp": {
+      "sha256": "05a8dcf57c9b12a23128f22e4bef01445c3a37991df5e1ffacd01d077c46595d",
+      "bytes": 11764
+    },
+    "include/strata/kernels/native_ple_postops.hpp": {
+      "sha256": "eeeec9650c6e19402dcec9c4c807ff5a62f0b64b4a3ad86e6a286489ee7af091",
+      "bytes": 2179
+    },
+    "include/strata/kernels/s_gemv.hpp": {
+      "sha256": "369ab6cc010b49ac1d82bb680246e93b4c10f4f7081f56a325f6c7138ab1c3fb",
+      "bytes": 9086
+    },
+    "include/strata/kernels/native_gdn.hpp": {
+      "sha256": "2b65e1b5b689c06d099bc061d746d606dcc5b974a7bffe0820ce01e7295d1971",
+      "bytes": 1109
+    },
+    "include/strata/kernels/ple.hpp": {
+      "sha256": "d044c70b3cc5044ee379d1d817c41c6fce7b0c0db18a1ce6274af3e62629255f",
+      "bytes": 8153
+    },
+    "include/strata/kernels/native_rope.hpp": {
+      "sha256": "06e3fbbc046fe4a3dda4788943285e586d08fe0885cd97cc9c21d132d750c413",
+      "bytes": 2048
+    },
+    "include/strata/kernels/gdn.hpp": {
+      "sha256": "f44626e3f52813b9be289aee72f708e9ad61aa9b3a0e43037ba5ff8b358fc638",
+      "bytes": 5558
+    },
+    "include/strata/kernels/kv_stream.hpp": {
+      "sha256": "24a47cb5eca790fa35b13bbeb12cf3407389c41219899789880d965cf86d8abe",
+      "bytes": 7207
+    },
+    "include/strata/kernels/native_router.hpp": {
+      "sha256": "e5e0a529c11235080ec541cdc65a1ac1c0dba8eb994cf5373609fc8985311502",
+      "bytes": 1044
+    },
+    "include/strata/kernels/iq_kernels.hpp": {
+      "sha256": "00e41a0b6d841cf6c532e012b113f5f0e4e9aa6b9e0d59a077b0e0bce2f1897a",
+      "bytes": 5729
+    },
+    "include/strata/hip_compat/cuda_runtime.h": {
+      "sha256": "e28d27acabe86c578d317b037cedd211869ad7c576ecbde81ca1f71a015a229b",
+      "bytes": 6566
+    },
+    "include/strata/hip_compat/cuda_fp16.h": {
+      "sha256": "5864a3c6a57debde2e84b83702a1467a01130dd1d2cdb70d75695931ca1582cc",
+      "bytes": 39
+    },
+    "include/strata/hip_compat/cuda_runtime_api.h": {
+      "sha256": "153e9ca18085214f68b95183d5ffac1a247c305144fb217bb6c68f8a4e6e01f3",
+      "bytes": 39
+    },
+    "include/strata/hip_compat/cublas_v2.h": {
+      "sha256": "19dd502fb04a49ada7296df1f17e3bc5a3e8d5a7f689f545555750fd20c6283e",
+      "bytes": 2630
+    },
+    "include/strata/hip_compat/math_constants.h": {
+      "sha256": "b72ba65e9a31def2f69a582f159f276dc4fdb1a984433cb2cd299a46a27f522f",
+      "bytes": 157
+    },
+    "include/strata/hip_compat/intrinsics.hpp": {
+      "sha256": "6f01de4466473d8323abff56fe7d33b7cc7fdd00d1bb7dc2fb1c80521db67c99",
+      "bytes": 8363
+    },
+    "include/strata/plan/plan.hpp": {
+      "sha256": "d6eca56c9d00ba3ad13e8a39ef4cb78f8a2c23fd3037e2e951167155a5b3dda5",
+      "bytes": 9396
+    },
+    "include/strata/prefill/kernels.hpp": {
+      "sha256": "3aba3293dc0b6a0c6e9de15ed20ea0aaafd7afe910d3e3925b90e30b4c168866",
+      "bytes": 9619
+    },
+    "include/strata/prefill/moe_fused.hpp": {
+      "sha256": "2809428405209d177a5ded160f62707f21eb344e85c84de8837b2b86ea938f65",
+      "bytes": 4033
+    },
+    "include/strata/prefill/gemm.hpp": {
+      "sha256": "a46c76cad934f4c4114a0f984aee2a7145c8549fc7b1efee16b09d62aab2cfaf",
+      "bytes": 5511
+    },
+    "include/strata/prefill/prefill.hpp": {
+      "sha256": "a96e893c9684c10cd3de7ee1e4f6c0254f5398da23e145b1e3d836a6be8d4665",
+      "bytes": 12181
+    },
+    "include/strata/prefill/moe_mmq.hpp": {
+      "sha256": "26910a9726f6200e41bcb0e80c2066b8b81063691ada8a566060ed614d1fe95b",
+      "bytes": 5269
+    },
+    "include/strata/prefill/moe_fused_iq.hpp": {
+      "sha256": "84d0c99ace277a53deb5d091b2a0a5137fdc390f834815b43e8a5a910f42b4c8",
+      "bytes": 2457
+    },
+    "include/strata/program/logits_selection.hpp": {
+      "sha256": "f023d183fecb0c236dd0941988c672f6096fa92963393d4d879767838313e006",
+      "bytes": 1195
+    },
+    "include/strata/program/message_boundary.hpp": {
+      "sha256": "0d4a3a535adda8bc91ece894c8edafa1b20ff35f9cf30e546a5474d9fbde18d7",
+      "bytes": 716
+    },
+    "include/strata/program/conv_cache.hpp": {
+      "sha256": "b98e3ce0086a009bd0eb7454e849b9bf3f6736a4f35f6b330627f8f6497b082a",
+      "bytes": 5898
+    },
+    "include/strata/spec/draft_policy.hpp": {
+      "sha256": "9f91cfb418cb6ab69e1362ebd3289d77a03f25ed1130b67f1605a3158590ac44",
+      "bytes": 3564
+    },
+    "include/strata/spec/suffix_drafter.hpp": {
+      "sha256": "ab154719dd72b23b9e4e540bc2f923be2bbbbad343b21fcf40116966720f963f",
+      "bytes": 2557
+    },
+    "include/strata/spec/controller.hpp": {
+      "sha256": "e1c8400792ec87882646c96b22d768e2f62a5cfebf4b415798ef177ea6e60cce",
+      "bytes": 3446
+    },
+    "include/strata/spec/draft_source.hpp": {
+      "sha256": "6955d5301aeda3a769f919a6b80d95d141f8c3656e821756bdbaf5eaebe80629",
+      "bytes": 3275
+    },
+    "include/strata/platform/memory.hpp": {
+      "sha256": "3bd4b462469a3bbbc8e9ff25282ab556ba8e700806106b3c4f84dcdc7992729c",
+      "bytes": 3047
+    },
+    "include/strata/platform/direct_file.hpp": {
+      "sha256": "ae9a8999aef1769d729e5d6e4058888a14b758cbce3804b291809b1a521a4253",
+      "bytes": 2391
+    },
+    "include/strata/kernels/cpu/expert_layout.hpp": {
+      "sha256": "dbc6cf5b91367e571ad9cb3be4e4cd851159544186c859a7cd374632a8a63fcd",
+      "bytes": 6565
+    },
+    "include/strata/kernels/cpu/kq_avx2.hpp": {
+      "sha256": "c4cd342ba0f2ffd34f6b5ac9c254c59d0a521370de0d7650f0c28e7a390b55dd",
+      "bytes": 1386
+    },
+    "include/strata/kernels/cpu/pool.hpp": {
+      "sha256": "7873e0ff47007f05437518a40f3f11251473ec5f073299aad21a8baae81f351f",
+      "bytes": 17972
+    },
+    "include/strata/kernels/cpu/expert.hpp": {
+      "sha256": "7c4562778ad0c54726f552042a19a77a274fcd1c07c9aafdb12c5de305a25cf9",
+      "bytes": 12527
+    },
+    "include/strata/kernels/cpu/native_expert.hpp": {
+      "sha256": "711dcaf43608b7d607f05e17f81993356b6fe36f18bcfa64b1ca111e9eeab0bc",
+      "bytes": 2871
+    },
+    "include/strata/kernels/cpu/iq_avx512.hpp": {
+      "sha256": "ede01ee7e474f5d816d9bc6ad6b0804cabd924c69b2b3d536d40f2432410841b",
+      "bytes": 876
+    },
+    "include/strata/kernels/cpu/kq_avx1.hpp": {
+      "sha256": "af289c2fec6ec8e4946352dbbbcc25df41bb57468953589e4b5b7cfe1d0ddbda",
+      "bytes": 1011
+    },
+    "include/strata/kernels/cpu/iq_avx2.hpp": {
+      "sha256": "69724ca08cce10cd49a138f9c43c61bd25423709ef87172e899a6784137613ca",
+      "bytes": 2774
+    },
+    "include/strata/platform/hip_compat/cuda_runtime.h": {
+      "sha256": "d054d07dc83186ca4d85491d2a869629add900a7608e56daac5b443a78c418de",
+      "bytes": 37
+    },
+    "include/strata/platform/hip_compat/cuda_fp16.h": {
+      "sha256": "d054d07dc83186ca4d85491d2a869629add900a7608e56daac5b443a78c418de",
+      "bytes": 37
+    },
+    "include/strata/platform/hip_compat/cublas_v2.h": {
+      "sha256": "1a82bd37bdee4da2da923d768afe9a4a3c4e6d0dcb8e1b0dfbb06137e856c37f",
+      "bytes": 998
+    },
+    "include/strata/platform/hip_compat/math_constants.h": {
+      "sha256": "bb6b8ab8e4de9c5f7b0f6c5d5a828107dda6785dd7730212c06cb3e6e4d8ec31",
+      "bytes": 185
+    },
+    "include/strata/platform/hip_compat/strata_hip.h": {
+      "sha256": "d1ff8af3bbd1a3a53b89b105f0f0528c4a3685aa9415a02985c3789f1b0cb71d",
+      "bytes": 16783
+    }
+  },
+  "baseline_archive_members": {
+    "libstrata_engine.a": {
+      "layer.cpp.o": [
+        "7e8e02b2c10c21abeb3cc9716ee2c118d2df27016848b219b7c8a7bed073e4a8"
+      ],
+      "session.cpp.o": [
+        "1a41753751073cdc92f94830ff8b892f2b31a8155fdc53de29db5e0977230548"
+      ],
+      "expert_source.cpp.o": [
+        "e164f1ad5c21ae65a20de9ac1ba919abcaf6a9c8093ad576a1ab133d85dbd87a"
+      ],
+      "remote_experts.cpp.o": [
+        "4d3c35736b543f64bbd2a1741dc9bc403accc54889d28863e423b2ee6d832b8e"
+      ],
+      "remote_expert_opt.cu.o": [
+        "637f67523cc1e39e4942a01f3916e4a9791fb90e32a46ae9e6e1d231ff49d83d"
+      ],
+      "expert_cache.cpp.o": [
+        "f0a40bdd4f2e776d29808c5462189542a4875d6039a642b551c659a3202ab847"
+      ],
+      "native_head.cpp.o": [
+        "e4ca894d2460cee51dde2544fa6f0ba670703fb928436659c224f1fd73ca797d"
+      ],
+      "native_dense.cpp.o": [
+        "ff894bea6b7294fd84b66611e856fd49dbaa47b5ef4448894c9758f55f152f08"
+      ],
+      "verify.cpp.o": [
+        "fbb528e9020cdd24a4c82bb939b8b75ab2fc26af8bc24970f45bd21075462c98"
+      ],
+      "mtp.cpp.o": [
+        "0a8835a4ec15352526ff11a9c1267406849fa51a292e12d2e5ca5cc60c08cfa1"
+      ],
+      "conversation_snapshot.cpp.o": [
+        "ddf93628358799f60e9968d5e57936e5c3a5a8088a197309757dd871a53b5ad1"
+      ],
+      "conversation_state.cpp.o": [
+        "2b9fab3ad487530daae79095c9f5ef177cf920be674156a621a6c11343eddfd3"
+      ],
+      "conversation_memory.cpp.o": [
+        "862084481af25c9c4ab9e06efc9f907412fb5116d221a7410f5c3eaafb8e8dfd"
+      ],
+      "peer_experts.cpp.o": [
+        "90c070ee334b745b0fdc817019bb310c96efe7ac926687f6e76c295f3595be7b"
+      ],
+      "arch_defaults.cpp.o": [
+        "bd880a62b961f3e985cc45def11cbd06f5da2f5b3c14393128600a9ca641178e"
+      ],
+      "vmm.cpp.o": [
+        "a870665d254870504eec9b9d16e561c83ee4afd3c8c0e59e494e7a6f1a19bbd4"
+      ],
+      "conversation_file.cpp.o": [
+        "194a77eea7a4e07d6161d0b4fd55721b42f03f84a72e69c5a1063f02c03378ff"
+      ]
+    },
+    "libstrata_prefill.a": {
+      "gemm.cu.o": [
+        "9b0d9fb8cf20c97bb81e43b363e6a6b68d32af0d36234b90ed058ad4433ad048"
+      ],
+      "kernels.cu.o": [
+        "044a94744940abaa1178ceb913461fa297a776e1466d4f6d8b4777b2bb16e475"
+      ],
+      "prefill.cpp.o": [
+        "7451d238266502b2a4780246168c69ef15ce3bbf85e178cf82368b5d6e927ec1"
+      ]
+    },
+    "libstrata_spec.a": {
+      "suffix_drafter.cpp.o": [
+        "f3c5fe2e58f00c719137c7db8876e186ac60c9adca600450cf4f7905602af045"
+      ],
+      "controller.cpp.o": [
+        "04e25c95a8e1292884edde09cd12bccfa71b10c99e77f790dc2a67900377d603"
+      ],
+      "draft_policy.cpp.o": [
+        "3c46e0a6ab36392f5da392a53216a019840281f7a21c44baaf9214729eb4db25"
+      ],
+      "draft_source.cpp.o": [
+        "7c79510a92f87d70db97d3f2970a24c5df9e89e95dad685ca8286f92b91d4b08"
+      ]
+    },
+    "libstrata_kernels.a": {
+      "dequant_s2.cu.o": [
+        "caa1cbff86bb5513f525c825ad2ee049fcffeb7b0adc5d06fe1b78966013e578"
+      ],
+      "s2_gemv.cu.o": [
+        "e802739146d6ec7155c99a257feccc21720fcd61fa55b039ca77b6de85d64752"
+      ],
+      "s_gemv.cu.o": [
+        "45517858e8d391bf8150169ae9f8a46284794fbe69a81842d03b597650f5f956"
+      ],
+      "s2_gemv_quads.cu.o": [
+        "7adac682ddfc5b43aa3f5850ad8e06996ae916b094ace0370aca6b37c6e47678"
+      ],
+      "s2_gemv_fast.cu.o": [
+        "e2e16eeb8ec067821e41bcb5a65e0bcd1a6e820844904f81d4c74afb0e3e6b10"
+      ],
+      "router_top10.cu.o": [
+        "9e2d21fcbbc408ccd760fc79200cc848ff1b8b8d79d3cb15d74f485bd15d9839"
+      ],
+      "quantize_act.cu.o": [
+        "adac569f57030d23f4d234995ee74fedc8210530560c756aac47a809d959d301"
+      ],
+      "rope.cu.o": [
+        "cb97336b1f7c1ec41bec2d726a5892f88d3baa7681cba9f84ca2d2f66a56c72e"
+      ],
+      "sampler.cu.o": [
+        "7f51d326842ce7a12da0e487782fe5ecca7c08c67d3ba99aeaa9e4e751a0f3e1"
+      ],
+      "s2_gemv_q8.cu.o": [
+        "440f50fff7f79f481f5cb3f4a49cde5aacc0849095553ae69fda8ef648ae4380"
+      ],
+      "s2_expert_grouped.cu.o": [
+        "a357462751f513afb1e31ac5b3bb91506a76d1e602ccf69151b955b6764ba8a0"
+      ],
+      "shared_expert.cu.o": [
+        "cc40609470870fdda30b6b28160879d1d001e0afc2d2a7b726f5bf5e42f3b20a"
+      ],
+      "gr.cu.o": [
+        "46c7adc574d030db4193b6a085d6c676065f34a386143dfe5344b30334e96586"
+      ],
+      "gdn.cu.o": [
+        "49d1e5a1d7eb12ccda7d87ca5cd89e67224067aef21563291770714de8b7a5fa"
+      ],
+      "qsa.cu.o": [
+        "30f4a6c133d82b3593cc67119222a5cdc88a93228e37ee498b79ed00bb29bf85"
+      ],
+      "elementwise.cu.o": [
+        "a7fc6385374497423fc128748cffce21e7780e68bd90dbd80465402c6780f24f"
+      ],
+      "bf16_gemv.cu.o": [
+        "6a2cb6f983cebc4887ca14e37d03d80740a42b19cb7f854e18c84941a45e1e25"
+      ],
+      "native_mmvq.cu.o": [
+        "1e34b84738fd3e98463f83ba6f21a6c9759cf99730b655edb74e53be3dace8cb"
+      ],
+      "native_bf16.cu.o": [
+        "68535685cb79d53dd2ec32e22c9b26f8c805aca9e17d2bcbfd885bb92619e70c"
+      ],
+      "native_gr_norm.cu.o": [
+        "2dbdd549e66f315e5c6c96d6aa99e144abb9a6a1b66212f5560314d462f6ccce"
+      ],
+      "native_moe.cu.o": [
+        "34ea968573a7db7c54ced50d2d8d3c16035c483ccfcc82d42e0adf5102565584"
+      ],
+      "native_gdn.cu.o": [
+        "f4cb4857a88d20778c160c3c66ebcea61e59d03cf7e8264174a88519c91324e0"
+      ],
+      "native_gr_postops.cu.o": [
+        "006af530ed9b63a8019cda991ff3f18bc985cbbc64e7f3450f7d3e16f5706ee3"
+      ],
+      "native_router.cu.o": [
+        "b84e2fc32e29388f0454e2831d402eafd941f001208244b83801fa7d7df2c306"
+      ],
+      "native_gdn_preprocess.cu.o": [
+        "2cb66326ede2e326c2fbc0327e1c0e56d921641cab062a9133913e2c8dfbde0d"
+      ],
+      "native_qsa.cu.o": [
+        "68cd21ced26b9cd208b7c666e5836fc6cc0e7b424acece8a67bc83bb8d77b3ea"
+      ],
+      "native_rope.cu.o": [
+        "916f0cf1962d3864184ba58da58b6b6e107fc9a930f3f0a7dbb4c080aca15c65"
+      ],
+      "native_ple_postops.cu.o": [
+        "109548c0ca3c16a6f0318e685f3630eeab9e052c48cfef6530dafbfbb8ac4a95"
+      ],
+      "native_flash_attn.cu.o": [
+        "de1dbd3313c92d1406890b877f3c7ef67dbea6c1a125a08b16ebbca429acaedc"
+      ],
+      "native_qsa_indexer.cu.o": [
+        "212370826aa0746b4964c14baa25817471b0977d3f6d27a63ff6499e4af47bfc"
+      ],
+      "native_qsa_score.cu.o": [
+        "46954e7d245809f267a419c4d944d2bd99984cdff693ecc4a924c016932e9a45"
+      ],
+      "ple.cu.o": [
+        "a5d2370ded6ecac5a60fb8c6738c41986949ff7b20893ced1dcfd6809b4dc581"
+      ],
+      "kv_q8.cu.o": [
+        "e442e8fad81c93108bb6d64a70be326a26ff3ad5a583c2590ef6ca79964ff05e"
+      ],
+      "kv_stream.cu.o": [
+        "b0ee285025bebf42d787131e7c4f881a721e37018649fd920711f4b16e6c45c6"
+      ],
+      "kv_q4.cu.o": [
+        "38c1d0ee1f4bef7c75e76df103380da57561af2240eb18ea6b275b85b6e9921f"
+      ],
+      "fused_gr.cu.o": [
+        "47c97120d1a0682888f91c29a67d99bdc9155223a40e3e28b86c2c3310345cb4"
+      ],
+      "cvec.cu.o": [
+        "26f26dc7f37e0626dbc0c514f7636205c6f0e0c99c4498da5866102d90bd5cc3"
+      ],
+      "qsa_decode_attn.cu.o": [
+        "562ae816458c5e4eb4eee3c573c77e2b52f731e96619da08d22905d1170d6754"
+      ],
+      "qsa_prompt_attn.cu.o": [
+        "bd3e1ddd6e84f3239c5828eeee522041e54607ef6ea63584bf8bfcb2d29bd4e5"
+      ],
+      "fused_gdn.cu.o": [
+        "80e823bab87598e7150d1b7eb12b367f810b42f79e6266da3e62234cee7ccada"
+      ],
+      "dequant_bf16.cu.o": [
+        "cbfc436dcfe1c9263344292c2cf539572f8cba7ce56c22b9e82f6f234d2d3406"
+      ],
+      "qsa_select.cu.o": [
+        "06e9036483a1c743f274f6548ae0399341e4c2570d3a0ae69ce2e92790f14deb"
+      ],
+      "verify_kernels.cu.o": [
+        "50a3e527914aa51e6c85a6b6aa358625b4398bd1a9fb9ab06742c735194486c5"
+      ],
+      "iq_kernels.cu.o": [
+        "74789052edf1fcbbcfc2977718561959cf4875750289031aec44c0b7c6fe431b"
+      ],
+      "ngram.cpp.o": [
+        "77db88da38a4ea2d81b530f8d28590414cee6a9d9fe60d35086f66b7708aa272"
+      ],
+      "ple_reader.cpp.o": [
+        "6ea6873fc7b016199473f4ec7fc13b497148f6d18ebe798c0cb0700f30c4d037"
+      ],
+      "direct_file.cpp.o": [
+        "adf7e27350950915dd868fea683b35c3a3ac934cbdee19ae693d1691fd55823a"
+      ]
+    },
+    "libstrata_core.a": {
+      "device.cu.o": [
+        "27904558166c600a894a63c7c3550bb2c6bc359e9930dd92d33d6c4f277783f3"
+      ],
+      "pinned.cu.o": [
+        "a7bd2fada8d1bd9bf0980cf46404888d3f1eae80ffdf7a0a17d3bbe6a2c6b2e4"
+      ],
+      "memory.cpp.o": [
+        "83eef735823c09acb0638a8b61184c68aa9da8e995b97cf9d77f69895a5ac8c7"
+      ],
+      "graph.cpp.o": [
+        "9c993dddb308ef34a2eeeae4211ed849b2598813cf4ab6693acce7db96632cc8"
+      ],
+      "weights.cpp.o": [
+        "5b05be37a8b3477fe84ce31a118606a22f45f8f9f0bb446e74d94efe6b9ceebb"
+      ],
+      "layout.cpp.o": [
+        "ededf87c1a7a10ee09c8cb18015e6a46304bb7a3e2f72cc05e15e20a02536bca"
+      ]
+    },
+    "libstrata_kernels_cpu.a": {
+      "expert.cpp.o": [
+        "21e0d57c1b52365e475a2a14a215ebd48f56451fafb1a6fcd386b88bb810fd36"
+      ],
+      "pool.cpp.o": [
+        "c9b7aee8417e8390478da53eabcc77dbd81d70dedad608cdfdfa477331dc87bf"
+      ],
+      "expert_layout.cpp.o": [
+        "86f547c1b14f391a4edc0eed04c88404e7ff996943587784bd67d3a2446468f2"
+      ],
+      "q2_avx2.cpp.o": [
+        "e0551f7a077d026952046307e245121d3f056887ebc5e9aa99a66f4777b0af5d"
+      ],
+      "native_expert.cpp.o": [
+        "cf593d4ae31026e91ecd379340b05e31d4b052074cd12d13b1f021982b7ca607"
+      ],
+      "iq_avx512.cpp.o": [
+        "59d909ee0607e7552c9334b164692b474c875c7129ddbe1866551b3d9ed8c3df"
+      ],
+      "iq_avx2.cpp.o": [
+        "dc0ee2f4a6b6cb69820729289b909c637ac388569a7292cf2c7b39ade5b48004"
+      ],
+      "kq_avx2.cpp.o": [
+        "92a23391521bfd5fb733dfb25f1207a85afc4f40a70cfd186d31468aa1148e58"
+      ],
+      "kq_avx1.cpp.o": [
+        "c65cba5b9298b4ac89855a20a06d2f929c54b77b1dd400cafb38acfdc89c9b08"
+      ]
+    },
+    "ggml/src/libggml-cpu.a": {
+      "ggml-cpu.c.o": [
+        "e302a40140d25e5e5cdc4b13f236f505d74b62d4dc617c61286861bf78cfcb2e"
+      ],
+      "ggml-cpu.cpp.o": [
+        "743fe0a55ec8cae95bc830dd439934bf96481252ae5bfd5d2ea9dfc8c200cb30"
+      ],
+      "repack.cpp.o": [
+        "b8a8ded2c64d077f358d6176a84ec3d2a8da4fd320bba1e9a0913efb1b874911",
+        "1e8e8ce08d08d95e29810095153fca931f3dd8712d9df76899c94fbe23e5658e"
+      ],
+      "iqp.cpp.o": [
+        "1f0a84e22c36e6e73e08e76e7bb54d59f3321d175a61716e8d7636f0300fc5db"
+      ],
+      "hbm.cpp.o": [
+        "c26b0feb9f89a692e3d3fd059663a7b7b74c8b9edb05f81aac9aa7deaebbcc9c"
+      ],
+      "quants.c.o": [
+        "c3c8f0fd9d845f909232a9f73349aa7ca1353c5502f3b679f2f8c28998527ea1",
+        "774dcf54a6f3d3a1e88c70f98beb59e69e1e2789cc3ad54c3cf3ee3d8e6e6761"
+      ],
+      "traits.cpp.o": [
+        "4522622d8930a13354f0fd85963c6fde927723e830197fdeaa296d54670fd4f7"
+      ],
+      "amx.cpp.o": [
+        "af87007339a7d14797d090f6e661df6710233f9de564fd4c98ae4d7d9dd2441f"
+      ],
+      "mmq.cpp.o": [
+        "9e97c63eb88f5ea7d8efa1c5ef1c2adb3d20c24dcb3b9f5eb80bc73e377c99ad"
+      ],
+      "binary-ops.cpp.o": [
+        "bf0c3410d2c792607fc67277df6ff6e5e02fc0dc74b24796b9fc95678f6dd300"
+      ],
+      "unary-ops.cpp.o": [
+        "f7be5a9b7d760b23ac3625ff3df316f813806b9d6ba3e9270d97a621ea48f1bd"
+      ],
+      "vec.cpp.o": [
+        "56103c47730731ce49cfac79f9677b0e6b7a6d77626d3472a35c409f14c9cf9c"
+      ],
+      "ops.cpp.o": [
+        "1061fd89435906761885679ac8c9c86c383fa4acfb11fdb95729ce5a7c2d6ce1"
+      ]
+    },
+    "libstrata_mmq.a": {
+      "moe_mmq.cu.o": [
+        "d99981234475921317a3faf3f49332d16d2359921802720a703d8142df601351"
+      ],
+      "moe_fused.cu.o": [
+        "eced5b8e46e6b4400a9d525025239a30c661a2111c45496848d604c5f7a1b52c"
+      ],
+      "moe_fused_iq.cu.o": [
+        "24304197a0ecdf6cd602b66a9c71312de48e0df253becaa26dffb678c31d21f3"
+      ],
+      "ggml_cuda_host.cu.o": [
+        "a25999906e4f8878bab9a249ca28543c671b80020b56aeacddb5ab68870c858b"
+      ],
+      "quantize.cu.o": [
+        "eb7b6195ac0201021d6c308b55cc8a68b0e77a0db34a7c2b8255ac5cb68417f1"
+      ],
+      "mmq-instance-q2_0.cu.o": [
+        "a0b6648a79a24e1bfe65dbd7c45081419851aa0699991a05a59b3c2e2b73bd97"
+      ],
+      "mmq-instance-iq2_xxs.cu.o": [
+        "77247237ac71170668c15e0341d24ae1af47666d5b447e92fa8e901a8b9450b3"
+      ],
+      "mmq-instance-iq2_xs.cu.o": [
+        "1a60cd65a3a42c44a0f1dad6168c628d8fe44102014f220214f298f0277c8feb"
+      ],
+      "mmq-instance-iq2_s.cu.o": [
+        "4a8b5f9eba507c8e9408201d229ffdb90fa8c167ac4c7dfc1b47742797215089"
+      ],
+      "mmq-instance-iq3_xxs.cu.o": [
+        "0e81fda3c5e791887ad8cda70bb87f878e21c4604f0e1e339ee771c6c977b863"
+      ],
+      "mmq-instance-iq3_s.cu.o": [
+        "7fba064b55ffa5f0dd77d5cd032b6e4f60cf8e586e47787684e45e8ea4a7af0f"
+      ],
+      "mmq-instance-iq4_nl.cu.o": [
+        "129b3497a83c0b3fca8568ffe9646b67e5bcacc32df92c62d5f60505b1092fe0"
+      ],
+      "mmq-instance-iq4_xs.cu.o": [
+        "eb23da7acf5b00a240769f9b752925c20a93aae4400f465e04c9e1857220df0a"
+      ],
+      "mmq-instance-q8_0.cu.o": [
+        "015a92a24eec56a0fdddf2f437f5594bb4d737eab6c77b3de97feb4fc350a878"
+      ]
+    },
+    "ggml/src/libggml-base.a": {
+      "ggml.c.o": [
+        "ed2bc76736e4ae595008465769d0311e5feba229c9be04dd0eb6cb51945c02b9"
+      ],
+      "ggml.cpp.o": [
+        "c5e4c16f0693564776303a1d3341d2fd5d772e520725d5733643f7004e842c53"
+      ],
+      "ggml-alloc.c.o": [
+        "439db3652977208ea2cc2cac29f1c419a36ba097c9ef8ace7f439ed85c1588d0"
+      ],
+      "ggml-backend.cpp.o": [
+        "453e401c08edf709f449353ccce3298c9611cf835087626de3e8d973ff6fa3bf"
+      ],
+      "ggml-backend-meta.cpp.o": [
+        "2e8835771c12dda8449c605e37c9702954690b29358e49f3f43c6059b17bd29b"
+      ],
+      "ggml-opt.cpp.o": [
+        "f9fb8c97deb8deff7243c1d90f404ac449f90ca22c12a9ae3feef3d0261da5f4"
+      ],
+      "ggml-threading.cpp.o": [
+        "f8e358d921bf64034740a0802af762a785b43797cea9c29368b6501175044a02"
+      ],
+      "ggml-quants.c.o": [
+        "0009ad6442911bf5bbcbad9f669132bf6be18e51fd65dccc6c410f392e40ff4d"
+      ],
+      "gguf.cpp.o": [
+        "cf1a1cd8cf22d9b33d93ed9ebc1836ec6b73d7dc57b88e442ffd0074ef1ce2f0"
+      ]
+    }
+  },
+  "baseline_objects_reproduced": {
+    "src/program/generate.cpp": {
+      "sha256": "f90e6142d7a5964be5e8bade7244f2893c8d2801fbc557b9bb3471e56190a4a1",
+      "bytes": 1235832
+    },
+    "src/core/conversation_state.cpp": {
+      "sha256": "2b9fab3ad487530daae79095c9f5ef177cf920be674156a621a6c11343eddfd3",
+      "bytes": 57048
+    },
+    "src/core/conversation_file.cpp": {
+      "sha256": "194a77eea7a4e07d6161d0b4fd55721b42f03f84a72e69c5a1063f02c03378ff",
+      "bytes": 166616
+    },
+    "src/core/conversation_snapshot.cpp": {
+      "sha256": "ddf93628358799f60e9968d5e57936e5c3a5a8088a197309757dd871a53b5ad1",
+      "bytes": 43208
+    }
+  },
+  "baseline_binary_reproduced": true,
+  "candidate_source_files": {
+    "include/strata/core/conversation_buffer.hpp": {
+      "sha256": "12f1abac2ec75cc71e8cf308a5a691923d8b617317560e009a41f713809f49d4",
+      "bytes": 6741
+    },
+    "include/strata/core/conversation_cache.hpp": {
+      "sha256": "a12ec3206f989e19821f1f1a450fef89605929547cdeefd9664cc8cd2e993e4f",
+      "bytes": 15896
+    },
+    "include/strata/core/conversation_memory_budget.hpp": {
+      "sha256": "41838947d41d11f4b6c0f4b39999ec1e01f72e979383ef6704525a58008f4a63",
+      "bytes": 10475
+    },
+    "include/strata/program/coverage.hpp": {
+      "sha256": "9e8da94aeeebb7254a25043f617fe0e5b530c83812249842eece8c4a9d14561b",
+      "bytes": 9159
+    },
+    "src/program/generate.cpp": {
+      "sha256": "f4f542c8b2fbadcbb09ee1a35cbf5de1206a07cbd6e3bdcc78c7a22692863c04",
+      "bytes": 781242
+    }
+  },
+  "cpu_policy_tests_passed": true,
+  "candidate_source_type_audit": {
+    "src/core/conversation_state.cpp": {
+      "sha256": "1118b3d783b46acd0e2d49d351cf6d14ba092a125b6ab355deea82f85c27ca0f",
+      "hits": [
+        "#include \"strata/core/conversation_snapshot.hpp\"",
+        "bool metadata_bytes(const ConversationCheckpoint& c, size_t& total) {",
+        "bool conversation_checkpoint_validate(const ConversationCheckpoint& c, const SessionState& ss,",
+        "bool conversation_checkpoint_save(ConversationCheckpoint& c, const SessionState& ss,",
+        "bool conversation_checkpoint_restore(const ConversationCheckpoint& c, SessionState& ss,",
+        "!product(checkpoints, {view.checkpoints.size(), sizeof(ConversationCheckpoint)}) ||",
+        "bool conversation_snapshot_save(SavedConversation& image, const ConversationView& view,",
+        "SavedConversation captured;",
+        "bool conversation_snapshot_sources(SavedConversation& meta, std::vector<SessionKvSource>& sources,",
+        "SavedConversation captured;",
+        "bool conversation_snapshot_validate(const SavedConversation& image, const SessionState& ss,",
+        "ConversationRestore conversation_snapshot_restore(const SavedConversation& image, SessionState& ss,",
+        "bool conversation_snapshot_save(SavedConversation& image, const ConversationView& view, const SessionState& ss,",
+        "bool conversation_snapshot_validate(const SavedConversation& image, const SessionState& ss, const ModelGeometry& g,",
+        "ConversationRestore conversation_snapshot_restore(const SavedConversation& image, SessionState& ss,"
+      ]
+    },
+    "src/core/conversation_file.cpp": {
+      "sha256": "136afacb6896fdf788ac751da2531ffdb59505edb83e9dc9d3176099e7eeb559",
+      "hits": [
+        "#include \"strata/core/conversation_file.hpp\"",
+        "void buffer(const ConversationBuffer& b) {",
+        "void put_checkpoint(Out& o, const ConversationCheckpoint& c) {",
+        "void put_payload(Out& o, const SavedConversation& s, const std::vector<SessionKvSource>* sources = nullptr) {",
+        "bool buffer(ConversationBuffer& b, size_t part) {",
+        "bool get_checkpoint(In& in, ConversationCheckpoint& c) {",
+        "bool get_payload(In& in, SavedConversation& s) {",
+        "bool has_stage_parts(const SavedConversation& s) {",
+        "bool write_impl(const std::string& path, const SavedConversation& image, const std::vector<SessionKvSource>* sources,",
+        "bool write_guarded(const std::string& path, const SavedConversation& image, const std::vector<SessionKvSource>* sources,",
+        "std::vector<ConversationCheckpoint> session_checkpoints_to_save(const std::vector<ConversationCheckpoint>& chain) {",
+        "const ConversationCheckpoint* deepest = session_deepest_checkpoint(chain);",
+        "const ConversationCheckpoint* session_deepest_checkpoint(const std::vector<ConversationCheckpoint>& chain) {",
+        "const ConversationCheckpoint* deepest = nullptr;",
+        "uint64_t session_save_peak_bytes(const ConversationCheckpoint* deepest, const SessionSaveLive& live) {",
+        "bool session_save_checkpoints(const std::vector<ConversationCheckpoint>& chain, const SessionSaveLive& live,",
+        "std::vector<ConversationCheckpoint>& out, std::string& why) {",
+        "const ConversationCheckpoint* deepest = session_deepest_checkpoint(chain);",
+        "bool session_file_write(const std::string& path, const SavedConversation& meta, const std::vector<SessionKvSource>& kv,",
+        "bool session_file_write(const std::string& path, const SavedConversation& image, const SessionFileIdentity& id,",
+        "bool read_impl(const std::string& path, const SessionFileIdentity& id, SavedConversation& image,",
+        "SavedConversation parsed;",
+        "bool session_file_read(const std::string& path, const SessionFileIdentity& id, SavedConversation& image,"
+      ]
+    },
+    "src/core/conversation_snapshot.cpp": {
+      "sha256": "41c023e09357031eb548b6a6fc066605897079241af1766ff2ffd22961dc8737",
+      "hits": [
+        "#include \"strata/core/conversation_snapshot.hpp\"",
+        "const std::array<const ConversationBuffer*,5> buffers = {&image.k, &image.v, &image.k_scale, &image.v_scale, &image.pooled};",
+        "const std::array<ConversationBuffer*,5> dst = {&image.k, &image.v, &image.k_scale, &image.v_scale, &image.pooled};",
+        "const std::array<const ConversationBuffer*,5> src = {&image.k, &image.v, &image.k_scale, &image.v_scale, &image.pooled};",
+        "const std::array<const ConversationBuffer*,5> src = {&image.k, &image.v, &image.k_scale, &image.v_scale, &image.pooled};",
+        "const std::array<const ConversationBuffer*, 5> saved = {&image.k, &image.v, &image.k_scale, &image.v_scale, &image.pooled};"
+      ]
+    },
+    "src/program/generate.cpp": {
+      "sha256": "f4f542c8b2fbadcbb09ee1a35cbf5de1206a07cbd6e3bdcc78c7a22692863c04",
+      "hits": [
+        "#include \"strata/core/conversation_snapshot.hpp\"",
+        "#include \"strata/core/conversation_file.hpp\"",
+        "using ConvCheckpoint = strata::core::ConversationCheckpoint;",
+        "// parking with --layer-split saves every stage (SavedConversation::stage_images)",
+        "// engine loaded, by role (conversation_file.hpp), once; the config fingerprint covers the RESOLVED settings",
+        "strata::core::ConversationCheckpointSplit cs;",
+        "strata::core::ConversationCheckpointSplit& cs; std::vector<ConvCheckpoint>& checks; bool on;",
+        "n_st * sizeof(strata::core::SavedConversation) + (size_t(1) << 20));",
+        "strata::core::SavedConversation image;",
+        "strata::core::SavedConversation part;",
+        "strata::core::ConversationCheckpoint ck;",
+        "strata::core::ConversationCheckpoint ck;",
+        "// UTF-8).  The file holds what a parked conversation holds (conversation_file.hpp).  Answers: SAVED /",
+        "strata::core::SavedConversation meta;",
+        "strata::core::SavedConversation image;",
+        "std::optional<strata::core::SavedConversation> incoming;",
+        "strata::core::ConversationCheckpointSplit cs;"
+      ]
+    },
+    "include/strata/core/conversation_buffer.hpp": {
+      "sha256": "12f1abac2ec75cc71e8cf308a5a691923d8b617317560e009a41f713809f49d4",
+      "hits": [
+        "class ConversationBuffer {",
+        "ConversationBuffer() = default;",
+        "ConversationBuffer(std::initializer_list<uint8_t> values) {",
+        "ConversationBuffer(const ConversationBuffer&) = default;",
+        "ConversationBuffer& operator=(const ConversationBuffer&) = default;",
+        "ConversationBuffer(ConversationBuffer&& other) noexcept",
+        "ConversationBuffer& operator=(ConversationBuffer&& other) noexcept {",
+        "bool operator==(const ConversationBuffer& other) const {"
+      ]
+    },
+    "include/strata/core/conversation_cache.hpp": {
+      "sha256": "a12ec3206f989e19821f1f1a450fef89605929547cdeefd9664cc8cd2e993e4f",
+      "hits": [
+        "#include \"strata/core/conversation_buffer.hpp\"",
+        "struct ConversationCheckpoint {",
+        "std::vector<ConversationCheckpoint> stage_parts;",
+        "conversation_cache_product(stage_parts.capacity(), sizeof(ConversationCheckpoint))})",
+        "ConversationBuffer k, v, k_scale, v_scale, pooled;",
+        "struct ConversationCheckpointSplit {",
+        "std::vector<ConversationCheckpoint> stage0;",
+        "std::vector<std::vector<ConversationCheckpoint>> parts;   ///< [stage][checkpoint]",
+        "std::vector<ConversationCheckpoint> rest;                 ///< not split (no complete set of stage parts)",
+        "inline ConversationCheckpointSplit conversation_checkpoints_split(std::vector<ConversationCheckpoint>&& checks,",
+        "ConversationCheckpointSplit out;",
+        "ConversationCheckpoint part;",
+        "inline bool conversation_checkpoints_merge(ConversationCheckpointSplit&& split, std::vector<ConversationCheckpoint>& out) {",
+        "ConversationCheckpoint cp = std::move(split.stage0[w]);",
+        "struct SavedConversation {",
+        "ConversationCheckpoint live;",
+        "std::vector<ConversationCheckpoint> checkpoints;",
+        "std::vector<SavedConversation> stage_images;",
+        "for (size_t x : {conversation_cache_product(checkpoints.capacity(), sizeof(ConversationCheckpoint)),",
+        "conversation_cache_product(stage_images.capacity(), sizeof(SavedConversation))})",
+        "int64_t conversation_prefix(const ConversationCheckpoint& c, const std::vector<Token>& prompt,",
+        "auto consider = [&](const ConversationCheckpoint& c, bool live) {",
+        "SavedConversation take(size_t index) {",
+        "SavedConversation out = std::move(entries_.at(index));",
+        "const std::vector<ConversationCheckpoint>& checkpoints, bool cvec) {",
+        "auto held = [&](const ConversationCheckpoint& c) {",
+        "bool put(SavedConversation&& image, size_t held = 0) {",
+        "std::deque<SavedConversation> entries_; // least recently active first"
+      ]
+    },
+    "include/strata/core/conversation_snapshot.hpp": {
+      "sha256": "c403e99ab515566e1314a3c485f8974d25bb0194a181f1e8ab804fc76ce8f665",
+      "hits": [
+        "#include \"strata/core/conversation_cache.hpp\"",
+        "#include \"strata/core/conversation_file.hpp\"",
+        "bool conversation_checkpoint_validate(const ConversationCheckpoint& checkpoint, const SessionState& session,",
+        "bool conversation_checkpoint_save(ConversationCheckpoint& checkpoint, const SessionState& session,",
+        "bool conversation_checkpoint_restore(const ConversationCheckpoint& checkpoint, SessionState& session,",
+        "const std::vector<ConversationCheckpoint>& checkpoints;",
+        "bool conversation_snapshot_save(SavedConversation& image, const ConversationView& view,",
+        "bool conversation_snapshot_sources(SavedConversation& meta, std::vector<SessionKvSource>& sources,",
+        "bool conversation_snapshot_validate(const SavedConversation& image, const SessionState& session,",
+        "ConversationRestore conversation_snapshot_restore(const SavedConversation& image, SessionState& session,",
+        "bool conversation_snapshot_save(SavedConversation& image, const ConversationView& view, const SessionState& session,",
+        "bool conversation_snapshot_validate(const SavedConversation& image, const SessionState& session,",
+        "ConversationRestore conversation_snapshot_restore(const SavedConversation& image, SessionState& session,"
+      ]
+    },
+    "include/strata/core/conversation_file.hpp": {
+      "sha256": "2c6ddbb2bb1f44331297a2cf970504da67ce501180fe1513aeb59f71cef8f942",
+      "hits": [
+        "// On-disk persistence of a conversation's state (SavedConversation): one file holding the running state, the",
+        "#include \"strata/core/conversation_cache.hpp\"",
+        "bool session_file_write(const std::string& path, const SavedConversation& image, const SessionFileIdentity& id,",
+        "bool session_file_write(const std::string& path, const SavedConversation& meta, const std::vector<SessionKvSource>& kv,",
+        "std::vector<ConversationCheckpoint> session_checkpoints_to_save(const std::vector<ConversationCheckpoint>& chain);",
+        "const ConversationCheckpoint* session_deepest_checkpoint(const std::vector<ConversationCheckpoint>& chain);",
+        "uint64_t session_save_peak_bytes(const ConversationCheckpoint* deepest, const SessionSaveLive& live);",
+        "bool session_save_checkpoints(const std::vector<ConversationCheckpoint>& chain, const SessionSaveLive& live,",
+        "std::vector<ConversationCheckpoint>& out, std::string& why);",
+        "bool session_file_read(const std::string& path, const SessionFileIdentity& id, SavedConversation& image,"
+      ]
+    }
+  },
+  "candidate_dependencies": {
+    "src/program/generate.cpp": {
+      "dependency_file": {
+        "sha256": "a349b5826a2061414ba66c7f39acf212e31907792c5d6daee8cec88000d072f5",
+        "bytes": 31317
+      },
+      "source_dependencies": [
+        "include/strata/artifact/gguf_reader.hpp",
+        "include/strata/artifact/gguf_split.hpp",
+        "include/strata/core/arch_defaults.hpp",
+        "include/strata/core/conversation_buffer.hpp",
+        "include/strata/core/conversation_cache.hpp",
+        "include/strata/core/conversation_file.hpp",
+        "include/strata/core/conversation_memory.hpp",
+        "include/strata/core/conversation_memory_budget.hpp",
+        "include/strata/core/conversation_snapshot.hpp",
+        "include/strata/core/coupled_draft.hpp",
+        "include/strata/core/device.hpp",
+        "include/strata/core/dma_batch.hpp",
+        "include/strata/core/emulate.hpp",
+        "include/strata/core/exchange_storage.hpp",
+        "include/strata/core/expert_cache.hpp",
+        "include/strata/core/expert_source.hpp",
+        "include/strata/core/hit_hook.hpp",
+        "include/strata/core/layer.hpp",
+        "include/strata/core/layout.hpp",
+        "include/strata/core/mtp.hpp",
+        "include/strata/core/native_dense.hpp",
+        "include/strata/core/native_head.hpp",
+        "include/strata/core/on_device.hpp",
+        "include/strata/core/peer_experts.hpp",
+        "include/strata/core/pinned.hpp",
+        "include/strata/core/progress.hpp",
+        "include/strata/core/remote_expert_opt.hpp",
+        "include/strata/core/remote_experts.hpp",
+        "include/strata/core/session.hpp",
+        "include/strata/core/verify.hpp",
+        "include/strata/core/vmm.hpp",
+        "include/strata/core/weights.hpp",
+        "include/strata/kernels/cpu/expert.hpp",
+        "include/strata/kernels/cpu/expert_layout.hpp",
+        "include/strata/kernels/cpu/native_expert.hpp",
+        "include/strata/kernels/cpu/pool.hpp",
+        "include/strata/kernels/cvec.hpp",
+        "include/strata/kernels/elementwise.hpp",
+        "include/strata/kernels/gdn.hpp",
+        "include/strata/kernels/gfx_arch.hpp",
+        "include/strata/kernels/gr.hpp",
+        "include/strata/kernels/iq_kernels.hpp",
+        "include/strata/kernels/kv_q4.hpp",
+        "include/strata/kernels/kv_stream.hpp",
+        "include/strata/kernels/mrope.hpp",
+        "include/strata/kernels/native_gdn.hpp",
+        "include/strata/kernels/native_moe.hpp",
+        "include/strata/kernels/native_qsa.hpp",
+        "include/strata/kernels/native_qsa_indexer.hpp",
+        "include/strata/kernels/native_rope.hpp",
+        "include/strata/kernels/native_router.hpp",
+        "include/strata/kernels/ngram.hpp",
+        "include/strata/kernels/ple.hpp",
+        "include/strata/kernels/qsa.hpp",
+        "include/strata/kernels/qsa_decode_attn.hpp",
+        "include/strata/kernels/rope_scaling.hpp",
+        "include/strata/kernels/s2_expert_grouped.hpp",
+        "include/strata/kernels/s_gemv.hpp",
+        "include/strata/kernels/sampler.hpp",
+        "include/strata/kernels/shared_expert.hpp",
+        "include/strata/kernels/verify_kernels.hpp",
+        "include/strata/platform/hip_compat/cuda_runtime.h",
+        "include/strata/platform/hip_compat/strata_hip.h",
+        "include/strata/prefill/prefill.hpp",
+        "include/strata/program/conv_cache.hpp",
+        "include/strata/program/coverage.hpp",
+        "include/strata/program/logits_selection.hpp",
+        "include/strata/program/message_boundary.hpp",
+        "include/strata/spec/draft_policy.hpp",
+        "include/strata/spec/draft_source.hpp",
+        "include/strata/spec/suffix_drafter.hpp",
+        "src/program/generate.cpp"
+      ]
+    },
+    "src/core/conversation_state.cpp": {
+      "dependency_file": {
+        "sha256": "41994604dca3d88d4cc730364dd6700bf20fdc5cb7a57457bce4ee4d6f3baf82",
+        "bytes": 26466
+      },
+      "source_dependencies": [
+        "include/strata/core/conversation_buffer.hpp",
+        "include/strata/core/conversation_cache.hpp",
+        "include/strata/core/conversation_file.hpp",
+        "include/strata/core/conversation_snapshot.hpp",
+        "include/strata/core/hit_hook.hpp",
+        "include/strata/core/layer.hpp",
+        "include/strata/core/layout.hpp",
+        "include/strata/core/session.hpp",
+        "include/strata/core/vmm.hpp",
+        "include/strata/core/weights.hpp",
+        "include/strata/kernels/cpu/expert.hpp",
+        "include/strata/kernels/cpu/native_expert.hpp",
+        "include/strata/kernels/cpu/pool.hpp",
+        "include/strata/kernels/gr.hpp",
+        "include/strata/kernels/kv_stream.hpp",
+        "include/strata/kernels/ngram.hpp",
+        "include/strata/kernels/ple.hpp",
+        "include/strata/kernels/qsa.hpp",
+        "include/strata/kernels/qsa_decode_attn.hpp",
+        "include/strata/platform/hip_compat/cuda_runtime.h",
+        "include/strata/platform/hip_compat/strata_hip.h",
+        "src/core/conversation_checked.hpp",
+        "src/core/conversation_state.cpp"
+      ]
+    },
+    "src/core/conversation_file.cpp": {
+      "dependency_file": {
+        "sha256": "bed5a849c4bf38f5cbc4ba2e79c4a660fbd6210a6be19a7b6a8b48b79d6dfbab",
+        "bytes": 25153
+      },
+      "source_dependencies": [
+        "include/strata/core/conversation_buffer.hpp",
+        "include/strata/core/conversation_cache.hpp",
+        "include/strata/core/conversation_file.hpp",
+        "src/core/conversation_file.cpp"
+      ]
+    },
+    "src/core/conversation_snapshot.cpp": {
+      "dependency_file": {
+        "sha256": "c22a5a5d9ce0042409d0c5b0b2fe168a524ca329829ace089fb33634f36b0f0f",
+        "bytes": 26514
+      },
+      "source_dependencies": [
+        "include/strata/core/conversation_buffer.hpp",
+        "include/strata/core/conversation_cache.hpp",
+        "include/strata/core/conversation_file.hpp",
+        "include/strata/core/conversation_snapshot.hpp",
+        "include/strata/core/hit_hook.hpp",
+        "include/strata/core/layer.hpp",
+        "include/strata/core/layout.hpp",
+        "include/strata/core/session.hpp",
+        "include/strata/core/vmm.hpp",
+        "include/strata/core/weights.hpp",
+        "include/strata/kernels/cpu/expert.hpp",
+        "include/strata/kernels/cpu/native_expert.hpp",
+        "include/strata/kernels/cpu/pool.hpp",
+        "include/strata/kernels/gr.hpp",
+        "include/strata/kernels/kv_q4.hpp",
+        "include/strata/kernels/kv_stream.hpp",
+        "include/strata/kernels/ngram.hpp",
+        "include/strata/kernels/ple.hpp",
+        "include/strata/kernels/qsa.hpp",
+        "include/strata/kernels/qsa_decode_attn.hpp",
+        "include/strata/platform/hip_compat/cuda_runtime.h",
+        "include/strata/platform/hip_compat/strata_hip.h",
+        "src/core/conversation_checked.hpp",
+        "src/core/conversation_snapshot.cpp"
+      ]
+    }
+  },
+  "candidate_archive_members": {
+    "libstrata_engine.a": {
+      "layer.cpp.o": [
+        "7e8e02b2c10c21abeb3cc9716ee2c118d2df27016848b219b7c8a7bed073e4a8"
+      ],
+      "session.cpp.o": [
+        "1a41753751073cdc92f94830ff8b892f2b31a8155fdc53de29db5e0977230548"
+      ],
+      "expert_source.cpp.o": [
+        "e164f1ad5c21ae65a20de9ac1ba919abcaf6a9c8093ad576a1ab133d85dbd87a"
+      ],
+      "remote_experts.cpp.o": [
+        "4d3c35736b543f64bbd2a1741dc9bc403accc54889d28863e423b2ee6d832b8e"
+      ],
+      "remote_expert_opt.cu.o": [
+        "637f67523cc1e39e4942a01f3916e4a9791fb90e32a46ae9e6e1d231ff49d83d"
+      ],
+      "expert_cache.cpp.o": [
+        "f0a40bdd4f2e776d29808c5462189542a4875d6039a642b551c659a3202ab847"
+      ],
+      "native_head.cpp.o": [
+        "e4ca894d2460cee51dde2544fa6f0ba670703fb928436659c224f1fd73ca797d"
+      ],
+      "native_dense.cpp.o": [
+        "ff894bea6b7294fd84b66611e856fd49dbaa47b5ef4448894c9758f55f152f08"
+      ],
+      "verify.cpp.o": [
+        "fbb528e9020cdd24a4c82bb939b8b75ab2fc26af8bc24970f45bd21075462c98"
+      ],
+      "mtp.cpp.o": [
+        "0a8835a4ec15352526ff11a9c1267406849fa51a292e12d2e5ca5cc60c08cfa1"
+      ],
+      "conversation_snapshot.cpp.o": [
+        "ddf93628358799f60e9968d5e57936e5c3a5a8088a197309757dd871a53b5ad1"
+      ],
+      "conversation_state.cpp.o": [
+        "c6f7e7cd848765e5cc0779c8634d69946f756ff489431c22cc85fd53d6b1858a"
+      ],
+      "conversation_memory.cpp.o": [
+        "862084481af25c9c4ab9e06efc9f907412fb5116d221a7410f5c3eaafb8e8dfd"
+      ],
+      "peer_experts.cpp.o": [
+        "90c070ee334b745b0fdc817019bb310c96efe7ac926687f6e76c295f3595be7b"
+      ],
+      "arch_defaults.cpp.o": [
+        "bd880a62b961f3e985cc45def11cbd06f5da2f5b3c14393128600a9ca641178e"
+      ],
+      "vmm.cpp.o": [
+        "a870665d254870504eec9b9d16e561c83ee4afd3c8c0e59e494e7a6f1a19bbd4"
+      ],
+      "conversation_file.cpp.o": [
+        "652a1f1f8595a1147cc8ddad848dd06bf70360d025439dc93fb50cc9367e3cd9"
+      ]
+    },
+    "libstrata_prefill.a": {
+      "gemm.cu.o": [
+        "9b0d9fb8cf20c97bb81e43b363e6a6b68d32af0d36234b90ed058ad4433ad048"
+      ],
+      "kernels.cu.o": [
+        "044a94744940abaa1178ceb913461fa297a776e1466d4f6d8b4777b2bb16e475"
+      ],
+      "prefill.cpp.o": [
+        "7451d238266502b2a4780246168c69ef15ce3bbf85e178cf82368b5d6e927ec1"
+      ]
+    },
+    "libstrata_spec.a": {
+      "suffix_drafter.cpp.o": [
+        "f3c5fe2e58f00c719137c7db8876e186ac60c9adca600450cf4f7905602af045"
+      ],
+      "controller.cpp.o": [
+        "04e25c95a8e1292884edde09cd12bccfa71b10c99e77f790dc2a67900377d603"
+      ],
+      "draft_policy.cpp.o": [
+        "3c46e0a6ab36392f5da392a53216a019840281f7a21c44baaf9214729eb4db25"
+      ],
+      "draft_source.cpp.o": [
+        "7c79510a92f87d70db97d3f2970a24c5df9e89e95dad685ca8286f92b91d4b08"
+      ]
+    },
+    "libstrata_kernels.a": {
+      "dequant_s2.cu.o": [
+        "caa1cbff86bb5513f525c825ad2ee049fcffeb7b0adc5d06fe1b78966013e578"
+      ],
+      "s2_gemv.cu.o": [
+        "e802739146d6ec7155c99a257feccc21720fcd61fa55b039ca77b6de85d64752"
+      ],
+      "s_gemv.cu.o": [
+        "45517858e8d391bf8150169ae9f8a46284794fbe69a81842d03b597650f5f956"
+      ],
+      "s2_gemv_quads.cu.o": [
+        "7adac682ddfc5b43aa3f5850ad8e06996ae916b094ace0370aca6b37c6e47678"
+      ],
+      "s2_gemv_fast.cu.o": [
+        "e2e16eeb8ec067821e41bcb5a65e0bcd1a6e820844904f81d4c74afb0e3e6b10"
+      ],
+      "router_top10.cu.o": [
+        "9e2d21fcbbc408ccd760fc79200cc848ff1b8b8d79d3cb15d74f485bd15d9839"
+      ],
+      "quantize_act.cu.o": [
+        "adac569f57030d23f4d234995ee74fedc8210530560c756aac47a809d959d301"
+      ],
+      "rope.cu.o": [
+        "cb97336b1f7c1ec41bec2d726a5892f88d3baa7681cba9f84ca2d2f66a56c72e"
+      ],
+      "sampler.cu.o": [
+        "7f51d326842ce7a12da0e487782fe5ecca7c08c67d3ba99aeaa9e4e751a0f3e1"
+      ],
+      "s2_gemv_q8.cu.o": [
+        "440f50fff7f79f481f5cb3f4a49cde5aacc0849095553ae69fda8ef648ae4380"
+      ],
+      "s2_expert_grouped.cu.o": [
+        "a357462751f513afb1e31ac5b3bb91506a76d1e602ccf69151b955b6764ba8a0"
+      ],
+      "shared_expert.cu.o": [
+        "cc40609470870fdda30b6b28160879d1d001e0afc2d2a7b726f5bf5e42f3b20a"
+      ],
+      "gr.cu.o": [
+        "46c7adc574d030db4193b6a085d6c676065f34a386143dfe5344b30334e96586"
+      ],
+      "gdn.cu.o": [
+        "49d1e5a1d7eb12ccda7d87ca5cd89e67224067aef21563291770714de8b7a5fa"
+      ],
+      "qsa.cu.o": [
+        "30f4a6c133d82b3593cc67119222a5cdc88a93228e37ee498b79ed00bb29bf85"
+      ],
+      "elementwise.cu.o": [
+        "a7fc6385374497423fc128748cffce21e7780e68bd90dbd80465402c6780f24f"
+      ],
+      "bf16_gemv.cu.o": [
+        "6a2cb6f983cebc4887ca14e37d03d80740a42b19cb7f854e18c84941a45e1e25"
+      ],
+      "native_mmvq.cu.o": [
+        "1e34b84738fd3e98463f83ba6f21a6c9759cf99730b655edb74e53be3dace8cb"
+      ],
+      "native_bf16.cu.o": [
+        "68535685cb79d53dd2ec32e22c9b26f8c805aca9e17d2bcbfd885bb92619e70c"
+      ],
+      "native_gr_norm.cu.o": [
+        "2dbdd549e66f315e5c6c96d6aa99e144abb9a6a1b66212f5560314d462f6ccce"
+      ],
+      "native_moe.cu.o": [
+        "34ea968573a7db7c54ced50d2d8d3c16035c483ccfcc82d42e0adf5102565584"
+      ],
+      "native_gdn.cu.o": [
+        "f4cb4857a88d20778c160c3c66ebcea61e59d03cf7e8264174a88519c91324e0"
+      ],
+      "native_gr_postops.cu.o": [
+        "006af530ed9b63a8019cda991ff3f18bc985cbbc64e7f3450f7d3e16f5706ee3"
+      ],
+      "native_router.cu.o": [
+        "b84e2fc32e29388f0454e2831d402eafd941f001208244b83801fa7d7df2c306"
+      ],
+      "native_gdn_preprocess.cu.o": [
+        "2cb66326ede2e326c2fbc0327e1c0e56d921641cab062a9133913e2c8dfbde0d"
+      ],
+      "native_qsa.cu.o": [
+        "68cd21ced26b9cd208b7c666e5836fc6cc0e7b424acece8a67bc83bb8d77b3ea"
+      ],
+      "native_rope.cu.o": [
+        "916f0cf1962d3864184ba58da58b6b6e107fc9a930f3f0a7dbb4c080aca15c65"
+      ],
+      "native_ple_postops.cu.o": [
+        "109548c0ca3c16a6f0318e685f3630eeab9e052c48cfef6530dafbfbb8ac4a95"
+      ],
+      "native_flash_attn.cu.o": [
+        "de1dbd3313c92d1406890b877f3c7ef67dbea6c1a125a08b16ebbca429acaedc"
+      ],
+      "native_qsa_indexer.cu.o": [
+        "212370826aa0746b4964c14baa25817471b0977d3f6d27a63ff6499e4af47bfc"
+      ],
+      "native_qsa_score.cu.o": [
+        "46954e7d245809f267a419c4d944d2bd99984cdff693ecc4a924c016932e9a45"
+      ],
+      "ple.cu.o": [
+        "a5d2370ded6ecac5a60fb8c6738c41986949ff7b20893ced1dcfd6809b4dc581"
+      ],
+      "kv_q8.cu.o": [
+        "e442e8fad81c93108bb6d64a70be326a26ff3ad5a583c2590ef6ca79964ff05e"
+      ],
+      "kv_stream.cu.o": [
+        "b0ee285025bebf42d787131e7c4f881a721e37018649fd920711f4b16e6c45c6"
+      ],
+      "kv_q4.cu.o": [
+        "38c1d0ee1f4bef7c75e76df103380da57561af2240eb18ea6b275b85b6e9921f"
+      ],
+      "fused_gr.cu.o": [
+        "47c97120d1a0682888f91c29a67d99bdc9155223a40e3e28b86c2c3310345cb4"
+      ],
+      "cvec.cu.o": [
+        "26f26dc7f37e0626dbc0c514f7636205c6f0e0c99c4498da5866102d90bd5cc3"
+      ],
+      "qsa_decode_attn.cu.o": [
+        "562ae816458c5e4eb4eee3c573c77e2b52f731e96619da08d22905d1170d6754"
+      ],
+      "qsa_prompt_attn.cu.o": [
+        "bd3e1ddd6e84f3239c5828eeee522041e54607ef6ea63584bf8bfcb2d29bd4e5"
+      ],
+      "fused_gdn.cu.o": [
+        "80e823bab87598e7150d1b7eb12b367f810b42f79e6266da3e62234cee7ccada"
+      ],
+      "dequant_bf16.cu.o": [
+        "cbfc436dcfe1c9263344292c2cf539572f8cba7ce56c22b9e82f6f234d2d3406"
+      ],
+      "qsa_select.cu.o": [
+        "06e9036483a1c743f274f6548ae0399341e4c2570d3a0ae69ce2e92790f14deb"
+      ],
+      "verify_kernels.cu.o": [
+        "50a3e527914aa51e6c85a6b6aa358625b4398bd1a9fb9ab06742c735194486c5"
+      ],
+      "iq_kernels.cu.o": [
+        "74789052edf1fcbbcfc2977718561959cf4875750289031aec44c0b7c6fe431b"
+      ],
+      "ngram.cpp.o": [
+        "77db88da38a4ea2d81b530f8d28590414cee6a9d9fe60d35086f66b7708aa272"
+      ],
+      "ple_reader.cpp.o": [
+        "6ea6873fc7b016199473f4ec7fc13b497148f6d18ebe798c0cb0700f30c4d037"
+      ],
+      "direct_file.cpp.o": [
+        "adf7e27350950915dd868fea683b35c3a3ac934cbdee19ae693d1691fd55823a"
+      ]
+    },
+    "libstrata_core.a": {
+      "device.cu.o": [
+        "27904558166c600a894a63c7c3550bb2c6bc359e9930dd92d33d6c4f277783f3"
+      ],
+      "pinned.cu.o": [
+        "a7bd2fada8d1bd9bf0980cf46404888d3f1eae80ffdf7a0a17d3bbe6a2c6b2e4"
+      ],
+      "memory.cpp.o": [
+        "83eef735823c09acb0638a8b61184c68aa9da8e995b97cf9d77f69895a5ac8c7"
+      ],
+      "graph.cpp.o": [
+        "9c993dddb308ef34a2eeeae4211ed849b2598813cf4ab6693acce7db96632cc8"
+      ],
+      "weights.cpp.o": [
+        "5b05be37a8b3477fe84ce31a118606a22f45f8f9f0bb446e74d94efe6b9ceebb"
+      ],
+      "layout.cpp.o": [
+        "ededf87c1a7a10ee09c8cb18015e6a46304bb7a3e2f72cc05e15e20a02536bca"
+      ]
+    },
+    "libstrata_kernels_cpu.a": {
+      "expert.cpp.o": [
+        "21e0d57c1b52365e475a2a14a215ebd48f56451fafb1a6fcd386b88bb810fd36"
+      ],
+      "pool.cpp.o": [
+        "c9b7aee8417e8390478da53eabcc77dbd81d70dedad608cdfdfa477331dc87bf"
+      ],
+      "expert_layout.cpp.o": [
+        "86f547c1b14f391a4edc0eed04c88404e7ff996943587784bd67d3a2446468f2"
+      ],
+      "q2_avx2.cpp.o": [
+        "e0551f7a077d026952046307e245121d3f056887ebc5e9aa99a66f4777b0af5d"
+      ],
+      "native_expert.cpp.o": [
+        "cf593d4ae31026e91ecd379340b05e31d4b052074cd12d13b1f021982b7ca607"
+      ],
+      "iq_avx512.cpp.o": [
+        "59d909ee0607e7552c9334b164692b474c875c7129ddbe1866551b3d9ed8c3df"
+      ],
+      "iq_avx2.cpp.o": [
+        "dc0ee2f4a6b6cb69820729289b909c637ac388569a7292cf2c7b39ade5b48004"
+      ],
+      "kq_avx2.cpp.o": [
+        "92a23391521bfd5fb733dfb25f1207a85afc4f40a70cfd186d31468aa1148e58"
+      ],
+      "kq_avx1.cpp.o": [
+        "c65cba5b9298b4ac89855a20a06d2f929c54b77b1dd400cafb38acfdc89c9b08"
+      ]
+    },
+    "ggml/src/libggml-cpu.a": {
+      "ggml-cpu.c.o": [
+        "e302a40140d25e5e5cdc4b13f236f505d74b62d4dc617c61286861bf78cfcb2e"
+      ],
+      "ggml-cpu.cpp.o": [
+        "743fe0a55ec8cae95bc830dd439934bf96481252ae5bfd5d2ea9dfc8c200cb30"
+      ],
+      "repack.cpp.o": [
+        "b8a8ded2c64d077f358d6176a84ec3d2a8da4fd320bba1e9a0913efb1b874911",
+        "1e8e8ce08d08d95e29810095153fca931f3dd8712d9df76899c94fbe23e5658e"
+      ],
+      "iqp.cpp.o": [
+        "1f0a84e22c36e6e73e08e76e7bb54d59f3321d175a61716e8d7636f0300fc5db"
+      ],
+      "hbm.cpp.o": [
+        "c26b0feb9f89a692e3d3fd059663a7b7b74c8b9edb05f81aac9aa7deaebbcc9c"
+      ],
+      "quants.c.o": [
+        "c3c8f0fd9d845f909232a9f73349aa7ca1353c5502f3b679f2f8c28998527ea1",
+        "774dcf54a6f3d3a1e88c70f98beb59e69e1e2789cc3ad54c3cf3ee3d8e6e6761"
+      ],
+      "traits.cpp.o": [
+        "4522622d8930a13354f0fd85963c6fde927723e830197fdeaa296d54670fd4f7"
+      ],
+      "amx.cpp.o": [
+        "af87007339a7d14797d090f6e661df6710233f9de564fd4c98ae4d7d9dd2441f"
+      ],
+      "mmq.cpp.o": [
+        "9e97c63eb88f5ea7d8efa1c5ef1c2adb3d20c24dcb3b9f5eb80bc73e377c99ad"
+      ],
+      "binary-ops.cpp.o": [
+        "bf0c3410d2c792607fc67277df6ff6e5e02fc0dc74b24796b9fc95678f6dd300"
+      ],
+      "unary-ops.cpp.o": [
+        "f7be5a9b7d760b23ac3625ff3df316f813806b9d6ba3e9270d97a621ea48f1bd"
+      ],
+      "vec.cpp.o": [
+        "56103c47730731ce49cfac79f9677b0e6b7a6d77626d3472a35c409f14c9cf9c"
+      ],
+      "ops.cpp.o": [
+        "1061fd89435906761885679ac8c9c86c383fa4acfb11fdb95729ce5a7c2d6ce1"
+      ]
+    },
+    "libstrata_mmq.a": {
+      "moe_mmq.cu.o": [
+        "d99981234475921317a3faf3f49332d16d2359921802720a703d8142df601351"
+      ],
+      "moe_fused.cu.o": [
+        "eced5b8e46e6b4400a9d525025239a30c661a2111c45496848d604c5f7a1b52c"
+      ],
+      "moe_fused_iq.cu.o": [
+        "24304197a0ecdf6cd602b66a9c71312de48e0df253becaa26dffb678c31d21f3"
+      ],
+      "ggml_cuda_host.cu.o": [
+        "a25999906e4f8878bab9a249ca28543c671b80020b56aeacddb5ab68870c858b"
+      ],
+      "quantize.cu.o": [
+        "eb7b6195ac0201021d6c308b55cc8a68b0e77a0db34a7c2b8255ac5cb68417f1"
+      ],
+      "mmq-instance-q2_0.cu.o": [
+        "a0b6648a79a24e1bfe65dbd7c45081419851aa0699991a05a59b3c2e2b73bd97"
+      ],
+      "mmq-instance-iq2_xxs.cu.o": [
+        "77247237ac71170668c15e0341d24ae1af47666d5b447e92fa8e901a8b9450b3"
+      ],
+      "mmq-instance-iq2_xs.cu.o": [
+        "1a60cd65a3a42c44a0f1dad6168c628d8fe44102014f220214f298f0277c8feb"
+      ],
+      "mmq-instance-iq2_s.cu.o": [
+        "4a8b5f9eba507c8e9408201d229ffdb90fa8c167ac4c7dfc1b47742797215089"
+      ],
+      "mmq-instance-iq3_xxs.cu.o": [
+        "0e81fda3c5e791887ad8cda70bb87f878e21c4604f0e1e339ee771c6c977b863"
+      ],
+      "mmq-instance-iq3_s.cu.o": [
+        "7fba064b55ffa5f0dd77d5cd032b6e4f60cf8e586e47787684e45e8ea4a7af0f"
+      ],
+      "mmq-instance-iq4_nl.cu.o": [
+        "129b3497a83c0b3fca8568ffe9646b67e5bcacc32df92c62d5f60505b1092fe0"
+      ],
+      "mmq-instance-iq4_xs.cu.o": [
+        "eb23da7acf5b00a240769f9b752925c20a93aae4400f465e04c9e1857220df0a"
+      ],
+      "mmq-instance-q8_0.cu.o": [
+        "015a92a24eec56a0fdddf2f437f5594bb4d737eab6c77b3de97feb4fc350a878"
+      ]
+    },
+    "ggml/src/libggml-base.a": {
+      "ggml.c.o": [
+        "ed2bc76736e4ae595008465769d0311e5feba229c9be04dd0eb6cb51945c02b9"
+      ],
+      "ggml.cpp.o": [
+        "c5e4c16f0693564776303a1d3341d2fd5d772e520725d5733643f7004e842c53"
+      ],
+      "ggml-alloc.c.o": [
+        "439db3652977208ea2cc2cac29f1c419a36ba097c9ef8ace7f439ed85c1588d0"
+      ],
+      "ggml-backend.cpp.o": [
+        "453e401c08edf709f449353ccce3298c9611cf835087626de3e8d973ff6fa3bf"
+      ],
+      "ggml-backend-meta.cpp.o": [
+        "2e8835771c12dda8449c605e37c9702954690b29358e49f3f43c6059b17bd29b"
+      ],
+      "ggml-opt.cpp.o": [
+        "f9fb8c97deb8deff7243c1d90f404ac449f90ca22c12a9ae3feef3d0261da5f4"
+      ],
+      "ggml-threading.cpp.o": [
+        "f8e358d921bf64034740a0802af762a785b43797cea9c29368b6501175044a02"
+      ],
+      "ggml-quants.c.o": [
+        "0009ad6442911bf5bbcbad9f669132bf6be18e51fd65dccc6c410f392e40ff4d"
+      ],
+      "gguf.cpp.o": [
+        "cf1a1cd8cf22d9b33d93ed9ebc1836ec6b73d7dc57b88e442ffd0074ef1ce2f0"
+      ]
+    }
+  },
+  "only_reviewed_archive_members_replaced": true,
+  "symbol_ownership": {
+    "strata_hc_bf16_n4_supported": "/out/build/hc_bf16_n4.o",
+    "strata_hc_bf16_n4_launch": "/out/build/hc_bf16_n4.o",
+    "strata_peer_affinity_capture": "libstrata_prefill.a(prefill.cpp.o)",
+    "strata_peer_affinity_pinned": "libstrata_prefill.a(prefill.cpp.o)",
+    "strata_peer_affinity_begin": "libstrata_prefill.a(prefill.cpp.o)",
+    "strata_peer_affinity_end": "libstrata_prefill.a(prefill.cpp.o)",
+    "strata_peer_affinity_report": "libstrata_prefill.a(prefill.cpp.o)",
+    "strata::prefill::Gemm::bf16(": "libstrata_prefill.a(gemm.cu.o)",
+    "strata::core::Verifier::run(": "libstrata_engine.a(verify.cpp.o)"
+  },
+  "binary": {
+    "sha256": "7b00d34c85181a2023862e01a5782c68c0403ba5b13a0e0eeec7280afa06b0e6",
+    "bytes": 21669936
+  },
+  "link_completed": true,
+  "donor_after": {
+    "libstrata_engine.a": {
+      "sha256": "6999f03f57473776a99b72bf4ebe8766a9c6c751f74affd010a2fccf36412da9",
+      "bytes": 1961682
+    },
+    "libstrata_prefill.a": {
+      "sha256": "b3a508a2f5c0e67303e25c39eb2cac5478732b97d628ac52028e2fc9e8e3c7f8",
+      "bytes": 801970
+    },
+    "libstrata_spec.a": {
+      "sha256": "52b87c781c881a52880886d3598337a877d4a61051911f6a5f5ad93588e174b2",
+      "bytes": 34860
+    },
+    "libstrata_kernels.a": {
+      "sha256": "135bfd9e51c94d9596db56d69db956f0397ff088097b28950002b98c3b97af9b",
+      "bytes": 9869884
+    },
+    "libstrata_core.a": {
+      "sha256": "0a445cccbca385adcd0da1b15b7e4bb8e3bd4b7d2aa2de308becfb05d37871af",
+      "bytes": 236302
+    },
+    "libstrata_kernels_cpu.a": {
+      "sha256": "30579ab20c14b8cd9d8fa70a7c3eb7d2fefc9e214fa7ad4cc1c4787f8c80de8a",
+      "bytes": 1024826
+    },
+    "ggml/src/libggml-cpu.a": {
+      "sha256": "a9fc4bf801bb7143635f78337062abb20b67849d7f43b531d1c91604cee28c0f",
+      "bytes": 1692740
+    },
+    "libstrata_mmq.a": {
+      "sha256": "53bbd154dd4978422993c2e65eed982cfcac38278a82c88df6bc97fae5a56c10",
+      "bytes": 8342270
+    },
+    "ggml/src/libggml-base.a": {
+      "sha256": "bae60befac1bde1706241a530bd256eccf7552d2ba1c9dc260ac3eda750c9951",
+      "bytes": 1401626
+    },
+    "hc_bf16_n4.o": {
+      "sha256": "3e0b616ef7d8658a61dc26cbd6219e1ebd3233ab8afc1a34fe7b23e226bc7b68",
+      "bytes": 19312
+    },
+    "CMakeFiles/strata.dir/src/program/generate.cpp.o": {
+      "sha256": "f90e6142d7a5964be5e8bade7244f2893c8d2801fbc557b9bb3471e56190a4a1",
+      "bytes": 1235832
+    },
+    "strata": {
+      "sha256": "74aa76d48a4783991e60b7e25601125dc5dc2bfeeaa351a71b350c122476b662",
+      "bytes": 21635056
+    },
+    "build-receipt.json": {
+      "sha256": "673c0c798e665ea86d0cf925306fadbdeff96249132379c51fd1cd900ff030cb",
+      "bytes": 10253
+    }
+  },
+  "donor_unchanged": true,
+  "gpu_object_unchanged": true,
+  "package_unchanged": true,
+  "candidate_sources_unchanged": true,
+  "rollback_binary_preserved": true,
+  "untouched_sources_unchanged": true
+}
