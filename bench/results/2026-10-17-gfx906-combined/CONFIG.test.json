@@ -1,0 +1,47 @@
+{
+  "protocol_source_commit": "477ac13cbe8e582c20484871ce459d20d82df09d",
+  "image": "sha256:bccb7ee7e7a78274519db9a43ba63c34ddd2e74bb60f8764a8f50aaee1f2c646",
+  "lock_path": "/ABSOLUTE/LOCAL/TEST/lock",
+  "prompt": "/ABSOLUTE/LOCAL/KIT/fixtures/prompt-65536.json",
+  "executables": {
+    "A": "/REPLACE/container/path/baseline-build/strata",
+    "B": "/REPLACE/container/path/candidate-build/strata"
+  },
+  "docker_options": [
+    "--device",
+    "/dev/kfd",
+    "--device",
+    "/dev/dri",
+    "--ipc",
+    "host",
+    "--ulimit",
+    "memlock=-1:-1",
+    "-v",
+    "/REPLACE/host/source:/REPLACE/container/source:ro"
+  ],
+  "environment": {},
+  "unset_environment": [],
+  "treatment_environment": {
+    "A": {},
+    "B": {}
+  },
+  "args": [
+    "REPLACE_WITH_ALL_COMMON_NATIVE_ARGS_INCLUDING_MODEL_AND_EOS_OVERRIDE"
+  ],
+  "expected_info": {
+    "context": "262144",
+    "kv": "int8",
+    "kv_resident": "32768",
+    "pool_workers": "15",
+    "spec": "6",
+    "mtp_max": "4",
+    "lookup": "0",
+    "prefill_cap": "4096"
+  },
+  "required_stderr_fragments": [
+    "REPLACE_WITH_VERIFIED_BASELINE_DEVICE_AND_SPLIT_LINES"
+  ],
+  "startup_timeout_s": 900,
+  "generation_timeout_s": 7200,
+  "quit_timeout_s": 120
+}

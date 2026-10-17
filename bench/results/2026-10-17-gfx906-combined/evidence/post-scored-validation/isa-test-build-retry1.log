@@ -1,0 +1,68 @@
+-- HIP: Using hipcc from relative path: /opt/rocm/bin/hipcc
+-- HIP_PLATFORM using hip_HIPCONFIG_EXECUTABLE: amd
+CMake Warning (author) at /opt/rocm/lib/cmake/hip/hip-config-amd.cmake:82 (message):
+   GPU_TARGETS was not set, and system GPU detection was unsuccsessful.
+   
+   The amdgpu-arch tool failed:
+   Error: 'Failed to get device count: no ROCm-capable device is detected (error code: 100)'
+   Output: ''
+   
+   As a result, --offload-arch will not be set for subsequent
+   compilations, and the default architecture
+   (gfx906 for dynamic build / gfx942 for static build) will be used
+   for compiling device code in C++ language mode
+
+Call Stack (most recent call first):
+  /opt/rocm/lib/cmake/hip/hip-config.cmake:164 (include)
+  CMakeLists.txt:147 (find_package)
+This warning is for project developers.  Use -Wno-author to suppress it.
+
+-- HIP: Using hipcc from relative path: /opt/rocm/bin/hipcc
+CMake Warning (author) at /opt/rocm/lib/cmake/hip/hip-config-amd.cmake:82 (message):
+   GPU_TARGETS was not set, and system GPU detection was unsuccsessful.
+   
+   The amdgpu-arch tool failed:
+   Error: 'Failed to get device count: no ROCm-capable device is detected (error code: 100)'
+   Output: ''
+   
+   As a result, --offload-arch will not be set for subsequent
+   compilations, and the default architecture
+   (gfx906 for dynamic build / gfx942 for static build) will be used
+   for compiling device code in C++ language mode
+
+Call Stack (most recent call first):
+  /opt/rocm/lib/cmake/hip/hip-config.cmake:164 (include)
+  /usr/local/lib/python3.12/dist-packages/cmake/data/share/cmake-4.4/Modules/CMakeFindDependencyMacro.cmake:93 (find_package)
+  /usr/local/lib/python3.12/dist-packages/cmake/data/share/cmake-4.4/Modules/CMakeFindDependencyMacro.cmake:125 (__find_dependency_common)
+  /opt/rocm/lib/cmake/hipblas/hipblas-config.cmake:90 (find_dependency)
+  CMakeLists.txt:148 (find_package)
+This warning is for project developers.  Use -Wno-author to suppress it.
+
+-- Strata: HIP (gfx906 compat) enabled, arch gfx906
+-- strata: pack/full/experts.bin absent - the expert arena load test is NOT registered
+-- Warning: ccache not found - consider installing it for faster compilation or disable this warning with GGML_CCACHE=OFF
+-- CMAKE_SYSTEM_PROCESSOR: x86_64
+-- GGML_SYSTEM_ARCH: x86
+-- Including CPU backend
+-- x86 detected
+-- Adding CPU backend variant ggml-cpu: -march=native 
+-- ggml version: 0.24.0
+-- ggml commit:  unknown
+-- Configuring done (4.2s)
+-- Generating done (3.2s)
+-- Build files have been written to: /work/build
+[  0%] Building CXX object CMakeFiles/q2_avx2_spread_test.dir/tests/q2_avx2_spread_test.cpp.o
+[  0%] Linking CXX executable q2_avx2_spread_test
+[  0%] Built target q2_avx2_spread_test
+[100%] Building CXX object CMakeFiles/q2_avx2_test_runner.dir/tests/q2_avx2_test_runner.cpp.o
+[100%] Linking CXX executable q2_avx2_test_runner
+[100%] Built target q2_avx2_test_runner
+Test project /work/build
+    Start 112: q2_avx2_spread_on
+1/2 Test #112: q2_avx2_spread_on ................   Passed    0.15 sec
+    Start 113: q2_avx2_spread_off
+2/2 Test #113: q2_avx2_spread_off ...............   Passed    0.16 sec
+
+100% tests passed out of 2
+
+Total Test time (real) =   0.32 sec

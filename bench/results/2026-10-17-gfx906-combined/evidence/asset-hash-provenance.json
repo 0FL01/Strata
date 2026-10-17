@@ -1,0 +1,12 @@
+{
+  "source_manifest_sha256": "a23d756ff7c434b6d714f8f2549feec65c6c495c480f5da3451ee98dcc3a385f",
+  "files": 17,
+  "timing": "Hash collection occurred after the scored benchmark, not during timed arms.",
+  "stat_stability": "Collection operator verified stable stat checks during hashing. This does not turn post-run hashing into a pre-run byte snapshot.",
+  "path_mapping": {
+    "pack/": "/runtime/shefowl-hybrid/",
+    "mtp/": "/runtime/mtp/",
+    "expert-profile.bin": "/data/expert-profile.bin"
+  },
+  "historical_metadata_caveat": "Pack conversion metadata names the earlier IQ4_NL second shard; current explicit --ple-gguf overrides it with the separately verified Q8_0 shard."
+}

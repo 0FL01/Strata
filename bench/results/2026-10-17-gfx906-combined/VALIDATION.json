@@ -1,0 +1,44 @@
+{
+  "runtime_byte_identical_to_reviewed_v6": [
+    "run_pairs.py",
+    "run_smoke.py",
+    "run_canary.py",
+    "probe_startup.py",
+    "protocol.py"
+  ],
+  "local_fake_runtime_tests": {
+    "passed": 32,
+    "real_gpu_or_docker_used": false
+  },
+  "qualification_replays": {
+    "smoke-4k-reserve-v3": {
+      "closed_raw_stdout_replay": "PASS",
+      "exact_output_work_layout_parity": true,
+      "performance_qualified": false
+    },
+    "canary-64k-reserve-v3": {
+      "closed_raw_stdout_replay": "PASS",
+      "exact_output_work_layout_parity": true,
+      "performance_qualified": false
+    }
+  },
+  "privacy_scan": "No original absolute host/workspace paths or internal links in public files",
+  "public_runtime_changes": "none",
+  "test_changes": "Use bundled prompt relative to test_runner.py; use separate CONFIG.test.json to isolate fake runtime configuration",
+  "scored_results": {
+    "state": "complete",
+    "arms": 12,
+    "pairs": 6,
+    "public_raw_replay_matches_original_summary": true,
+    "first_pair_retained": true,
+    "all_closed_receipts_pass": true,
+    "engine_version_checked": "0.1.45"
+  },
+  "post_scored_validation": {
+    "default_hc_build_options_off": "PASS",
+    "defaultoff_short_model_parity": true,
+    "output_tokens": 256,
+    "target_host_cpu_ctest_passed": 2,
+    "measured_engine_unchanged": true
+  }
+}

@@ -1,0 +1,21 @@
+HC_N4_PARITY T=4096 fixture=0 words=16384 different=0 nonfinite=0
+HC_N4_PARITY T=4096 fixture=1 words=16384 different=0 nonfinite=0
+HC_N4_PARITY T=4096 fixture=2 words=16384 different=0 nonfinite=0
+HC_N4_PARITY T=4096 fixture=3 words=16384 different=0 nonfinite=0
+HC_N4_PARITY T=4096 fixture=4 words=16384 different=0 nonfinite=0
+HC_N4_PARITY T=4096 fixture=5 words=16384 different=0 nonfinite=0
+HC_N4_PARITY T=4096 fixture=6 words=16384 different=0 nonfinite=0
+HC_N4_PARITY T=4096 fixture=7 words=16384 different=0 nonfinite=0
+HC_N4_PARITY T=4096 fixture=8 words=16384 different=0 nonfinite=0
+HC_N4_PARITY T=4096 fixture=9 words=16384 different=0 nonfinite=0
+HC_N4_PARITY T=4095 fixture=0 words=16380 different=0 nonfinite=0
+HC_N4_PARITY T=4095 fixture=1 words=16380 different=0 nonfinite=0
+HC_N4_PARITY T=4095 fixture=2 words=16380 different=0 nonfinite=0
+HC_N4_PARITY T=4095 fixture=3 words=16380 different=0 nonfinite=0
+HC_N4_PARITY T=4095 fixture=4 words=16380 different=0 nonfinite=0
+HC_N4_PARITY T=4095 fixture=5 words=16380 different=0 nonfinite=0
+HC_N4_PARITY T=4095 fixture=6 words=16380 different=0 nonfinite=0
+HC_N4_PARITY T=4095 fixture=7 words=16380 different=0 nonfinite=0
+HC_N4_PARITY T=4095 fixture=8 words=16380 different=0 nonfinite=0
+HC_N4_PARITY T=4095 fixture=9 words=16380 different=0 nonfinite=0
+PASS: 20 synthetic full-word cases; actual-weight/shadow/model qualification remains separate

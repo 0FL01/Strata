@@ -1,0 +1,12 @@
+{
+  "baseline-startup-reserve-v3/receipt.json": "51a481324e56b8e111291f64dadc78bcc073e936612c04a7775db24a07f3a791",
+  "candidate-startup-reserve-v3/receipt.json": "d474db08d192d6d1d0d3d9b1c9db9d558fd4f9a4694baace5924d6e24cb3e9f7",
+  "smoke-4k-reserve-v3/smoke-B.receipt.json": "b9af172039fcf003255798f643a7230a2fd23be9299526d3f4c90dc65fd2989e",
+  "smoke-4k-reserve-v3/status.json": "edfb72b61171882c1ea156971baad1c49304778134de570c982f4697560d762d",
+  "smoke-4k-reserve-v3/smoke-A.receipt.json": "a5fcd99f19c23a9f9cf2f701eff11729e325ed49c5ca700610bb4d92c7efcc09",
+  "smoke-4k-reserve-v3/smoke-C.receipt.json": "3de8468faa1d311b87085e6b5155dc92016c6c6f2e3f3a56f785f6c83f743611",
+  "canary-64k-reserve-v3/canary-A.receipt.json": "9b922064f4a93389479305b975181f6094715b45a11a3989f6c72c103715497d",
+  "canary-64k-reserve-v3/canary-B.receipt.json": "a5247b67f0978671c7a10fcfad5d8be77664143842fb48ec4adea7a58c7793df",
+  "canary-64k-reserve-v3/status.json": "5557b6f9f14f41042fcdc4f865a2702854aec8deb785613632ba23c23e73d721",
+  "actual_configuration_sha256": "5c777ed792f416a3dfda085d7f1bcd27137f654ad428d2a7bcc98b946cdd7b25"
+}

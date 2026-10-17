@@ -1,0 +1,20 @@
+HC_F16_EXACT_STATE owner=0 enabled=0 shadow=0 reference_only=0 reason=disabled calls=0 takes=0 guard_fallback=0 other_fallback=0
+HC_F16_EXACT_ALLOC owner=0 bytes=90440448 charge=100663296 floor=268435456 before=16741564416 after=16649289728
+HC_F16_EXACT_STATE owner=0 enabled=1 shadow=0 reference_only=0 reason=active calls=9 takes=3 guard_fallback=6 other_fallback=0
+HC_F16_EXACT_ALLOC owner=0 bytes=90440448 charge=100663296 floor=268435456 before=16733175808 after=16640901120
+HC_F16_EXACT_STATE owner=0 enabled=1 shadow=0 reference_only=1 reason=active calls=1 takes=0 guard_fallback=0 other_fallback=1
+HC_F16_EXACT_STATE owner=0 enabled=0 shadow=0 reference_only=0 reason=disabled calls=0 takes=0 guard_fallback=0 other_fallback=0
+HC_F16_EXACT_ALLOC owner=0 bytes=90440448 charge=100663296 floor=268435456 before=16485711872 after=16393437184
+HC_F16_EXACT_STATE owner=0 enabled=1 shadow=0 reference_only=0 reason=active calls=9 takes=3 guard_fallback=6 other_fallback=0
+HC_F16_EXACT_ALLOC owner=0 bytes=90440448 charge=100663296 floor=268435456 before=16485711872 after=16393437184
+HC_F16_EXACT_STATE owner=0 enabled=1 shadow=0 reference_only=1 reason=active calls=1 takes=0 guard_fallback=0 other_fallback=1
+HC_F16_EXACT_STATE owner=0 enabled=0 shadow=0 reference_only=0 reason=disabled calls=0 takes=0 guard_fallback=0 other_fallback=0
+HC_F16_EXACT_ALLOC owner=0 bytes=90440448 charge=100663296 floor=268435456 before=16731078656 after=16638803968
+HC_F16_EXACT_STATE owner=0 enabled=1 shadow=0 reference_only=0 reason=active calls=9 takes=3 guard_fallback=6 other_fallback=0
+HC_F16_EXACT_ALLOC owner=0 bytes=90440448 charge=100663296 floor=268435456 before=16731078656 after=16638803968
+HC_F16_EXACT_STATE owner=0 enabled=1 shadow=0 reference_only=1 reason=active calls=1 takes=0 guard_fallback=0 other_fallback=1
+HC_F16_EXACT_STATE owner=0 enabled=0 shadow=0 reference_only=0 reason=disabled calls=0 takes=0 guard_fallback=0 other_fallback=0
+HC_F16_EXACT_ALLOC owner=0 bytes=90440448 charge=100663296 floor=268435456 before=16485711872 after=16393437184
+HC_F16_EXACT_STATE owner=0 enabled=1 shadow=0 reference_only=0 reason=active calls=9 takes=3 guard_fallback=6 other_fallback=0
+HC_F16_EXACT_ALLOC owner=0 bytes=90440448 charge=100663296 floor=268435456 before=16485711872 after=16393437184
+HC_F16_EXACT_STATE owner=0 enabled=1 shadow=0 reference_only=1 reason=active calls=1 takes=0 guard_fallback=0 other_fallback=1

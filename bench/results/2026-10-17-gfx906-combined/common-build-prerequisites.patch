@@ -1,0 +1,57 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index d900326e..f7aff400 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1603,6 +1603,10 @@ if(STRATA_NATIVE_EXPERTS)
+     endif()
+     target_link_libraries(strata_mmq_w4a4 PUBLIC ggml-base ${_strata_gpu_runtime_target})
+     target_link_libraries(strata_mmq PRIVATE strata_mmq_w4a4)
++    # PR #2460: select the HIP vendor headers in the w4a4 translation unit.
++    if(STRATA_HIP_GFX906 OR STRATA_ENABLE_HIP)
++      target_compile_definitions(strata_mmq_w4a4 PRIVATE GGML_USE_HIP)
++    endif()
+     # STRATA_MMQ_TAB: the pointer-table copy of MMQ's scheduler mirrors mmq.cuh from mul_mat_q_process_tile through
+     # mul_mat_q_case (struct mmq_args included).  A fingerprint of that text instead of a compile probe: nothing is
+     # compiled at configure time, and a llama.cpp tree with another scheduler turns the feature off instead of
+diff --git a/include/strata/platform/hip_compat/cublas_v2.h b/include/strata/platform/hip_compat/cublas_v2.h
+index fe8ea157..a90b839b 100644
+--- a/include/strata/platform/hip_compat/cublas_v2.h
++++ b/include/strata/platform/hip_compat/cublas_v2.h
+@@ -13,6 +13,9 @@
+ #define cublasDestroy hipblasDestroy
+ #define cublasSetStream hipblasSetStream
+ #define cublasGemmEx hipblasGemmEx
++#define cublasSgemm hipblasSgemm
++#define cublasSgemmStridedBatched hipblasSgemmStridedBatched
++#define cublasGemmStridedBatchedEx hipblasGemmStridedBatchedEx
+ #define CUBLAS_OP_N HIPBLAS_OP_N
+ #define CUBLAS_OP_T HIPBLAS_OP_T
+ #define CUBLAS_GEMM_DEFAULT HIPBLAS_GEMM_DEFAULT
+diff --git a/src/prefill/moe_f16_kq.hpp b/src/prefill/moe_f16_kq.hpp
+index c7f80eb1..71f82af2 100644
+--- a/src/prefill/moe_f16_kq.hpp
++++ b/src/prefill/moe_f16_kq.hpp
+@@ -12,6 +12,16 @@
+ 
+ namespace strata::prefill::fused::f16kq {
+ 
++#if defined(STRATA_HIP_GFX906)
++// Build prerequisite adapted from PR #2020: gfx906 has no gfx11 F16 K-quant kernels.
++inline bool covers(int) { return false; }
++inline bool covers_down(int) { return false; }
++inline void gate_up(const Batch&, const NativeGeom&, const int32_t*, const int2*, const int32_t*, int64_t,
++                    int, int64_t, const uint8_t*, const int32_t*, uint8_t*, cudaStream_t) { __builtin_trap(); }
++inline void down(const Batch&, const NativeGeom&, const int32_t*, const int2*, const int32_t*, int64_t, int,
++                 int64_t, const uint8_t*, float*, cudaStream_t) { __builtin_trap(); }
++#else
++
+ /// The gate/up type has a kernel here (and this build has gfx11 device code).
+ bool covers(int gu_type);
+ 
+@@ -27,4 +37,6 @@ bool covers_down(int d_type);
+ void down(const Batch& b, const NativeGeom& g, const int32_t* ts, const int2* tiles, const int32_t* off, int64_t n, int n_expert,
+           int64_t work_bound, const uint8_t* h, float* dm, cudaStream_t s);
+ 
++#endif
++
+ }  // namespace strata::prefill::fused::f16kq

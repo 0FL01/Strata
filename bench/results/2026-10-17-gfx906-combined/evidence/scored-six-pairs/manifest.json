@@ -1,0 +1,74 @@
+[
+  {
+    "pair": 1,
+    "arm": "A",
+    "stdout": "01A.stdout",
+    "exit_code": 0
+  },
+  {
+    "pair": 1,
+    "arm": "B",
+    "stdout": "01B.stdout",
+    "exit_code": 0
+  },
+  {
+    "pair": 2,
+    "arm": "B",
+    "stdout": "02B.stdout",
+    "exit_code": 0
+  },
+  {
+    "pair": 2,
+    "arm": "A",
+    "stdout": "02A.stdout",
+    "exit_code": 0
+  },
+  {
+    "pair": 3,
+    "arm": "B",
+    "stdout": "03B.stdout",
+    "exit_code": 0
+  },
+  {
+    "pair": 3,
+    "arm": "A",
+    "stdout": "03A.stdout",
+    "exit_code": 0
+  },
+  {
+    "pair": 4,
+    "arm": "A",
+    "stdout": "04A.stdout",
+    "exit_code": 0
+  },
+  {
+    "pair": 4,
+    "arm": "B",
+    "stdout": "04B.stdout",
+    "exit_code": 0
+  },
+  {
+    "pair": 5,
+    "arm": "A",
+    "stdout": "05A.stdout",
+    "exit_code": 0
+  },
+  {
+    "pair": 5,
+    "arm": "B",
+    "stdout": "05B.stdout",
+    "exit_code": 0
+  },
+  {
+    "pair": 6,
+    "arm": "B",
+    "stdout": "06B.stdout",
+    "exit_code": 0
+  },
+  {
+    "pair": 6,
+    "arm": "A",
+    "stdout": "06A.stdout",
+    "exit_code": 0
+  }
+]

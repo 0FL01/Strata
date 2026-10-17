@@ -1,0 +1,40 @@
+{
+  "scored": false,
+  "purpose": "Default HC build options OFF, all new runtime controls OFF: 4096 prompt/256 output parity against prior upstream A; same frozen profile. Separate target-host CTest validation.",
+  "parity": true,
+  "binary_sha256": "ef71874a30098cc41b744749531d4cafaa11c3c8d8da45e5752fa143bbf7bbc2",
+  "files": {
+    "defaultoff-model-smoke/status.json": {
+      "source_sha256": "818d369b07bc64afccae0a8ef846ec5e18f7dfd7c0fdf151d5f8008391c4ee5c",
+      "public_sha256": "818d369b07bc64afccae0a8ef846ec5e18f7dfd7c0fdf151d5f8008391c4ee5c"
+    },
+    "defaultoff-model-smoke/defaultoff.receipt.json": {
+      "source_sha256": "9a541deef605c1cb381acd42887d9d79884f580c01203becd5ac034aa3b71619",
+      "public_sha256": "612783ab0b99098648fb5cf250addd3bc3b2d98e2128e9fe9f71200d996c11ba"
+    },
+    "defaultoff-model-smoke/defaultoff.stdout": {
+      "source_sha256": "8f4d908b2711fffb5d519b2431bcc81b0879de789e64cf02729fb5d97cb9644f",
+      "public_sha256": "8f4d908b2711fffb5d519b2431bcc81b0879de789e64cf02729fb5d97cb9644f"
+    },
+    "defaultoff-model-smoke/defaultoff.stderr": {
+      "source_sha256": "f341ffdedddf43f2b8d5fadbbcef9a7e231bd3cb1acb7617f98dc3aadc202742",
+      "public_sha256": "f341ffdedddf43f2b8d5fadbbcef9a7e231bd3cb1acb7617f98dc3aadc202742"
+    },
+    "defaultoff-build-completed.json": {
+      "source_sha256": "7252fc25591580ebcf5dc2b32714164e75ed9dfa5c6fdd4e6fffd9c04bfa84be",
+      "public_sha256": "7252fc25591580ebcf5dc2b32714164e75ed9dfa5c6fdd4e6fffd9c04bfa84be"
+    },
+    "isa-test-build-retry1-completed.json": {
+      "source_sha256": "06ef5227a44b19fc143921efe75fab0f93a53e12198ba0e65a19255861f0e50e",
+      "public_sha256": "06ef5227a44b19fc143921efe75fab0f93a53e12198ba0e65a19255861f0e50e"
+    },
+    "isa-test-build-retry1.log": {
+      "source_sha256": "53fe8539c8e6d4e6bee2bbba0219a1eb59f880185c8bf6033e69705394e6bce9",
+      "public_sha256": "53fe8539c8e6d4e6bee2bbba0219a1eb59f880185c8bf6033e69705394e6bce9"
+    },
+    "isa-test-build-failed.log": {
+      "source_sha256": "a2e03577f6d4c715106b9da769ebfccd74021ab6dacb72326c34ab50ac3eec77",
+      "public_sha256": "a2e03577f6d4c715106b9da769ebfccd74021ab6dacb72326c34ab50ac3eec77"
+    }
+  }
+}

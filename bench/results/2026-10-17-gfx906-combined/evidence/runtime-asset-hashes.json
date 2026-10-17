@@ -1,0 +1,75 @@
+{
+  "started": "2026-10-17T19:39:08.413641+00:00",
+  "completed": true,
+  "files": {
+    "pack/conversions.json": {
+      "bytes": 344,
+      "sha256": "7595a07da1de4b5fada9ac522c78105f0e15af505e59ac7bc9d8456b573bd431"
+    },
+    "pack/dense.bin": {
+      "bytes": 1538035200,
+      "sha256": "d2af3d8331e5c7a1985d1d589747230f9d56719a6d33c7cddc9ee6b81cde6b13"
+    },
+    "pack/experts.bin": {
+      "bytes": 33973862400,
+      "sha256": "20684bf01755f081541370ce66e1ba880137016f1f4645adfbb5440a8be4c8ff"
+    },
+    "pack/experts.bin.src.json": {
+      "bytes": 411,
+      "sha256": "292fe26ea611b7c30750bd6e92d5cebd607a0c4bbf5e2dc46c1691cde4156663"
+    },
+    "pack/index.txt": {
+      "bytes": 93704,
+      "sha256": "f433767ff6ca93cd733aa3b1ab785a7d308cf9189a8bddcb14b930532e688fc2"
+    },
+    "pack/native_experts.txt": {
+      "bytes": 3307,
+      "sha256": "efb00a84c6ee366fe66787cb1b93769ad60e9c1e2aa78d493bb528c8303ee682"
+    },
+    "pack/tokenizer/chat_template.jinja": {
+      "bytes": 9993,
+      "sha256": "12827f24b742ea4e80cdc12dbcf9622227056b9f797252a3149263d4f9aaadce"
+    },
+    "pack/tokenizer/merges.txt": {
+      "bytes": 3353258,
+      "sha256": "4ba698529766c7a2f5052083ea10cdf2485577f5237a332ee291054eb11e3332"
+    },
+    "pack/tokenizer/token_type.json": {
+      "bytes": 744960,
+      "sha256": "5088c8c298fc06af8382ddb3b76c888703ac2634e82263b97eedcc2ad202738b"
+    },
+    "pack/tokenizer/tokenizer.json": {
+      "bytes": 541,
+      "sha256": "c0bd435efbc6c3b28964b47999afe16c4ad268c7c7c4e8cb3af410796a6f30bf"
+    },
+    "pack/tokenizer/vocab.json": {
+      "bytes": 5737005,
+      "sha256": "4ba64f0332abcfb0b600b7df1537d1e836e68009d5fb7cdb77339738dc6365c4"
+    },
+    "mtp/.ready": {
+      "bytes": 408,
+      "sha256": "14dcb49aea8a03d063fc9aeb641c278a7de3d667d447299c115e818f57b7a806"
+    },
+    "mtp/dense.bin": {
+      "bytes": 116099072,
+      "sha256": "c724dc0b0822ada5d2977bf5bde821605feabaa64ea2e0045b67ca656329070a"
+    },
+    "mtp/dense.txt": {
+      "bytes": 1851,
+      "sha256": "991456cf4eb266eb8a888c349e548d11bc640f5dbd9149439aa9786af0f732fd"
+    },
+    "mtp/draft_vocab.bin": {
+      "bytes": 425196,
+      "sha256": "b1e1d3a7a9e4bf862dcd5923ce661fb59bbd07907e594df5cf86a62ac235cb91"
+    },
+    "mtp/experts.bin": {
+      "bytes": 707788800,
+      "sha256": "09398406be61f1f54c93861f449e48b8df0bfccbc9ec9b2b7636775a6ea9244f"
+    },
+    "expert-profile.bin": {
+      "bytes": 196632,
+      "sha256": "8f59b4aa8873209dff11c11e37bcda9529a1335b724a1afeea37bf6388975baf"
+    }
+  },
+  "finished": "2026-10-17T19:41:11.892910+00:00"
+}
