@@ -1,6 +1,6 @@
 # Draft: gfx906 exact decode pipeline and prefill preparation
 
-Status: Draft supplement; qualification limits below remain open. Depends on the existing combined gfx906 work in upstream PR #2966. Publication still needs a clean public-base diff review.
+Status: dependent Draft supplement with explicit build prerequisites. Depends on the existing combined gfx906 work in upstream PR #2966. Publication still needs a clean public-base diff review.
 
 ## What changes
 - Exact decode pipeline and shape-aware preparation.
@@ -56,3 +56,6 @@ Short8k on/off/off/on repeat launched18:49 UTC, binary unchanged, to test whethe
 ## 18:59 UTC: short8k repeat complete
 ON/OFF/OFF/ON, all4 outputs exact256IDs. {"off": {"pp_tps": 488.84990183617094, "tg_tps": 64.63830324453983}, "on": {"pp_tps": 496.2036664072178, "tg_tps": 64.4560263866858}, "pp_delta_pct": 1.5042990790067323, "tg_delta_pct": -0.2819951154417355, "same_tokens": true, "pairs": 2}
 Initial 418t/s J48-on PP slowdown did not repeat; its cause remains unknown and original result retained. Do not label it fixed or discard it. Both repeat PP pairs positive. TG one positive/one negative with only256 tokens. No more GPU jobs running.
+
+## Required external build prerequisites
+The measured local base also carries compatibility fixes from PR #2020 (gfx906 F16 K-quant stubs), #2460 (HIP w4a4 header selection), and cuBLAS-to-hipBLAS aliases overlapping #2459/#3083. These are NOT proposed again as optimization code. The public source omits those prerequisite code hunks; apply compatibility-prerequisites.patch to reproduce the measured gfx906 build until upstream provides equivalent fixes. This is a dependent Draft, not a standalone gfx906 build claim. Windows batch-file differences in the local checkout are not part of this Linux benchmark. Do not import #3078 wholesale.
