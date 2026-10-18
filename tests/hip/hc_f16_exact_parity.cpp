@@ -12,6 +12,7 @@
 #include <cstring>
 #include <string>
 #include <vector>
+#include <memory>
 #ifndef STRATA_HC_F16_EXACT_BUILT
 #error "This test requires the real HC F16 exact Gemm path"
 #endif
@@ -47,12 +48,16 @@ template<class U> struct Buffer {
         return got;
     }
 };
+static bool test_external=false;
 struct Workspace {
-    hc::State state;strata::prefill::Gemm& gemm;cudaStream_t stream;
+    hc::State state;strata::prefill::Gemm& gemm;cudaStream_t stream;std::unique_ptr<Buffer<uint16_t>> region;
     Workspace(strata::prefill::Gemm& g,int device,cudaStream_t s,const char* enable,bool reference=false):gemm(g),stream(s) {
         env("STRATA_HC_F16_EXACT",enable);env("STRATA_HC_F16_EXACT_SHADOW","0");env("STRATA_HC_F16_EXACT_REFERENCE_ONLY",reference?"1":"0");
-        std::string error;if(!state.prepare(device,s,true,error))throw std::runtime_error(error);require(!state.shadow,"shadow is not an independent output");
-        if(enable&&std::strcmp(enable,"1")==0)require(state.scratch&&std::strcmp(state.reason,"active")==0,"enabled path failed to provision its independent workspace");
+        std::string error;if(!state.prepare(device,s,true,error,test_external))throw std::runtime_error(error);require(!state.shadow,"shadow is not an independent output");
+        if(enable&&std::strcmp(enable,"1")==0){
+            if(test_external){require(state.external_mode&&!state.scratch,"external mode failed");region=std::make_unique<Buffer<uint16_t>>(hc::kBytes/2,s);region->upload();check(cudaStreamSynchronize(s),"region sentinel upload");}
+            else require(state.scratch&&std::strcmp(state.reason,"active")==0,"enabled owned workspace missing");
+        }
         else require(!state.enabled&&!state.scratch,"default OFF allocated/enabled HC storage");
         gemm.bind_hc_f16_exact(&state);
     }
@@ -72,6 +77,7 @@ static void run_case(strata::prefill::Gemm& reference,strata::prefill::Gemm& can
     reference.bf16(x.device(),w.device(),reinterpret_cast<float*>(ref.device()),shape.t,shape.n,shape.k,ld,0.0f,0,x_f16);
     check(cudaGetLastError(),"reference launch");check(cudaStreamSynchronize(workspace.stream),"reference drain");
     const auto a=ref.read();x.read(true);w.read(true);
+    hc::State::RegionView external_view(workspace.state,workspace.region?workspace.region->device():nullptr,hc::kBytes,shape.t,true);
     candidate.bf16(x.device(),w.device(),reinterpret_cast<float*>(got.device()),shape.t,shape.n,shape.k,ld,0.0f,0,x_f16);
     check(cudaGetLastError(),"candidate launch");check(cudaStreamSynchronize(workspace.stream),"candidate drain");
     const auto after=counts(workspace.state);const bool bypass=!workspace.state.enabled||x_f16||f16_io;
@@ -83,11 +89,12 @@ static void run_case(strata::prefill::Gemm& reference,strata::prefill::Gemm& can
         unsigned guard[10]{};auto stats=static_cast<uint16_t*>(workspace.state.scratch)+n*k+t*k;
         check(cudaMemcpyAsync(guard,stats,sizeof(guard),cudaMemcpyDeviceToHost,workspace.stream),"conversion guard read");check(cudaStreamSynchronize(workspace.stream),"guard read drain");hc_test::check_guard(fixture,guard);
     }
+    if(workspace.region)workspace.region->read();
     const auto b=got.read();x.read(true);w.read(true);const auto c=hc_test::compare(a.data()+ref.guard,b.data()+got.guard,t,n,ld,poison_ref,poison_got);
     // The allocation is sized for the padded variant; contiguous cases must leave its tail alone.
     for(size_t i=outputs;i<ref.count;++i)require(a[i+ref.guard]==poison_ref&&b[i+got.guard]==poison_got,"inactive output allocation tail changed");
-    std::printf("HC_F16_COMPONENT T=%lld N=%lld K=%lld ldy=%zu mode=%s fixture=%s words=%zu different=%zu nonfinite=%zu calls=%llu takes=%llu guard_fallback=%llu other_fallback=%llu x_f16=%d f16_io=%d\n",
-        static_cast<long long>(shape.t),static_cast<long long>(shape.n),static_cast<long long>(shape.k),ld,mode,hc_test::name(fixture),c.words,c.different,c.nonfinite,
+    std::printf("HC_F16_COMPONENT storage=%s T=%lld N=%lld K=%lld ldy=%zu mode=%s fixture=%s words=%zu different=%zu nonfinite=%zu calls=%llu takes=%llu guard_fallback=%llu other_fallback=%llu x_f16=%d f16_io=%d\n",
+        test_external?"external":"owned",static_cast<long long>(shape.t),static_cast<long long>(shape.n),static_cast<long long>(shape.k),ld,mode,hc_test::name(fixture),c.words,c.different,c.nonfinite,
         static_cast<unsigned long long>(after.calls-before.calls),static_cast<unsigned long long>(after.takes-before.takes),
         static_cast<unsigned long long>(after.guard-before.guard),static_cast<unsigned long long>(after.other-before.other),int(x_f16),int(f16_io));
     require(c.different==0,"full F32 word mismatch");
@@ -109,6 +116,7 @@ int main(int argc,char** argv) {
         if(!candidate.init(stream.value,1<<20,error))throw std::runtime_error(error);
         reference.bind_hc_f16_exact(nullptr);reference.set_f16_io(false);candidate.set_f16_io(false);
         size_t cases=0;
+        for(bool external:{false,true}) {test_external=external;
         for(int64_t t:{4095,4096}) for(auto shape:{Shape{t,320,10240},Shape{t,10240,320}}) {
             Buffer<uint16_t> x(size_t(t)*shape.k,stream.value),w(size_t(shape.n)*shape.k,stream.value);
             Buffer<uint32_t> a(size_t(t)*(shape.n+8),stream.value),b(size_t(t)*(shape.n+8),stream.value);
@@ -124,7 +132,8 @@ int main(int argc,char** argv) {
             }
             { Workspace session(candidate,device,stream.value,"1",true);run_case(reference,candidate,session,shape,hc_test::Fixture::dense,"reference_only",x,w,a,b);++cases; }
         }
-        require(cases==56,"fixed complete component case census");
-        std::puts("PASS HC_F16_COMPONENT cases=56 positive_takes=12 guard_fallbacks=24 bypasses=16 reference_only=4 fullword=1 model_trajectory=0 timing=0");return 0;
+        }
+        require(cases==112,"fixed complete component case census");
+        std::puts("PASS HC_F16_COMPONENT cases=112 positive_takes=24 guard_fallbacks=48 bypasses=32 reference_only=8 owned_external=1 fullword=1 model_trajectory=0 timing=0");return 0;
     } catch(const std::exception& e) { std::fprintf(stderr,"HC_F16_COMPONENT FAIL: %s\n",e.what());return 1; }
 }

@@ -1689,6 +1689,10 @@ if(STRATA_NATIVE_EXPERTS)
     endif()
     target_link_libraries(strata_mmq_w4a4 PUBLIC ggml-base ${_strata_gpu_runtime_target})
     target_link_libraries(strata_mmq PRIVATE strata_mmq_w4a4)
+    # PR #2460: select the HIP vendor headers in the w4a4 translation unit.
+    if(STRATA_HIP_GFX906 OR STRATA_ENABLE_HIP)
+      target_compile_definitions(strata_mmq_w4a4 PRIVATE GGML_USE_HIP)
+    endif()
     # STRATA_MMQ_TAB: the pointer-table copy of MMQ's scheduler mirrors mmq.cuh from mul_mat_q_process_tile through
     # mul_mat_q_case (struct mmq_args included).  A fingerprint of that text instead of a compile probe: nothing is
     # compiled at configure time, and a llama.cpp tree with another scheduler turns the feature off instead of
@@ -2090,3 +2094,10 @@ if(STRATA_HIP_GFX906)
   add_executable(gfx906_qsa_query_swizzle_probe bench/gfx906_qsa_query_swizzle_probe.cpp)
   target_link_libraries(gfx906_qsa_query_swizzle_probe PRIVATE strata_kernels ${_strata_gpu_runtime_target})
 endif()
+
+# Isolated R&D only; runtime remains opt-in.
+set_property(SOURCE src/prefill/prefill.cpp APPEND PROPERTY COMPILE_DEFINITIONS STRATA_HC_F16_REGION_REUSE_BUILT=1)
+
+# Isolated fixed-J48 prefill candidate. Runtime is default OFF.
+set_property(SOURCE src/prefill/moe_mmq.cu APPEND PROPERTY COMPILE_DEFINITIONS STRATA_GFX906_PREFILL_J48_BUILT=1)
+set_property(SOURCE src/prefill/prefill.cpp APPEND PROPERTY COMPILE_DEFINITIONS STRATA_GFX906_PREFILL_J48_BUILT=1)

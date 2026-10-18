@@ -81,6 +81,8 @@ struct Product {
     /// set: expert z's matrix starts at tab->p[z] (w and expert_bytes are not used for addressing).  CUDA only,
     /// and only where `tab_fits` said so.
     const WeightTab* tab = nullptr;
+    // Host provenance: only the original local, full-routing FP32 expert prefill calls set this.
+    bool local_full_routing_prefill = false;
 };
 
 /// The launch context (llama.cpp's MMQ keeps a small scratch pool for its stream-k fixup).  One per prompt path.

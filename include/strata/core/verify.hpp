@@ -304,6 +304,14 @@ public:
     int device() const { return device_; }
     /// Capture every window size and the commit graph now (a capture syncs the stream: never with a window in flight).
     bool capture_all(std::string& err);
+    /// Add selected existing T-token graphs (bit T, 1..max_t) and common resources.
+    /// Caller must have drained ALL pipeline stages, commits and drafter work first.
+    /// Never captures from pl_launch; a missing graph remains an error there.
+    bool capture_shapes(uint32_t shape_mask, std::string& err);
+    /// Non-synchronizing preflight. Caller checks ALL instances before ANY capture.
+    bool pipeline_capture_ready(std::string& err) const;
+    /// This experiment excludes the all-resident/alternate graph-cache lifetime.
+    bool pipeline_shapes_supported() const { return !all_resident_ && !ar_off_; }
     bool pl_launch(int T, const int32_t* tokens, int64_t pos0, std::string& err);
     /// Stage a window ahead of its launch (positions, and the PLE rows from `ple_prev` = the two tokens before the
     /// window as they WILL be, their pages prefetched).  A later `pl_launch` of the same window (T, pos0, tokens, and
@@ -506,6 +514,7 @@ private:
     bool staged_ = false;
     bool copy_used_ = false;
     bool capture_commit(std::string& err);
+    bool prepare_pipeline_common(std::string& err);
     bool record_window(int T, cudaStream_t cs, std::string& err);
     // #649: STRATA_VERIFY_TRACE=1 - a host event ring (trace_ev) and GPU breadcrumbs: the profiler's stamp points,
     // per layer and token group, written to mapped memory (null when the trace is off)

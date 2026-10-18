@@ -1,5 +1,5 @@
 #pragma once
-// Independent optional HC down/up storage. Never lent to/from cache, carve or N4.
+// Optional HC down/up storage: owned by default; experimental main-HC scoped region view.
 #include <cuda_runtime.h>
 #include <cstdint>
 #include <cstdio>
@@ -31,10 +31,11 @@ template<class Drain> DrainOnExit(Drain, bool) -> DrainOnExit<Drain>;
 struct State {
  void* scratch=nullptr;void* stream=nullptr;int owner=-1;
  bool prepared=false,enabled=false,shadow=false,reference_only=false,report=false;
+ bool external_mode=false;uint64_t external_views=0,external_takes=0,external_drains=0;
  uint64_t calls=0,takes=0,guard_fallback=0,other_fallback=0;
  const char* reason="unprepared";
  static bool flag(const char* key,bool& valid){const char* v=std::getenv(key);if(!v||!std::strcmp(v,"0"))return false;if(!std::strcmp(v,"1"))return true;valid=false;return false;}
- bool prepare(int device,void* compute,bool compatible,std::string& err){
+ bool prepare(int device,void* compute,bool compatible,std::string& err,bool external_ok=false){
   if(prepared)return true;
   bool valid=true;enabled=flag("STRATA_HC_F16_EXACT",valid);shadow=flag("STRATA_HC_F16_EXACT_SHADOW",valid);reference_only=flag("STRATA_HC_F16_EXACT_REFERENCE_ONLY",valid);
   if(!valid||((shadow||reference_only)&&!enabled)||(shadow&&reference_only)){err="HC_F16_EXACT: invalid mode";return false;}
@@ -43,6 +44,8 @@ struct State {
   Owner scope(owner,true);int supported=strata_hc_f16_exact_supported(owner);
   if(supported<0){err="HC_F16_EXACT: architecture query failed";return false;}
   if(!supported){reason="architecture";return true;}
+  if(external_ok){external_mode=true;reason="region-view";
+   std::fprintf(stderr,"HC_F16_EXACT_REGION owner=%d bytes=%zu allocation=0\n",owner,kBytes);return true;}
   size_t before=0,total=0,after=0;
   if(cudaMemGetInfo(&before,&total)!=cudaSuccess){err="HC_F16_EXACT: memory query failed";return false;}
   reason="headroom";if(before<kFloor+kCharge)return true;
@@ -68,8 +71,20 @@ struct State {
   int current=-1;if(cudaGetDevice(&current)!=cudaSuccess||current!=owner||compute!=stream)fatal("call owner/stream changed");
   return true;
  }
+ // Main-prefill HC only. The enclosing Prefill owns the region and its stream lifetime.
+ struct RegionView {
+  State& state;void* bound=nullptr;uint64_t takes_before=0;
+  RegionView(State& s,void* region,size_t capacity,int64_t t,bool qualified):state(s){
+   if(!s.external_mode||(t!=4095&&t!=4096))return;
+   if(!qualified||s.scratch||!region||capacity<kBytes||(reinterpret_cast<uintptr_t>(region)&255))
+    fatal("external HC region invariant");
+   bound=region;takes_before=s.takes;s.scratch=region;++s.external_views;
+  }
+  ~RegionView(){if(bound){if(state.scratch!=bound)fatal("external HC view changed");state.external_takes+=state.takes-takes_before;state.scratch=nullptr;}}
+  RegionView(const RegionView&)=delete;RegionView& operator=(const RegionView&)=delete;
+ };
  // Caller joined stage chain and checked compute drain on owner; clear Gemm view first.
- void release(){if(!scratch)return;Owner scope(owner,true);if(cudaFree(scratch)!=cudaSuccess)fatal("workspace free");scratch=nullptr;}
- ~State(){if(scratch)fatal("workspace lost without drain");if(report)std::fprintf(stderr,"HC_F16_EXACT_STATE owner=%d enabled=%d shadow=%d reference_only=%d reason=%s calls=%llu takes=%llu guard_fallback=%llu other_fallback=%llu\n",owner,int(enabled),int(shadow),int(reference_only),reason,(unsigned long long)calls,(unsigned long long)takes,(unsigned long long)guard_fallback,(unsigned long long)other_fallback);}
+ void release(){if(external_mode){if(scratch)fatal("release with live external view");return;}if(!scratch)return;Owner scope(owner,true);if(cudaFree(scratch)!=cudaSuccess)fatal("workspace free");scratch=nullptr;}
+ ~State(){if(scratch)fatal("workspace lost without drain");if(report&&external_mode)std::fprintf(stderr,"HC_F16_EXACT_REGION_STATE owner=%d external=1 views=%llu takes=%llu drains=%llu live_view=0\n",owner,(unsigned long long)external_views,(unsigned long long)external_takes,(unsigned long long)external_drains);if(report)std::fprintf(stderr,"HC_F16_EXACT_STATE owner=%d enabled=%d shadow=%d reference_only=%d reason=%s calls=%llu takes=%llu guard_fallback=%llu other_fallback=%llu\n",owner,int(enabled),int(shadow),int(reference_only),reason,(unsigned long long)calls,(unsigned long long)takes,(unsigned long long)guard_fallback,(unsigned long long)other_fallback);}
 };
 }

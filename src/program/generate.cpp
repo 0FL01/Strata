@@ -74,6 +74,7 @@
 #include "strata/platform/host_limits.hpp"
 #include "strata/program/split_ring.hpp"
 #include "strata/program/draft_kv_plan.hpp"
+#include "strata/program/pipeline_shape_plan.hpp"
 #include "strata/program/message_boundary.hpp"
 #include "strata/spec/draft_policy.hpp"
 #include "strata/spec/draft_source.hpp"
@@ -8712,16 +8713,56 @@ int main(int argc, char** argv) {
         SplitDrive* PSD[2] = {&split_drive, &split_drive_b};
         cudaEvent_t pl_mtp_ev[2] = {nullptr, nullptr};
         bool pl_mtp_live[2] = {false, false};
-        bool pl_prepared = false;
-        // every graph captured and the drafter's prompt path sized while nothing is in flight (a capture syncs its stream)
-        auto pl_prepare = [&](std::string& e) -> bool {
-            if (pl_prepared) return true;
+        bool pl_prepared = false, pl_eager_prepared = false;
+        // Bounded opt-in only. Check every stage, including mixed-device configurations.
+        const bool pl_shape_eligible = [&]() {
+#if defined(STRATA_USE_HIP) || defined(STRATA_HIP_GFX906)
+            static_assert(strata::program::kPipelineShapeMaxT == strata::kernels::kVerifyMaxT,
+                          "pipeline shape planner must match the verifier's shape bound");
+            if (!strata::program::pipeline_shape_opt_in(std::getenv("STRATA_PIPE_SHAPE_PREP")) ||
+                !pipe || n_stages != 2 || o.batch != 0 || !use_mtp ||
+                strata::program::pipeline_shape_range(o.spec) == 0) return false;
+            for (int st = 0; st < n_stages; ++st) {
+                cudaDeviceProp prop{};
+                if (cudaGetDeviceProperties(&prop, stage_ver_p(st, 0).device()) != cudaSuccess) {
+                    (void) cudaGetLastError();
+                    return false;
+                }
+                if (!strata::program::pipeline_shape_gfx906(prop.gcnArchName, prop.warpSize)) return false;
+                for (int par = 0; par < 2; ++par)
+                    if (stage_ver_p(st, par).max_t() != o.spec ||
+                        !stage_ver_p(st, par).pipeline_shapes_supported()) return false;
+            }
+            return true;
+#else
+            return false;
+#endif
+        }();
+        // All required graphs stay at the original idle preparation boundary. A later
+        // prompt interval/request may add shapes; pl_prepared only caches MTP/events.
+        auto pl_prepare = [&](const strata::program::PipelineShapePlan& shapes, std::string& e) -> bool {
+            if (pl_prepared && !shapes.selective && pl_eager_prepared) return true;
+            // Non-synchronizing preflight of ALL windows, commit events and MTP
+            // before any selective capture; fail closed on a violated idle boundary.
+            if (shapes.selective) {
+                for (int st = 0; st < n_stages; ++st)
+                    for (int par = 0; par < 2; ++par)
+                        if (!stage_ver_p(st, par).pipeline_capture_ready(e)) return false;
+                const strata::core::OnDevice on(mtp.device());
+                const cudaError_t q = cudaStreamQuery(mtp.stream());
+                if (q != cudaSuccess) {
+                    e = std::string("pipeline: shape preparation before drafter idle: ") + cudaGetErrorString(q);
+                    return false;
+                }
+            }
             for (int st = 0; st < n_stages; ++st)
                 for (int par = 0; par < 2; ++par) {
                     strata::core::Verifier& v = stage_ver_p(st, par);
                     const strata::core::OnDevice on(v.device());
-                    if (!v.capture_all(e)) return false;
+                    if (shapes.selective ? !v.capture_shapes(shapes.mask[par], e) : !v.capture_all(e)) return false;
                 }
+            if (!shapes.selective) pl_eager_prepared = true;
+            if (pl_prepared) return true;
             if (!mtp.prepare_prefill(e)) return false;
             if (o.pipeline_windows >= 2 && pl_snap_ok && !mtp.prepare_chain(e)) return false;
             const strata::core::OnDevice on(mtp.device());
@@ -12445,12 +12486,6 @@ int main(int argc, char** argv) {
             // stage runs the same windows in the same order as read_windows below, so the session ends the same.
             auto read_windows_pl = [&](int64_t a, int64_t b, std::string& e) -> bool {
                 strata::core::progress_at("reading the prompt (pipelined verify windows), from token", a);
-                if (!pl_prepare(e)) return false;
-                for (int par = 0; par < 2; ++par) PV[0][par]->set_head_sampling(false);   // reaches stage 1 (set_next)
-                struct Restore {
-                    strata::core::Verifier* v[2];
-                    ~Restore() { v[0]->set_head_sampling(true); v[1]->set_head_sampling(true); }
-                } restore{{PV[0][0], PV[0][1]}};
                 struct Win { int T; int64_t q; };
                 std::vector<Win> wins;
                 for (int64_t q = a; q < b;) {
@@ -12458,6 +12493,18 @@ int main(int argc, char** argv) {
                     wins.push_back({T, q});
                     q += T;
                 }
+                uint32_t prompt_shapes[2] = {0, 0};
+                bool shape_plan_ok = pl_shape_eligible;
+                if (shape_plan_ok)
+                    for (size_t i = 0; i < wins.size(); ++i)
+                        if (!strata::program::pipeline_shape_add_prompt(prompt_shapes, i, wins[i].T)) shape_plan_ok = false;
+                const auto shapes = strata::program::pipeline_shape_plan(shape_plan_ok, S, S_mtp, o.suffix_draft, prompt_shapes);
+                if (!pl_prepare(shapes, e)) return false;
+                for (int par = 0; par < 2; ++par) PV[0][par]->set_head_sampling(false);   // reaches stage 1 (set_next)
+                struct Restore {
+                    strata::core::Verifier* v[2];
+                    ~Restore() { v[0]->set_head_sampling(true); v[1]->set_head_sampling(true); }
+                } restore{{PV[0][0], PV[0][1]}};
                 const size_t N = wins.size();
                 std::vector<int32_t> w0((size_t) S), w1((size_t) S), nx((size_t) S);
                 size_t l0 = 0, f0 = 0, l1 = 0, f1 = 0;   // stage 0 launched / finished, stage 1 launched / finished
@@ -13573,7 +13620,9 @@ int main(int argc, char** argv) {
             }
             if (pl_want && pl_serial == nullptr && !cancelled && produced_n < max_new) {
                 pl_ran = true;
-                if (!pl_prepare(err)) {
+                const uint32_t prompt_shapes[2] = {0, 0};
+                const auto shapes = strata::program::pipeline_shape_plan(pl_shape_eligible, S, S_mtp, o.suffix_draft, prompt_shapes);
+                if (!pl_prepare(shapes, err)) {
                     std::printf("ERR %s\n", err.c_str());
                     return 1;
                 }

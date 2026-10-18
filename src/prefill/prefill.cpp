@@ -1061,8 +1061,8 @@ void Prefill::release() {
     impl_->hand_worker.reset();   // idle here (run drains the chain before it returns); joins its thread
 #if defined(STRATA_HC_F16_EXACT_BUILT)
     // Independent of N4: HC may own storage on a stage where N4 refused.
-    const hc_f16_exact::Owner hc_owner(impl_->device, impl_->hc_exact.scratch != nullptr);
-    if (impl_->hc_exact.scratch && cudaStreamSynchronize(impl_->cs) != cudaSuccess)
+    const hc_f16_exact::Owner hc_owner(impl_->device, impl_->hc_exact.scratch != nullptr || impl_->hc_exact.external_mode);
+    if ((impl_->hc_exact.scratch || impl_->hc_exact.external_mode) && cudaStreamSynchronize(impl_->cs) != cudaSuccess)
         hc_f16_exact::fatal("compute drain before release");
     impl_->gemm.bind_hc_f16_exact(nullptr);
     impl_->hc_exact.release();
@@ -1440,15 +1440,39 @@ bool Prefill::init(const core::WeightTable& wt, const core::ModelGeometry& g, co
 }
 
 #if defined(STRATA_HC_F16_EXACT_BUILT)
+namespace {
+// Fixed target geometry: draft_kv's per_row excluding the nonnegative Q8 suffix.
+bool split_help_env(); // Includes incoming helper loans from other stages.
+constexpr uint64_t hc_region_draft_limit = 4095ull * 251860ull;
+bool hc_region_geometry(const core::ModelGeometry* g, uint64_t region_bytes, int64_t chunk) {
+ return g && g->n_embd==2560 && g->hc==4 && g->hc_lr==320 &&
+        g->n_head_kv>0 && g->head_dim>0 && int64_t(g->n_head_kv)*g->head_dim==512 &&
+        region_bytes<hc_region_draft_limit &&
+        ((chunk!=4095&&chunk!=4096)||region_bytes>=hc_f16_exact::kBytes);
+}
+bool hc_region_requested() {
+#if defined(STRATA_HC_F16_REGION_REUSE_BUILT) && defined(STRATA_HIP_GFX906)
+ static const bool on=[] {const char* e=std::getenv("STRATA_HC_F16_REGION_REUSE");return e&&e[0]=='1'&&e[1]==0;}();
+ return on;
+#else
+ return false;
+#endif
+}
+}
 bool Prefill::prepare_hc_f16_exact(std::string& err) {
     Impl& m = *impl_;
     // Called only after the COMPLETE existing N4 prepare traversal and all mandatory
     // serving allocations. No cache/loan/carve sizing consumes this optional budget.
+    const bool reuse = hc_region_requested() && m.T_max==4096 && m.T==4096 &&
+        m.borrowed && !m.borrow_spill && !m.pp && !m.help_pp && helper_==nullptr &&
+        !cpu_share_on() && !hc_upmix() && !split_help_env() && m.region && !(reinterpret_cast<uintptr_t>(m.region)&255) &&
+        hc_region_geometry(m.g,m.region_bytes,m.T);
     if (m.wt && !m.hc_exact.prepare(m.device, m.cs,
-            m.T_max >= 4095 && !m.f16_io && !m.xn_f16 && !m.xn16_lo && !m.lo16_lo && !hc_pad(), err)) return false;
+            m.T_max >= 4095 && !m.f16_io && !m.xn_f16 && !m.xn16_lo && !m.lo16_lo && !hc_pad(), err,reuse)) return false;
+    if(m.hc_exact.external_mode)std::fprintf(stderr,"HC_F16_EXACT_REGION_QUAL owner=%d region_bytes=%llu draft_limit=%llu alignment=256 borrowed=1 no_peer=1 no_helper=1 no_cpu_share=1 no_upmix=1 main_call_only=1 tmax=4096\n",m.device,(unsigned long long)m.region_bytes,(unsigned long long)hc_region_draft_limit);
     m.gemm.bind_hc_f16_exact(m.hc_exact.enabled ? &m.hc_exact : nullptr);
     if (next_ && !next_->prepare_hc_f16_exact(err)) return false;
-    m.hc_exact_chain = m.hc_exact.scratch || (next_ && next_->impl_->hc_exact_chain);
+    m.hc_exact_chain = m.hc_exact.scratch || m.hc_exact.external_mode || (next_ && next_->impl_->hc_exact_chain);
     return true;
 }
 #endif
@@ -1602,6 +1626,13 @@ bool Prefill::relayout(int64_t chunk, void* borrow, uint64_t borrow_bytes, std::
               std::to_string(o.failed_bytes >> 20) + " MiB)";
         return false;
     }
+#if defined(STRATA_HC_F16_EXACT_BUILT)
+    if (m.hc_exact.external_mode && (m.hc_exact.scratch || !hc_region_geometry(m.g,m.region_bytes,chunk) ||
+        !m.region || (reinterpret_cast<uintptr_t>(m.region)&255) || m.pp || m.help_pp || helper_ ||
+        cpu_share_on() || hc_upmix() || split_help_env())) {
+        err="HC region reuse: relayout outside qualified lifetime/geometry";return false;
+    }
+#endif
     return true;
 }
 
@@ -3030,7 +3061,14 @@ bool Prefill::run_impl(const int64_t* tokens, int64_t n, int64_t pos0, std::stri
                     }
                     hcd = true;
                 }
-                if (!hcd && !hdown && !bf16_proj(m.gemm, wd, m.xn16, m.lo, T, sd, err, 0, m.xn16_lo, ldx != D ? ldx : 0, m.cs, xf16)) return false;
+                {
+#if defined(STRATA_HC_F16_EXACT_BUILT)
+                    hc_f16_exact::State::RegionView hc_view(m.hc_exact,m.region,m.region_bytes,T,
+                        m.borrowed && !m.borrow_spill && !m.pp && !m.help_pp && !helper_ &&
+                        !cpu_share_on() && !hc_upmix() && !split_help_env() && hc_region_geometry(m.g,m.region_bytes,T));
+#endif
+                    if (!hcd && !hdown && !bf16_proj(m.gemm, wd, m.xn16, m.lo, T, sd, err, 0, m.xn16_lo, ldx != D ? ldx : 0, m.cs, xf16)) return false;
+                }
                 gr_silu(m.lo, m.lo16, T, m.cs, m.lo16_lo);
                 bool upmixed = false;
                 if (wu->q8_scale == nullptr && hc_upmix() && T >= std::max(pf_switch_min_t(), hc_upmix_min_t()) && !gr_unfused() && !m.lo16_lo && !m.mixed_bf_lo &&
@@ -3059,7 +3097,14 @@ bool Prefill::run_impl(const int64_t* tokens, int64_t n, int64_t pos0, std::stri
                                            m.mixed, m.mixed_bf, m.mixed_h, T, m.cs);
                     }
                 }
-                if (!upmixed && !bf16_proj(m.gemm, wu, m.lo16, m.gated, T, su, err, 0, m.lo16_lo, 0, m.cs)) return false;
+                {
+#if defined(STRATA_HC_F16_EXACT_BUILT)
+                    hc_f16_exact::State::RegionView hc_view(m.hc_exact,m.region,m.region_bytes,T,
+                        m.borrowed && !m.borrow_spill && !m.pp && !m.help_pp && !helper_ &&
+                        !cpu_share_on() && !hc_upmix() && !split_help_env() && hc_region_geometry(m.g,m.region_bytes,T));
+#endif
+                    if (!upmixed && !bf16_proj(m.gemm, wu, m.lo16, m.gated, T, su, err, 0, m.lo16_lo, 0, m.cs)) return false;
+                }
 #if defined(STRATA_HC_BF16_N4_BUILT)
                 if (!hcd) {
                     const int n4 = m.hc_n4.call(m.gemm, wi, m.xn16, m.inj, T, m.f16_io || xf16, m.xn16_lo, ldx, m.cs, err);
@@ -4385,12 +4430,26 @@ bool Prefill::run_impl(const int64_t* tokens, int64_t n, int64_t pos0, std::stri
                                                     ns ? m.grp_gu + (size_t) ns * mmq_gub : nullptr,
                                                     ns ? m.grp_d + (size_t) ns * mmq_db : nullptr, MMQ_TAIL, m.cs);
                                 }
+#if defined(STRATA_GFX906_PREFILL_J48_BUILT) && STRATA_GFX906_PREFILL_J48_BUILT == 1 && defined(STRATA_HIP_GFX906)
+                                // Only these two original local expert calls can carry this provenance.
+                                const bool local_full_routing_prefill =
+                                    use_mmq && !direct && !m.f16_io && mmq_gt == 42 && mmq_dt == 42 &&
+                                    !m.pp && !m.help_pp && !helper_ && !helped && !split_help_env() &&
+                                    !cpu_share_on() && !cpu_maybe && rows_cpu == 0 && n_cpu == 0 &&
+                                    rows_peer == 0 && on_cpu.empty() && on_peer.empty() && order_peer.empty() &&
+                                    N == 2560 && K == 10 && T > 0 && T <= INT32_MAX / K &&
+                                    rows_local == T * K && ngx == 16 && r0 >= 0 && r0 <= T * K &&
+                                    nr > 0 && nr <= T * K - r0 && maxr > 32 && maxr <= T && maxr <= nr;
+#endif
                                 mmq::Product gu;
                                 gu.w = m.grp_gu; gu.type = mmq_gt; gu.w_rows = 1280; gu.w_cols = N; gu.expert_bytes = mmq_gub;
                                 gu.n = ngx; gu.xq = m.Xq; gu.bounds = m.bounds_dev + j0; gu.ids = m.ids_identity;
                                 gu.total_rows = T * K; gu.max_rows = maxr; gu.dst = m.GU; gu.ld_dst = 1280;
                                 gu.y_scale = mmq::fp4_activations(mmq_gt) ? m.Xscale : nullptr;
                                 if (direct) gu.tab = &tgu;
+#if defined(STRATA_GFX906_PREFILL_J48_BUILT) && STRATA_GFX906_PREFILL_J48_BUILT == 1 && defined(STRATA_HIP_GFX906)
+                                gu.local_full_routing_prefill = local_full_routing_prefill;
+#endif
                                 m.mmq_ctx->run(gu, m.cs);
                                 if (lay.native && lay.fmt[(size_t) l].tail_off)   // gate/up scales applied as read
                                     mmq::swiglu_scaled(m.GU + r0 * 1280, m.H + r0 * 640, nr, 640, m.bounds_dev + j0, ngx,
@@ -4406,6 +4465,9 @@ bool Prefill::run_impl(const int64_t* tokens, int64_t n, int64_t pos0, std::stri
                                 dn.ld_dst = N;
                                 dn.y_scale = mmq::fp4_activations(mmq_dt) ? m.Hscale : nullptr;
                                 if (direct) dn.tab = &td;
+#if defined(STRATA_GFX906_PREFILL_J48_BUILT) && STRATA_GFX906_PREFILL_J48_BUILT == 1 && defined(STRATA_HIP_GFX906)
+                                dn.local_full_routing_prefill = local_full_routing_prefill;
+#endif
                                 m.mmq_ctx->run(dn, m.cs);
                                 if (lay.native && lay.fmt[(size_t) l].tail_off)   // s_down: applied by the combine
                                     mmq::down_row_scales(m.row_sd + r0, dn.bounds, ngx, m.grp_tail, nr, m.cs);
@@ -4842,6 +4904,30 @@ bool Prefill::run_impl(const int64_t* tokens, int64_t n, int64_t pos0, std::stri
 }
 
 bool Prefill::drain_pipeline(std::string& err) {
+#if defined(STRATA_HC_F16_EXACT_BUILT)
+    bool region_chain=false;
+    for(Prefill* p=this;p;p=p->next_)region_chain=region_chain||p->impl_->hc_exact.external_mode;
+    if(region_chain){
+        // A call view is already cleared. Mode, not scratch!=nullptr, owns the drain obligation.
+        bool ok=true;std::exception_ptr pending;
+        for(Prefill* p=this;p;p=p->next_){
+            try {if(p->next_run_.valid()&&!p->next_run_.get()){if(ok)err=p->next_err_;ok=false;}}
+            catch(...){if(!pending)pending=std::current_exception();ok=false;}
+        }
+        // Always visit every stage even if a future failed/threw. Only propagate after owner drains.
+        for(Prefill* p=this;p;p=p->next_){
+            Impl& m=*p->impl_;const hc_f16_exact::Owner owner(m.device,true);
+            const bool cs_ok=!m.cs||cudaStreamSynchronize(m.cs)==cudaSuccess;
+            const bool copy_ok=!m.copy||cudaStreamSynchronize(m.copy)==cudaSuccess;
+            const bool kv_ok=!m.kv_copy||cudaStreamSynchronize(m.kv_copy)==cudaSuccess;
+            if(!cs_ok||!copy_ok||!kv_ok){if(ok)err="HC region reuse: owner stream drain failed";ok=false;}
+            if(cs_ok&&copy_ok&&kv_ok&&m.hc_exact.external_mode)++m.hc_exact.external_drains;
+            if(m.hc_exact.scratch && m.hc_exact.external_mode)hc_f16_exact::fatal("view survives chain drain");
+        }
+        if(pending)std::rethrow_exception(pending);
+        return ok;
+    }
+#endif
     bool ok = true;
 
     if (next_run_.valid()) {

@@ -4037,6 +4037,47 @@ bool Verifier::capture_all(std::string& err) {
     if (released_.load()) { err = "verify: an earlier window never finished on the GPU (#267); restart the engine"; return false; }
     for (int T = 1; T <= max_t_; ++T)
         if (!capture(T, err)) return false;
+    return prepare_pipeline_common(err);
+}
+
+bool Verifier::capture_shapes(uint32_t shape_mask, std::string& err) {
+    const OnDevice on_device(device_);
+    if (g_ == nullptr) { err = "verify: capture_all before init"; return false; }
+    if (remote_opt_ != nullptr) { err = "verify: pipelined windows do not serve --remote-expert-opt"; return false; }
+    if (released_.load()) { err = "verify: an earlier window never finished on the GPU (#267); restart the engine"; return false; }
+    if (!pipeline_shapes_supported()) {
+        err = "verify: shape preparation does not support the all-resident/alternate graph variant"; return false;
+    }
+    // Validate BEFORE shifting or indexing; bit zero and bits above max_t are invalid.
+    if (max_t_ < 1 || max_t_ > strata::kernels::kVerifyMaxT || max_t_ > 8) {
+        err = "verify: shape preparation window bound out of range"; return false;
+    }
+    const uint32_t valid = (uint32_t(1) << (max_t_ + 1)) - 2u;
+    if (shape_mask == 0 || (shape_mask & ~valid) != 0) {
+        err = "verify: shape preparation mask out of range"; return false;
+    }
+    if (!pipeline_capture_ready(err)) return false;
+    for (int T = 1; T <= max_t_; ++T)
+        if ((shape_mask & (uint32_t(1) << T)) != 0 && !capture(T, err)) return false;
+    // These resources are created together by the original common tail. No live
+    // staging fields are reset on later idle calls, including after serial reuse.
+    if (commit_exec_ != nullptr && ev_done_ != nullptr && ev_commit_ != nullptr && !pl_ple_rows_.empty()) return true;
+    return prepare_pipeline_common(err);
+}
+
+bool Verifier::pipeline_capture_ready(std::string& err) const {
+    const OnDevice on_device(device_);
+    if (fl_active_) { err = "verify: shape preparation with a window in flight"; return false; }
+    // commit_live_ remains set after a drained pipeline commit. Query completion;
+    // never clear/reuse its live fields or synchronize outstanding work to hide it.
+    if (commit_live_) {
+        const cudaError_t q = ev_commit_ == nullptr ? cudaErrorNotReady : cudaEventQuery(ev_commit_);
+        if (q != cudaSuccess) { err = "verify: shape preparation before commit completed"; return false; }
+    }
+    return true;
+}
+
+bool Verifier::prepare_pipeline_common(std::string& err) {
     if (!capture_commit(err)) return false;
     if ((ev_done_ == nullptr && cudaEventCreateWithFlags(&ev_done_, cudaEventDisableTiming) != cudaSuccess) ||
         (ev_commit_ == nullptr && cudaEventCreateWithFlags(&ev_commit_, cudaEventDisableTiming) != cudaSuccess)) {

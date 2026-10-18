@@ -401,6 +401,70 @@ Context::Context() {
 }
 Context::~Context() { delete (ggml_backend_cuda_context*) ctx_; }
 
+// Fixed policy; host-only opt-in. This changes only the MMQ ncols_opt hint.
+static int64_t prefill_j48_opt(const Product& p) {
+#if defined(STRATA_GFX906_PREFILL_J48_BUILT) && STRATA_GFX906_PREFILL_J48_BUILT == 1 && \
+    defined(STRATA_HIP_GFX906) && defined(__HIPCC__)
+    if (!p.local_full_routing_prefill) return p.max_rows;
+    static const bool enabled = [] {
+        const char* value = std::getenv("STRATA_GFX906_PREFILL_J48");
+        return value != nullptr && std::strcmp(value, "1") == 0;
+    }();
+    if (!enabled) return p.max_rows;
+    if (p.type != GGML_TYPE_Q2_0 || p.n != 16 || p.tab || p.y_scale ||
+        !p.w || !p.xq || !p.dst || !p.ids || !p.bounds ||
+        !((p.w_rows == 1280 && p.w_cols == 2560) || (p.w_rows == 2560 && p.w_cols == 640)) ||
+        p.ld_dst != p.w_rows || p.max_rows <= 32 || p.max_rows > INT32_MAX ||
+        p.total_rows <= 0 || p.total_rows > INT32_MAX || p.max_rows > p.total_rows ||
+        p.expert_bytes != matrix_bytes(p.type, p.w_rows, p.w_cols)) return p.max_rows;
+
+    // The retained exact0705 ggml_cuda_host.cu uses this same direct HIP device index.
+    // Do not consume/clear the runtime error state, or cache failed queries.
+    int id = -1;
+    hipDeviceProp_t prop{};
+    if (hipGetDevice(&id) != hipSuccess || id < 0 || id >= GGML_CUDA_MAX_DEVICES ||
+        hipGetDeviceProperties(&prop, id) != hipSuccess ||
+        std::strncmp(prop.gcnArchName, "gfx906", 6) != 0 ||
+        (prop.gcnArchName[6] != '\0' && prop.gcnArchName[6] != ':') || prop.warpSize != 64) return p.max_rows;
+    const auto& info = ggml_cuda_info();
+    if (id >= info.device_count) return p.max_rows;
+    const auto& dev = info.devices[id];
+    if (dev.cc != GGML_CUDA_CC_VEGA20 || dev.warp_size != 64 || dev.physical_device != id ||
+        dev.physical_share_count != 1 || dev.virtual_index != 0) return p.max_rows;
+    const bool fallback = p.w_rows % 128 != 0;
+    if (fallback) return p.max_rows;
+    auto selected = [&](int64_t hint) {
+        int result = 0;
+        int64_t best = INT64_MAX;
+        for (int j = 8; j <= 128 && best > 1; j += 8) {
+            const auto c = ggml_cuda_mmq_get_config(GGML_TYPE_Q2_0, j, fallback, dev.cc);
+            if (c.type == GGML_TYPE_COUNT) continue;
+            // A changed/deformed configuration is unsupported, never a new policy.
+            if (c.type != GGML_TYPE_Q2_0 || c.J != j || (c.I != 64 && c.I != 128) ||
+                c.K_vram != 256 || c.sram_layout != GGML_CUDA_MMQ_SRAM_LAYOUT_Q8_0 ||
+                c.nthreads != 256 || c.occupancy != 2 || c.stream_k) return 0;
+            if (mmq_get_nbytes_shared(c, dev.cc) > dev.smpbo) continue;
+            const int64_t tiles = (hint + c.J - 1) / c.J;
+            if (tiles < best) { best = tiles; result = j; }
+        }
+        return result;
+    };
+    const int original = selected(p.max_rows);
+    if ((original != 40 && original != 48 && original != 64) || selected(48) != 48) return p.max_rows;
+    auto exact_config = [&](int j) {
+        const auto c = ggml_cuda_mmq_get_config(GGML_TYPE_Q2_0, j, false, dev.cc);
+        return c.type == GGML_TYPE_Q2_0 && c.J == j && c.I == 64 && c.K_vram == 256 &&
+            c.sram_layout == GGML_CUDA_MMQ_SRAM_LAYOUT_Q8_0 && c.nthreads == 256 &&
+            c.occupancy == 2 && !c.stream_k && mmq_get_nbytes_shared(c, dev.cc) <= dev.smpbo &&
+            mmq_get_nbytes_shared(c, dev.cc) <= prop.sharedMemPerBlock &&
+            prop.maxGridSize[0] >= p.w_rows / 64 &&
+            prop.maxGridSize[1] >= (p.max_rows + j - 1) / j && prop.maxGridSize[2] >= p.n;
+    };
+    if (exact_config(original) && exact_config(48)) return 48;
+#endif
+    return p.max_rows;
+}
+
 void Context::run(const Product& p, void* stream) {
     if (p.n <= 0 || p.max_rows <= 0) return;
     const ggml_type t = (ggml_type) p.type;
@@ -409,7 +473,7 @@ void Context::run(const Product& p, void* stream) {
                         p.w_cols, p.w_rows, p.total_rows, bpr, p.total_rows, p.ld_dst,
                         p.n, p.n, p.tab ? 0 : (int64_t) (p.expert_bytes / ggml_type_size(t)), 0, 0,
                         1, 1, 0, 0, 0,
-                        p.max_rows, p.max_rows};
+                        p.max_rows, prefill_j48_opt(p)};
     auto& ctx = *(ggml_backend_cuda_context*) ctx_;
     const cudaStream_t s = (cudaStream_t) stream;
     if (p.tab) {

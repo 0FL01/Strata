@@ -1,0 +1,110 @@
+[
+  {
+    "arm": "base",
+    "pp_ms": 101600.6,
+    "tg_ms": 18504.5,
+    "pp_tps": 645.0355608136172,
+    "tg_tps": 55.337890783322976,
+    "same_tokens": true,
+    "done": "DONE 1024 65536 101600.6 18504.5 length 669 861 0 554045 585120 0 0 0.0 65536 0 chunk=4096 experts_streamed=164512"
+  },
+  {
+    "arm": "on",
+    "pp_ms": 100149.4,
+    "tg_ms": 16596.5,
+    "pp_tps": 654.3823527649691,
+    "tg_tps": 61.69975597264484,
+    "same_tokens": true,
+    "done": "DONE 1024 65536 100149.4 16596.5 length 653 895 0 672296 709870 0 0 0.0 65536 0 chunk=4096 experts_streamed=164512"
+  },
+  {
+    "arm": "on",
+    "pp_ms": 101123.7,
+    "tg_ms": 16623.2,
+    "pp_tps": 648.0775525420846,
+    "tg_tps": 61.600654506954136,
+    "same_tokens": true,
+    "done": "DONE 1024 65536 101123.7 16623.2 length 653 895 0 672299 709860 0 0 0.0 65536 0 chunk=4096 experts_streamed=164512"
+  },
+  {
+    "arm": "base",
+    "pp_ms": 100955.8,
+    "tg_ms": 18529.7,
+    "pp_tps": 649.155372945388,
+    "tg_tps": 55.26263242254327,
+    "same_tokens": true,
+    "done": "DONE 1024 65536 100955.8 18529.7 length 669 861 0 554045 585120 0 0 0.0 65536 0 chunk=4096 experts_streamed=164512"
+  },
+  {
+    "arm": "on",
+    "pp_ms": 100280.0,
+    "tg_ms": 16624.5,
+    "pp_tps": 653.5301156761069,
+    "tg_tps": 61.595837468796056,
+    "same_tokens": true,
+    "done": "DONE 1024 65536 100280.0 16624.5 length 653 895 0 672110 709660 0 0 0.0 65536 0 chunk=4096 experts_streamed=164512"
+  },
+  {
+    "arm": "base",
+    "pp_ms": 103611.3,
+    "tg_ms": 18563.1,
+    "pp_tps": 632.5178817368376,
+    "tg_tps": 55.163200112050255,
+    "same_tokens": true,
+    "done": "DONE 1024 65536 103611.3 18563.1 length 669 861 0 554045 585120 0 0 0.0 65536 0 chunk=4096 experts_streamed=164512"
+  },
+  {
+    "arm": "base",
+    "pp_ms": 101366.5,
+    "tg_ms": 18587.3,
+    "pp_tps": 646.5252326952199,
+    "tg_tps": 55.09137959789749,
+    "same_tokens": true,
+    "done": "DONE 1024 65536 101366.5 18587.3 length 669 861 0 554045 585120 0 0 0.0 65536 0 chunk=4096 experts_streamed=164512"
+  },
+  {
+    "arm": "on",
+    "pp_ms": 102027.3,
+    "tg_ms": 16589.1,
+    "pp_tps": 642.3378840761247,
+    "tg_tps": 61.7272787553273,
+    "same_tokens": true,
+    "done": "DONE 1024 65536 102027.3 16589.1 length 653 895 0 672366 709930 0 0 0.0 65536 0 chunk=4096 experts_streamed=164512"
+  },
+  {
+    "arm": "base",
+    "pp_ms": 101209.8,
+    "tg_ms": 18532.7,
+    "pp_tps": 647.5262276973178,
+    "tg_tps": 55.253686726704686,
+    "same_tokens": true,
+    "done": "DONE 1024 65536 101209.8 18532.7 length 669 861 0 554045 585120 0 0 0.0 65536 0 chunk=4096 experts_streamed=164512"
+  },
+  {
+    "arm": "on",
+    "pp_ms": 100500.5,
+    "tg_ms": 16614.3,
+    "pp_tps": 652.096258227571,
+    "tg_tps": 61.633652937529725,
+    "same_tokens": true,
+    "done": "DONE 1024 65536 100500.5 16614.3 length 653 895 0 672062 709610 0 0 0.0 65536 0 chunk=4096 experts_streamed=164512"
+  },
+  {
+    "arm": "on",
+    "pp_ms": 101288.4,
+    "tg_ms": 16615.7,
+    "pp_tps": 647.0237460558169,
+    "tg_tps": 61.62845983016063,
+    "same_tokens": true,
+    "done": "DONE 1024 65536 101288.4 16615.7 length 653 895 0 672228 709800 0 0 0.0 65536 0 chunk=4096 experts_streamed=164512"
+  },
+  {
+    "arm": "base",
+    "pp_ms": 101227.4,
+    "tg_ms": 18538.7,
+    "pp_tps": 647.4136449222246,
+    "tg_tps": 55.235804020778154,
+    "same_tokens": true,
+    "done": "DONE 1024 65536 101227.4 18538.7 length 669 861 0 554045 585120 0 0 0.0 65536 0 chunk=4096 experts_streamed=164512"
+  }
+]

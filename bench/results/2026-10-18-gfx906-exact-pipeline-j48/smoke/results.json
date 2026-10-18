@@ -1,0 +1,29 @@
+[
+  {
+    "arm": "base",
+    "pp_ms": 16719.6,
+    "tg_ms": 3954.1,
+    "pp_tps": 489.96387473384533,
+    "tg_tps": 64.74292506512228,
+    "same_tokens": true,
+    "done": "DONE 256 8192 16719.6 3954.1 length 168 227 0 162404 171240 0 0 0.0 8192 0 chunk=4096 experts_streamed=20564"
+  },
+  {
+    "arm": "off",
+    "pp_ms": 16582.9,
+    "tg_ms": 3960.4,
+    "pp_tps": 494.00285836614825,
+    "tg_tps": 64.63993536006464,
+    "same_tokens": true,
+    "done": "DONE 256 8192 16582.9 3960.4 length 168 227 0 162403 171240 0 0 0.0 8192 0 chunk=4096 experts_streamed=20564"
+  },
+  {
+    "arm": "on",
+    "pp_ms": 19585.5,
+    "tg_ms": 3972.9,
+    "pp_tps": 418.2686170891731,
+    "tg_tps": 64.43655767827028,
+    "same_tokens": true,
+    "done": "DONE 256 8192 19585.5 3972.9 length 168 227 0 162647 171510 0 0 0.0 8192 0 chunk=4096 experts_streamed=20564"
+  }
+]
