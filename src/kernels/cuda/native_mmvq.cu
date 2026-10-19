@@ -1849,28 +1849,43 @@ __global__ void native_mmvq_wave_kernel(const typename F::Block* __restrict__ w,
             if (lane == 0 && row0 + i < n_out) y[std::size_t(j) * n_out + row0 + i] = v;
         }
 }
-template<typename F, int NCOLS>
+template<typename F, int NCOLS, int R = 1>
 void wave_launch_n(const void* weights, const void* x_q8_1, float* y, int n_in, int n_out, cudaStream_t s) {
     const auto* w = static_cast<const typename F::Block*>(weights);
     const auto* x = static_cast<const Q81Block*>(x_q8_1);
-    constexpr int R = 1;
     const unsigned blocks = unsigned((std::size_t(n_out) + 4 * R - 1) / (4 * R));
     native_mmvq_wave_kernel<F, NCOLS, R><<<blocks, 256, 0, s>>>(w, x, y, n_in, n_out);
 }
-template<typename F>
+template<typename F, int R = 1>
 void wave_launch(const void* weights, const void* x_q8_1, float* y, int n_in, int n_out, int ncols, void* stream) {
     const auto s = static_cast<cudaStream_t>(stream);
     switch (ncols) {
-        case 1: wave_launch_n<F, 1>(weights, x_q8_1, y, n_in, n_out, s); break;
-        case 2: wave_launch_n<F, 2>(weights, x_q8_1, y, n_in, n_out, s); break;
-        case 3: wave_launch_n<F, 3>(weights, x_q8_1, y, n_in, n_out, s); break;
-        case 4: wave_launch_n<F, 4>(weights, x_q8_1, y, n_in, n_out, s); break;
-        case 5: wave_launch_n<F, 5>(weights, x_q8_1, y, n_in, n_out, s); break;
-        case 6: wave_launch_n<F, 6>(weights, x_q8_1, y, n_in, n_out, s); break;
-        case 7: wave_launch_n<F, 7>(weights, x_q8_1, y, n_in, n_out, s); break;
-        case 8: wave_launch_n<F, 8>(weights, x_q8_1, y, n_in, n_out, s); break;
+        case 1: wave_launch_n<F, 1, R>(weights, x_q8_1, y, n_in, n_out, s); break;
+        case 2: wave_launch_n<F, 2, R>(weights, x_q8_1, y, n_in, n_out, s); break;
+        case 3: wave_launch_n<F, 3, R>(weights, x_q8_1, y, n_in, n_out, s); break;
+        case 4: wave_launch_n<F, 4, R>(weights, x_q8_1, y, n_in, n_out, s); break;
+        case 5: wave_launch_n<F, 5, R>(weights, x_q8_1, y, n_in, n_out, s); break;
+        case 6: wave_launch_n<F, 6, R>(weights, x_q8_1, y, n_in, n_out, s); break;
+        case 7: wave_launch_n<F, 7, R>(weights, x_q8_1, y, n_in, n_out, s); break;
+        case 8: wave_launch_n<F, 8, R>(weights, x_q8_1, y, n_in, n_out, s); break;
         default: throw std::invalid_argument("native MMVQ (wave) requires 1 <= ncols <= 8");
     }
+}
+bool q5_head_r2_enabled() {
+    const char* e = std::getenv("STRATA_GFX906_Q5_HEAD_R2");
+    if (!e || std::string(e) != "1") return false;
+    int dev = -1;
+    if (cudaGetDevice(&dev) != cudaSuccess) return false;
+    static thread_local int cached_dev = -1;
+    static thread_local bool eligible = false;
+    if (cached_dev != dev) {
+        cudaDeviceProp p{};
+        if (cudaGetDeviceProperties(&p, dev) != cudaSuccess) return false;
+        const std::string arch(p.gcnArchName);
+        eligible = p.warpSize == 64 && (arch == "gfx906" || arch.rfind("gfx906:", 0) == 0);
+        cached_dev = dev;
+    }
+    return eligible;
 }
 #define STRATA_WAVE_MMVQ(...) \
     if (!g_wave_off) { wave_launch<__VA_ARGS__>(weights, x_q8_1, y, n_in, n_out, ncols, stream); launch_check(); return; }
@@ -2390,6 +2405,14 @@ void native_q5_k_mmvq(const void* weights, const void* x_q8_1, float* y,
     validate_pointer(x_q8_1);
     validate_pointer(y);
     validate_stream(stream);
+#if defined(STRATA_HIP_GFX906)
+    if (!g_wave_off && n_in == 2560 && (n_out == 248320 || n_out == 106299) &&
+        (ncols == 1 || ncols == 2 || ncols == 4) && q5_head_r2_enabled()) {
+        wave_launch<Q5KTraits, 2>(weights, x_q8_1, y, n_in, n_out, ncols, stream);
+        launch_check();
+        return;
+    }
+#endif
     STRATA_WAVE_MMVQ(Q5KTraits)
     if (ncols > 1) {
         launch_multi<Q5KTraits>(weights, x_q8_1, y, n_in, n_out, ncols, stream);

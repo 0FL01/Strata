@@ -1,0 +1,121 @@
+{
+  "baseline_binary_sha256": "cc78113d53e5eb89146c1c45fccacef47cd89cba3fa39f7f4b59927c7a384b58",
+  "baseline_archive_sha256": "05e4c669013c348f1577c8996a219d7600c5cacf6e367f97dd075b5ab521446a",
+  "candidate_binary_sha256": "23ffbb6d7fdedc87637c382499f79b7dec7e55f3f05f00241b41196935a482de",
+  "status": "validated opt-in local preset; frozen baseline retained; public checkout not independently rebuilt",
+  "summary": {
+    "baseline": {
+      "PP": 654.5379003971012,
+      "TG": 61.50113212533259
+    },
+    "q5": {
+      "PP": 650.8050156951497,
+      "TG": 62.135168262521084
+    },
+    "percent": {
+      "PP": -0.5703084114284107,
+      "TG": 1.030934090605684
+    }
+  },
+  "packaged_base": "413dbf648b0b59014c3d3a648ab068f5fbc9e444",
+  "fixed_settings": {
+    "expert_slots": [
+      9399,
+      8619
+    ],
+    "pipeline": 2,
+    "split": [
+      27,
+      21
+    ],
+    "kv": "int8",
+    "max_context": 262144,
+    "resident_context": 32768,
+    "prefill": 4096,
+    "spec": 6,
+    "mtp_max": 4,
+    "suffix": 0,
+    "host_core": 0,
+    "worker_cores": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15
+    ],
+    "aux_core": 16,
+    "pool_tasks": 48,
+    "eos": 2147483647,
+    "EXP_MODE": 16,
+    "HIP_SWIGLU_FUSED": 0,
+    "J48": 1,
+    "HC_F16_REGION_REUSE": 1,
+    "PIPE_SHAPE_PREP": 1,
+    "IQ_MT_MIN": 1,
+    "MTP_STAGE0": 0,
+    "NO_PCIE_GROUP": 1,
+    "Q2_AVX2_SPREAD": 1,
+    "HC_BF16_N4": 1,
+    "HC_F16_EXACT": 1,
+    "TOPK_REG": 2,
+    "FIT17": 1,
+    "GR_SPLIT": 0,
+    "GR_UP_EXACT": 0,
+    "MMVF_ROWS": 1,
+    "MMVF_RPB": 4,
+    "PREFILL_CPU_SHARE": 0,
+    "HELP": 0,
+    "PIPED_CONCURRENT": 0
+  },
+  "combined_64k": {
+    "baseline": {
+      "pp": 653.3247301344487,
+      "tg": 61.63578607446554
+    },
+    "comboaux": {
+      "pp": 657.0044822189942,
+      "tg": 62.62230919765166
+    },
+    "change_pct": {
+      "pp": 0.5632347766459489,
+      "tg": 1.6005687377690592
+    }
+  },
+  "qualification_200k": {
+    "baseline": {
+      "arm": "baseline",
+      "pp_ms": 328130.2,
+      "tg_ms": 4756.4,
+      "pp_tps": 609.5141501757533,
+      "tg_tps": 53.82221848456817,
+      "same_tokens": true,
+      "done": "DONE 256 200000 328130.2 4756.4 length 163 219 0 166302 173940 0 0 0.0 200000 0 chunk=4096 experts_streamed=503936"
+    },
+    "comboaux": {
+      "arm": "comboaux",
+      "pp_ms": 323745.8,
+      "tg_ms": 4659.3,
+      "pp_tps": 617.768632056385,
+      "tg_tps": 54.94387568948125,
+      "same_tokens": true,
+      "done": "DONE 256 200000 323745.8 4659.3 length 163 219 0 166080 173660 0 0 0.0 200000 0 chunk=4096 experts_streamed=503936"
+    },
+    "change_pct": {
+      "pp_tps": 1.3542723951940117,
+      "tg_tps": 2.0840040349408673
+    },
+    "scope": "one preliminary A/B pair, 200000 input/256 output, exact golden0705 and current control"
+  },
+  "prompt_64k_file_sha256": "30de397a081dea1688bcdc30fe6b75c5f3e9819b4af656c38a76cfe369ece367",
+  "prompt_200k_file_sha256": "736636e97ede94cc37e32447eefde4217a38bd17c81a7349345be98060e766c4"
+}

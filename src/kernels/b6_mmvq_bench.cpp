@@ -55,8 +55,9 @@ const Case CASES[] = {
     {"shexp down IQ4_NL", 20, 640, 2560, 32, 18, {0, -1}},
     {"router BF16", 30, 2560, 512, 1, 2, {-1, -1}},
     {"head Q5_K", 13, 2560, 248320, 256, 176, {0, 2}},
+    {"draft head Q5_K", 13, 2560, 106299, 256, 176, {0, 2}},
 };
-const int WIDTHS[] = {1, 2, 3, 4, 5, 8};
+const int WIDTHS[] = {1, 2, 3, 4, 5, 6, 7, 8};
 
 bool ck(cudaError_t e, const char* what) {
     if (e == cudaSuccess) return true;
@@ -123,12 +124,35 @@ int main(int argc, char** argv) {
     if (!ck(cudaGetDeviceCount(&n_dev), "device count")) return 1;
     const int only = argc > 2 ? std::atoi(argv[2]) : -1;
     const int bmode = argc > 3 ? std::atoi(argv[3]) : 1;
+    const bool q5r2 = argc > 4 && std::strcmp(argv[4], "--q5-head-r2") == 0;
+    const char* wave_mode = std::getenv("STRATA_MMVQ_WAVE");
+    if (q5r2 && (bmode != 1 || n_dev < 1 || only < -1 || only >= n_dev ||
+                 (wave_mode && std::strcmp(wave_mode, "0") == 0))) return 2;
+    int q5_head_cases = 0;
+    auto set_rows = [&](int mode) {
+        if (q5r2) {
+#if defined(STRATA_HIP_GFX906)
+            if (setenv("STRATA_GFX906_Q5_HEAD_R2", mode ? "1" : "0", 1) != 0) std::exit(2);
+#endif
+        } else K::native_mmvq_set_b6_rows(mode);
+    };
+
     long long bad = 0;
     for (int dev = 0; dev < n_dev; ++dev) {
         if (only >= 0 && dev != only) continue;
-        cudaSetDevice(dev);
+        if (!ck(cudaSetDevice(dev), "set device")) return 2;
         cudaDeviceProp pr{};
-        cudaGetDeviceProperties(&pr, dev);
+        if (!ck(cudaGetDeviceProperties(&pr, dev), "device properties")) return 2;
+        if (q5r2) {
+#if defined(STRATA_HIP_GFX906)
+            if (pr.warpSize != 64 || std::strncmp(pr.gcnArchName, "gfx906", 6) != 0 ||
+                (pr.gcnArchName[6] != 0 && pr.gcnArchName[6] != ':')) return 2;
+#else
+            return 2;
+#endif
+            std::puts("Q5_HEAD_R2: A=R1, B=R2 for exact head shapes at columns 1/2/4; other cases test unchanged fallback");
+        }
+
         std::printf("\n=== device %d: %s (sm_%d%d, L2 %d KB), %d reps, median ms per call, B = rows mode %d ===\n", dev, pr.name,
                     pr.major, pr.minor, pr.l2CacheSize / 1024, reps, bmode);
         std::printf("%-18s %4s %9s %9s %8s %8s  %s\n", "case", "cols", "A ms", "B ms", "A +col", "B +col",
@@ -142,6 +166,8 @@ int main(int argc, char** argv) {
                 std::printf("%-18s unsupported type %d\n", c.name, c.type);
                 continue;
             }
+            if (q5r2 && c.type == 13 && c.n_in == 2560 && (c.n_out == 248320 || c.n_out == 106299))
+                ++q5_head_cases;
             std::mt19937 rng(77u + (unsigned) c.type * 131u + (unsigned) c.n_out);
             Buf b;
             b.wbytes = c.type == 30 ? (size_t) c.n_in * c.n_out * 2 : K::native_mmvq_weight_bytes(c.type, c.n_in, c.n_out);
@@ -184,18 +210,18 @@ int main(int argc, char** argv) {
             double a1 = 0, b1 = 0;
             for (int T : WIDTHS) {
                 std::vector<uint32_t> ha((size_t) T * c.n_out), hb(ha.size()), h1(ha.size());
-                K::native_mmvq_set_b6_rows(0);
+                set_rows(0);
                 const double ta = median_ms(c, b, T, reps, s, ev);
                 call(c, b, 0, T, ya, s);
                 for (int j = 0; j < T; ++j) call_col(c, b, j, y1, s);
-                K::native_mmvq_set_b6_rows(bmode);
+                set_rows(bmode);
                 const double tb = median_ms(c, b, T, reps, s, ev);
                 call(c, b, 0, T, yb, s);
-                K::native_mmvq_set_b6_rows(0);
+                set_rows(0);
                 if (!ck(cudaStreamSynchronize(s), "run")) return 1;
-                cudaMemcpy(ha.data(), ya, ha.size() * 4, cudaMemcpyDeviceToHost);
-                cudaMemcpy(hb.data(), yb, hb.size() * 4, cudaMemcpyDeviceToHost);
-                cudaMemcpy(h1.data(), y1, h1.size() * 4, cudaMemcpyDeviceToHost);
+                if (!ck(cudaMemcpy(ha.data(), ya, ha.size() * 4, cudaMemcpyDeviceToHost), "read ha")) return 2;
+                if (!ck(cudaMemcpy(hb.data(), yb, hb.size() * 4, cudaMemcpyDeviceToHost), "read hb")) return 2;
+                if (!ck(cudaMemcpy(h1.data(), y1, h1.size() * 4, cudaMemcpyDeviceToHost), "read h1")) return 2;
                 const bool ba = std::memcmp(ha.data(), hb.data(), ha.size() * 4) == 0;
                 const bool a_1 = std::memcmp(ha.data(), h1.data(), ha.size() * 4) == 0;
                 const bool b_1 = std::memcmp(hb.data(), h1.data(), hb.size() * 4) == 0;
@@ -213,6 +239,7 @@ int main(int argc, char** argv) {
         for (auto& e : ev) cudaEventDestroy(e);
         cudaStreamDestroy(s);
     }
+    if (q5r2 && q5_head_cases != 2 * (only < 0 ? n_dev : 1)) return 2;
     std::printf("\nb6_mmvq_bench: %s (%lld case/width comparisons failed)\n", bad ? "FAILED" : "ok", bad);
     return bad ? 1 : 0;
 }

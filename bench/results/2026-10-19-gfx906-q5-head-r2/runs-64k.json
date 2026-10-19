@@ -1,0 +1,338 @@
+{
+  "q564": [
+    {
+      "arm": "baseline",
+      "pp_ms": 100168.8,
+      "tg_ms": 16719.7,
+      "pp_tps": 654.2556165193154,
+      "tg_tps": 61.24511803441449,
+      "same_tokens": true,
+      "done": "DONE 1024 65536 100168.8 16719.7 length 653 895 0 672206 709760 0 0 0.0 65536 0 chunk=4096 experts_streamed=164512",
+      "output_token_file_sha256": "9f31236d07fd97b4e894fe7525878eda56962f2562706d555ed171c205fc8f14"
+    },
+    {
+      "arm": "q5",
+      "pp_ms": 100576.6,
+      "tg_ms": 16459.7,
+      "pp_tps": 651.6028579212261,
+      "tg_tps": 62.212555514377534,
+      "same_tokens": true,
+      "done": "DONE 1024 65536 100576.6 16459.7 length 653 895 0 671521 709020 0 0 0.0 65536 0 chunk=4096 experts_streamed=164512",
+      "output_token_file_sha256": "9f31236d07fd97b4e894fe7525878eda56962f2562706d555ed171c205fc8f14"
+    },
+    {
+      "arm": "q5",
+      "pp_ms": 100823.2,
+      "tg_ms": 16500.7,
+      "pp_tps": 650.0091248839553,
+      "tg_tps": 62.0579732981025,
+      "same_tokens": true,
+      "done": "DONE 1024 65536 100823.2 16500.7 length 653 895 0 671549 709050 0 0 0.0 65536 0 chunk=4096 experts_streamed=164512",
+      "output_token_file_sha256": "9f31236d07fd97b4e894fe7525878eda56962f2562706d555ed171c205fc8f14"
+    },
+    {
+      "arm": "baseline",
+      "pp_ms": 100082.4,
+      "tg_ms": 16580.5,
+      "pp_tps": 654.8204279673549,
+      "tg_tps": 61.75929555803504,
+      "same_tokens": true,
+      "done": "DONE 1024 65536 100082.4 16580.5 length 653 895 0 672075 709620 0 0 0.0 65536 0 chunk=4096 experts_streamed=164512",
+      "output_token_file_sha256": "9f31236d07fd97b4e894fe7525878eda56962f2562706d555ed171c205fc8f14"
+    }
+  ],
+  "norm64": [
+    {
+      "arm": "baseline",
+      "pp_ms": 100580.2,
+      "tg_ms": 16715.6,
+      "pp_tps": 651.579535534827,
+      "tg_tps": 61.26014022828975,
+      "same_tokens": true,
+      "done": "DONE 1024 65536 100580.2 16715.6 length 653 895 0 672352 709910 0 0 0.0 65536 0 chunk=4096 experts_streamed=164512",
+      "output_token_file_sha256": "9f31236d07fd97b4e894fe7525878eda56962f2562706d555ed171c205fc8f14"
+    },
+    {
+      "arm": "norm",
+      "pp_ms": 101236.0,
+      "tg_ms": 16449.5,
+      "pp_tps": 647.3586471215773,
+      "tg_tps": 62.251132253259975,
+      "same_tokens": true,
+      "done": "DONE 1024 65536 101236.0 16449.5 length 653 895 0 672446 710020 0 0 0.0 65536 0 chunk=4096 experts_streamed=164512",
+      "output_token_file_sha256": "9f31236d07fd97b4e894fe7525878eda56962f2562706d555ed171c205fc8f14"
+    },
+    {
+      "arm": "norm",
+      "pp_ms": 100105.1,
+      "tg_ms": 16447.9,
+      "pp_tps": 654.6719397912793,
+      "tg_tps": 62.257187847688755,
+      "same_tokens": true,
+      "done": "DONE 1024 65536 100105.1 16447.9 length 653 895 0 672377 709950 0 0 0.0 65536 0 chunk=4096 experts_streamed=164512",
+      "output_token_file_sha256": "9f31236d07fd97b4e894fe7525878eda56962f2562706d555ed171c205fc8f14"
+    },
+    {
+      "arm": "baseline",
+      "pp_ms": 100523.6,
+      "tg_ms": 16598.6,
+      "pp_tps": 651.9464086045466,
+      "tg_tps": 61.69194992348753,
+      "same_tokens": true,
+      "done": "DONE 1024 65536 100523.6 16598.6 length 653 895 0 672381 709950 0 0 0.0 65536 0 chunk=4096 experts_streamed=164512",
+      "output_token_file_sha256": "9f31236d07fd97b4e894fe7525878eda56962f2562706d555ed171c205fc8f14"
+    }
+  ],
+  "norm64-repeat1": [
+    {
+      "arm": "baseline",
+      "pp_ms": 100153.9,
+      "tg_ms": 16607.1,
+      "pp_tps": 654.3529508087055,
+      "tg_tps": 61.66037417730971,
+      "same_tokens": true,
+      "done": "DONE 1024 65536 100153.9 16607.1 length 653 895 0 672315 709880 0 0 0.0 65536 0 chunk=4096 experts_streamed=164512",
+      "output_token_file_sha256": "9f31236d07fd97b4e894fe7525878eda56962f2562706d555ed171c205fc8f14"
+    },
+    {
+      "arm": "norm",
+      "pp_ms": 102898.0,
+      "tg_ms": 16557.8,
+      "pp_tps": 636.902563703862,
+      "tg_tps": 61.843964777929436,
+      "same_tokens": true,
+      "done": "DONE 1024 65536 102898.0 16557.8 length 653 895 0 672409 709990 0 0 0.0 65536 0 chunk=4096 experts_streamed=164512",
+      "output_token_file_sha256": "9f31236d07fd97b4e894fe7525878eda56962f2562706d555ed171c205fc8f14"
+    },
+    {
+      "arm": "norm",
+      "pp_ms": 100456.9,
+      "tg_ms": 16438.6,
+      "pp_tps": 652.3792790739113,
+      "tg_tps": 62.29240932926162,
+      "same_tokens": true,
+      "done": "DONE 1024 65536 100456.9 16438.6 length 653 895 0 672344 709910 0 0 0.0 65536 0 chunk=4096 experts_streamed=164512",
+      "output_token_file_sha256": "9f31236d07fd97b4e894fe7525878eda56962f2562706d555ed171c205fc8f14"
+    },
+    {
+      "arm": "baseline",
+      "pp_ms": 100434.9,
+      "tg_ms": 16592.0,
+      "pp_tps": 652.5221810346802,
+      "tg_tps": 61.71648987463838,
+      "same_tokens": true,
+      "done": "DONE 1024 65536 100434.9 16592.0 length 653 895 0 671955 709490 0 0 0.0 65536 0 chunk=4096 experts_streamed=164512",
+      "output_token_file_sha256": "9f31236d07fd97b4e894fe7525878eda56962f2562706d555ed171c205fc8f14"
+    }
+  ],
+  "combo64": [
+    {
+      "arm": "baseline",
+      "pp_ms": 100541.9,
+      "tg_ms": 16589.1,
+      "pp_tps": 651.8277454474205,
+      "tg_tps": 61.7272787553273,
+      "same_tokens": true,
+      "done": "DONE 1024 65536 100541.9 16589.1 length 653 895 0 672242 709800 0 0 0.0 65536 0 chunk=4096 experts_streamed=164512",
+      "output_token_file_sha256": "9f31236d07fd97b4e894fe7525878eda56962f2562706d555ed171c205fc8f14"
+    },
+    {
+      "arm": "combo",
+      "pp_ms": 102497.8,
+      "tg_ms": 16285.9,
+      "pp_tps": 639.3893332344694,
+      "tg_tps": 62.87647597001087,
+      "same_tokens": true,
+      "done": "DONE 1024 65536 102497.8 16285.9 length 653 895 0 671619 709120 0 0 0.0 65536 0 chunk=4096 experts_streamed=164512",
+      "output_token_file_sha256": "9f31236d07fd97b4e894fe7525878eda56962f2562706d555ed171c205fc8f14"
+    },
+    {
+      "arm": "combo",
+      "pp_ms": 102403.7,
+      "tg_ms": 16298.4,
+      "pp_tps": 639.9768758355411,
+      "tg_tps": 62.82825308005694,
+      "same_tokens": true,
+      "done": "DONE 1024 65536 102403.7 16298.4 length 653 895 0 671579 709080 0 0 0.0 65536 0 chunk=4096 experts_streamed=164512",
+      "output_token_file_sha256": "9f31236d07fd97b4e894fe7525878eda56962f2562706d555ed171c205fc8f14"
+    },
+    {
+      "arm": "baseline",
+      "pp_ms": 100573.7,
+      "tg_ms": 16619.5,
+      "pp_tps": 651.6216466133791,
+      "tg_tps": 61.61436866331719,
+      "same_tokens": true,
+      "done": "DONE 1024 65536 100573.7 16619.5 length 653 895 0 672136 709680 0 0 0.0 65536 0 chunk=4096 experts_streamed=164512",
+      "output_token_file_sha256": "9f31236d07fd97b4e894fe7525878eda56962f2562706d555ed171c205fc8f14"
+    }
+  ],
+  "combo64-reverse": [
+    {
+      "arm": "combo",
+      "pp_ms": 100687.7,
+      "tg_ms": 16351.8,
+      "pp_tps": 650.8838716149044,
+      "tg_tps": 62.623075135459096,
+      "same_tokens": true,
+      "done": "DONE 1024 65536 100687.7 16351.8 length 653 895 0 671569 709070 0 0 0.0 65536 0 chunk=4096 experts_streamed=164512",
+      "output_token_file_sha256": "9f31236d07fd97b4e894fe7525878eda56962f2562706d555ed171c205fc8f14"
+    },
+    {
+      "arm": "baseline",
+      "pp_ms": 100254.6,
+      "tg_ms": 16596.2,
+      "pp_tps": 653.6956907712962,
+      "tg_tps": 61.700871283787855,
+      "same_tokens": true,
+      "done": "DONE 1024 65536 100254.6 16596.2 length 653 895 0 672282 709850 0 0 0.0 65536 0 chunk=4096 experts_streamed=164512",
+      "output_token_file_sha256": "9f31236d07fd97b4e894fe7525878eda56962f2562706d555ed171c205fc8f14"
+    },
+    {
+      "arm": "baseline",
+      "pp_ms": 100302.1,
+      "tg_ms": 16600.1,
+      "pp_tps": 653.3861205298792,
+      "tg_tps": 61.686375383280826,
+      "same_tokens": true,
+      "done": "DONE 1024 65536 100302.1 16600.1 length 653 895 0 672240 709800 0 0 0.0 65536 0 chunk=4096 experts_streamed=164512",
+      "output_token_file_sha256": "9f31236d07fd97b4e894fe7525878eda56962f2562706d555ed171c205fc8f14"
+    },
+    {
+      "arm": "combo",
+      "pp_ms": 100427.4,
+      "tg_ms": 16345.7,
+      "pp_tps": 652.5709119224435,
+      "tg_tps": 62.64644524247967,
+      "same_tokens": true,
+      "done": "DONE 1024 65536 100427.4 16345.7 length 653 895 0 671630 709130 0 0 0.0 65536 0 chunk=4096 experts_streamed=164512",
+      "output_token_file_sha256": "9f31236d07fd97b4e894fe7525878eda56962f2562706d555ed171c205fc8f14"
+    }
+  ],
+  "aux64": [
+    {
+      "arm": "baseline",
+      "pp_ms": 100309.6,
+      "tg_ms": 16599.7,
+      "pp_tps": 653.3372678188329,
+      "tg_tps": 61.68786182882823,
+      "same_tokens": true,
+      "done": "DONE 1024 65536 100309.6 16599.7 length 653 895 0 672237 709790 0 0 0.0 65536 0 chunk=4096 experts_streamed=164512",
+      "output_token_file_sha256": "9f31236d07fd97b4e894fe7525878eda56962f2562706d555ed171c205fc8f14"
+    },
+    {
+      "arm": "aux",
+      "pp_ms": 99652.8,
+      "tg_ms": 16635.1,
+      "pp_tps": 657.6433376683846,
+      "tg_tps": 61.55658817800916,
+      "same_tokens": true,
+      "done": "DONE 1024 65536 99652.8 16635.1 length 653 895 0 672306 709870 0 0 0.0 65536 0 chunk=4096 experts_streamed=164512",
+      "output_token_file_sha256": "9f31236d07fd97b4e894fe7525878eda56962f2562706d555ed171c205fc8f14"
+    },
+    {
+      "arm": "aux",
+      "pp_ms": 99775.5,
+      "tg_ms": 16772.9,
+      "pp_tps": 656.8345936627729,
+      "tg_tps": 61.05086180684317,
+      "same_tokens": true,
+      "done": "DONE 1024 65536 99775.5 16772.9 length 653 895 0 672098 709640 0 0 0.0 65536 0 chunk=4096 experts_streamed=164512",
+      "output_token_file_sha256": "9f31236d07fd97b4e894fe7525878eda56962f2562706d555ed171c205fc8f14"
+    },
+    {
+      "arm": "baseline",
+      "pp_ms": 100334.3,
+      "tg_ms": 16584.6,
+      "pp_tps": 653.17643119053,
+      "tg_tps": 61.744027591862334,
+      "same_tokens": true,
+      "done": "DONE 1024 65536 100334.3 16584.6 length 653 895 0 672348 709920 0 0 0.0 65536 0 chunk=4096 experts_streamed=164512",
+      "output_token_file_sha256": "9f31236d07fd97b4e894fe7525878eda56962f2562706d555ed171c205fc8f14"
+    }
+  ],
+  "comboaux64": [
+    {
+      "arm": "baseline",
+      "pp_ms": 100277.9,
+      "tg_ms": 16609.9,
+      "pp_tps": 653.5438017748677,
+      "tg_tps": 61.64997983130542,
+      "same_tokens": true,
+      "done": "DONE 1024 65536 100277.9 16609.9 length 653 895 0 672367 709930 0 0 0.0 65536 0 chunk=4096 experts_streamed=164512",
+      "output_token_file_sha256": "9f31236d07fd97b4e894fe7525878eda56962f2562706d555ed171c205fc8f14"
+    },
+    {
+      "arm": "comboaux",
+      "pp_ms": 99452.1,
+      "tg_ms": 16408.2,
+      "pp_tps": 658.9704993660264,
+      "tg_tps": 62.4078204800039,
+      "same_tokens": true,
+      "done": "DONE 1024 65536 99452.1 16408.2 length 653 895 0 671513 709010 0 0 0.0 65536 0 chunk=4096 experts_streamed=164512",
+      "output_token_file_sha256": "9f31236d07fd97b4e894fe7525878eda56962f2562706d555ed171c205fc8f14"
+    },
+    {
+      "arm": "comboaux",
+      "pp_ms": 99513.7,
+      "tg_ms": 16334.3,
+      "pp_tps": 658.56258987456,
+      "tg_tps": 62.690167316628205,
+      "same_tokens": true,
+      "done": "DONE 1024 65536 99513.7 16334.3 length 653 895 0 671614 709120 0 0 0.0 65536 0 chunk=4096 experts_streamed=164512",
+      "output_token_file_sha256": "9f31236d07fd97b4e894fe7525878eda56962f2562706d555ed171c205fc8f14"
+    },
+    {
+      "arm": "baseline",
+      "pp_ms": 100216.7,
+      "tg_ms": 16627.1,
+      "pp_tps": 653.9429057232976,
+      "tg_tps": 61.586205652218375,
+      "same_tokens": true,
+      "done": "DONE 1024 65536 100216.7 16627.1 length 653 895 0 672211 709770 0 0 0.0 65536 0 chunk=4096 experts_streamed=164512",
+      "output_token_file_sha256": "9f31236d07fd97b4e894fe7525878eda56962f2562706d555ed171c205fc8f14"
+    }
+  ],
+  "comboaux64-reverse": [
+    {
+      "arm": "comboaux",
+      "pp_ms": 100205.5,
+      "tg_ms": 16340.9,
+      "pp_tps": 654.0159971259062,
+      "tg_tps": 62.66484710144484,
+      "same_tokens": true,
+      "done": "DONE 1024 65536 100205.5 16340.9 length 653 895 0 671484 708980 0 0 0.0 65536 0 chunk=4096 experts_streamed=164512",
+      "output_token_file_sha256": "9f31236d07fd97b4e894fe7525878eda56962f2562706d555ed171c205fc8f14"
+    },
+    {
+      "arm": "baseline",
+      "pp_ms": 99953.4,
+      "tg_ms": 16595.7,
+      "pp_tps": 655.6655401417061,
+      "tg_tps": 61.70273022529932,
+      "same_tokens": true,
+      "done": "DONE 1024 65536 99953.4 16595.7 length 653 895 0 672332 709900 0 0 0.0 65536 0 chunk=4096 experts_streamed=164512",
+      "output_token_file_sha256": "9f31236d07fd97b4e894fe7525878eda56962f2562706d555ed171c205fc8f14"
+    },
+    {
+      "arm": "baseline",
+      "pp_ms": 100798.1,
+      "tg_ms": 16622.2,
+      "pp_tps": 650.1709853657956,
+      "tg_tps": 61.60436043363694,
+      "same_tokens": true,
+      "done": "DONE 1024 65536 100798.1 16622.2 length 653 895 0 672241 709800 0 0 0.0 65536 0 chunk=4096 experts_streamed=164512",
+      "output_token_file_sha256": "9f31236d07fd97b4e894fe7525878eda56962f2562706d555ed171c205fc8f14"
+    },
+    {
+      "arm": "comboaux",
+      "pp_ms": 99827.5,
+      "tg_ms": 16324.6,
+      "pp_tps": 656.492449475345,
+      "tg_tps": 62.727417517121395,
+      "same_tokens": true,
+      "done": "DONE 1024 65536 99827.5 16324.6 length 653 895 0 671570 709070 0 0 0.0 65536 0 chunk=4096 experts_streamed=164512",
+      "output_token_file_sha256": "9f31236d07fd97b4e894fe7525878eda56962f2562706d555ed171c205fc8f14"
+    }
+  ]
+}

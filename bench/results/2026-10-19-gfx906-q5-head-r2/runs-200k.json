@@ -1,0 +1,25 @@
+{
+  "baseline": {
+    "arm": "baseline",
+    "pp_ms": 328130.2,
+    "tg_ms": 4756.4,
+    "pp_tps": 609.5141501757533,
+    "tg_tps": 53.82221848456817,
+    "same_tokens": true,
+    "done": "DONE 256 200000 328130.2 4756.4 length 163 219 0 166302 173940 0 0 0.0 200000 0 chunk=4096 experts_streamed=503936"
+  },
+  "comboaux": {
+    "arm": "comboaux",
+    "pp_ms": 323745.8,
+    "tg_ms": 4659.3,
+    "pp_tps": 617.768632056385,
+    "tg_tps": 54.94387568948125,
+    "same_tokens": true,
+    "done": "DONE 256 200000 323745.8 4659.3 length 163 219 0 166080 173660 0 0 0.0 200000 0 chunk=4096 experts_streamed=503936"
+  },
+  "change_pct": {
+    "pp_tps": 1.3542723951940117,
+    "tg_tps": 2.0840040349408673
+  },
+  "scope": "one preliminary A/B pair, 200000 input/256 output, exact golden0705 and current control"
+}
