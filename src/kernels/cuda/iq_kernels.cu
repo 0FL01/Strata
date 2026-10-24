@@ -4544,7 +4544,16 @@ void native_expert_grouped(const NativeExpertLayout& L, const unsigned long long
     const bool q2_gu = q2_mode != 0 && L.gu_type == 42 && L.n_embd == 2560 && L.n_ff == 640;
     if (q2_gu) {
         const dim3 gl((unsigned) ((2 * L.n_ff + 15) / 16), (unsigned) cap_groups);
-        native_gu_q2_global_kernel<4, 16><<<gl, 256, 0, s>>>(grp_ptr, grp_start, n_groups, ent_tok, X, L, gate, up);
+        // Opt-in small-cap chunk2 uses the existing token-independent GU arithmetic.
+        // cap_entries is only a performance guard, not a maximum group length:
+        // NT=2 also handles larger groups as successive pairs and a singleton tail.
+        const char* chunk2_env = std::getenv("STRATA_GFX906_Q2_GU_CHUNK2");
+        const bool chunk2 = chunk2_env && std::strcmp(chunk2_env, "1") == 0 &&
+                            cap_entries > 0 && cap_entries <= 20 && cap_groups > 0 && cap_groups <= 20;
+        if (chunk2)
+            native_gu_q2_global_kernel<2, 16><<<gl, 256, 0, s>>>(grp_ptr, grp_start, n_groups, ent_tok, X, L, gate, up);
+        else
+            native_gu_q2_global_kernel<4, 16><<<gl, 256, 0, s>>>(grp_ptr, grp_start, n_groups, ent_tok, X, L, gate, up);
     } else
 #endif
     {

@@ -12,6 +12,16 @@
 
 namespace strata::prefill::fused::f16kq {
 
+#if defined(STRATA_HIP_GFX906)
+// Build prerequisite adapted from PR #2020: gfx906 has no gfx11 F16 K-quant kernels.
+inline bool covers(int) { return false; }
+inline bool covers_down(int) { return false; }
+inline void gate_up(const Batch&, const NativeGeom&, const int32_t*, const int2*, const int32_t*, int64_t,
+                    int, int64_t, const uint8_t*, const int32_t*, uint8_t*, cudaStream_t) { __builtin_trap(); }
+inline void down(const Batch&, const NativeGeom&, const int32_t*, const int2*, const int32_t*, int64_t, int,
+                 int64_t, const uint8_t*, float*, cudaStream_t) { __builtin_trap(); }
+#else
+
 /// The gate/up type has a kernel here (and this build has gfx11 device code).
 bool covers(int gu_type);
 
@@ -26,5 +36,7 @@ bool covers_down(int d_type);
 /// Down for the same experts and tiles: H (int8, `h`) to the routed rows' FP32 outputs in `dm`.
 void down(const Batch& b, const NativeGeom& g, const int32_t* ts, const int2* tiles, const int32_t* off, int64_t n, int n_expert,
           int64_t work_bound, const uint8_t* h, float* dm, cudaStream_t s);
+
+#endif
 
 }  // namespace strata::prefill::fused::f16kq

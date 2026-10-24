@@ -133,6 +133,8 @@ bool read_file(const std::string& path, std::vector<uint8_t>& out) {
 }  // namespace
 
 MtpDrafter::~MtpDrafter() {
+    // The borrowed path is scoped to the last stage; its head outlives this drafter on every return.
+    const OnDevice on_borrowed(head_borrowed_ || head_borrow_reservation_bytes_ ? device_ : -1);
     if (cs_) cudaStreamSynchronize(cs_);
     for (auto& e : prefill_exec_) if (e) cudaGraphExecDestroy(e);
     for (auto& e : prefill_dev_exec_) if (e) cudaGraphExecDestroy(e);
@@ -159,7 +161,9 @@ MtpDrafter::~MtpDrafter() {
     if (arena_) cudaFree(arena_);
     if (head_logits_) cudaFree(head_logits_);
     if (owns_draft_head_ && dhead_) { strata::kernels::native_q6_k_unpack(dhead_); cudaFree(dhead_); }
-    if (owns_draft_head_ && dvocab_) cudaFree(dvocab_);
+    if (owns_draft_vocab_ && dvocab_) cudaFree(dvocab_);
+    // Reservation is never referenced by a kernel or graph. Destroy graph users first on error unwind.
+    if (head_borrow_reservation_) cudaFree(head_borrow_reservation_);
     if (ev_chain_) cudaEventDestroy(ev_chain_);
     for (cudaEvent_t e : ev_step_) if (e) cudaEventDestroy(e);
     void* hosts[] = {h_tok_, h_step_, h_pos_, h_row_, h_out_, h_prob_, h_force_};
@@ -249,6 +253,10 @@ bool MtpDrafter::make_q4_head(std::string& err) {
 
 bool MtpDrafter::load(const std::string& rt_dir, const ModelGeometry& g, SessionState& ss, int max_t, std::string& err,
                       int64_t window, const MtpDrafter* shared) {
+    if (head_borrowed_ || head_borrow_reservation_bytes_ != 0) {
+        err = "mtp: borrowed head reload is not supported";
+        return false;
+    }
 #if defined(STRATA_GPU_METAL)
     (void) window; (void) shared;
     g_ = &g;
@@ -274,6 +282,7 @@ bool MtpDrafter::load(const std::string& rt_dir, const ModelGeometry& g, Session
         tensors_ = shared->tensors_;
         owns_weights_ = false;
         owns_draft_head_ = false;
+        owns_draft_vocab_ = false;
     }
     // Loader fix (0.1.15+loaderfix.2): the two reads below are the whole “drafter files” cost; reporting
     // them apart from the rest of the stage is what makes the next regression visible.
@@ -657,6 +666,79 @@ void draft_head_hint(int64_t n_tokens, int64_t row_bytes) {
 }
 }  // namespace
 
+#if defined(STRATA_HIP_GFX906)
+namespace {
+bool mtp_head_borrow_env() {
+    const char* e = std::getenv("STRATA_MTP_HEAD_BORROW");
+    return e != nullptr && std::strcmp(e, "1") == 0;
+}
+
+// Runtime safety contract only. Qualification pins the canonical file's SHA-256 externally;
+// every admitted map keeps its original ordering, with no sorting or new inverse output mapping.
+bool mtp_head_borrow_vocab(const std::vector<uint8_t>& raw) {
+    if (raw.size() != 106299u * 4u) return false;
+    std::vector<uint8_t> seen(248320u, 0);
+    for (size_t at = 0; at < raw.size(); at += 4) {
+        int32_t id = -1;
+        std::memcpy(&id, raw.data() + at, 4);
+        if (id < 0 || id >= 248320 || seen[(size_t) id]) return false;
+        seen[(size_t) id] = 1;
+    }
+    return true;
+}
+}  // namespace
+
+#endif  // STRATA_HIP_GFX906
+
+bool MtpDrafter::audit_head_borrow_memory(const char* phase, std::string& err) const {
+    const char* audit = std::getenv("STRATA_MTP_HEAD_BORROW_AUDIT");
+    if (!head_borrow_scope_ || audit == nullptr || std::strcmp(audit, "1") != 0) return true;
+    const OnDevice on_device(device_);
+    int current = -1;
+    size_t free_b = 0, total_b = 0;
+    if (cudaGetDevice(&current) != cudaSuccess || current != device_ ||
+        cudaMemGetInfo(&free_b, &total_b) != cudaSuccess) {
+        err = "mtp: borrowed head startup memory audit failed";
+        return false;
+    }
+    const uint64_t owned = owns_draft_head_ && dhead_ ? (uint64_t) n_dvocab_ * head_->row_bytes() : 0;
+    std::fprintf(stderr, "strata mtp head-audit: phase=%s device=%d free=%llu total=%llu borrowed=%d "
+                         "owned_head_bytes=%llu reservation_bytes=%llu\n",
+                 phase, device_, (unsigned long long) free_b, (unsigned long long) total_b,
+                 head_borrowed_ ? 1 : 0, (unsigned long long) owned,
+                 (unsigned long long) head_borrow_reservation_bytes_);
+    return true;
+}
+
+bool MtpDrafter::release_head_borrow_reservation(std::string& err) {
+    if (!audit_head_borrow_memory("before_release", err)) return false;
+    if (head_borrow_reservation_ == nullptr) return audit_head_borrow_memory("after_release", err);
+    if (!head_borrowed_) { err = "mtp: incomplete borrowed head startup"; return false; }
+    const OnDevice on_device(device_);
+    int current = -1;
+    if (cudaGetDevice(&current) != cudaSuccess || current != device_) {
+        err = "mtp: could not select borrowed head reservation device";
+        return false;
+    }
+    // No request has run. All startup captures/preparations must have completed before the slack is exposed.
+    if (cudaDeviceSynchronize() != cudaSuccess) { err = "mtp: borrowed head startup synchronization failed"; return false; }
+    size_t before = 0, total = 0, after = 0;
+    if (cudaMemGetInfo(&before, &total) != cudaSuccess) { err = "mtp: reading reserved head free memory"; return false; }
+    // A failing free may have executed. Detach ownership before attempting it; startup fails without a retry.
+    void* reservation = head_borrow_reservation_;
+    const uint64_t released = head_borrow_reservation_bytes_;
+    head_borrow_reservation_ = nullptr;
+    head_borrow_reservation_bytes_ = 0;
+    vram_ -= released;
+    if (cudaFree(reservation) != cudaSuccess) { err = "mtp: releasing head reservation failed"; return false; }
+    if (cudaMemGetInfo(&after, &total) != cudaSuccess) { err = "mtp: reading released head free memory"; return false; }
+    std::fprintf(stderr, "strata mtp: indexed borrowed head CUDA%d: released=%llu logical_bytes, free_before=%llu "
+                         "free_after=%llu total=%llu; full_head=borrowed vocabulary=owned\n",
+                 device_, (unsigned long long) released, (unsigned long long) before,
+                 (unsigned long long) after, (unsigned long long) total);
+    return audit_head_borrow_memory("after_release", err);
+}
+
 bool MtpDrafter::bind(const WeightTable& wt, const NativeHead* head, const float* window_R, std::string& err,
                       const MtpDrafter* shared) {
 #if defined(STRATA_GPU_METAL)
@@ -664,6 +746,15 @@ bool MtpDrafter::bind(const WeightTable& wt, const NativeHead* head, const float
     return true;
 #endif
     const OnDevice on_device(device_);
+    // A borrowed graph must never silently observe a replacement head or acquire a slot borrower.
+    if (head_borrowed_) {
+        err = "mtp: borrowed head rebind/reload is not supported";
+        return false;
+    }
+    if (shared != nullptr && shared->head_borrowed_) {
+        err = "mtp: shared borrowed draft heads are not supported";
+        return false;
+    }
     wt_ = &wt;
     head_ = head;
     window_R_ = window_R;
@@ -671,6 +762,7 @@ bool MtpDrafter::bind(const WeightTable& wt, const NativeHead* head, const float
     if (!wo) { err = "mtp: output.weight is missing"; return false; }
     n_vocab_ = wo->ne1;
     if (head == nullptr || !head->loaded()) { err = "mtp: the draft layer needs the native head (--native)"; return false; }
+    if (!audit_head_borrow_memory("before_bind", err)) return false;
     if (head_logits_ == nullptr &&
         cudaMalloc((void**) &head_logits_, (size_t) max_t_ * (size_t) n_vocab_ * sizeof(float)) != cudaSuccess) {
         err = "mtp: the draft logits do not fit";
@@ -687,6 +779,7 @@ bool MtpDrafter::bind(const WeightTable& wt, const NativeHead* head, const float
         dvocab_ = shared->dvocab_;
         n_dvocab_ = shared->n_dvocab_;
         owns_draft_head_ = false;
+        owns_draft_vocab_ = false;
     }
     // the draft head's token subset, when tools/draft_vocab.py wrote one
     if (dhead_ == nullptr && shared == nullptr && !full_head_env()) {
@@ -694,6 +787,57 @@ bool MtpDrafter::bind(const WeightTable& wt, const NativeHead* head, const float
         if (read_file(vocab_file(), raw) && raw.size() >= 4 && raw.size() % 4 == 0) {
             n_dvocab_ = (int64_t) (raw.size() / 4);
             const int64_t row_bytes = (int64_t) head->row_bytes();   // a vocabulary row of the native head
+            bool borrow = false;
+#if defined(STRATA_HIP_GFX906)
+            int current_device = -1;
+            borrow = mtp_head_borrow_env() && head_borrow_scope_ && !q4_ && !q4_head_ &&
+                owns_weights_ && owns_draft_head_ && owns_draft_vocab_ && cs_ != nullptr &&
+                head->type() == 13 && g_->n_embd == 2560 && wo->ne0 == 2560 && n_vocab_ == 248320 &&
+                n_dvocab_ == 106299 && row_bytes == 1760 && head->weight_bytes() == 437043200ull &&
+                head->device() == device_ && cudaGetDevice(&current_device) == cudaSuccess &&
+                current_device == device_ && strata::kernels::native_q5_k_mtp_head_indexed_available();
+            if (borrow && !mtp_head_borrow_vocab(raw)) {
+                err = "mtp: indexed borrowed head vocabulary has invalid or duplicate IDs";
+                return false;  // never send an otherwise-qualified invalid map to the old unchecked gather
+            }
+#endif
+            if (borrow) {
+                // Match the removed allocation in device, order and exact size until all sizing has finished.
+                const uint64_t bytes = (uint64_t) n_dvocab_ * (uint64_t) row_bytes;
+                head_borrow_reservation_bytes_ = bytes;  // select this device even if the second allocation fails
+                if (cudaMalloc((void**) &dvocab_, raw.size()) != cudaSuccess ||
+                    cudaMalloc(&head_borrow_reservation_, (size_t) bytes) != cudaSuccess) {
+                    err = "mtp: the borrowed head startup reservation does not fit";
+                    draft_head_hint(n_dvocab_, row_bytes);
+                    return false;
+                }
+                // The old gather wrote every duplicate-head byte. Touch the entire replacement too,
+                // before observing free memory or allowing any later startup slack decision.
+                if (cudaMemcpy(dvocab_, raw.data(), raw.size(), cudaMemcpyHostToDevice) != cudaSuccess ||
+                    cudaMemset(head_borrow_reservation_, 0, (size_t) bytes) != cudaSuccess ||
+                    cudaDeviceSynchronize() != cudaSuccess) {
+                    err = "mtp: initializing the borrowed head vocabulary/reservation failed";
+                    return false;
+                }
+                dvocab_host_.resize((size_t) n_dvocab_);
+                std::memcpy(dvocab_host_.data(), raw.data(), raw.size());
+                // No writer may use this alias: Q4 and alias/reload modes are excluded above/by startup scope.
+                dhead_ = const_cast<uint8_t*>(static_cast<const uint8_t*>(head->weights()));
+                dhead_type_ = head->type();
+                owns_draft_head_ = false;
+                head_borrowed_ = true;
+                vram_ += bytes + raw.size();
+                size_t free_b = 0, total_b = 0;
+                if (cudaMemGetInfo(&free_b, &total_b) != cudaSuccess) {
+                    err = "mtp: reading borrowed head allocation memory";
+                    return false;
+                }
+                std::fprintf(stderr, "strata mtp: indexed borrowed Q5_K head CUDA%d: source_rows=248320 "
+                                     "shortlist_rows=106299 head_bytes=437043200 duplicate_bytes=%llu reserved_bytes=%llu "
+                                     "vocabulary_bytes=%llu free=%llu total=%llu; full_head=borrowed vocabulary=owned\n",
+                             device_, (unsigned long long) bytes, (unsigned long long) bytes,
+                             (unsigned long long) raw.size(), (unsigned long long) free_b, (unsigned long long) total_b);
+            } else {
             if (cudaMalloc((void**) &dvocab_, raw.size()) != cudaSuccess ||
                 cudaMalloc((void**) &dhead_, (size_t) (n_dvocab_ * row_bytes)) != cudaSuccess) {
                 err = "mtp: the draft head does not fit";
@@ -740,10 +884,11 @@ bool MtpDrafter::bind(const WeightTable& wt, const NativeHead* head, const float
             if (dhead_type_ == 14 && strata::kernels::native_q6_k_packed_enabled())   // STRATA_Q6_PACKED=1
                 strata::kernels::native_q6_k_pack(dhead_, (int) (row_bytes / 210) * 256, (int) n_dvocab_,
                                                   "MTP draft head");
+            }  // unchanged copied-head fallback
         }
     }
     if (coupled_draft_env() && cparams_ == nullptr && !setup_coupled(err)) return false;
-    return true;
+    return audit_head_borrow_memory("after_bind", err);
 }
 
 // STRATA_MTP_PROFILE=1 (measurement only): GPU stamps between the draft layer's stages in the round graph and in every
@@ -1192,8 +1337,20 @@ bool MtpDrafter::record_rest(int step_row, cudaStream_t cs, std::string& err) {
         native_quantize_q8_1(sample_, xq_, (int) N, T, cs);
         const bool sub = dhead_ != nullptr;
         const int64_t nv = sub ? n_dvocab_ : n_vocab_;
-        native_mmvq(sub ? dhead_type_ : head_->type(), sub ? dhead_ : head_->weights(), xq_, head_logits_, (int) N,
-                    (int) nv, T, cs);
+#if defined(STRATA_HIP_GFX906)
+        if (head_borrowed_) {
+            if (T != 1 || !sub || head_->weights() != dhead_ || head_->device() != device_) {
+                err = "mtp: indexed borrowed head lifetime/shape mismatch";
+                return false;
+            }
+            native_q5_k_mtp_head_indexed_component(dhead_, xq_, head_logits_, dvocab_, (int) N,
+                                                  (int) n_vocab_, (int) nv, T, cs);
+        } else
+#endif
+        {
+            native_mmvq(sub ? dhead_type_ : head_->type(), sub ? dhead_ : head_->weights(), xq_, head_logits_, (int) N,
+                        (int) nv, T, cs);
+        }
         g_mp.stamp(14, cs);
         if (coupled_rec_) {
             // coupled draft sampling: the target's chain and Philox draw for the row that will verify this draft

@@ -131,6 +131,12 @@ bool conversation_snapshot_capture_bytes(const ConversationKvReuse& reuse, const
 bool conversation_snapshot_save(SavedConversation& image, const ConversationView& view, const SessionState& session,
                                 const ModelGeometry& g, const QsaState* draft, std::string& error,
                                 ConversationKvReuse reuse = {}, size_t* reused_bytes = nullptr);
+// Cold-park preparation only: validates the COMPLETE view, then captures live/K/V normally and
+// copies compact checkpoint identities. The five deferred payloads MUST be attached before publication.
+bool conversation_snapshot_prepare_payload_move(SavedConversation& image, const ConversationView& view,
+                                                const SessionState& session, const ModelGeometry& g,
+                                                const QsaState* draft, std::string& error,
+                                                ConversationKvReuse reuse, size_t* reused_bytes);
 bool conversation_snapshot_validate(const SavedConversation& image, const SessionState& session,
                                     const ModelGeometry& g, const QsaState* draft, std::string& error);
 ConversationRestore conversation_snapshot_restore(const SavedConversation& image, SessionState& session,

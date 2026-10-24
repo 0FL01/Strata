@@ -471,6 +471,7 @@ private:
     std::vector<float> logit_bias_host_;
     float* logit_bias_device_ = nullptr;
     bool no_pcie_group_ = false;         ///< fixed before graph capture; gfx906 wave64 opt-in only
+    bool omit_pcie_staging_ = false;     ///< same empty-plan contract; initialized before arena allocation
     int device_ = -1;                    ///< the device `init` ran on: run/commit switch to it (layer split)
     unsigned long long* rr_stats_ = nullptr;   ///< STRATA_ROUTE_RESIDENT's counters on device_ (#1578); null: none
     std::atomic<bool> released_{false};  ///< #267: release_gpu_waits ran (maybe on the watchdog thread): no more windows
@@ -641,6 +642,8 @@ private:
     float *sh_gate_ = nullptr, *sh_up_ = nullptr, *sh_g_ = nullptr;
     float* hist_snap_ = nullptr;                              // T * NG_HIST * NG_HC_DIM
     int64_t cap_ = 0, max_blocks_ = 0, attn_scratch_floats_ = 0;
+    // STRATA_VERIFY_STAGE_HISTORY=1: only this stage's four GDN histories; zero keeps absolute indexing by default.
+    int64_t gdn_history_ord0_ = 0;                             // independent of SessionState::gdn_ord0
 };
 
 }  // namespace strata::core

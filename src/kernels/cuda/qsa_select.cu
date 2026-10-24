@@ -863,6 +863,131 @@ __global__ void __launch_bounds__(TK_T) block_topk_reg_kernel(const float* __res
     }
 }
 
+// Opt-in FIT17 clone: separate full-block keys from the single signed-weight tail.
+template <int PER, bool FIT17_ONLY = false>
+__global__ void __launch_bounds__(TK_T) block_topk_reg17_tail_kernel(const float* __restrict__ scores,
+                                                              const int32_t* __restrict__ steps, int64_t max_blocks,
+                                                              int64_t cap, int32_t* __restrict__ ids) {
+    __shared__ int hist[TK_T / 32][256];
+    __shared__ int s_warp[33];
+    __shared__ int s_digit, s_above;
+    const int64_t qi = blockIdx.x;
+    const int32_t* st = steps + qi * kStepCount;
+    const int64_t n_kv = st[kStepNKv], n_bid = st[kStepNBid], width = st[kStepWidth];
+    if constexpr (FIT17_ONLY) {
+        static_assert(PER == 17, "FIT17 requires 17 keys per thread");
+        if (!gfx906_topk_window_fits17(steps, (int) gridDim.x)) return;
+    }
+    int32_t* out = ids + qi * cap;
+    const int t = threadIdx.x, lane = t & 31, warp = t >> 5;
+    if (n_kv <= width) {
+        for (int64_t j = t; j < n_kv; j += TK_T) out[j] = (int32_t) j;
+        return;
+    }
+    const float* sc = scores + qi * max_blocks;
+    const int64_t nb = n_bid + 1;
+    const int64_t per = (nb + TK_T - 1) / TK_T;       // <= PER (the caller checks)
+    const int64_t b0 = (int64_t) t * per, b1 = (b0 + per < nb) ? b0 + per : nb;
+    // Full blocks always contribute R cells. Keep the one tail separately,
+    // including its original signed weight and its preload when that weight is zero.
+    const int64_t full_end = b1 < n_bid ? b1 : n_bid;
+    const bool owns_tail = b0 <= n_bid && n_bid < b1;
+    uint32_t key[PER];
+#pragma unroll
+    for (int j = 0; j < PER; ++j) key[j] = (b0 + j < full_end) ? order_key(sc[b0 + j]) : 0u;
+    const uint32_t tail_key = owns_tail ? order_key(sc[n_bid]) : 0u;
+    const int tail_w = (int) (n_kv - n_bid * R);
+    uint32_t prefix = 0;
+    int above = 0;
+    for (int shift = 24; shift >= 0; shift -= 8) {
+        for (int i = lane; i < 256; i += 32) hist[warp][i] = 0;
+        __syncwarp();
+        const uint32_t hi_mask = shift == 24 ? 0u : (0xffffffffu << (shift + 8));
+#pragma unroll
+        for (int j = 0; j < PER; ++j) {
+            const int64_t b = b0 + j;
+            if (b >= full_end) break;
+            if ((key[j] & hi_mask) == (prefix & hi_mask)) atomicAdd(&hist[warp][(key[j] >> shift) & 255], R);
+        }
+        if (owns_tail && tail_w != 0 && (tail_key & hi_mask) == (prefix & hi_mask))
+            atomicAdd(&hist[warp][(tail_key >> shift) & 255], tail_w);
+        __syncthreads();
+        if (t < 256) {                                // fold the warps' histograms into warp 0's
+            int s = 0;
+            for (int w2 = 0; w2 < TK_T / 32; ++w2) s += hist[w2][t];
+            hist[0][t] = s;
+        }
+        __syncthreads();
+        // the digit: the first bin from the top where the count above reaches `width` (bin 0 when none of 255..1
+        // does).  Threads 0-255 (warps 0-7) prefix-sum the 256 bins in descending order instead of one thread
+        // walking them: the same digit and count above.
+        int v = 0, x = 0;
+        if (t < 256) {
+            v = hist[0][255 - t];
+            x = v;
+#pragma unroll
+            for (int o = 1; o < 32; o <<= 1) {
+                const int y = __shfl_up_sync(0xffffffffu, x, o);
+                if (lane >= o) x += y;
+            }
+            if (lane == 31) s_warp[warp] = x;
+        }
+        __syncthreads();
+        if (t < 256) {
+            int inc = x;
+            for (int w2 = 0; w2 < warp; ++w2) inc += s_warp[w2];
+            const int before = above + inc - v;
+            if (before < width && (above + inc >= width || t == 255)) {
+                s_digit = 255 - t;
+                s_above = before;
+            }
+        }
+        __syncthreads();
+        prefix |= (uint32_t) s_digit << shift;
+        above = s_above;
+        __syncthreads();
+    }
+    const uint32_t thr = prefix;
+    const int64_t eq_budget = width - above;
+    int gt = 0, eq = 0;
+#pragma unroll
+    for (int j = 0; j < PER; ++j) {
+        const int64_t b = b0 + j;
+        if (b >= full_end) break;
+        if (key[j] > thr) gt += R;
+        else if (key[j] == thr) eq += R;
+    }
+    if (owns_tail && tail_w != 0) {
+        if (tail_key > thr) gt += tail_w;
+        else if (tail_key == thr) eq += tail_w;
+    }
+    int tot;
+    const int eq_before = block_excl_scan(eq, s_warp, tot);
+    int64_t my_eq = eq_budget - eq_before;
+    if (my_eq < 0) my_eq = 0;
+    if (my_eq > eq) my_eq = eq;
+    const int sel = gt + (int) my_eq;
+    int64_t wpos = block_excl_scan(sel, s_warp, tot);
+    int64_t eq_left = my_eq;
+#pragma unroll
+    for (int j = 0; j < PER; ++j) {
+        const int64_t b = b0 + j;
+        if (b >= full_end) break;
+        if (key[j] > thr) {
+            for (int c = 0; c < R; ++c) out[wpos++] = (int32_t) (b * R + c);
+        } else if (key[j] == thr) {
+            for (int c = 0; c < R && eq_left > 0; ++c, --eq_left) out[wpos++] = (int32_t) (b * R + c);
+        }
+    }
+    if (owns_tail && tail_w != 0) {
+        if (tail_key > thr) {
+            for (int c = 0; c < tail_w; ++c) out[wpos++] = (int32_t) (n_bid * R + c);
+        } else if (tail_key == thr) {
+            for (int c = 0; c < tail_w && eq_left > 0; ++c, --eq_left) out[wpos++] = (int32_t) (n_bid * R + c);
+        }
+    }
+}
+
 // ---- a query with more blocks than the register kernel holds (contexts past 4 * 1024 * TK_PER cells): the register
 // kernel's threads, per-warp histograms and warp scans, with each key read from memory again on every pass.  A
 // histogram has no order, so on the four radix passes thread t reads blocks t, t + 1024, ...: a warp reads 32
@@ -989,6 +1114,153 @@ __global__ void __launch_bounds__(TK_T) block_topk_wide_kernel(const float* __re
         run_sel += __shfl_sync(0xffffffffu, ps, 31);
     }
 }
+
+
+#if defined(STRATA_HIP_GFX906) && defined(__HIPCC__)
+// Default-off wide digit-search experiment; all streaming and emission code stays unchanged.
+template <bool ONLY_FAILED = false, bool FIT17_FALLBACK = false>
+__global__ void __launch_bounds__(TK_T) block_topk_wide_scan_kernel(const float* __restrict__ scores,
+                                                               const int32_t* __restrict__ steps, int64_t max_blocks,
+                                                               int64_t cap, int32_t* __restrict__ ids) {
+    if (ONLY_FAILED && !g_tk_fail[blockIdx.x]) return;
+    if constexpr (FIT17_FALLBACK) {
+        static_assert(!ONLY_FAILED, "FIT17 fallback is independent of sampled top-k");
+        if (gfx906_topk_window_fits17(steps, (int) gridDim.x)) return;
+    }
+    __shared__ int hist[TK_T / 32][256];
+    __shared__ int s_gt[TK_T / 32], s_eq[TK_T / 32];
+    __shared__ int s_digit, s_above;
+    const int64_t qi = blockIdx.x;
+    const int32_t* st = steps + qi * kStepCount;
+    const int64_t n_kv = st[kStepNKv], n_bid = st[kStepNBid], width = st[kStepWidth];
+    int32_t* out = ids + qi * cap;
+    const int t = threadIdx.x, lane = t & 31, warp = t >> 5;
+    if (n_kv <= width) {
+        for (int64_t j = t; j < n_kv; j += TK_T) out[j] = (int32_t) j;
+        return;
+    }
+    // Current device row only: nonnegative full/tail weights and a positive threshold.
+    const bool wide_scan = n_kv > 69631 && n_kv <= 262144 &&
+                           n_bid == n_kv / R && width > 0 && width < n_kv;
+    const float* sc = scores + qi * max_blocks;
+    const int64_t nb = n_bid + 1;
+    const int64_t per = (nb + TK_T - 1) / TK_T;       // rows of 32 blocks per warp
+    auto weight = [&](int64_t b) -> int { return b < n_bid ? R : (int) (n_kv - n_bid * R); };
+    uint32_t prefix = 0;
+    int above = 0;
+    for (int shift = 24; shift >= 0; shift -= 8) {
+        for (int i = lane; i < 256; i += 32) hist[warp][i] = 0;
+        __syncwarp();
+        const uint32_t hi_mask = shift == 24 ? 0u : (0xffffffffu << (shift + 8));
+        for (int64_t b = t; b < nb; b += TK_T) {
+            const int w = weight(b);
+            if (w == 0) continue;
+            const uint32_t k = order_key(sc[b]);
+            if ((k & hi_mask) == (prefix & hi_mask)) atomicAdd(&hist[warp][(k >> shift) & 255], w);
+        }
+        __syncthreads();
+        if (t < 256) {                                // fold the warps' histograms into warp 0's
+            int sum = 0;
+            for (int w2 = 0; w2 < TK_T / 32; ++w2) sum += hist[w2][t];
+            hist[0][t] = sum;
+        }
+        __syncthreads();
+        if (wide_scan) {
+            int v = 0, x = 0;
+            if (t < 256) {
+                v = hist[0][255 - t];
+                x = v;
+#pragma unroll
+                for (int o = 1; o < 32; o <<= 1) {
+                    const int y = __shfl_up_sync(0xffffffffu, x, o);
+                    if (lane >= o) x += y;
+                }
+                if (lane == 31) s_gt[warp] = x;
+            }
+            __syncthreads();
+            if (t < 256) {
+                int inc = x;
+                for (int w2 = 0; w2 < warp; ++w2) inc += s_gt[w2];
+                const int before = above + inc - v;
+                if (before < width && (above + inc >= width || t == 255)) {
+                    s_digit = 255 - t;
+                    s_above = before;
+                }
+            }
+        } else
+        if (t == 0) {
+            int cum = above, d = 255;
+            for (; d > 0; --d) {
+                if (cum + hist[0][d] >= width) break;
+                cum += hist[0][d];
+            }
+            s_digit = d;
+            s_above = cum;
+        }
+        __syncthreads();
+        prefix |= (uint32_t) s_digit << shift;
+        above = s_above;
+        __syncthreads();
+    }
+    const uint32_t thr = prefix;
+    const int eq_budget = (int) (width - above);      // cells equal to thr that fit, lowest index first
+    const int64_t w0 = (int64_t) warp * 32 * per;
+    int gt = 0, eq = 0;
+    for (int64_t b = w0 + lane; b < nb && b < w0 + 32 * per; b += 32) {
+        const int w = weight(b);
+        if (w == 0) continue;
+        const uint32_t k = order_key(sc[b]);
+        if (k > thr) gt += w;
+        else if (k == thr) eq += w;
+    }
+#pragma unroll
+    for (int o = 16; o > 0; o >>= 1) {
+        gt += __shfl_xor_sync(0xffffffffu, gt, o);
+        eq += __shfl_xor_sync(0xffffffffu, eq, o);
+    }
+    if (lane == 0) { s_gt[warp] = gt; s_eq[warp] = eq; }
+    __syncthreads();
+    if (t == 0) {                                     // per warp: the selected cells and the tied cells before it
+        int eb = 0, sb = 0;
+        for (int w2 = 0; w2 < TK_T / 32; ++w2) {
+            const int g2 = s_gt[w2], e2 = s_eq[w2];
+            const int take = eq_budget - eb < 0 ? 0 : (eq_budget - eb > e2 ? e2 : eq_budget - eb);
+            s_gt[w2] = sb;
+            s_eq[w2] = eb;
+            sb += g2 + take;
+            eb += e2;
+        }
+    }
+    __syncthreads();
+    int run_sel = s_gt[warp], run_eq = s_eq[warp];
+    for (int64_t r0 = w0; r0 < nb && r0 < w0 + 32 * per; r0 += 32) {
+        const int64_t b = r0 + lane;
+        const int w = b < nb ? weight(b) : 0;
+        const uint32_t k = w ? order_key(sc[b]) : 0u;
+        const int my_gt = (w && k > thr) ? w : 0, my_eq = (w && k == thr) ? w : 0;
+        if (__ballot_sync(0xffffffffu, (my_gt | my_eq) != 0) == 0u) continue;   // a row without a selected block
+        int pe = my_eq;                               // tied cells up to and with this lane
+#pragma unroll
+        for (int o = 1; o < 32; o <<= 1) {
+            const int y = __shfl_up_sync(0xffffffffu, pe, o);
+            if (lane >= o) pe += y;
+        }
+        const int left = eq_budget - (run_eq + pe - my_eq);
+        const int take = left < 0 ? 0 : (left > my_eq ? my_eq : left);
+        const int my_sel = my_gt + take;
+        int ps = my_sel;
+#pragma unroll
+        for (int o = 1; o < 32; o <<= 1) {
+            const int y = __shfl_up_sync(0xffffffffu, ps, o);
+            if (lane >= o) ps += y;
+        }
+        int32_t* dst = out + run_sel + ps - my_sel;
+        for (int c = 0; c < my_sel; ++c) dst[c] = (int32_t) (b * R + c);
+        run_eq += __shfl_sync(0xffffffffu, pe, 31);
+        run_sel += __shfl_sync(0xffffffffu, ps, 31);
+    }
+}
+#endif
 
 
 // Block scores with every key block read ONCE for all of a call's queries (block_scores_kernel's grid is
@@ -1133,7 +1405,16 @@ __global__ void __launch_bounds__(SCORE_WARPS * 32) block_scores_rows_kernel(con
 #pragma unroll
             for (int h = 0; h < IDX_HEADS; ++h) {
                 const float4 q4 = qr[qi][h];
+#if defined(STRATA_HIP_GFX906) && defined(__gfx906__)
+                // Match FOUR's compiled multi scorer: even heads round k.x*q.x first,
+                // odd heads round k.y*q.y first; explicit FMAs preserve that contraction.
+                const float xy = (h & 1)
+                    ? fmaf(k4.x, q4.x, __fmul_rn(k4.y, q4.y))
+                    : fmaf(k4.y, q4.y, __fmul_rn(k4.x, q4.x));
+                d[h] = fmaf(k4.w, q4.w, fmaf(k4.z, q4.z, xy));
+#else
                 d[h] = k4.x * q4.x + k4.y * q4.y + k4.z * q4.z + k4.w * q4.w;
+#endif
             }
             // reduce-scatter: after xor 16 the lane keeps heads {0,1} (bit 4 clear) or {2,3}; after xor 8 one head
             float r2[2];
@@ -2610,12 +2891,26 @@ void qsa_block_topk(const float* scores, const int32_t* steps, int64_t nq, int64
         const char* fit17 = std::getenv("STRATA_GFX906_TOPK_FIT17");
         return reg && std::strcmp(reg, "2") == 0 && fit17 && std::strcmp(fit17, "1") == 0;
     }();
+    static const bool wide_scan = [] {
+        const char* v = std::getenv("STRATA_GFX906_TOPK_WIDE_SCAN");
+        return v && std::strcmp(v, "1") == 0;
+    }();
     if (guarded_fit17 && !old && !counted && nq <= 8 &&
         reach > (int64_t) TK_T * TK_PER && reach <= (int64_t) TK_T * TK_PER_MAX &&
         topk_current_device_is_gfx906()) {
         // Complementary guards read identical current steps before any barrier.
         // A captured graph therefore survives growth and restores across both boundaries.
-        block_topk_reg_kernel<17, true><<<(unsigned) nq, TK_T, 0, (cudaStream_t) stream>>>(scores, steps, max_blocks, cap, ids);
+        static const bool fit17_tail = [] {
+            const char* v = std::getenv("STRATA_GFX906_TOPK_FIT17_TAIL");
+            return v && std::strcmp(v, "1") == 0;
+        }();
+        if (fit17_tail)
+            block_topk_reg17_tail_kernel<17, true><<<(unsigned) nq, TK_T, 0, (cudaStream_t) stream>>>(scores, steps, max_blocks, cap, ids);
+        else
+            block_topk_reg_kernel<17, true><<<(unsigned) nq, TK_T, 0, (cudaStream_t) stream>>>(scores, steps, max_blocks, cap, ids);
+        if (wide_scan)
+            block_topk_wide_scan_kernel<false, true><<<(unsigned) nq, TK_T, 0, (cudaStream_t) stream>>>(scores, steps, max_blocks, cap, ids);
+        else
         block_topk_wide_kernel<false, true><<<(unsigned) nq, TK_T, 0, (cudaStream_t) stream>>>(scores, steps, max_blocks, cap, ids);
         const cudaError_t e = cudaGetLastError();
         if (e != cudaSuccess) { std::fprintf(stderr, "qsa_block_topk guarded FIT17: %s\n", cudaGetErrorString(e)); std::exit(1); }

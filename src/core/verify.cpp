@@ -665,6 +665,8 @@ bool Verifier::init(const WeightTable& wt, const ModelGeometry& g, SessionState&
     const bool device_ok = cudaGetDevice(&device_) == cudaSuccess;   // this stage's actual device
     // Dynamic PCIe balancing can request a nonempty share; retain its original graph.
     no_pcie_group_ = device_ok && bal_ == nullptr && no_pcie_group_device(device_);
+    // The existing no-PCIe path rejects nonempty plans before publishing or DMA.
+    omit_pcie_staging_ = no_pcie_group_ && gfx906_opt_in("STRATA_VERIFY_NO_PCIE_STAGING");
     rr_stats_ = route_resident_cfg().stats_on(device_);   // STRATA_ROUTE_RESIDENT: this GPU's counters, outside graph capture
     strata::kernels::fused_gr_check();   // once per card: which bitwise-equal hyper-connection read runs there
     strata::kernels::fused_gr_persist_init();   // opt-in STRATA_HC_PERSIST=1 (HIP)
@@ -708,6 +710,30 @@ bool Verifier::init(const WeightTable& wt, const ModelGeometry& g, SessionState&
         err = "verify: the stage's layer range or its hand-off buffers are wrong";
         return false;
     }
+    // Exact opt-in: compact only the four verifier-owned GDN histories, never session state or QSA storage.
+    const bool stage_history = gfx906_opt_in("STRATA_VERIFY_STAGE_HISTORY");
+    if (stage_history && (g.qsa_interval <= 0 || g.ssm_conv_channels <= 0 || g.ssm_v_heads <= 0)) {
+        err = "verify: invalid geometry for stage-local GDN history";
+        return false;
+    }
+    int64_t history_layers = g.n_gdn_layers();
+    gdn_history_ord0_ = 0;
+    if (stage_history) {
+        int64_t first = 0, count = 0, total = 0;
+        for (int64_t l = 0; l < g.n_layers; ++l) {
+            if (is_qsa_layer(g, l)) continue;
+            if (l < lb_) ++first;
+            else if (l < le_) ++count;
+            ++total;
+        }
+        // Check signed ordinals before casting allocation sizes. A QSA-only stage legitimately has count == 0.
+        if (total != history_layers || first < 0 || first > total || count < 0 || count > total - first) {
+            err = "verify: invalid stage-local GDN history range";
+            return false;
+        }
+        gdn_history_ord0_ = first;
+        history_layers = count;
+    }
     const WeightRef* wo = wt.find("output.weight");
     if (wo == nullptr) { err = "verify: output.weight is missing"; return false; }
     n_vocab_ = wo->ne1;
@@ -721,7 +747,7 @@ bool Verifier::init(const WeightTable& wt, const ModelGeometry& g, SessionState&
     const uint64_t C = (uint64_t) g.ssm_conv_channels, ZV = (uint64_t) g.ssm_value_dim, HV = (uint64_t) g.ssm_v_heads;
     const uint64_t NH = (uint64_t) g.n_head, HD = (uint64_t) g.head_dim, NKV = (uint64_t) g.n_head_kv;
     const uint64_t IQ = (uint64_t) g.idx_q_heads, ID = (uint64_t) g.idx_key_dim;
-    const uint64_t nG = (uint64_t) g.n_gdn_layers(), nQ = (uint64_t) g.n_qsa_layers();
+    const uint64_t nG = (uint64_t) history_layers, nQ = (uint64_t) g.n_qsa_layers();
     const uint64_t HS = (uint64_t) strata::kernels::NG_HIST * strata::kernels::NG_HC_DIM;
     const uint64_t TS = (uint64_t) (s.idx_block - 1) * ID;
     const int max_in = (int) std::max<uint64_t>(std::max<uint64_t>(N, ZV), NH * HD);
@@ -804,7 +830,9 @@ bool Verifier::init(const WeightTable& wt, const ModelGeometry& g, SessionState&
         shared_ = b.take<float>(T * N); parts_ = b.take<float>(T * K * N); hit_out_ = b.take<float>(T * K * N);
         hit_slot_ = b.take<int32_t>(T * K); hit_dst_ = b.take<int32_t>(T * K); hit_count_ = b.take<int32_t>(4);
         plan_ = b.take<int32_t>(2 * ((uint64_t) plan_i32_ + 16));
-        staging_ = b.take<uint8_t>((uint64_t) kStagingBlobs * strata::kernels::cpu::expert_layout().max_blob);
+        // Keep a valid pointer for the empty plan; planner capacity and its fail-closed check are unchanged.
+        staging_ = b.take<uint8_t>(omit_pcie_staging_ ? 256 :
+            (uint64_t) kStagingBlobs * strata::kernels::cpu::expert_layout().max_blob);
         hit_xq_ = b.take<uint8_t>(T * (N / 32) * 34); hit_xs_ = b.take<float>(T * (N / 32));
         nat_xq_ = b.take<uint8_t>(T * (N / 32) * 36);
         hit_scratch_ = b.take<uint8_t>(std::max<uint64_t>(
@@ -868,6 +896,9 @@ bool Verifier::init(const WeightTable& wt, const ModelGeometry& g, SessionState&
     }
     sink_.staging = (unsigned long long) staging_;
     sink_.staging_cap = kStagingBlobs;
+    if (omit_pcie_staging_)
+        std::fprintf(stderr, "strata verify: omitted empty PCIe staging on GPU %d: %llu bytes saved\n", device_,
+            (unsigned long long) ((uint64_t) kStagingBlobs * strata::kernels::cpu::expert_layout().max_blob - 256));
     (void) TS;
     // STRATA_PIPED_CONCURRENT=1 (opt-in): a prompt can run on the same GPU while the batch windows run, so the windows'
     // streams get the device's highest priority (HIP: the default priority, as the drafter's)
@@ -1326,10 +1357,10 @@ bool Verifier::record_window(int T, cudaStream_t cs, std::string& err) {
                 const int64_t gi = gdn_idx[(size_t) l];
                 float* state = ss.gdn_state + (size_t) (gi - ss.gdn_ord0) * gdn_floats;
                 float* conv = state + (uint64_t) g.ssm_state_size * g.ssm_v_heads * g.ssm_state_size;
-                float* qkv = qkv_L_ + (size_t) gi * MT * C;
-                float* hb = h_L_ + (size_t) gi * MT * C;
-                float* gate = gate_L_ + (size_t) gi * MT * HV;
-                float* beta = beta_L_ + (size_t) gi * MT * HV;
+                float* qkv = qkv_L_ + (size_t) (gi - gdn_history_ord0_) * MT * C;
+                float* hb = h_L_ + (size_t) (gi - gdn_history_ord0_) * MT * C;
+                float* gate = gate_L_ + (size_t) (gi - gdn_history_ord0_) * MT * HV;
+                float* beta = beta_L_ + (size_t) (gi - gdn_history_ord0_) * MT * HV;
                 if (sidem) {   // the gates (a few blocks, latency-bound) beside the projections, joined below
                     if (!branch(mfork_, cs, side_, "fork")) return false;
                     gdn_ab_multi(xm, (const uint16_t*) wa->data, (const uint16_t*) wb->data, (const float*) wdt->data,
@@ -2444,9 +2475,9 @@ bool Verifier::capture_commit(std::string& err) {
             else if (n_gdn > 0)
                 gdn_batched = gdn_commit_layers(
                     ss.gdn_state + (size_t) (gdn_index - ss.gdn_ord0) * gdn_floats, (int64_t) gdn_floats,
-                    (int64_t) g.ssm_state_size * g.ssm_v_heads * g.ssm_state_size, qkv_L_ + (size_t) gdn_index * MT * C,
-                    MT * C, h_L_ + (size_t) gdn_index * MT * C, MT * C, gate_L_ + (size_t) gdn_index * MT * HV,
-                    beta_L_ + (size_t) gdn_index * MT * HV, MT * HV, (int) C, (int) g.ssm_k_heads, (int) HV, (int) MT,
+                    (int64_t) g.ssm_state_size * g.ssm_v_heads * g.ssm_state_size, qkv_L_ + (size_t) (gdn_index - gdn_history_ord0_) * MT * C,
+                    MT * C, h_L_ + (size_t) (gdn_index - gdn_history_ord0_) * MT * C, MT * C, gate_L_ + (size_t) (gdn_index - gdn_history_ord0_) * MT * HV,
+                    beta_L_ + (size_t) (gdn_index - gdn_history_ord0_) * MT * HV, MT * HV, (int) C, (int) g.ssm_k_heads, (int) HV, (int) MT,
                     (int) n_gdn, commit_, cs_);
         }
         // the QSA layers' tail restore + indexer append, one launch for all of them (one block per layer)
@@ -2487,10 +2518,10 @@ bool Verifier::capture_commit(std::string& err) {
                 if (!wnm) { ok = false; break; }
                 float* state = ss.gdn_state + (size_t) (gdn_index - ss.gdn_ord0) * gdn_floats;
                 float* conv = state + (uint64_t) g.ssm_state_size * g.ssm_v_heads * g.ssm_state_size;
-                const float* qkv = qkv_L_ + (size_t) gdn_index * MT * C;
+                const float* qkv = qkv_L_ + (size_t) (gdn_index - gdn_history_ord0_) * MT * C;
                 gdn_conv_commit(conv, qkv, (int) C, commit_, cs_);
-                gdn_step_norm_multi(state, h_L_ + (size_t) gdn_index * MT * C, (int) C, gate_L_ + (size_t) gdn_index * MT * HV,
-                                    beta_L_ + (size_t) gdn_index * MT * HV, z_, (const float*) wnm->data, EPS, y_dummy_,
+                gdn_step_norm_multi(state, h_L_ + (size_t) (gdn_index - gdn_history_ord0_) * MT * C, (int) C, gate_L_ + (size_t) (gdn_index - gdn_history_ord0_) * MT * HV,
+                                    beta_L_ + (size_t) (gdn_index - gdn_history_ord0_) * MT * HV, z_, (const float*) wnm->data, EPS, y_dummy_,
                                     (int) g.ssm_k_heads, (int) HV, (int) MT, commit_, cs_,
                                     (int) MT);   // S26: t_out_begin = MT - the replay's outputs (y_dummy_) are never read
                 ++gdn_index;
@@ -3039,7 +3070,8 @@ void Verifier::set_plan_slot(int grp) {
     sink_.start2 = base + ptr_off + 4 * cap;
     const int G = last_batch_ ? 1 : (groups_[last_t_] > 0 ? groups_[last_t_] : 1);
     const int64_t per = G == 2 ? kStagingBlobs / 2 : kStagingBlobs;
-    sink_.staging = (unsigned long long) (staging_ + (size_t) (grp * per) * strata::kernels::cpu::expert_layout().max_blob);
+    sink_.staging = (unsigned long long) (omit_pcie_staging_ ? staging_ :
+        staging_ + (size_t) (grp * per) * strata::kernels::cpu::expert_layout().max_blob);
     sink_.staging_cap = per;
 }
 
@@ -3066,6 +3098,13 @@ void Verifier::fetch_dma(void* ctx, const uint8_t* const* src, int n, size_t byt
     Verifier* v = (Verifier*) ctx;
     const uint32_t want = v->cur_layer_ + 1;
     if (n <= 0) { raise_flag(v->h_flagB_, want); return; }
+    // Public plan_sink callbacks must also fail closed if called outside the normal publish-before-fetch path.
+    if (v->omit_pcie_staging_) {
+        std::fprintf(stderr, "strata verify: omitted PCIe staging cannot accept %d DMA blobs on GPU %d\n", n, v->device_);
+        std::fflush(stderr);
+        v->release_gpu_waits(5000);
+        std::abort();
+    }
     v->copy_used_ = true;
     uint8_t* stage = (uint8_t*) v->sink_.staging;                  // this group's half in a split window
     // STRATA_DMA_BATCH (midhatn's #807, F12): the group's independent uploads as one cudaMemcpyBatchAsync.  Mode 0 is
@@ -3428,7 +3467,7 @@ bool Verifier::capture_commit_batch(const int* rows, int S, int hbase, std::stri
                     const int32_t* keep = commitb_ + (size_t) rows[first] * CB;
                     float* state = sx.gdn_state + (size_t) (gdn_index - sx.gdn_ord0) * gdn_floats;
                     float* conv = state + (uint64_t) g.ssm_state_size * g.ssm_v_heads * g.ssm_state_size;
-                    gdn_conv_commit(conv, qkv_L_ + (size_t) gdn_index * MT * C + (size_t) first * C,
+                    gdn_conv_commit(conv, qkv_L_ + (size_t) (gdn_index - gdn_history_ord0_) * MT * C + (size_t) first * C,
                                     (int) C, keep, cs_);
                     if (gdn_groups_on && one_row) {
                         gg.state[gg.n] = state;
@@ -3438,17 +3477,17 @@ bool Verifier::capture_commit_batch(const int* rows, int S, int hbase, std::stri
                         ++gg.n;
                         continue;
                     }
-                    gdn_step_norm_multi(state, h_L_ + (size_t) gdn_index * MT * C + (size_t) first * C, (int) C,
-                                        gate_L_ + (size_t) gdn_index * MT * HV + (size_t) first * HV,
-                                        beta_L_ + (size_t) gdn_index * MT * HV + (size_t) first * HV,
+                    gdn_step_norm_multi(state, h_L_ + (size_t) (gdn_index - gdn_history_ord0_) * MT * C + (size_t) first * C, (int) C,
+                                        gate_L_ + (size_t) (gdn_index - gdn_history_ord0_) * MT * HV + (size_t) first * HV,
+                                        beta_L_ + (size_t) (gdn_index - gdn_history_ord0_) * MT * HV + (size_t) first * HV,
                                         z_ + (size_t) first * ZV, (const float*) wnm->data, EPS,
                                         y_dummy_ + (size_t) first * ZV, (int) g.ssm_k_heads,
                                         (int) HV, t - first, keep, cs_,
                                         t - first > 1 ? t - first : 0);   // a 1-row group keeps the 0.1.39 kernel
                 }
                 if (gg.n > 0)
-                    gdn_step_norm_groups(gg, h_L_ + (size_t) gdn_index * MT * C, (int) C,
-                                         gate_L_ + (size_t) gdn_index * MT * HV, beta_L_ + (size_t) gdn_index * MT * HV,
+                    gdn_step_norm_groups(gg, h_L_ + (size_t) (gdn_index - gdn_history_ord0_) * MT * C, (int) C,
+                                         gate_L_ + (size_t) (gdn_index - gdn_history_ord0_) * MT * HV, beta_L_ + (size_t) (gdn_index - gdn_history_ord0_) * MT * HV,
                                          z_, (const float*) wnm->data, EPS, y_dummy_, (int) g.ssm_k_heads, (int) HV, true,
                                          cs_);
                 ++gdn_index;

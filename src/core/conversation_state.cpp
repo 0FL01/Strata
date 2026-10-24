@@ -327,6 +327,33 @@ bool conversation_snapshot_save(SavedConversation& image, const ConversationView
     return true;
 }
 
+bool conversation_snapshot_prepare_payload_move(SavedConversation& image, const ConversationView& view,
+                                                const SessionState& ss, const ModelGeometry& g,
+                                                const QsaState* draft, std::string& error,
+                                                ConversationKvReuse reuse, size_t* reused_bytes) {
+    size_t estimate = 0;
+    if (!conversation_snapshot_capture_bytes(reuse, view, ss, g, draft, estimate, error)) return false;
+    std::vector<ConversationCheckpoint> identities;
+    identities.reserve(view.checkpoints.size());
+    for (const auto& c : view.checkpoints) {
+        ConversationCheckpoint meta;
+        meta.ids = conversation_detail::copy_beating(c.ids);
+        meta.imgs = conversation_detail::copy_beating(c.imgs);
+        meta.used = c.used; meta.pinned = c.pinned;
+        // As in copy_checkpoint_beating: default plan, no stage_parts after full-view validation.
+        identities.push_back(std::move(meta));
+    }
+    const std::vector<ConversationCheckpoint> empty;
+    const ConversationView live_only{view.ids, view.images, empty, view.cvec};
+    SavedConversation captured;
+    // Deliberately retain the ordinary synchronization and live/K/V capture path unchanged.
+    if (!conversation_snapshot_save(captured, live_only, ss, g, draft, error, std::move(reuse), reused_bytes))
+        return false;
+    captured.checkpoints = std::move(identities);
+    image = std::move(captured);
+    return true;
+}
+
 bool conversation_snapshot_sources(SavedConversation& meta, std::vector<SessionKvSource>& sources,
                                    const ConversationView& view, const SessionState& ss, const ModelGeometry& g,
                                    const QsaState& draft, std::string& error) {

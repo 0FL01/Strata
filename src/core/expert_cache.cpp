@@ -21,6 +21,7 @@
 #include <cstdlib>
 #include <utility>
 #include <cstring>
+#include <limits>
 
 namespace strata::core {
 
@@ -382,6 +383,10 @@ int64_t ExpertCache::slots_within(int64_t bytes) const {
 }
 
 bool ExpertCache::shrink(int64_t keep_bytes, std::string& err) {
+    if (fixed_map_) {
+        err = "ExpertCache::shrink: fixed map is immutable";
+        return false;
+    }
     if (segs_.empty()) {
         err = "the expert cache is not segmented (the engine needs --vram-elastic)";
         return false;
@@ -416,6 +421,10 @@ bool ExpertCache::shrink(int64_t keep_bytes, std::string& err) {
 }
 
 bool ExpertCache::grow(int64_t want_bytes, std::string& err) {
+    if (fixed_map_) {
+        err = "ExpertCache::grow: fixed map is immutable";
+        return false;
+    }
     if (segs_.empty()) {
         err = "the expert cache is not segmented (the engine needs --vram-elastic)";
         return false;
@@ -613,6 +622,12 @@ void ExpertCache::close() {
         base_ = nullptr;
     }
     residency_.clear();
+    fixed_map_ = false;
+    fixed_sealed_ = false;
+    fixed_resident_ = 0;
+    fixed_slots_.clear();
+    fixed_copied_.clear();
+    fixed_pending_residency_.clear();
     slots_ = 0;
     live_slots_ = 0;
     n_layers_ = 0;
@@ -635,12 +650,141 @@ void ExpertCache::layer_slot_range(int64_t layer, int64_t& lo, int64_t& hi) cons
     hi = (layer == n_layers_ - 1) ? slots_ : (layer + 1) * q;
 }
 
+bool ExpertCache::import_fixed_map(const std::vector<std::pair<int32_t, int32_t>>& slots,
+                                    int64_t layer_begin, int64_t layer_end, std::string& err) {
+    if (!valid() || slots_ <= 0 || live_slots_ != slots_) {
+        err = "ExpertCache::import_fixed_map: requires an open, fully backed physical cache";
+        return false;
+    }
+    if (fixed_map_ || next_free_ != 0 || admitted_ != 0 || fills_ != 0 ||
+        std::any_of(residency_.begin(), residency_.end(), [](int32_t s) { return s != kNotResident; })) {
+        err = "ExpertCache::import_fixed_map: cache must be empty and not already fixed";
+        return false;
+    }
+    if (per_layer_ || segmented() || vmm_) {
+        err = "ExpertCache::import_fixed_map: per-layer admission and elastic storage are unsupported";
+        return false;
+    }
+    if (slots_ > std::numeric_limits<int32_t>::max() || slots.size() != (size_t) slots_) {
+        err = "ExpertCache::import_fixed_map: physical slot count does not match the plan or exceeds int32";
+        return false;
+    }
+    if (n_layers_ <= 0 || n_expert_ <= 0 || blob_ <= 0 ||
+        n_layers_ > std::numeric_limits<int64_t>::max() / n_expert_ ||
+        (uint64_t) n_layers_ > (uint64_t) std::numeric_limits<size_t>::max() / (uint64_t) n_expert_ ||
+        residency_.size() != (size_t) n_layers_ * (size_t) n_expert_ ||
+        layer_begin < 0 || layer_begin >= layer_end || layer_end > n_layers_) {
+        err = "ExpertCache::import_fixed_map: invalid dimensions or layer ownership range";
+        return false;
+    }
+    if (guard_ != 0 || (!off_.empty() && (off_.size() != slots.size() + 1 || off_.front() != 0))) {
+        err = "ExpertCache::import_fixed_map: requires uniform blob-sized slots without guard";
+        return false;
+    }
+
+    std::vector<int32_t> pending(residency_.size(), kNotResident);
+    int64_t live = 0;
+    for (size_t s = 0; s < slots.size(); ++s) {
+        if (!off_.empty() && (off_[s + 1] < off_[s] || off_[s + 1] - off_[s] != (uint64_t) blob_)) {
+            err = "ExpertCache::import_fixed_map: nonuniform or padded slot " + std::to_string(s);
+            return false;
+        }
+        const int64_t layer = slots[s].first, expert = slots[s].second;
+        if (layer == -1 && expert == -1) continue;
+        if (layer < layer_begin || layer >= layer_end || expert < 0 || expert >= n_expert_) {
+            err = "ExpertCache::import_fixed_map: invalid or unowned identity at slot " + std::to_string(s);
+            return false;
+        }
+        const size_t at = (size_t) layer * (size_t) n_expert_ + (size_t) expert;
+        if (pending[at] != kNotResident) {
+            err = "ExpertCache::import_fixed_map: duplicate identity at slot " + std::to_string(s);
+            return false;
+        }
+        pending[at] = (int32_t) s;
+        ++live;
+    }
+    // Build all potentially allocating state before committing the mode switch.
+    auto identities = slots;
+    std::vector<uint8_t> copied(slots.size(), 0);
+    fixed_slots_.swap(identities);
+    fixed_copied_.swap(copied);
+    fixed_pending_residency_.swap(pending);
+    fixed_resident_ = live;
+    fixed_sealed_ = false;
+    fixed_map_ = true;
+    return true;
+}
+
+std::pair<int32_t, int32_t> ExpertCache::fixed_identity(int32_t slot) const {
+    if (!fixed_map_ || slot < 0 || (size_t) slot >= fixed_slots_.size()) return {-1, -1};
+    return fixed_slots_[(size_t) slot];
+}
+
+bool ExpertCache::validate_fixed_fill(int32_t slot, int64_t& bytes, std::string& err,
+                                      bool preparation) const {
+    if (!fixed_map_) return true;
+    if (slot < 0 || (size_t) slot >= fixed_slots_.size() || fixed_slots_[(size_t) slot].first < 0) {
+        err = "ExpertCache: fixed-map copy targets a hole or invalid physical slot";
+        return false;
+    }
+    if (!fixed_sealed_ && !preparation) {
+        err = "ExpertCache: fixed-map preparation requires an identity-aware blocking fill";
+        return false;
+    }
+    const int64_t expected = blob_;
+    if (bytes != 0 && bytes != expected) {
+        err = "ExpertCache: fixed-map copy must contain the slot's complete payload";
+        return false;
+    }
+    bytes = expected;
+    return true;
+}
+
+bool ExpertCache::fill_fixed_slot_blocking(int32_t slot, int64_t layer, int64_t expert,
+                                           const uint8_t* host_blob, std::string& err, int64_t bytes) {
+    if (fixed_sealed_) {
+        err = "ExpertCache::fill_fixed_slot_blocking: preparation is forbidden after sealing";
+        return false;
+    }
+    if (!fixed_map_ || layer < 0 || expert < 0 || slot < 0 || (size_t) slot >= fixed_slots_.size() ||
+        fixed_slots_[(size_t) slot].first != layer || fixed_slots_[(size_t) slot].second != expert) {
+        err = "ExpertCache::fill_fixed_slot_blocking: identity does not match a live imported slot";
+        return false;
+    }
+    // A failed repeated copy must not leave an earlier completion eligible to seal.
+    fixed_copied_[(size_t) slot] = 0;
+    if (!fill_slot_blocking_impl(slot, host_blob, err, bytes, true)) return false;
+    fixed_copied_[(size_t) slot] = 1;
+    return true;
+}
+
+bool ExpertCache::seal_fixed_map(std::string& err) {
+    if (!fixed_map_ || !valid()) {
+        err = "ExpertCache::seal_fixed_map: no open fixed map";
+        return false;
+    }
+    if (fixed_sealed_) return true;
+    for (size_t s = 0; s < fixed_slots_.size(); ++s) {
+        if (fixed_slots_[s].first >= 0 && !fixed_copied_[s]) {
+            err = "ExpertCache::seal_fixed_map: live slot " + std::to_string(s) + " has no complete copy";
+            return false;
+        }
+    }
+    // No partially published table: import prepared it, and all payloads are now complete.
+    residency_.swap(fixed_pending_residency_);
+    fixed_pending_residency_.clear();
+    fixed_sealed_ = true;
+    return true;
+}
+
 int32_t ExpertCache::slot_of(int64_t layer, int64_t expert) const {
+    if (fixed_map_ && !fixed_sealed_) return kNotResident;
     if (layer < 0 || layer >= n_layers_ || expert < 0 || expert >= n_expert_) return kNotResident;
     return residency_[(size_t) (layer * n_expert_ + expert)];
 }
 
 int32_t ExpertCache::admit(int64_t layer, int64_t expert) {
+    if (fixed_map_) return slot_of(layer, expert);
     if (layer < 0 || layer >= n_layers_ || expert < 0 || expert >= n_expert_) return kNotResident;
     const size_t at = (size_t) (layer * n_expert_ + expert);
     if (residency_[at] != kNotResident) return residency_[at];
@@ -673,6 +817,7 @@ const uint8_t* ExpertCache::device_slot(int32_t slot) const {
 }
 
 bool ExpertCache::fill_slot(int32_t slot, const uint8_t* host_blob, void* stream, std::string& err, int64_t bytes) {
+    if (!validate_fixed_fill(slot, bytes, err)) return false;
     const size_t n = (size_t) (bytes > 0 && bytes <= blob_ ? bytes : blob_);
     uint8_t* dst = device_slot(slot);
     if (dst == nullptr) {
@@ -695,6 +840,12 @@ bool ExpertCache::fill_slot(int32_t slot, const uint8_t* host_blob, void* stream
 }
 
 bool ExpertCache::fill_slot_blocking(int32_t slot, const uint8_t* host_blob, std::string& err, int64_t bytes) {
+    return fill_slot_blocking_impl(slot, host_blob, err, bytes, false);
+}
+
+bool ExpertCache::fill_slot_blocking_impl(int32_t slot, const uint8_t* host_blob, std::string& err,
+                                         int64_t bytes, bool fixed_preparation) {
+    if (!validate_fixed_fill(slot, bytes, err, fixed_preparation)) return false;
     const size_t n = (size_t) (bytes > 0 && bytes <= blob_ ? bytes : blob_);
     uint8_t* dst = device_slot(slot);
     if (dst == nullptr) {
@@ -726,6 +877,7 @@ bool ExpertCache::fill_slot_blocking(int32_t slot, const uint8_t* host_blob, std
 }
 
 bool ExpertCache::fill_slot_queued(int32_t slot, const uint8_t* host_blob, std::string& err, int64_t bytes) {
+    if (!validate_fixed_fill(slot, bytes, err)) return false;
     const size_t n = (size_t) (bytes > 0 && bytes <= blob_ ? bytes : blob_);
     uint8_t* dst = device_slot(slot);
     if (dst == nullptr || host_blob == nullptr) {
@@ -743,10 +895,36 @@ bool ExpertCache::fill_slot_queued(int32_t slot, const uint8_t* host_blob, std::
 }
 
 bool ExpertCache::fill_slot_queued_parts(int32_t slot, const BlobPart* parts, int n, std::string& err) {
+    int64_t fixed_bytes = 0;
+    if (!validate_fixed_fill(slot, fixed_bytes, err)) return false;
     uint8_t* dst = device_slot(slot);
     if (dst == nullptr || parts == nullptr || n <= 0) {
         err = "ExpertCache::fill_slot_queued_parts: slot outside the arena or no pieces";
         return false;
+    }
+    if (fixed_map_) {
+        uint64_t covered = 0;
+        const uint64_t expected = (uint64_t) fixed_bytes;
+        for (int i = 0; i < n; ++i) {
+            const auto& part = parts[i];
+            if ((part.n != 0 && part.p == nullptr) || part.at > expected ||
+                part.n > expected - part.at || part.n > expected - covered) {
+                err = "ExpertCache::fill_slot_queued_parts: fixed-map piece is outside its payload";
+                return false;
+            }
+            for (int j = 0; j < i; ++j) {
+                if (part.n != 0 && parts[j].n != 0 &&
+                    part.at < parts[j].at + parts[j].n && parts[j].at < part.at + part.n) {
+                    err = "ExpertCache::fill_slot_queued_parts: fixed-map pieces overlap";
+                    return false;
+                }
+            }
+            covered += part.n;
+        }
+        if (covered != expected) {
+            err = "ExpertCache::fill_slot_queued_parts: fixed-map pieces do not cover the full payload";
+            return false;
+        }
     }
     uint64_t total = 0;
     for (int i = 0; i < n; ++i) total += parts[i].n;

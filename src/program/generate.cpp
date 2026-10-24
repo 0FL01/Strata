@@ -22,6 +22,7 @@
 #include "strata/core/device.hpp"
 #include "strata/core/remote_expert_opt.hpp"
 #include "strata/core/expert_cache.hpp"
+#include "strata/program/split26_fixed.hpp"
 #include "strata/core/conversation_snapshot.hpp"
 #include "strata/core/conversation_file.hpp"
 #include "strata/core/session_save_reclaim.hpp"
@@ -141,6 +142,153 @@ namespace strata::metal_engine { void set_model_shard(const char* shard1); }   /
 #include <vector>
 
 namespace {
+// "native" records descriptor provenance, not the outer arena byte geometry. The hybrid
+// pack's native_experts.txt describes uniform Q2_0 blobs too. Admit only that exact
+// geometry (and its native formats), never arbitrary native layouts or padded arenas.
+// This checks metadata only; native interleaved blocks are NOT claimed to equal planar contents.
+bool memory_policy_audit_canonical_layout(const strata::core::ModelGeometry& g,
+                                         const strata::kernels::cpu::ExpertLayout& lay) {
+    using namespace strata::kernels::cpu;
+    if (g.n_layers <= 0 || g.n_expert != NE || g.n_layers > 32768 / NE ||
+        g.n_embd != H || g.n_ff != FF || lay.n_layers != g.n_layers || lay.n_expert != g.n_expert ||
+        lay.max_blob != BLOB || lay.total != (uint64_t) g.n_layers * (uint64_t) NE * BLOB)
+        return false;
+    if (lay.native && (lay.fmt.size() != (size_t) g.n_layers ||
+                       lay.offset.size() != (size_t) g.n_layers || lay.bytes.size() != (size_t) g.n_layers))
+        return false;
+    for (int64_t l = 0; l < g.n_layers; ++l) {
+        if (lay.blob_bytes(l) != BLOB || lay.layer_offset(l) != (uint64_t) l * (uint64_t) NE * BLOB)
+            return false;
+        if (lay.native) {
+            const auto& f = lay.fmt[(size_t) l];
+            if (f.gu_type != 42 || f.d_type != 42 || f.n_embd != H || f.n_ff != FF ||
+                f.gu_row != (size_t) H * BB / QK || f.d_row != (size_t) FF * BB / QK ||
+                f.up_off != f.gu_row * FF || f.down_off != 2 * f.up_off ||
+                f.bytes != BLOB || f.tail_off != 0)
+                return false;
+        }
+    }
+    return true;
+}
+
+// Optional startup-only structural witness. No GPU API, model-byte reads, counters or policy writes.
+// Derived only from the reviewed no-RoPE candidate's host-map audit logic, not its memory policy.
+// Records are exact IDs and relative byte offsets. A complete footer is required by the host parser.
+bool memory_policy_audit_stage(const strata::core::ExpertCache& xc,
+                               const strata::core::ModelGeometry& g,
+                               const std::vector<int32_t>& host_res, int stage, int dev,
+                               int64_t lb, int64_t le, int32_t first, int32_t first_now,
+                               uint64_t configured_bytes, uint64_t& records, std::string& err) {
+    const int64_t n = xc.slots(), total = g.n_layers * g.n_expert;
+    if (n < 0 || n > total || xc.bytes() < 0 || lb < 0 || le <= lb || le > g.n_layers ||
+        first < -1 || first >= n || first_now != first || host_res.size() != (size_t) total) {
+        err = "memory-policy-audit: unsupported or invalid stage/loan geometry"; return false;
+    }
+    std::vector<std::pair<int64_t, int64_t>> ordered((size_t) n, {-1, -1});
+    for (int64_t l = 0; l < g.n_layers; ++l)
+        for (int64_t e = 0; e < g.n_expert; ++e) {
+            const int32_t s = xc.slot_of(l, e);  // actual uncounted host residency, not ranked profile pairs
+            if (s == strata::core::kNotResident) continue;
+            if (s < 0 || l < lb || l >= le || s >= n || ordered[(size_t) s].first != -1) {
+                err = "memory-policy-audit: GPU duplicate, bounds or stage ownership mismatch"; return false;
+            }
+            ordered[(size_t) s] = {l, e};
+        }
+    const uint64_t* off = xc.slot_offsets();
+    if (xc.bytes_of(0) != 0 || xc.bytes_of(n) != xc.bytes()) {
+        err = "memory-policy-audit: GPU endpoint mismatch"; return false;
+    }
+    for (int64_t s = 0; s < n; ++s) {
+        const int64_t a = xc.bytes_of(s), b = xc.bytes_of(s + 1);
+        if (ordered[(size_t) s].first < 0 || a < 0 || b <= a || b > xc.bytes() ||
+            (off != nullptr && (off[s] != (uint64_t) a || off[s + 1] != (uint64_t) b))) {
+            err = "memory-policy-audit: GPU hole or invalid byte layout"; return false;
+        }
+    }
+    const int64_t loan_count = first < 0 ? 0 : n - first;
+    const uint64_t loan_offset = first < 0 ? 0 : (uint64_t) xc.bytes_of(first);
+    const uint64_t loan_bytes = first < 0 ? 0 : (uint64_t) xc.bytes() - loan_offset;
+    if (loan_bytes != configured_bytes) {
+        err = "memory-policy-audit: configured loan byte span mismatch"; return false;
+    }
+    int64_t lend_count = 0;
+    for (int64_t l = lb; l < le; ++l)
+        for (int64_t e = 0; e < g.n_expert; ++e) {
+            const int32_t h = host_res[(size_t) (l * g.n_expert + e)];
+            if (h != strata::core::kNotResident && (h < 0 || h != xc.slot_of(l, e))) {
+                err = "memory-policy-audit: active host residency differs from actual GPU map"; return false;
+            }
+            if (first >= 0 && h >= first) ++lend_count;
+        }
+    std::fprintf(stderr, "memory-policy-audit stage order=%d dev=%d lb=%lld le=%lld slots=%lld bytes=%lld "
+                 "first=%d first_now=%d count=%lld offset=%llu loan_bytes=%llu lend_count=%lld\n",
+                 stage, dev, (long long) lb, (long long) le, (long long) n, (long long) xc.bytes(),
+                 first, first_now, (long long) loan_count, (unsigned long long) loan_offset,
+                 (unsigned long long) loan_bytes, (long long) lend_count);
+    ++records;
+    for (int64_t s = 0; s < n; ++s) {
+        const auto& id = ordered[(size_t) s];
+        std::fprintf(stderr, "memory-policy-audit gpu-slot stage=%d slot=%lld layer=%lld expert=%lld "
+                     "offset=%lld bytes=%lld borrow_order=%lld\n", stage, (long long) s,
+                     (long long) id.first, (long long) id.second, (long long) xc.bytes_of(s),
+                     (long long) (xc.bytes_of(s + 1) - xc.bytes_of(s)),
+                     (long long) (first >= 0 && s >= first ? s - first : -1));
+        ++records;
+    }
+    int64_t lend_order = 0;
+    for (int64_t l = lb; l < le; ++l)
+        for (int64_t e = 0; e < g.n_expert; ++e) {
+            const int32_t h = host_res[(size_t) (l * g.n_expert + e)];
+            const int64_t order = first >= 0 && h >= first ? lend_order++ : -1;
+            // Matches lend()'s layer/expert enumeration; this is a projection, not an executed GEN loan.
+            std::fprintf(stderr, "memory-policy-audit host-slot stage=%d layer=%lld expert=%lld slot=%d "
+                         "lend_order=%lld\n", stage, (long long) l, (long long) e, h, (long long) order);
+            ++records;
+        }
+    return true;
+}
+
+bool memory_policy_audit_arena(const strata::core::ArenaExpertSource& src,
+                               const strata::core::ModelGeometry& g, uint64_t& records, std::string& err) {
+    const auto& lay = strata::kernels::cpu::expert_layout();
+    if (!memory_policy_audit_canonical_layout(g, lay) ||
+        !src.mapped() || src.blobs() != g.n_layers * g.n_expert) {
+        err = "memory-policy-audit: unsupported noncanonical or incomplete RAM arena"; return false;
+    }
+    struct Row { uintptr_t address; uint64_t bytes; int64_t layer, expert; bool pinned; };
+    std::vector<Row> rows;
+    rows.reserve((size_t) src.blobs());
+    for (int64_t l = 0; l < g.n_layers; ++l)
+        for (int64_t e = 0; e < g.n_expert; ++e) {
+            const uint8_t* p = src.blob_at(l, e);  // const, uncounted; no memory content is read
+            if (p == nullptr) { err = "memory-policy-audit: missing RAM blob"; return false; }
+            rows.push_back({reinterpret_cast<uintptr_t>(p), lay.blob_bytes(l), l, e, src.pinned(l, e)});
+        }
+    std::sort(rows.begin(), rows.end(), [](const Row& a, const Row& b) { return a.address < b.address; });
+    const uintptr_t base = rows.front().address;
+    uint64_t end = 0;
+    for (const Row& r : rows) {
+        const uint64_t offset = (uint64_t) (r.address - base);
+        if (offset != end || r.bytes == 0 || end > lay.total || r.bytes > lay.total - end ||
+            offset != lay.blob_offset(r.layer, r.expert)) {
+            err = "memory-policy-audit: RAM duplicate, hole, padding or noncanonical offset"; return false;
+        }
+        end += r.bytes;
+    }
+    if (end != lay.total) { err = "memory-policy-audit: RAM byte count mismatch"; return false; }
+    std::fprintf(stderr, "memory-policy-audit ram count=%zu bytes=%llu pin_ranges=%zu\n",
+                 rows.size(), (unsigned long long) end, src.pin_ranges());
+    ++records;
+    for (size_t i = 0; i < rows.size(); ++i) {
+        const Row& r = rows[i];
+        std::fprintf(stderr, "memory-policy-audit ram-slot order=%zu layer=%lld expert=%lld offset=%llu "
+                     "bytes=%llu pinned=%d\n", i, (long long) r.layer, (long long) r.expert,
+                     (unsigned long long) (r.address - base), (unsigned long long) r.bytes, (int) r.pinned);
+        ++records;
+    }
+    return true;
+}
+
 // Windows' WDDM driver model: native Windows, or WSL2 (its GPU goes through /dev/dxg to the Windows driver).  There,
 // pinning a large arena into two CUDA contexts leaves WDDM refusing every later allocation (the 5080 + 3090 rig);
 // a Linux driver has no such limit (#253: the 8 GiB cap cost a 4090 + 3060 split 3x of its prompt speed).
@@ -197,6 +345,14 @@ bool ckpt_pool_env() {
     static const bool on = [] {
         const char* v = std::getenv("STRATA_CKPT_POOL");
         return v && v[0] != '0';
+    }();
+    return on;
+}
+// Exact "1", default OFF: only the explicitly cold caller may transfer discarded checkpoint payloads.
+bool ckpt_park_payload_move_env() {
+    static const bool on = [] {
+        const char* v = std::getenv("STRATA_CKPT_PARK_PAYLOAD_MOVE");
+        return v && std::strcmp(v, "1") == 0;
     }();
     return on;
 }
@@ -2184,6 +2340,21 @@ static double ple_direct_rows_per_s(strata::kernels::PleTable& t) {
 }
 
 int main(int argc, char** argv) {
+    const char* fixed26_env = std::getenv("STRATA_SPLIT26_FIXED_RESIDENCY");
+    const bool fixed26 = fixed26_env != nullptr && std::strcmp(fixed26_env, "1") == 0;
+    if (fixed26_env && std::strcmp(fixed26_env, "0") != 0 && !fixed26) {
+        std::fprintf(stderr, "split26 reject: selector must be exactly 0 or 1\n");
+        return 2;
+    }
+    const char* reserve512_env = std::getenv("STRATA_RECOVERABLE_RESERVE_512");
+    const bool reserve512_diagnostic = reserve512_env && std::strcmp(reserve512_env, "1") == 0;
+    if (reserve512_env && std::strcmp(reserve512_env, "0") != 0 && !reserve512_diagnostic) {
+        std::fprintf(stderr, "recoverable reserve selector must be exactly 0 or 1\n"); return 2;
+    }
+    strata::program::Split26Fixed fixed26_map;
+    const char* memory_policy_audit_env = std::getenv("STRATA_MEMORY_POLICY_AUDIT");
+    const bool memory_policy_audit = memory_policy_audit_env != nullptr &&
+                                     std::strcmp(memory_policy_audit_env, "1") == 0;
     // **UNBUFFERED, BECAUSE THE INTERESTING OUTPUT IS THE OUTPUT BEFORE A CRASH.**  `stdout` redirected to a
     // pipe or a file is block-buffered, so a program that dies loses every line it had already printed - which
     // turns "it crashed at step 7" into "it crashed somewhere", and the difference is a debugging session.
@@ -2262,6 +2433,10 @@ int main(int argc, char** argv) {
             qwen35 = strata::model_family(meta) == strata::ModelFamily::Qwen35Moe;
         } catch (const std::exception&) {
             // not readable here: the normal path below reports it
+        }
+        if (qwen35 && memory_policy_audit) {
+            std::fprintf(stderr, "memory-policy-audit reject reason=unsupported-family\n");
+            return 2;
         }
         if (qwen35) return strata::qwen35::run(argc, argv);
         break;
@@ -2984,6 +3159,30 @@ int main(int argc, char** argv) {
         return 2;
     }
     strata::core::qsa_set_kv_resident(o.kv_resident);
+    if (fixed26) {
+        const bool scope = o.serve && o.layer_split == "26" && o.batch == 0 && !o.batch_mtp &&
+            o.expert_cache == 9900 && !o.expert_cache_per_layer && o.adapt_every == 0 && !o.adapt_async &&
+            !o.vram_elastic && !o.kv_grow && !o.mmap_experts && !o.resident_cpu_experts &&
+            !o.no_prefill_borrow && !o.prefill_auto && o.prefill_chunk == 4096 &&
+            !o.prefill_head_alias && o.max_context == 262144 && o.kv == "int8" && o.kv_resident == 32768 &&
+            o.spec == 6 && o.mtp_max_t == 2 && o.pipeline_windows == 2 && !o.no_capture &&
+            !o.no_token_graph && !o.no_pool && o.peer_device < 1 && o.pcie_frac == 0 &&
+            o.expert_profile_save.empty() && memory_policy_audit;
+        bool helpers = false;
+        for (int r = 0; r < 3; ++r) helpers = helpers || o.expert_cache_remote[(size_t) r] > 0;
+        const char* small_own = std::getenv("STRATA_SPLIT_SMALL_OWN");
+        const char* small_max = std::getenv("STRATA_SPLIT_SMALL_MAX");
+        const bool permanent_suffix = (small_own && std::strcmp(small_own, "0") != 0) ||
+                                      (small_max && std::strcmp(small_max, "0") != 0);
+        if (!scope || helpers || permanent_suffix || !std::getenv("STRATA_SPLIT26_FIXED_MAP")) {
+            std::fprintf(stderr, "split26 reject: unsupported options or missing immutable fixture path\n");
+            return 2;
+        }
+    }
+    if (memory_policy_audit && !o.serve) {
+        std::fprintf(stderr, "memory-policy-audit reject reason=serve-required\n");
+        return 2;
+    }
     // Prompt lookup (the suffix drafter, on by default): the MTP keeps its --spec windows and a lookup window may be
     // up to 2 tokens longer; the draft policy (strata/spec/draft_policy.hpp) takes one only where it pays. Code
     // edits +6-11%, ordinary text unchanged (bench/results/2026-09-27-spec). --suffix-draft 0 turns it off.
@@ -4204,6 +4403,15 @@ int main(int argc, char** argv) {
         std::fprintf(stderr, "strata generate: profile %s: %zu ranked pairs, built for %lld slots\n",
                      o.expert_profile.c_str(), profile.size(), (long long) pslots);
     }
+    if (fixed26) {
+        if (!native_pack || !memory_policy_audit_canonical_layout(g, strata::kernels::cpu::expert_layout()) ||
+            g.n_layers != 48 || g.n_expert != 512 || slot_guard != 0 || !multi_gpu || split_auto ||
+            primary_device != 0 || stages.size() != 1 || stages[0]->dev != 1 || mtp_first ||
+            !fixed26_map.load(std::getenv("STRATA_SPLIT26_FIXED_MAP"), o.expert_profile, profile, err)) {
+            std::fprintf(stderr, "split26 reject: canonical model/profile/device scope: %s\n", err.c_str());
+            return 2;
+        }
+    }
     // #477: the whole ranking as loaded, the prior of --expert-profile-save's order (a layer split keeps only
     // CUDA0's pairs in `profile` below).  Empty without --expert-profile-save.
     std::vector<std::pair<int32_t, int32_t>> profile_loaded;
@@ -5186,6 +5394,12 @@ int main(int argc, char** argv) {
     // Secure MTP's CUDA0 allocations before the large host arena is registered with both CUDA contexts.
     // In particular WDDM can refuse the draft weights after mapping tens of GiB of host pages.
     strata::core::MtpDrafter mtp;
+    // Only GpuStage::head has proven longer lifetime on every early return. The single-GPU
+    // native_head below is constructed after mtp and can be unloaded/reloaded by head alias mode.
+    mtp.set_head_borrow_scope(o.serve && stages.size() == 1 && primary_device == 0 && last_st != nullptr &&
+                              last_st->dev == 1 && last_st->lb == (fixed26 ? 26 : 27) && !mtp_first && o.batch == 0 &&
+                              o.pipeline_windows == 2 && o.spec == 6 && o.mtp_max_t == 2 &&
+                              !o.no_capture && !o.prefill_head_alias);
     // the draft layer's geometry (the canonical model's MTP head), `static` because MtpDrafter keeps a reference; the batch
     // slots' draft-KV copies use this one too
     static const strata::core::ModelGeometry draft_geometry{};
@@ -5810,7 +6024,7 @@ int main(int argc, char** argv) {
                          (long long) session_mib, (long long) o.max_context, (long long) (mtp_bind >> 20),
                          reserve_tip.c_str());
         }
-    } else if (multi_gpu && o.expert_cache > 0) {
+    } else if (multi_gpu && o.expert_cache > 0 && !fixed26) {
         // an explicit cache size leaves room for the prompt path's buffers and the reserve, or the first prompt
         // fails with "device buffers ... do not fit" (with borrowing - the default with a profile - the path lends
         // slots instead and `prefill_mib` is 0, so only the reserve is checked)
@@ -5836,7 +6050,14 @@ int main(int argc, char** argv) {
     // blobs, and the quota is however many copies of every layer fit in it.
     std::vector<int64_t> sized_slots;
     uint64_t per_layer_bytes = 0;
-    if (native_pack && o.expert_cache > 0 && o.expert_cache_per_layer) {
+    if (fixed26) {
+        if (srcp != &arena_src) {
+            std::fprintf(stderr, "split26 reject: only unchanged canonical RAM arena is supported\n");
+            return 2;
+        }
+        o.expert_cache = (int) strata::program::Split26Fixed::physical[0];
+        sized_slots.assign((size_t) o.expert_cache, strata::program::Split26Fixed::stride);
+    } else if (native_pack && o.expert_cache > 0 && o.expert_cache_per_layer) {
         const size_t free_b = strata::core::device_free_bytes();   // the same reading the shared-cache sizing uses
         const auto& lay = strata::kernels::cpu::expert_layout();
         const int asked = o.expert_cache;
@@ -5984,7 +6205,7 @@ int main(int argc, char** argv) {
                     std::snprintf(commit, sizeof commit, " (Windows has %.1f GiB of commit left: RAM + page file)",
                                   (double) ms.ullAvailPageFile / 1073741824.0);
 #endif
-                if (auto_cache && failed < 8 && shrink_to(cache_bytes() / 4 * 3)) {
+                if (!fixed26 && auto_cache && failed < 8 && shrink_to(cache_bytes() / 4 * 3)) {
                     ++failed;
                     std::fprintf(stderr, "strata generate: %s%s; trying a smaller expert cache: %d slots\n", err.c_str(),
                                  commit, o.expert_cache);
@@ -5998,7 +6219,7 @@ int main(int argc, char** argv) {
 #endif
                 return 1;
             }
-            if (!auto_cache || attempt - failed >= 6) break;
+            if (fixed26 || !auto_cache || attempt - failed >= 6) break;
             cudaMemset(xcache.device_slot(0), 0, (size_t) xcache.bytes());
             cudaDeviceSynchronize();
             size_t free_b = 0, total_b = 0;
@@ -6051,8 +6272,31 @@ int main(int argc, char** argv) {
     // ONCE: with `slots` pairs and `slots` slots the cache is full when this returns, so the decode-time
     // admission finds no room and every non-profiled expert stays a CPU miss.  That is what makes the profile
     // the policy rather than a hint.
+    auto fixed26_fill = [&](strata::core::ExpertCache& xc, int origin) -> bool {
+        int actual_device = -1;
+        if (cudaGetDevice(&actual_device) != cudaSuccess || actual_device != origin) {
+            err = "split26: fixed fill on wrong or unavailable device"; return false;
+        }
+        const auto& map = fixed26_map.slots[origin];
+        if (!xc.import_fixed_map(map, origin == 0 ? 0 : 26, origin == 0 ? 26 : 48, err)) return false;
+        for (int32_t slot = 0; slot < (int32_t) map.size(); ++slot) {
+            const auto id = map[(size_t) slot];
+            if (id.first < 0) continue;  // explicit physical scratch hole, never a fake expert
+            const uint8_t* b = srcp->blob_stable(id.first, id.second);
+            if (b == nullptr || !xc.fill_fixed_slot_blocking(slot, id.first, id.second, b, err,
+                    strata::program::Split26Fixed::stride) ||
+                !xc.verify_slot(slot, b, err, strata::program::Split26Fixed::stride)) return false;
+        }
+        // Blocking fill and byte-exact readback of EVERY live destination precede publication.
+        return xc.seal_fixed_map(err) && xc.resident() == strata::program::Split26Fixed::logical[origin];
+    };
     int64_t prefilled = 0;
-    if (!profile.empty() && srcp != nullptr) {
+    if (fixed26) {
+        if (!fixed26_fill(xcache, 0)) {
+            std::fprintf(stderr, "split26 reject: primary fixed fill: %s\n", err.c_str()); return 1;
+        }
+        prefilled = xcache.resident();
+    } else if (!profile.empty() && srcp != nullptr) {
         // #369 (dag08): per layer, a full layer skips only its own pairs - each layer takes its hottest experts until
         // its range is full (one full layer used to end the whole fill, leaving most layers empty)
         const bool per_layer = xcache.per_layer_admission();
@@ -6159,7 +6403,9 @@ int main(int argc, char** argv) {
         }
         std::vector<int64_t> sized;
         int64_t used = 0;
-        for (const auto& pr : st.profile) {
+        if (fixed26) sized.assign((size_t) strata::program::Split26Fixed::physical[1],
+                                  strata::program::Split26Fixed::stride);
+        else for (const auto& pr : st.profile) {
             const int64_t b = native_pack ? strata::core::ExpertCache::slot_stride((int64_t) lay.blob_bytes(pr.first), slot_guard)
                                           : (int64_t) lay.max_blob;
             if (used + b > room) break;
@@ -6174,7 +6420,7 @@ int main(int argc, char** argv) {
         for (int attempt = 0; !sized.empty(); ++attempt) {
             stage_open = native_pack ? st.cache.open_sized(sized, g.n_layers, g.n_expert, err)
                                      : st.cache.open((int64_t) sized.size(), g.n_layers, g.n_expert, (int64_t) lay.max_blob, err);
-            if (stage_open || attempt >= 3) break;
+            if (stage_open || fixed26 || attempt >= 3) break;
             (void) cudaGetLastError();
             const size_t keep = sized.size() * 9 / 10;
             std::fprintf(stderr, "strata generate: layer split, CUDA%d expert cache: %s; trying %zu of %zu slots "
@@ -6189,7 +6435,12 @@ int main(int argc, char** argv) {
             return 1;
         }
         int64_t filled = 0;
-        for (const auto& pr : st.profile) {
+        if (fixed26) {
+            if (!fixed26_fill(st.cache, 1)) {
+                std::fprintf(stderr, "split26 reject: secondary fixed fill: %s\n", err.c_str()); return 1;
+            }
+            filled = st.cache.resident();
+        } else for (const auto& pr : st.profile) {
             if (filled >= st.cache.slots()) break;
             const int32_t slot = st.cache.admit(pr.first, pr.second);
             if (slot == strata::core::kNotResident) break;
@@ -6201,9 +6452,9 @@ int main(int argc, char** argv) {
             }
             ++filled;
         }
-        if (filled == 0 || !st.cache.verify_slot(st.cache.slot_of(st.profile[0].first, st.profile[0].second),
+        if (!fixed26 && (filled == 0 || !st.cache.verify_slot(st.cache.slot_of(st.profile[0].first, st.profile[0].second),
                                                  srcp->blob_stable(st.profile[0].first, st.profile[0].second), err,
-                                                 (int64_t) lay.blob_bytes(st.profile[0].first))) {
+                                                 (int64_t) lay.blob_bytes(st.profile[0].first)))) {
             std::fprintf(stderr, "strata generate: layer split, CUDA%d expert cache: %s\n", st.dev,
                          filled == 0 ? "nothing filled" : err.c_str());
             return 1;
@@ -7920,6 +8171,9 @@ int main(int argc, char** argv) {
             int32_t first_now = -1;        // where its buffers are laid out now
             int64_t lent_chunk = 0;
             std::vector<std::pair<int32_t, int32_t>> lent;
+            bool loan_active = false;  // fixed mode: independent of nonempty physical copies
+            strata::program::Split26Fixed::Loan fixed_loan;
+            uint64_t fixed_required_bytes = 0, fixed_copied_fnv = 0;
         };
         // bytes -> slots for one cache: exact when it knows its per-slot offsets (a native pack's blobs differ
         // per layer), otherwise max_blob each.
@@ -8034,11 +8288,20 @@ int main(int argc, char** argv) {
                 if (c == 0 && cap < strata::prefill::Prefill::ring_default_slots()) c = probe(kRingMin);
                 return std::max(c, small);   // never a smaller chunk than 0.1.39's
             };
-            const int64_t chunk = scan(nullptr);
+            const int64_t chunk = fixed26 ? o.prefill_chunk : scan(nullptr);
+            if (fixed26) {
+                if (pf_parts.size() != 2 || strata::prefill::Prefill::ring_slots_for(chunk) != 384) {
+                    std::fprintf(stderr, "split26 reject: startup ring/participant geometry\n"); return 1;
+                }
+                for (const auto& p : pf_parts)
+                    if (part_slots(p, chunk) != strata::program::Split26Fixed::max_loan) {
+                        std::fprintf(stderr, "split26 reject: startup physical suffix must equal audited 1862\n"); return 1;
+                    }
+            }
             // #448: a small card in a layer split caps every stage's chunk (an RTX 3080's 512-slot cache held a
             // 32 GB card's split to 512 tokens: prompts 6.2x slower, decode the same).  Named when it bites, so the
             // regression is one log line: each stage that cannot fund the chunk CUDA0 alone would read in.
-            const int64_t alone = pf_parts.size() > 1 ? scan(&pf_parts[0]) : chunk;
+            const int64_t alone = !fixed26 && pf_parts.size() > 1 ? scan(&pf_parts[0]) : chunk;
             // both scans left the ring override on their own last trial: put it back on the chunk that won, which
             // is what `init` lays out and what the INFO line reports
             if (chunk > 0 && o.prefill_auto && strata::prefill::Prefill::ring_bytes_enabled()) {
@@ -8100,7 +8363,7 @@ int main(int argc, char** argv) {
                     const char* v = std::getenv("STRATA_SPLIT_OWN_BUFFERS");
                     return v == nullptr || v[0] != '0';
                 }();
-                if (pf_parts.size() > 1 && own_ok) {
+                if (!fixed26 && pf_parts.size() > 1 && own_ok) {
                     for (PfPart& p : pf_parts) {
                         const strata::core::OnDevice on(p.dev);
                         size_t fb = 0, tb = 0;
@@ -8247,6 +8510,10 @@ int main(int argc, char** argv) {
             int dev = 0;
             int64_t need = 0, fb = 0;
             if (!own_fits(o.prefill_chunk, dev, need, fb)) {
+                if (fixed26) {
+                    std::fprintf(stderr, "split26 reject: private prompt-buffer fallback is forbidden\n");
+                    return 1;
+                }
                 int64_t c = 0;
                 for (const int64_t s : kStepChunks) {
                     int d2 = 0;
@@ -8268,7 +8535,7 @@ int main(int argc, char** argv) {
             int64_t next = 0;
             for (const int64_t c : kStepChunks)
                 if (c < o.prefill_chunk) { next = c; break; }
-            if (r == 2 && next > 0) {
+            if (!fixed26 && r == 2 && next > 0) {
                 std::fprintf(stderr, "strata serve: %s: trying a %lld-token chunk\n", err.c_str(), (long long) next);
                 // start the prompt paths over (a failed init may hold buffers), and consume the failed allocation's
                 // error: it is sticky, and the next launch check would report "out of memory" for a kernel
@@ -8904,7 +9171,7 @@ int main(int argc, char** argv) {
         };
         // Save only on a switch/rewind, not on each continuing request. No graph
         // addresses change: all parked images live in ordinary host vectors.
-        auto park_current_body = [&](size_t held) -> bool {
+        auto park_current_body = [&](size_t held, bool cold_payload_move) -> bool {
             if (!conversations.enabled() || !live_ok || live.empty()) return true;
             // #2049: parking copies the outgoing conversation's running checkpoints and K/V into host memory, which
             // is a silent stretch of the "request" stage; when the OS has paged that memory out it takes minutes.
@@ -8932,6 +9199,32 @@ int main(int argc, char** argv) {
             // A layer split parks one image per stage: the first stage's (with the draft layer's K/V) and one per
             // later stage (without it - the draft ring is saved once).  The checkpoints are MOVED apart into their
             // stage parts for the capture and put back together whichever way this ends (no running state copied).
+            const bool move_payloads = cold_payload_move && ckpt_park_payload_move_env() &&
+                stages.size() == 1 && ss.layer_lo == 0 && [&]() {
+                    const auto& child = stages[0]->ss;
+                    // Preserve the donor's legacy carve; fixed26 is a separate, bounded admission.
+                    if (ss.layer_hi == 27 && child.layer_lo == 27 && child.layer_hi == g.n_layers)
+                        return true;
+                    if (!fixed26 || reserve512_diagnostic || primary_device != 0 || stages[0]->dev != 1 ||
+                        g.n_layers != 48 || g.qsa_interval != 4 ||
+                        ss.layer_hi != 26 || child.layer_lo != 26 || child.layer_hi != 48 ||
+                        ss.gdn_ord0 != 0 || ss.gdn_alloc != 20 || ss.qsa_ord0 != 0 || ss.qsa_alloc != 6 ||
+                        child.gdn_ord0 != 20 || child.gdn_alloc != 16 ||
+                        child.qsa_ord0 != 6 || child.qsa_alloc != 6 || pf_parts.size() != 2)
+                        return false;
+                    // The ordinary successful Prefill drain/refill and owner syncs remain authoritative.
+                    // Admit only their idle, matching participants; do not schedule or wait for a loan here.
+                    const auto& a = pf_parts[0];
+                    const auto& b = pf_parts[1];
+                    return a.ses == &ss && a.cache == &xcache && a.dev == -1 && a.lb == 0 && a.le == 26 &&
+                        b.ses == &child && b.cache == &stages[0]->cache &&
+                        b.dev == 1 && b.lb == 26 && b.le == 48 &&
+                        !a.loan_active && a.lent.empty() && a.lent_chunk == 0 &&
+                        !b.loan_active && b.lent.empty() && b.lent_chunk == 0;
+                }() &&
+                o.batch == 0 && !ckpt_pool.on() && !ckpt_threads_env() && !slot_ckpt_move_env() &&
+                strata::prefill::Prefill::pipe_setting() == 0.0 &&
+                std::all_of(checks.begin(), checks.end(), strata::core::conversation_checkpoint_payload_compact);
             const size_t n_st = stages.size();
             // the draft layer's K/V lives on the last stage's GPU (the drafter is loaded there): with a split it is
             // saved with that stage's image, under its device; stage 0's image holds none
@@ -9036,18 +9329,50 @@ int main(int argc, char** argv) {
                                  (long long) o.conversation_cache_min_free_mib);
                 strata::core::SavedConversation image;
                 size_t reused_bytes = 0;
-                if (!strata::core::conversation_snapshot_save(image, view, ss, g, draft0, err,
-                        std::move(reuse), &reused_bytes)) return false;
+                auto capture = move_payloads ? strata::core::conversation_snapshot_prepare_payload_move :
+                    static_cast<bool (*)(strata::core::SavedConversation&, const strata::core::ConversationView&,
+                        const strata::core::SessionState&, const strata::core::ModelGeometry&,
+                        const strata::core::QsaState*, std::string&, strata::core::ConversationKvReuse, size_t*)>(
+                            strata::core::conversation_snapshot_save);
+                if (!capture(image, view, ss, g, draft0, err, std::move(reuse), &reused_bytes)) return false;
                 for (size_t k = 0; k < n_st; ++k) {   // the later stages (the last one with the draft layer's K/V)
                     auto& st = stages[k];
                     const strata::core::OnDevice on(st->dev);
                     if (cudaDeviceSynchronize() != cudaSuccess) { err = "stage sync failed"; return false; }
                     const strata::core::ConversationView view_k{live, live_imgs, cs.parts[k], cvec_cached};
                     strata::core::SavedConversation part;
-                    if (!strata::core::conversation_snapshot_save(part, view_k, st->ss, g, draft_of(k), err,
+                    if (!capture(part, view_k, st->ss, g, draft_of(k), err,
                             std::move(stage_reuse[k]), &reused_bytes))
                         return false;
                     image.stage_images.push_back(std::move(part));
+                }
+                // All captures AND stage-image allocations succeeded. Only these five payloads move;
+                // retained source headers/capacities make immediate MergeBack allocation-free.
+                struct PayloadRollback {
+                    strata::core::SavedConversation& image;
+                    std::vector<ConvCheckpoint>& root;
+                    std::vector<std::vector<ConvCheckpoint>>& parts;
+                    bool on;
+                    void swap() noexcept {
+                        for (size_t j = 0; j < root.size(); ++j)
+                            strata::core::conversation_checkpoint_payload_swap(root[j], image.checkpoints[j]);
+                        for (size_t k = 0; k < parts.size(); ++k)
+                            for (size_t j = 0; j < parts[k].size(); ++j)
+                                strata::core::conversation_checkpoint_payload_swap(
+                                    parts[k][j], image.stage_images[k].checkpoints[j]);
+                    }
+                    ~PayloadRollback() { if (on) swap(); }
+                } payload_rollback{image, n_st > 0 ? cs.stage0 : checks, cs.parts, move_payloads};
+                size_t moved_payload_bytes = 0;
+                if (move_payloads) {
+                    payload_rollback.swap();
+                    auto count = [&](const auto& checkpoints) {
+                        for (const auto& c : checkpoints)
+                            moved_payload_bytes += c.gdn.size() + c.ple.size() + c.tails.size() +
+                                                   c.dead.size() + c.block_pos.size();
+                    };
+                    count(image.checkpoints);
+                    for (const auto& part : image.stage_images) count(part.checkpoints);
                 }
                 const auto mem_after = strata::core::sample_host_memory();
                 if (!strata::core::conversation_memory_admit(
@@ -9058,6 +9383,10 @@ int main(int argc, char** argv) {
                 }
                 const size_t snapshot_bytes = image.bytes();
                 const bool stored = conversations.put(std::move(image), held);
+                if (stored) payload_rollback.on = false;   // no throwing gap after ownership is published
+                if (stored && move_payloads)
+                    std::fprintf(stderr, "strata serve: checkpoint payload move: stages=%zu checkpoints=%zu bytes=%zu\n",
+                                 n_st + 1, view.checkpoints.size(), moved_payload_bytes);
                 std::fprintf(stderr, "strata serve: conversation cache: %s %zu tokens in %.1f ms; parked=%zu bytes=%zu evictions=%zu snapshot_bytes=%zu reused_kv_bytes=%zu\n",
                              stored ? "parked" : "skipped", live.size(),
                              std::chrono::duration<double, std::milli>(Clock::now() - t0).count(),
@@ -9071,8 +9400,8 @@ int main(int argc, char** argv) {
         };
         // #752: the whole park (the checkpoint split included) is under one try, so a host OOM skips parking instead of
         // ending the server
-        auto park_current = [&](size_t held) -> bool {
-            try { return park_current_body(held); }
+        auto park_current = [&](size_t held, bool cold_payload_move = false) -> bool {
+            try { return park_current_body(held, cold_payload_move); }
             catch (const std::bad_alloc&) {
                 std::fprintf(stderr, "strata serve: conversation cache: allocation failed; skip parking\n");
                 return true;
@@ -9593,7 +9922,78 @@ int main(int argc, char** argv) {
             std::fprintf(stderr, "strata serve: adaptive overlap: off%s%s\n",
                          aov_why ? ": " : " (STRATA_ADAPT_OVERLAP=1 turns it on)", aov_why ? aov_why : "");
         // a layer split's later stages keep a copy of the residency table on their devices, and swap on their own
+        auto fixed26_validate = [&](std::string& e) -> bool {
+            if (!fixed26) return true;
+            if (pf_parts.size() != 2 || host_res.size() != 24576 || srcp != &arena_src ||
+                o.prefill_chunk != 4096 || !memory_policy_audit_canonical_layout(g, strata::kernels::cpu::expert_layout())) {
+                e = "split26: runtime canonical geometry changed"; return false;
+            }
+            std::vector<int32_t> expected = fixed26_map.destination;
+            for (int st = 0; st < 2; ++st) {
+                const PfPart& p = pf_parts[st];
+                if (!p.cache->fixed_sealed() || p.cache->slots() != strata::program::Split26Fixed::physical[st] ||
+                    p.cache->resident() != strata::program::Split26Fixed::logical[st] ||
+                    p.cache->bytes() != p.cache->slots() * strata::program::Split26Fixed::stride ||
+                    p.lb != (st == 0 ? 0 : 26) || p.le != (st == 0 ? 26 : 48) ||
+                    p.dev != (st == 0 ? -1 : 1)) {
+                    e = "split26: runtime cache/layer/device extent changed"; return false;
+                }
+                if (p.loan_active) {
+                    if (p.fixed_loan.origin != st || p.fixed_loan.k < 0 ||
+                        p.fixed_loan.k > strata::program::Split26Fixed::max_loan ||
+                        p.fixed_loan.first != p.first_now || p.lent.size() != p.fixed_loan.refills.size()) {
+                        e = "split26: invalid active loan"; return false;
+                    }
+                    for (const auto& x : p.fixed_loan.hidden) {
+                        if (expected[(size_t) x.index()] != x.slot) {
+                            e = "split26: duplicate logical hiding or wrong destination"; return false;
+                        }
+                        expected[(size_t) x.index()] = strata::core::kNotResident;
+                    }
+                } else if (!p.lent.empty()) {
+                    e = "split26: physical refills without active origin"; return false;
+                }
+            }
+            if (expected != host_res) { e = "split26: actual all-layer logical visibility mismatch"; return false; }
+            return true;
+        };
+        uint64_t fixed26_event = 0;
+        auto fixed26_witness = [&](const char* event, const PfPart& p, int64_t want,
+                                   uint64_t required_bytes, int64_t required_k, uint64_t restored,
+                                   std::string& e) -> bool {
+            if (!fixed26 || !reserve512_diagnostic) return true;
+            if (fixed26_event >= 512) { e = "split26: diagnostic witness bound exceeded"; return false; }
+            const auto& q = p.fixed_loan;
+            using Plan = strata::program::Split26Fixed;
+            std::fprintf(stderr, "split26-loan seq=%llu event=%s origin=%d want=%lld required_bytes=%llu "
+                         "required_k=%lld first=%d k=%lld physical_refills=%zu logical_holdouts=%zu hidden=%zu "
+                         "old_order_fnv=%016llx hidden_fnv=%016llx refills_fnv=%016llx holdouts_fnv=%016llx "
+                         "copied_fnv=%016llx restored_fnv=%016llx active0=%d active1=%d\n",
+                         (unsigned long long) ++fixed26_event, event, q.origin, (long long) want,
+                         (unsigned long long) required_bytes, (long long) required_k, q.first, (long long) q.k,
+                         q.refills.size(), q.holdouts.size(), q.hidden.size(),
+                         (unsigned long long) Plan::hash_entries(q.old_order),
+                         (unsigned long long) Plan::hash_entries(q.hidden),
+                         (unsigned long long) Plan::hash_entries(q.refills),
+                         (unsigned long long) Plan::hash_entries(q.holdouts),
+                         (unsigned long long) p.fixed_copied_fnv, (unsigned long long) restored,
+                         int(pf_parts[0].loan_active), int(pf_parts[1].loan_active));
+            if (std::fflush(stderr) != 0 || std::ferror(stderr)) { e = "split26: witness write failed"; return false; }
+            return true;
+        };
         auto res_upload = [&]() -> cudaError_t {   // the first error, every table tried
+            if (fixed26) {
+                int previous = -1;
+                cudaError_t r = cudaGetDevice(&previous);
+                if (r != cudaSuccess) return r;
+                for (int dev = 0; dev < 2; ++dev) {
+                    cudaError_t e = cudaSetDevice(dev);
+                    if (e == cudaSuccess) e = res_put(dev == 0 ? d_res : stages[0]->d_res);
+                    if (r == cudaSuccess) r = e;
+                }
+                const cudaError_t restore = cudaSetDevice(previous);
+                return r == cudaSuccess ? restore : r;
+            }
             cudaError_t r = d_res != nullptr ? res_put(d_res) : cudaSuccess;
             for (auto& st : stages) {
                 const strata::core::OnDevice on(st->dev);
@@ -10429,6 +10829,133 @@ int main(int argc, char** argv) {
             return 1;
         }
 #endif
+        // Preserve every startup free-memory decision, including both optional HC workspaces.
+        // The exact temporary duplicate-head reservation becomes usable slack only here, before READY.
+        if (!mtp.release_head_borrow_reservation(err)) {
+            std::fprintf(stderr, "strata serve: %s\n", err.c_str());
+            return 1;
+        }
+        // Separately gated diagnostic: touched recoverable bytes, not startup-free headroom.
+        struct RecoverableReserve512 {
+            void* held = nullptr;
+            int device = -1;
+            int completed = 0;
+            bool enabled = false;
+            bool released = false;
+            bool report_error(const char* op, cudaError_t rc, std::string& e) {
+                e = std::string("recoverable reserve ") + op + ": " + cudaGetErrorString(rc);
+                std::fprintf(stderr, "FAIL split26-reserve op=%s device=%d code=%d\n", op, device, (int) rc);
+                std::fflush(stderr);
+                return false;
+            }
+            bool release(const char* reason, std::string& e) {
+                // No retry after a possibly executed free, including destructor cleanup.
+                void* p = held;
+                held = nullptr;
+                if (!p) { e = "recoverable reserve release without owned allocation"; return false; }
+                int previous = -1;
+                cudaError_t rc = cudaGetDevice(&previous);
+                if (rc != cudaSuccess) return report_error("release_get_device", rc, e);
+                rc = cudaSetDevice(device);
+                if (rc != cudaSuccess) {
+                    cudaError_t restore = cudaSetDevice(previous);
+                    report_error("release_set_device", rc, e);
+                    if (restore != cudaSuccess) report_error("release_restore_device", restore, e);
+                    return false; // pointer detached; process teardown reclaims it, never a successful proof.
+                }
+                size_t before = 0, after = 0, total = 0;
+                rc = cudaDeviceSynchronize();
+                if (rc == cudaSuccess) rc = cudaMemGetInfo(&before, &total);
+                cudaError_t free_rc = cudaSuccess;
+                if (rc == cudaSuccess) free_rc = cudaFree(p);
+                if (rc == cudaSuccess && free_rc == cudaSuccess) rc = cudaMemGetInfo(&after, &total);
+                cudaError_t restore = cudaSetDevice(previous);
+                if (rc != cudaSuccess) report_error("release_sync_or_meminfo", rc, e);
+                if (free_rc != cudaSuccess) report_error("release_free", free_rc, e);
+                if (restore != cudaSuccess) report_error("release_restore_device", restore, e);
+                if (rc != cudaSuccess || free_rc != cudaSuccess || restore != cudaSuccess) return false;
+                released = true;
+                const int written = std::fprintf(stderr, "split26-reserve event=released status=success device=%d restored_device=%d restore_status=success free_status=success bytes=536870912 completed=%d reason=%s free_before=%llu free_after=%llu total=%llu\n",
+                             device, previous, completed, reason, (unsigned long long) before,
+                             (unsigned long long) after, (unsigned long long) total);
+                if (written < 0 || std::fflush(stderr) != 0 || std::ferror(stderr)) {
+                    e = "recoverable reserve receipt write failed"; return false;
+                }
+                return true;
+            }
+            bool acquire(int secondary_device, std::string& e) {
+                const char* value = std::getenv("STRATA_RECOVERABLE_RESERVE_512");
+                if (value == nullptr || std::strcmp(value, "0") == 0) return true;
+                if (std::strcmp(value, "1") != 0) {
+                    e = "STRATA_RECOVERABLE_RESERVE_512 must be exactly 0 or 1"; return false;
+                }
+                enabled = true;
+                device = secondary_device;
+                if (device != 1) { e = "recoverable reserve requires canonical secondary CUDA1"; return false; }
+                int previous = -1;
+                cudaError_t rc = cudaGetDevice(&previous);
+                if (rc != cudaSuccess) return report_error("acquire_get_device", rc, e);
+                rc = cudaSetDevice(device);
+                if (rc != cudaSuccess) {
+                    cudaError_t restore = cudaSetDevice(previous);
+                    report_error("acquire_set_device", rc, e);
+                    if (restore != cudaSuccess) report_error("acquire_restore_device", restore, e);
+                    return false;
+                }
+                size_t before = 0, after = 0, total = 0;
+                rc = cudaMemGetInfo(&before, &total);
+                if (rc == cudaSuccess) rc = cudaMalloc(&held, size_t(536870912));
+                if (rc == cudaSuccess) rc = cudaMemset(held, 0xA5, size_t(536870912));
+                if (rc == cudaSuccess) rc = cudaDeviceSynchronize();
+                if (rc == cudaSuccess) rc = cudaMemGetInfo(&after, &total);
+                cudaError_t restore = cudaSetDevice(previous);
+                if (rc != cudaSuccess) report_error("acquire_alloc_touch_sync_or_meminfo", rc, e);
+                if (restore != cudaSuccess) report_error("acquire_restore_device", restore, e);
+                if (rc != cudaSuccess || restore != cudaSuccess) return false;
+                const int written = std::fprintf(stderr, "split26-reserve event=held status=success device=1 restored_device=%d restore_status=success bytes=536870912 requested_bytes=536870912 touched_bytes=536870912 completed=0 touched=1 synced=1 free_before=%llu free_after=%llu total=%llu\n",
+                             previous, (unsigned long long) before, (unsigned long long) after, (unsigned long long) total);
+                if (written < 0 || std::fflush(stderr) != 0 || std::ferror(stderr)) {
+                    e = "recoverable reserve receipt write failed"; return false;
+                }
+                return true;
+            }
+            bool after_done(bool ordinary_success, std::string& e) {
+                if (!enabled) return true;
+                if (!ordinary_success || !held || released || completed >= 5) {
+                    e = "recoverable reserve requires exactly five successful ordinary DONE records"; return false;
+                }
+                ++completed;
+                if (completed == 5) return release("five_done", e);
+                const int written = std::fprintf(stderr, "split26-reserve event=held_after_done status=success device=1 bytes=536870912 completed=%d\n", completed);
+                if (written < 0 || std::fflush(stderr) != 0 || std::ferror(stderr)) {
+                    e = "recoverable reserve receipt write failed"; return false;
+                }
+                return true;
+            }
+            ~RecoverableReserve512() {
+                if (held != nullptr) {
+                    std::string ignored;
+                    if (!release("abort_cleanup", ignored)) {
+                        std::fprintf(stderr, "FAIL split26-reserve abort_cleanup=failed\n");
+                        std::fflush(stderr);
+                    }
+                }
+            }
+        } reserve512;
+        const char* reserve_value = std::getenv("STRATA_RECOVERABLE_RESERVE_512");
+        if (reserve_value && std::strcmp(reserve_value, "0") != 0 &&
+            (!multi_gpu || split_auto || primary_device != 0 || stages.size() != 1 || stages[0]->dev != 1 ||
+             o.batch != 0 || o.batch_mtp || mtp_first || !native_pack || !memory_policy_audit ||
+             (o.layer_split != "26" && o.layer_split != "27") ||
+             srcp != &arena_src || !memory_policy_audit_canonical_layout(g, strata::kernels::cpu::expert_layout()))) {
+            std::fprintf(stderr, "FAIL split26-reserve canonical two-device/no-batch guard\n");
+            return 1;
+        }
+        if (!reserve512.acquire(stages.size() == 1 ? stages[0]->dev : -1, err)) {
+            std::fprintf(stderr, "FAIL strata serve: %s\n", err.c_str());
+            return 1;
+        }
+
         {
             // what is left once everything is allocated: under WDDM a GPU filled to the brim does not fail, it pages -
             // and a page-in while the verify graph spins on a host flag stalls the request for good
@@ -10491,6 +11018,145 @@ int main(int argc, char** argv) {
                                  (long long) (later_reserve + 768 - sf_mib));
             }
         }
+        if (fixed26) {
+            using Plan = strata::program::Split26Fixed;
+            if (!fixed26_validate(err)) {
+                std::fprintf(stderr, "split26 reject: startup visibility: %s\n", err.c_str()); return 1;
+            }
+            uint64_t records = 1;
+            std::fprintf(stderr, "split26-audit begin version=1 phase=pre-ready source=canonical-arena "
+                         "layers=48 experts=512 stages=2 context=%lld chunk=%lld ring=%lld "
+                         "physical_total=18065 logical_total=18018 holes=47 "
+                         "old_split=27 new_split=26 max_loan=1862 ram_priority=not-exported "
+                         "hash=fnv1a64-le-i32-owner-slot-layer-expert-oldslot\n",
+                         (long long) o.max_context, (long long) o.prefill_chunk,
+                         (long long) strata::prefill::Prefill::ring_slots_for(o.prefill_chunk));
+            for (int st = 0; st < 2; ++st) {
+                const PfPart& p = pf_parts[st];
+                Plan::Loan q;
+                const int64_t k = part_slots(p, o.prefill_chunk);
+                if (p.loan_active || p.first != p.first_now || p.first != p.cache->slots() - k ||
+                    !fixed26_map.plan(st, k, q, err)) {
+                    std::fprintf(stderr, "split26 reject: startup loan: %s\n", err.c_str()); return 1;
+                }
+                std::fprintf(stderr, "split26-audit stage origin=%d dev=%d lb=%lld le=%lld physical_slots=%lld "
+                             "logical_resident=%lld holes=%lld bytes=%lld first=%d first_now=%d k=%lld "
+                             "loan_bytes=%llu physical_refills=%zu logical_holdouts=%zu hidden=%zu "
+                             "old_order_fnv=%016llx hidden_fnv=%016llx refills_fnv=%016llx holdouts_fnv=%016llx\n",
+                             st, st, (long long) p.lb, (long long) p.le, (long long) p.cache->slots(),
+                             (long long) p.cache->resident(), (long long) (p.cache->slots() - p.cache->resident()),
+                             (long long) p.cache->bytes(), p.first, p.first_now, (long long) k,
+                             (unsigned long long) part_bytes(p, p.first), q.refills.size(), q.holdouts.size(), q.hidden.size(),
+                             (unsigned long long) Plan::hash_entries(q.old_order),
+                             (unsigned long long) Plan::hash_entries(q.hidden),
+                             (unsigned long long) Plan::hash_entries(q.refills),
+                             (unsigned long long) Plan::hash_entries(q.holdouts));
+                ++records;
+                std::vector<Plan::Id> actual((size_t) p.cache->slots(), {-1, -1});
+                for (int32_t l = 0; l < 48; ++l)
+                    for (int32_t ex = 0; ex < 512; ++ex) {
+                        const int32_t slot = p.cache->slot_of(l, ex);
+                        if (slot < 0) continue;
+                        if (slot >= p.cache->slots() || actual[(size_t) slot].first >= 0 ||
+                            l < p.lb || l >= p.le) {
+                            std::fprintf(stderr, "split26 reject: actual duplicate/out-of-stage cache identity\n"); return 1;
+                        }
+                        actual[(size_t) slot] = {l, ex};
+                    }
+                if (actual != fixed26_map.slots[st]) {
+                    std::fprintf(stderr, "split26 reject: actual physical map differs from pinned fixture\n"); return 1;
+                }
+                for (int32_t slot = 0; slot < p.cache->slots(); ++slot) {
+                    const auto id = actual[(size_t) slot];
+                    const bool hole = id.first < 0;
+                    const auto hold = hole ? fixed26_map.holes[(size_t) slot] : Plan::Id{-1, -1};
+                    const int32_t i = hole ? -1 : id.first * 512 + id.second;
+                    if (p.cache->bytes_of(slot) != slot * Plan::stride ||
+                        p.cache->bytes_of(slot + 1) - p.cache->bytes_of(slot) != Plan::stride) {
+                        std::fprintf(stderr, "split26 reject: actual physical slot byte span\n"); return 1;
+                    }
+                    std::fprintf(stderr, "split26-audit gpu-slot stage=%d slot=%d layer=%d expert=%d "
+                                 "offset=%lld bytes=%lld old_origin=%d old_slot=%d "
+                                 "holdout_layer=%d holdout_expert=%d borrow_order=%lld\n",
+                                 st, slot, id.first, id.second, (long long) p.cache->bytes_of(slot),
+                                 (long long) Plan::stride, hole ? -1 : fixed26_map.old_owner[(size_t) i],
+                                 hole ? -1 : fixed26_map.old_destination[(size_t) i],
+                                 hold.first, hold.second, (long long) (slot >= p.first ? slot - p.first : -1));
+                    ++records;
+                }
+                for (int32_t l = (int32_t) p.lb; l < p.le; ++l)
+                    for (int32_t ex = 0; ex < 512; ++ex) {
+                        const size_t i = (size_t) (l * 512 + ex);
+                        std::fprintf(stderr, "split26-audit host-slot stage=%d layer=%d expert=%d slot=%d "
+                                     "\n", st, l, ex, host_res[i]);
+                        ++records;
+                    }
+            }
+            // Exact original RAM record grammar/order; no source/copy priority is synthesized.
+            if (!memory_policy_audit_arena(arena_src, g, records, err)) {
+                std::fprintf(stderr, "split26 reject: RAM audit: %s\n", err.c_str()); return 1;
+            }
+            std::fprintf(stderr, "split26-audit end version=1 status=complete records=%llu\n",
+                         (unsigned long long) (records + 1));
+            if (std::fflush(stderr) != 0 || std::ferror(stderr)) return 1;
+        }
+        // Final startup policy witness: after all cache/prefill sizing and head-reservation release,
+        // before READY or any timed GEN. OFF performs no host-map walk or log I/O.
+        if (memory_policy_audit && !fixed26) {
+            const int64_t audit_limit = 32768;
+            const auto& lay = strata::kernels::cpu::expert_layout();
+            bool supported = srcp == &arena_src && memory_policy_audit_canonical_layout(g, lay) && !o.mmap_experts &&
+                             !o.resident_cpu_experts && !peer.valid() && !remote_opt &&
+                             g.n_layers > 0 && g.n_expert > 0 &&
+                             g.n_layers <= audit_limit / g.n_expert &&
+                             stages.size() < 16 && pf_parts.size() == stages.size() + 1;
+            for (int r = 0; r < 3; ++r) supported = supported && o.expert_cache_remote[(size_t) r] <= 0;
+            int64_t next_layer = 0;
+            for (size_t i = 0; supported && i < pf_parts.size(); ++i) {
+                const PfPart& p = pf_parts[i];
+                const auto* expected = i == 0 ? &xcache : &stages[i - 1]->cache;
+                const int64_t expected_end = i == 0 ? (multi_gpu ? split_at[0] : g.n_layers) : stages[i - 1]->le;
+                const int expected_dev = i == 0 ? -1 : stages[i - 1]->dev;
+                supported = p.cache == expected && p.lb == next_layer && p.le == expected_end &&
+                            p.dev == expected_dev && p.lent.empty() && p.lent_chunk == 0 &&
+                            p.first >= -1 && p.first < p.cache->slots() && p.first_now == p.first;
+                next_layer = p.le;
+            }
+            supported = supported && next_layer == g.n_layers;
+            if (!supported) {
+                std::fprintf(stderr, "memory-policy-audit reject reason=unsupported-scope\n");
+                return 1;
+            }
+            uint64_t audit_records = 1;
+            std::fprintf(stderr, "memory-policy-audit begin version=1 phase=pre-ready source=canonical-arena "
+                         "layers=%lld experts=%lld stages=%zu context=%lld chunk=%lld ring=%lld "
+                         "max_ids=32768 max_stages=16 max_line_bytes=512 "
+                         "borrow_order=physical-ascending lend_order=host-layer-expert "
+                         "loan_scope=configured-startup ram_order=actual-normalized-offset ram_priority=not-exported\n",
+                         (long long) g.n_layers, (long long) g.n_expert, pf_parts.size(),
+                         (long long) o.max_context, (long long) o.prefill_chunk,
+                         (long long) strata::prefill::Prefill::ring_slots_for(o.prefill_chunk));
+            for (size_t i = 0; i < pf_parts.size(); ++i) {
+                const PfPart& p = pf_parts[i];
+                const uint64_t loan_bytes = p.first < 0 ? 0 : part_bytes(p, p.first);
+                if (!memory_policy_audit_stage(*p.cache, g, host_res, (int) i,
+                        i == 0 ? primary_device : p.dev, p.lb, p.le, p.first, p.first_now,
+                        loan_bytes, audit_records, err)) {
+                    std::fprintf(stderr, "memory-policy-audit reject reason=invalid-stage\n");
+                    std::fprintf(stderr, "strata serve: %s\n", err.c_str());
+                    return 1;
+                }
+            }
+            if (!memory_policy_audit_arena(arena_src, g, audit_records, err)) {
+                std::fprintf(stderr, "memory-policy-audit reject reason=invalid-arena\n");
+                std::fprintf(stderr, "strata serve: %s\n", err.c_str());
+                return 1;
+            }
+            // At most 3*N + stages + 3 records; no addresses, prompts, model bytes or probabilistic digest.
+            std::fprintf(stderr, "memory-policy-audit end version=1 status=complete records=%llu\n",
+                         (unsigned long long) (audit_records + 1));
+            if (std::fflush(stderr) != 0 || std::ferror(stderr)) return 1;
+        }
         // what the server's Monitor tab shows (servers before 0.1.8 skip unknown lines until READY)
         {
             size_t free_b = 0, total_b = 0;
@@ -10499,11 +11165,11 @@ int main(int argc, char** argv) {
             // showed CUDA0's cache as if it were the whole GPU's: a 4-GPU 256K run read 3327 experts when the four
             // cards held 13320, and the Monitor tab was wrong by 4x for every multi-GPU config.  The tiers are
             // disjoint by construction (remote_experts.cpp skips any pair a stage already claimed), so they add.
-            const int64_t slots_primary = (int64_t) xcache.slots();
+            const int64_t slots_primary = fixed26 ? xcache.resident() : (int64_t) xcache.slots();
             const int64_t mib_primary = (int64_t) (xcache.bytes() >> 20);
             int64_t slots_all = slots_primary, mib_all = mib_primary;
             for (const auto& st : stages) {
-                slots_all += (int64_t) st->cache.slots();
+                slots_all += fixed26 ? st->cache.resident() : (int64_t) st->cache.slots();
                 mib_all += (int64_t) (st->cache.bytes() >> 20);
             }
             for (int r = 0; r < 3; ++r)
@@ -10657,7 +11323,7 @@ int main(int argc, char** argv) {
             }
             if (peer.valid()) { e = "VRAM: not with --peer-device"; return false; }
             for (const PfPart& p : pf_parts)
-                if (!p.lent.empty()) { e = "VRAM: a prompt's loan is still out"; return false; }
+                if (fixed26 || !p.lent.empty()) { e = fixed26 ? "VRAM: sealed split26 cache is immutable" : "VRAM: a prompt's loan is still out"; return false; }
             if (!ver.wait_commit(e)) return false;
             adapt_quiesce();                         // the adaptive tier's swaps in flight land first (async too)
             if (cudaDeviceSynchronize() != cudaSuccess) {
@@ -11357,6 +12023,18 @@ int main(int argc, char** argv) {
             } else if (!next_line(line)) {
                 break;
             }
+            if (fixed26 && line != "QUIT" && line.rfind("GEN ", 0) != 0) {
+                std::fprintf(stderr, "split26 reject: fixed diagnostic accepts ordinary GEN or QUIT only\n");
+                return 1;
+            }
+            if (reserve512.enabled && line != "QUIT" &&
+                (reserve512.released || line.rfind("GEN ", 0) != 0)) {
+                std::fprintf(stderr, "FAIL split26-reserve command_rejected completed=%d released=%d\n",
+                             reserve512.completed, int(reserve512.released));
+                std::fflush(stderr);
+                return 1;
+            }
+
             // --batch: BSTOP <slot> ends that slot at its next batch window; BGEN <slot> <max_new> ... reads the
             // request's prompt and first token as a GEN 1, then continues it in that slot
             if (line.rfind("BSTOP ", 0) == 0) {
@@ -12153,7 +12831,8 @@ int main(int argc, char** argv) {
                     }
                 }
             } else if ((!from_live || incoming || slot_source >= 0) && !pin_sibling && park_worth &&
-                       !park_current(incoming ? incoming->bytes() : 0)) {
+                       !park_current(incoming ? incoming->bytes() : 0,
+                           resume == 0 && !from_live && !incoming && !borrow && slot_source < 0)) {
                 std::printf("ERR %s\n", err.c_str());
                 return 1;
             }
@@ -12646,15 +13325,64 @@ int main(int argc, char** argv) {
             // STRATA_REFILL_PARTS=1 (gfx1151's table): a lent slot of a GGUF read in place is refilled from the pieces in the mapping.
             // The default assembles the blob in a staging buffer first (a 4 MB copy on this thread), then copies that.
             static const bool refill_parts = [] { const char* v = std::getenv("STRATA_REFILL_PARTS"); return v != nullptr && std::atoi(v) != 0; }();
+            // Diagnostic-only executed legacy reference; never a projection labelled as a copy.
+            auto legacy_loan_witness = [&](const char* event, const PfPart& p, int64_t want,
+                                            bool restored, std::string& e) -> bool {
+                if (fixed26 || !reserve512.enabled) return true;
+                if (fixed26_event >= 512) { e = "split27: diagnostic witness bound exceeded"; return false; }
+                using Plan = strata::program::Split26Fixed;
+                const int origin = p.dev < 0 ? 0 : 1;
+                std::vector<Plan::Entry> host;
+                host.reserve(p.lent.size());
+                for (const auto& [i, slot] : p.lent)
+                    host.push_back({origin, slot, i / 512, i % 512, slot});
+                auto physical = host;
+                std::sort(physical.begin(), physical.end(), [](const Plan::Entry& a, const Plan::Entry& b) {
+                    return a.slot < b.slot;
+                });
+                const uint64_t bytes = strata::prefill::Prefill::bytes_needed(g, *p.ses, want, srcp != nullptr);
+                const int64_t need = part_slots(p, want), k = p.cache->slots() - p.first_now;
+                const uint64_t h = Plan::hash_entries(host), old = Plan::hash_entries(physical);
+                std::fprintf(stderr, "split27-loan seq=%llu event=%s origin=%d want=%lld required_bytes=%llu "
+                             "required_k=%lld first=%d k=%lld physical_refills=%zu logical_holdouts=0 hidden=%zu "
+                             "old_order_fnv=%016llx hidden_fnv=%016llx refills_fnv=%016llx holdouts_fnv=%016llx "
+                             "copied_fnv=%016llx restored_fnv=%016llx active0=%d active1=%d\n",
+                             (unsigned long long) ++fixed26_event, event, origin, (long long) want,
+                             (unsigned long long) bytes, (long long) need, p.first_now, (long long) k,
+                             host.size(), host.size(), (unsigned long long) old, (unsigned long long) h,
+                             (unsigned long long) h, (unsigned long long) 14695981039346656037ull,
+                             (unsigned long long) (restored ? h : 0), (unsigned long long) (restored ? h : 0),
+                             int(!pf_parts[0].lent.empty() && !(restored && origin == 0)),
+                             int(!pf_parts[1].lent.empty() && !(restored && origin == 1)));
+                if (std::fflush(stderr) != 0 || std::ferror(stderr)) {
+                    e = "split27: diagnostic witness write failed"; return false;
+                }
+                return true;
+            };
             auto refill_issue = [&](PfPart& p, std::string& e) -> bool {
                 tr("refill start", (long long) p.lent.size());
+                if (fixed26 && !fixed26_validate(e)) return false;
                 const strata::core::OnDevice on(p.dev);
+                if (fixed26) {
+                    int actual_device = -1;
+                    if (cudaGetDevice(&actual_device) != cudaSuccess || actual_device != (p.dev < 0 ? 0 : p.dev)) {
+                        e = "split26: refill issue on wrong or unavailable device"; return false;
+                    }
+                }
+                std::vector<strata::program::Split26Fixed::Entry> actual_copies;
+                if (fixed26 && reserve512_diagnostic) actual_copies.reserve(p.lent.size());
                 for (const auto& [i, slot] : p.lent) {   // D-4: queued, one wait (STRATA_REFILL_BLOCKING=1: each)
+                    if (fixed26 && p.cache->fixed_identity(slot) !=
+                        strata::program::Split26Fixed::Id{i / 512, i % 512}) {
+                        e = "split26: physical refill destination identity mismatch"; return false;
+                    }
+                    if (fixed26 && reserve512_diagnostic) actual_copies.push_back({p.fixed_loan.origin, slot, i / 512, i % 512,
+                                                          fixed26_map.old_destination[(size_t) i]});
                     strata::core::BlobPart parts[3];
                     const int np = refill_parts && !refill_blocking() ? srcp->blob_parts(i / g.n_expert, i % g.n_expert, parts) : 0;
                     if (np > 0) {   // the GGUF read in place: the tensors' pieces go from the mapping to the slot, no assembled copy
                         if (!p.cache->fill_slot_queued_parts(slot, parts, np, e)) return false;
-                        host_res[(size_t) i] = slot;
+                        if (!fixed26) host_res[(size_t) i] = slot;
                         continue;
                     }
                     const uint8_t* b = srcp->blob_stable(i / g.n_expert, i % g.n_expert);
@@ -12663,24 +13391,51 @@ int main(int argc, char** argv) {
                                                             : p.cache->fill_slot_queued(slot, b, e, nb)))
                         return false;
                     if (!refill_blocking()) srcp->note_async_read(b, nullptr);   // #1237
-                    host_res[(size_t) i] = slot;
+                    if (!fixed26) host_res[(size_t) i] = slot;
                 }
+                if (fixed26 && reserve512_diagnostic)
+                    p.fixed_copied_fnv = strata::program::Split26Fixed::hash_entries(actual_copies);
                 return true;
             };
             auto refill_wait = [&](PfPart& p, std::string& e) -> bool {
                 const strata::core::OnDevice on(p.dev);
+                if (fixed26) {
+                    int actual_device = -1;
+                    if (cudaGetDevice(&actual_device) != cudaSuccess || actual_device != (p.dev < 0 ? 0 : p.dev)) {
+                        e = "split26: refill wait on wrong or unavailable device"; return false;
+                    }
+                }
                 if (!p.cache->sync_queued(e)) return false;
 #if defined(_WIN32)
                 // The copies have landed: the file pages touched by the loan need not stay in the working set.
                 for (const auto& [i, slot] : p.lent)
                     srcp->release(i / g.n_expert, i % g.n_expert);
 #endif
+                if (fixed26) {
+                    // Every physical copy has completed. Restore only this OLD origin's domain,
+                    // including unoverwritten layer-26 holdouts on secondary. Other loans stay hidden.
+                    auto restored = p.fixed_loan.hidden;
+                    for (auto& x : restored) {
+                        if (host_res[(size_t) x.index()] != strata::core::kNotResident ||
+                            pf_parts[(size_t) x.owner].cache->slot_of(x.layer, x.expert) != x.slot) {
+                            e = "split26: invalid logical restoration destination"; return false;
+                        }
+                        host_res[(size_t) x.index()] = x.slot;
+                        x.slot = host_res[(size_t) x.index()];
+                    }
+                    p.loan_active = false;
+                    p.lent.clear();
+                    if (!fixed26_validate(e) ||
+                        !fixed26_witness("restore", p, p.lent_chunk, p.fixed_required_bytes, p.fixed_loan.k,
+                            reserve512_diagnostic ? strata::program::Split26Fixed::hash_entries(restored) : 0, e)) return false;
+                }
+                if (!legacy_loan_witness("restore", p, p.lent_chunk, true, e)) return false;
                 p.lent.clear();
                 p.lent_chunk = 0;
                 return true;
             };
             auto refill_one = [&](PfPart& p, std::string& e) -> bool {
-                if (p.lent.empty()) return true;
+                if (fixed26 ? !p.loan_active : p.lent.empty()) return true;
                 return refill_issue(p, e) && refill_wait(p, e);
             };
             // #340: with several stages every stage's copies go out first (each card on its own link), then each is
@@ -12691,17 +13446,30 @@ int main(int argc, char** argv) {
                 const auto t_rf = Clock::now();
                 int64_t n_lent = 0, n_parts = 0;
                 for (PfPart& p : pf_parts)
-                    if (!p.lent.empty()) { n_lent += (int64_t) p.lent.size(); ++n_parts; }
+                    if (fixed26 ? p.loan_active : !p.lent.empty()) { n_lent += (int64_t) p.lent.size(); ++n_parts; }
                 if (n_parts > 1 && !refill_serial) {
                     for (PfPart& p : pf_parts)
-                        if (!p.lent.empty() && !refill_issue(p, e)) return false;
+                        if ((fixed26 ? p.loan_active : !p.lent.empty()) && !refill_issue(p, e)) return false;
                     for (PfPart& p : pf_parts)
-                        if (!p.lent.empty() && !refill_wait(p, e)) return false;
+                        if ((fixed26 ? p.loan_active : !p.lent.empty()) && !refill_wait(p, e)) return false;
                 } else {
                     for (PfPart& p : pf_parts)
-                        if (!p.lent.empty() && !refill_one(p, e)) return false;
+                        if ((fixed26 ? p.loan_active : !p.lent.empty()) && !refill_one(p, e)) return false;
                 }
-                if (n_parts > 0) res_upload();
+                if (fixed26 && !fixed26_validate(e)) return false;
+                if (n_parts > 0) {
+                    const cudaError_t upload = res_upload();
+                    if ((fixed26 || reserve512.enabled) && upload != cudaSuccess) {
+                        e = "diagnostic: restored device mask publication failed"; return false;
+                    }
+                    if (fixed26 && reserve512_diagnostic) {
+                        std::fprintf(stderr, "split26-publish after_seq=%llu phase=restore status=device-complete active0=%d active1=%d\n",
+                                     (unsigned long long) fixed26_event, int(pf_parts[0].loan_active), int(pf_parts[1].loan_active));
+                        if (std::fflush(stderr) != 0 || std::ferror(stderr)) {
+                            e = "split26: publication witness write failed"; return false;
+                        }
+                    }
+                }
                 if (trace && n_parts > 0) {
                     std::fprintf(stderr, "strata trace: refilled %lld slots on %lld stage(s) in %.1f ms\n",
                                  (long long) n_lent, (long long) n_parts,
@@ -12731,11 +13499,86 @@ int main(int argc, char** argv) {
                     e = "prefill: cannot lend buffers for an empty request segment";
                     return false;
                 }
+                if (fixed26) {
+                    using Plan = strata::program::Split26Fixed;
+                    if (!fixed26_validate(e) || want > 4096) {
+                        if (e.empty()) e = "split26: unsupported request chunk geometry";
+                        return false;
+                    }
+                    std::array<Plan::Loan, 2> next;
+                    std::array<uint64_t, 2> bytes{};
+                    std::array<int64_t, 2> need{};
+                    std::array<bool, 2> reuse{};
+                    for (int st = 0; st < 2; ++st) {
+                        const PfPart& p = pf_parts[st];
+                        bytes[st] = strata::prefill::Prefill::bytes_needed(g, *p.ses, want, srcp != nullptr);
+                        need[st] = part_slots(p, want);
+                        // Validate the ACTUAL computed geometry before refill, relayout, masking or scratch.
+                        if (p.first < 0 || need[st] <= 0 || need[st] > Plan::max_loan ||
+                            (bytes[st] + Plan::stride - 1) / Plan::stride != (uint64_t) need[st] ||
+                            !fixed26_map.plan(st, need[st], next[st], e)) {
+                            if (e.empty()) e = "split26: unsupported actual physical suffix; no fallback";
+                            return false;
+                        }
+                        reuse[st] = p.loan_active && want <= p.lent_chunk;
+                        if (reuse[st] && need[st] > p.fixed_loan.k) {
+                            e = "split26: nonmonotonic need exceeds an active loan; no fallback"; return false;
+                        }
+                    }
+                    // Returning one origin never publishes or refills the other origin's members.
+                    for (int st = 0; st < 2; ++st)
+                        if (pf_parts[st].loan_active && !reuse[st] && !refill_one(pf_parts[st], e)) return false;
+                    for (int st = 0; st < 2; ++st) {
+                        PfPart& p = pf_parts[st];
+                        if (reuse[st]) continue;
+                        p.fixed_loan = std::move(next[st]);
+                        p.fixed_required_bytes = bytes[st];
+                        p.fixed_copied_fnv = 0;
+                        p.first_now = p.fixed_loan.first;
+                        p.lent_chunk = want;
+                        p.loan_active = true;
+                        for (const auto& x : p.fixed_loan.refills) p.lent.emplace_back(x.index(), x.slot);
+                        for (const auto& x : p.fixed_loan.hidden) {
+                            if (host_res[(size_t) x.index()] != x.slot) {
+                                e = "split26: logical hiding source mismatch"; return false;
+                            }
+                            host_res[(size_t) x.index()] = strata::core::kNotResident;
+                        }
+                    }
+                    if (!fixed26_validate(e)) return false;
+                    if (res_upload() != cudaSuccess) { e = "split26: hidden device mask publication failed"; return false; }
+                    if (reserve512_diagnostic) {
+                        std::fprintf(stderr, "split26-publish after_seq=%llu phase=hide status=device-complete active0=%d active1=%d\n",
+                                     (unsigned long long) fixed26_event, int(pf_parts[0].loan_active), int(pf_parts[1].loan_active));
+                        if (std::fflush(stderr) != 0 || std::ferror(stderr)) {
+                            e = "split26: publication witness write failed"; return false;
+                        }
+                    }
+                    for (int st = 0; st < 2; ++st) {
+                        PfPart& p = pf_parts[st];
+                        if (!reuse[st]) {
+                            const strata::core::OnDevice on(p.dev);
+                            int actual_device = -1;
+                            if (cudaGetDevice(&actual_device) != cudaSuccess || actual_device != (p.dev < 0 ? 0 : p.dev)) {
+                                e = "split26: relayout on wrong or unavailable device"; return false;
+                            }
+                            if (!p.sp->relayout(want, p.cache->device_slot(p.first_now),
+                                                part_bytes(p, p.first_now), e)) return false;
+                        }
+                        if (!fixed26_witness(reuse[st] ? "reuse" : "lend", p, want, bytes[st], need[st], 0, e))
+                            return false;
+                        seg_lend = std::max(seg_lend, p.lent_chunk);
+                    }
+                    return true;
+                }
                 bool any = false;
                 for (PfPart& p : pf_parts) {
                     if (p.first < 0) continue;
                     if (!p.lent.empty()) {
-                        if (want <= p.lent_chunk) continue;            // its current loan already covers this
+                        if (want <= p.lent_chunk) {
+                            if (!legacy_loan_witness("reuse", p, want, false, e)) return false;
+                            continue;  // its current loan already covers this
+                        }
                         // ONLY this participant's loan goes back: `refill` would return the other participants'
                         // loans too, and their buffers are still laid out in their caches - marking those slots
                         // resident again would hand the next window a prompt buffer in place of an expert
@@ -12784,10 +13627,16 @@ int main(int argc, char** argv) {
                             }
                         }
                     p.lent_chunk = want_p;
+                    if (!legacy_loan_witness("lend", p, want_p, false, e)) return false;
                 }
                 for (const PfPart& p : pf_parts)
                     if (p.first >= 0) seg_lend = std::max(seg_lend, p.lent_chunk);
-                if (any) res_upload();
+                if (any) {
+                    const cudaError_t upload = res_upload();
+                    if (reserve512.enabled && upload != cudaSuccess) {
+                        e = "split27: hidden device mask publication failed"; return false;
+                    }
+                }
                 if (trace) {
                     int64_t n_lent = 0;
                     for (const PfPart& p : pf_parts) n_lent += (int64_t) p.lent.size();
@@ -14717,7 +15566,15 @@ int main(int argc, char** argv) {
                         (double) (src.file_read_bytes() - file_bytes0) / 1e6, (long long) read_n,
                         (long long) req_offload, chain_txt, (long long) req_chunk,
                         (long long) (sp.chain_experts_streamed() - streamed0));
-            std::fflush(stdout);
+            const int done_flush = std::fflush(stdout);
+            if (reserve512.enabled && (done_flush != 0 || std::ferror(stdout))) {
+                std::fprintf(stderr, "FAIL split26-reserve DONE write failed\n");
+                return 1;
+            }
+            if (!reserve512.after_done(admit_slot < 0 && !cancelled && std::strcmp(finish, "length") == 0, err)) {
+                std::fprintf(stderr, "FAIL strata serve: %s\n", err.c_str());
+                return 1;
+            }
             if (admit_slot >= 0) {   // --batch: BADM <slot> <1 = continues in the batch windows | 0 = done>
                 bool cont = !cancelled && produced_n == 1 && admit_max_new > 1 && std::strcmp(finish, "length") == 0 &&
                             (int64_t) live.size() == p;

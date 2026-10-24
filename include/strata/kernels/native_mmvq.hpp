@@ -50,6 +50,26 @@ void native_swiglu_quantize_q8_1(const float* gate, const float* up, void* x_q8_
 void native_q5_k_mmvq(const void* weights, const void* x_q8_1, float* y,
                       int n_in, int n_out, int ncols, void* stream);
 
+// The exact component selector (including the startup-cached wave policy), without a launch.
+bool native_q5_k_mtp_head_indexed_available();
+
+// Indexed MTP head component; an opt-in production caller must satisfy the same contract.
+// Only raw Q5_K [n_in=2560, n_source_rows=248320], n_out=106299, ncols=1;
+// gfx906 wave64 with STRATA_GFX906_Q5_HEAD_R2=1 and STRATA_MMVQ_WAVE!=0.
+// weights contains the full immutable native head, not the gathered shortlist.
+// source_row_ids contains exactly n_out immutable 32-bit device IDs in the
+// ORIGINAL shortlist order. Before upload/capture, the harness must validate
+// length, uniqueness and every ID in [0,n_source_rows). Qualification additionally
+// pins the canonical vocabulary hash externally. This enqueue-only API does not inspect device ID values or allocation
+// sizes. y[row] preserves the original shortlist coordinate and tie ordering.
+// All buffers must be non-overlapping, on the stream's device, sufficiently
+// sized, and alive (with weights/IDs unchanged) through stream/graph completion.
+// Throws on unsupported shape/backend/device/selector or null/misaligned
+// pointer/stream. No fallback, allocation, gather, quantization or synchronization.
+void native_q5_k_mtp_head_indexed_component(
+        const void* weights, const void* x_q8_1, float* y, const int* source_row_ids,
+        int n_in, int n_source_rows, int n_out, int ncols, void* stream);
+
 // Convenience composition: caller owns scratch sized by native_q8_1_bytes.
 void native_q5_k_f32(const void* weights, const float* x, void* scratch_q8_1,
                      float* y, int n_in, int n_out, int ncols, void* stream);

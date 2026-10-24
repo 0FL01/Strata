@@ -66,6 +66,11 @@ public:
     /// --mtp-draft-vocab FILE (opt-in; before bind): the draft head's token subset from FILE instead of
     /// rt/draft_vocab.bin (e.g. data/draft_vocab_en.bin, 40K tokens)
     void set_draft_vocab(const std::string& path) { dvocab_path_ = path; }
+    /// Internal startup scope: only --serve's immutable last-stage head, no alias/reload or slot drafters.
+    /// STRATA_MTP_HEAD_BORROW=1 additionally opts in; all other callers retain the copied head.
+    void set_head_borrow_scope(bool on) { head_borrow_scope_ = on; }
+    /// After all startup free-memory decisions, before READY. No-op on the unchanged copied path.
+    bool release_head_borrow_reservation(std::string& err);
     /// STRATA_MTP_TOP2=1 (diagnostic): draft j's runner-up token in the last draft() (-1 = unknown)
     static bool top2_env();
     int32_t top2(int j) const { return j >= 0 && j < (int) top2_.size() ? top2_[(size_t) j] : -1; }
@@ -168,6 +173,7 @@ public:
     }
 
 private:
+    bool audit_head_borrow_memory(const char* phase, std::string& err) const;
     bool record_forward(int T, int step_row0, cudaStream_t cs, std::string& err);
     /// The layer's front for T rows at step rows [row0, +T): the embedding, the fc projections, the attention
     /// hyper-connection read (R_, inj_, mixed_) and the K/V appended.
@@ -249,6 +255,10 @@ private:
     // Slot drafters borrow immutable weights and head; each still owns its state and scratch.
     bool owns_weights_ = true;
     bool owns_draft_head_ = true;
+    bool owns_draft_vocab_ = true;  ///< independent: the indexed head borrows weights but owns its original-order map
+    bool head_borrow_scope_ = false, head_borrowed_ = false;
+    void* head_borrow_reservation_ = nullptr;
+    uint64_t head_borrow_reservation_bytes_ = 0;
     void* state_arena_ = nullptr;
     QsaState st_;
     void* arena_ = nullptr;

@@ -9,6 +9,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <deque>
+#include <type_traits>
 #include <utility>
 #include <vector>
 
@@ -51,6 +52,17 @@ struct ConversationCheckpoint {
         return n;
     }
 };
+
+// Cold-park ownership transfer must preserve the compact copy's capacity-based charge.
+inline bool conversation_checkpoint_payload_compact(const ConversationCheckpoint& c) {
+    for (const auto* p : {&c.gdn, &c.ple, &c.tails, &c.dead, &c.block_pos})
+        if (p->capacity() != p->size()) return false;
+    return std::all_of(c.stage_parts.begin(), c.stage_parts.end(), conversation_checkpoint_payload_compact);
+}
+inline void conversation_checkpoint_payload_swap(ConversationCheckpoint& a, ConversationCheckpoint& b) noexcept {
+    a.gdn.swap(b.gdn); a.ple.swap(b.ple); a.tails.swap(b.tails);
+    a.dead.swap(b.dead); a.block_pos.swap(b.block_pos);
+}
 
 // Identity-layout K/V pages and completed indexer rows. For streamed layers the
 // source is the authoritative host pool, NOT the replaceable VRAM slots.
@@ -424,8 +436,14 @@ public:
         if (!enabled() || held > budget_ || n > budget_ - held) return false;   // make_room's refusal, first
         drop_superseded(image.live.ids, image.live.imgs, image.checkpoints, image.cvec);
         if (!make_room(n, held)) return false;
-        entries_.push_back(std::move(image));
-        serials_.push_back(next_serial_++);
+        static_assert(std::is_nothrow_move_assignable_v<SavedConversation>);
+        static_assert(std::is_nothrow_move_constructible_v<ConversationCheckpoint>);
+        // Allocate both publication slots before consuming the caller's rollback image.
+        entries_.emplace_back();
+        try { serials_.push_back(next_serial_); }
+        catch (...) { entries_.pop_back(); throw; }
+        entries_.back() = std::move(image);
+        ++next_serial_;
         bytes_ += n;
         return true;
     }

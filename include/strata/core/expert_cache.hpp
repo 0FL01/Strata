@@ -26,6 +26,8 @@
 #include <cstdint>
 #include <memory>
 #include <string>
+#include <stdexcept>
+#include <utility>
 #include <vector>
 
 #include "strata/core/vmm.hpp"
@@ -100,6 +102,24 @@ public:
     const uint64_t* slot_offsets() const { return off_.empty() ? nullptr : off_.data(); }
     void close();
 
+    /// Import a physical slot plan into an empty, open, non-elastic cache with uniform blob-sized slots
+    /// and no guard. {-1,-1} is a permanent hole. Variable-sized slot geometry is not supported.
+    /// Live identities must be unique and belong to [layer_begin, layer_end). Import does not publish hits:
+    /// every live slot must first be copied through fill_fixed_slot_blocking, then seal_fixed_map.
+    bool import_fixed_map(const std::vector<std::pair<int32_t, int32_t>>& slots,
+                          int64_t layer_begin, int64_t layer_end, std::string& err);
+    bool fixed_map() const { return fixed_map_; }
+    bool fixed_sealed() const { return fixed_sealed_; }
+    /// Invalid slots and holes return {-1,-1}; this plan is visible before residency is published.
+    std::pair<int32_t, int32_t> fixed_identity(int32_t slot) const;
+    /// Preparation only: copies exactly the imported identity's full payload, blocking until complete.
+    /// Rejects calls after sealing. A positive bytes value
+    /// must equal the slot's payload size; 0 selects that size (not alignment, guard, or another slot's size).
+    bool fill_fixed_slot_blocking(int32_t slot, int64_t layer, int64_t expert,
+                                  const uint8_t* host_blob, std::string& err, int64_t bytes = 0);
+    /// Publish precisely the imported live identities, only after every live payload copy completed.
+    bool seal_fixed_map(std::string& err);
+
     bool valid() const { return base_ != nullptr; }
     /// The slots usable now: all of them, unless `shrink` gave the tail's VRAM back (#533) - then the ones wholly
     /// inside the VRAM still backed, always a prefix.  The prompt path's loan (the last slots) and every report
@@ -107,8 +127,11 @@ public:
     int64_t slots() const { return live_slots_; }
     int64_t full_slots() const { return slots_; }
     /// Slots actually claimed.  Not the same as `slots()` - the cache does not evict, so a run that routes
-    /// fewer distinct experts than there are slots leaves the rest empty.
-    int64_t resident() const { return per_layer_ ? admitted_ : next_free_; }
+    /// fewer distinct experts than there are slots leaves the rest empty. Fixed maps report 0 before sealing,
+    /// then the number of live identities, excluding permanent physical holes.
+    int64_t resident() const {
+        return fixed_map_ ? (fixed_sealed_ ? fixed_resident_ : 0) : (per_layer_ ? admitted_ : next_free_);
+    }
     /// The bytes of `slots()` (all of the arena unless shrunk); `full_bytes()`: of every slot.
     int64_t bytes() const { return slot_end(live_slots_); }
     int64_t full_bytes() const { return slot_end(slots_); }
@@ -121,12 +144,18 @@ public:
     /// plan's pointers and the prompt path's loan all hold addresses into it).  0 (the default): one cudaMalloc, as
     /// always.  CUDA only: a HIP build refuses it at open.  The slots past `slots()` after a shrink must hold no
     /// resident expert and no loan: the CALLER evicts them first (they become CPU misses).
-    void set_segment_bytes(int64_t seg_bytes) { seg_req_ = seg_bytes > 0 ? seg_bytes : 0; }
+    void set_segment_bytes(int64_t seg_bytes) {
+        if (fixed_map_) throw std::logic_error("ExpertCache::set_segment_bytes: fixed map is immutable");
+        seg_req_ = seg_bytes > 0 ? seg_bytes : 0;
+    }
     /// STRATA_MMQ_DIRECT: `open_sized` leaves at least `g` bytes of room after each slot's blob (the prompt MMQ
     /// reads a little past a down matrix when it reads an expert in its slot).  Set before opening, like
     /// `set_segment_bytes`; `close` keeps it.  0 (the default): no guard.  The uniform `open` ignores it, and so does
     /// the SYCL engine's open_sized (its slots then have no guard, and `slot_tail` finds no room).
-    void set_slot_guard(int64_t g) { guard_req_ = g > 0 ? g : 0; }
+    void set_slot_guard(int64_t g) {
+        if (fixed_map_) throw std::logic_error("ExpertCache::set_slot_guard: fixed map is immutable");
+        guard_req_ = g > 0 ? g : 0;
+    }
     /// The guard the open slots were laid out with: what `open_sized` applied (0 for uniform slots, when closed, and
     /// on SYCL, whose open_sized applies none).
     int64_t slot_guard() const { return guard_; }
@@ -157,8 +186,9 @@ public:
     /// sweep) and a placeholder policy would set the hit rate that everything downstream is then sized against.
     int32_t admit(int64_t layer, int64_t expert);
 
-    /// Publish a same-layer replacement after its slot copy has completed.
+    /// Publish a same-layer replacement after its slot copy has completed. Fixed maps throw std::logic_error.
     void replace(int64_t layer, int32_t old_expert, int32_t new_expert) {
+        if (fixed_map_) throw std::logic_error("ExpertCache::replace: fixed map is immutable");
         auto& old = residency_[(size_t) layer * n_expert_ + old_expert];
         residency_[(size_t) layer * n_expert_ + new_expert] = old;
         old = kNotResident;
@@ -180,7 +210,11 @@ public:
     /// layer taking the remainder.  **EVICTION IS STILL ABSENT** - the property the comment above calls
     /// deliberate is preserved exactly; only WHICH slot a layer may take changes.  Default off, so every
     /// caller that predates this flag is bit-for-bit unaffected.
-    void set_per_layer_admission(bool on) { per_layer_ = on; }
+    /// Changing this policy after fixed-map import throws std::logic_error.
+    void set_per_layer_admission(bool on) {
+        if (fixed_map_) throw std::logic_error("ExpertCache::set_per_layer_admission: fixed map is immutable");
+        per_layer_ = on;
+    }
     bool per_layer_admission() const { return per_layer_; }
     /// The slot range layer `l` may admit into under per-layer admission.  Exposed so a test can check it.
     void layer_slot_range(int64_t layer, int64_t& lo, int64_t& hi) const;
@@ -192,6 +226,7 @@ public:
     /// Copies `(layer, expert)`'s blob from `host_blob` into `slot` on `stream`.  Asynchronous: the caller
     /// orders it.  Returns false if the indices are out of range rather than reading past the arena.
     /// `bytes` (plan v0.3 P6): the blob's own size when it is smaller than the slot (a native pack); 0 = the slot.
+    /// In fixed mode, untyped fills require a sealed live slot and its complete payload (0 selects its size).
     bool fill_slot(int32_t slot, const uint8_t* host_blob, void* stream, std::string& err, int64_t bytes = 0);
 
     /// **THE SAME COPY, BUT BLOCKING, AND THE PROFILE FILL NEEDS IT.**  `fill_slot` is asynchronous because on
@@ -234,6 +269,15 @@ public:
     }
 
 private:
+    bool validate_fixed_fill(int32_t slot, int64_t& bytes, std::string& err, bool preparation = false) const;
+    bool fill_slot_blocking_impl(int32_t slot, const uint8_t* host_blob, std::string& err,
+                                 int64_t bytes, bool fixed_preparation);
+    bool fixed_map_ = false;
+    bool fixed_sealed_ = false;
+    int64_t fixed_resident_ = 0;
+    std::vector<std::pair<int32_t, int32_t>> fixed_slots_;
+    std::vector<uint8_t> fixed_copied_;
+    std::vector<int32_t> fixed_pending_residency_;
 #if defined(STRATA_USE_HIP)
     bool ensure_blocking_staging(std::size_t bytes, std::string& err);
     uint8_t* blocking_staging_ = nullptr;

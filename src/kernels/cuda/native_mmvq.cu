@@ -1849,6 +1849,43 @@ __global__ void native_mmvq_wave_kernel(const typename F::Block* __restrict__ w,
             if (lane == 0 && row0 + i < n_out) y[std::size_t(j) * n_out + row0 + i] = v;
         }
 }
+// Indexed MTP head component only. Existing wave kernel and dispatch stay unchanged.
+template<typename F, int NCOLS, int R>
+__launch_bounds__(256)
+__global__ void native_q5_k_mtp_head_indexed_wave_kernel(const typename F::Block* __restrict__ w, const Q81Block* __restrict__ x,
+                                        float* __restrict__ y, const int* __restrict__ source_row_ids,
+                                        int n_in, int n_out) {
+    constexpr int BPIW = 64 / F::T;
+    static_assert(64 % F::T == 0, "a block's threads must tile the wavefront");
+    const int lane = int(threadIdx.x) & 63;
+    const int row0 = (int(blockIdx.x) * 4 + (int(threadIdx.x) >> 6)) * R;
+    if (row0 >= n_out) return;
+    const int blocks_per_row = n_in / F::DIV;
+    const int x_stride = n_in / Q8K;
+    const int kqs = F::kqs(lane);
+    float tmp[NCOLS][R] = {};
+    for (int kbx = lane / F::T; kbx < blocks_per_row; kbx += BPIW) {
+        const int kby = kbx * F::KBY;
+#pragma unroll
+        for (int i = 0; i < R; ++i) {
+            if (row0 + i < n_out) {
+                const typename F::W wv = F::load(w + std::size_t(source_row_ids[row0 + i]) * blocks_per_row + kbx, kqs);
+#pragma unroll
+                for (int j = 0; j < NCOLS; ++j) tmp[j][i] += F::apply(wv, x + std::size_t(j) * x_stride + kby, kqs);
+            }
+        }
+    }
+#pragma unroll
+    for (int j = 0; j < NCOLS; ++j)
+#pragma unroll
+        for (int i = 0; i < R; ++i) {
+            float v = tmp[j][i];
+#pragma unroll
+            for (int off = 32; off > 0; off >>= 1) v += __shfl_xor(v, off, 64);
+            if (lane == 0 && row0 + i < n_out) y[std::size_t(j) * n_out + row0 + i] = v;
+        }
+}
+
 template<typename F, int NCOLS, int R = 1>
 void wave_launch_n(const void* weights, const void* x_q8_1, float* y, int n_in, int n_out, cudaStream_t s) {
     const auto* w = static_cast<const typename F::Block*>(weights);
@@ -1887,6 +1924,22 @@ bool q5_head_r2_enabled() {
     }
     return eligible;
 }
+bool q8_output_r2_enabled() {
+    const char* e = std::getenv("STRATA_GFX906_Q8_OUT_R2");
+    if (!e || std::string(e) != "1") return false;
+    int dev = -1;
+    if (cudaGetDevice(&dev) != cudaSuccess) return false;
+    static thread_local int cached_dev = -1;
+    static thread_local bool eligible = false;
+    if (cached_dev != dev) {
+        cudaDeviceProp p{};
+        if (cudaGetDeviceProperties(&p, dev) != cudaSuccess) return false;
+        const std::string arch(p.gcnArchName);
+        eligible = p.warpSize == 64 && (arch == "gfx906" || arch.rfind("gfx906:", 0) == 0);
+        cached_dev = dev;
+    }
+    return eligible;
+}
 #define STRATA_WAVE_MMVQ(...) \
     if (!g_wave_off) { wave_launch<__VA_ARGS__>(weights, x_q8_1, y, n_in, n_out, ncols, stream); launch_check(); return; }
 #else
@@ -1902,6 +1955,21 @@ void small_mmvq(const void* weights, const void* x_q8_1, float* y,
     validate_pointer(x_q8_1);
     validate_pointer(y);
     validate_stream(stream);
+#if defined(STRATA_HIP_GFX906)
+    // Exact Q8_0 output projections: two adjacent rows per wave, unchanged
+    // lane/K assignment and XOR64 reduction for each row. Opt-in, T1/2 only.
+    if constexpr (std::is_same_v<Weight, Q80Block> && Qi == 8) {
+        if (!g_wave_off && n_in == 6144 && n_out == 2560 && (ncols == 1 || ncols == 2) &&
+            q8_output_r2_enabled()) {
+            using F = SmallTraits<Q80Block, 8>;
+            const auto s = static_cast<cudaStream_t>(stream);
+            if (ncols == 1) wave_launch_n<F, 1, 2>(weights, x_q8_1, y, n_in, n_out, s);
+            else wave_launch_n<F, 2, 2>(weights, x_q8_1, y, n_in, n_out, s);
+            launch_check();
+            return;
+        }
+    }
+#endif
     STRATA_WAVE_MMVQ(SmallTraits<Weight, Qi>)
     if (ncols > 1) {
         launch_multi<SmallTraits<Weight, Qi>>(weights, x_q8_1, y, n_in, n_out, ncols, stream);
@@ -2430,6 +2498,43 @@ void native_q5_k_mmvq(const void* weights, const void* x_q8_1, float* y,
         native_q5_k_mmvq_kernel<false><<<unsigned(n_out), threads, 0, s>>>(w, x, y, n_in, n_out);
     }
     launch_check();
+}
+
+bool native_q5_k_mtp_head_indexed_available() {
+#if defined(STRATA_HIP_GFX906)
+    return !g_wave_off && q5_head_r2_enabled();
+#else
+    return false;
+#endif
+}
+
+// This component's device code and launch contract are unchanged by the borrowing caller.
+void native_q5_k_mtp_head_indexed_component(
+        const void* weights, const void* x_q8_1, float* y, const int* source_row_ids,
+        int n_in, int n_source_rows, int n_out, int ncols, void* stream) {
+    static_assert(sizeof(int) == 4, "indexed MTP head requires 32-bit row IDs");
+    if (n_in != 2560 || n_source_rows != 248320 || n_out != 106299 || ncols != 1) {
+        throw std::invalid_argument("indexed MTP head component requires Q5_K shape 2560/248320/106299/T1");
+    }
+    validate_pointer(weights);
+    validate_pointer(x_q8_1);
+    validate_pointer(y);
+    validate_pointer(source_row_ids);
+    validate_stream(stream);
+#if defined(STRATA_HIP_GFX906)
+    if (g_wave_off || !q5_head_r2_enabled()) {
+        throw std::invalid_argument("indexed MTP head component requires gfx906 wave64 and Q5_HEAD_R2=1");
+    }
+    const auto* w = static_cast<const Q5KBlock*>(weights);
+    const auto* x = static_cast<const Q81Block*>(x_q8_1);
+    const auto s = static_cast<cudaStream_t>(stream);
+    const unsigned blocks = unsigned((std::size_t(n_out) + 4 * 2 - 1) / (4 * 2));
+    native_q5_k_mtp_head_indexed_wave_kernel<Q5KTraits, 1, 2><<<blocks, 256, 0, s>>>(
+        w, x, y, source_row_ids, n_in, n_out);
+    launch_check();
+#else
+    throw std::invalid_argument("indexed MTP head component is implemented only for gfx906");
+#endif
 }
 
 void native_q5_k_f32(const void* weights, const float* x, void* scratch_q8_1,
