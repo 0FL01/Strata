@@ -1,3 +1,6 @@
+#if defined(STRATA_HC_BF16_CLONE_BUILT)
+#include "hc_bf16_clone_gate.hpp"
+#endif
 #if defined(STRATA_HC_F16_EXACT_BUILT)
 #include "hc_f16_exact.hpp"
 #endif
@@ -871,6 +874,9 @@ struct Prefill::Impl {
     bool borrowed = false, borrow_spill = false;
     cudaStream_t cs = nullptr, copy = nullptr;
     Gemm gemm;
+#if defined(STRATA_HC_BF16_CLONE_BUILT)
+    bool hc_clone = false;
+#endif
     std::vector<void*> owned;
 #if defined(STRATA_HC_F16_EXACT_BUILT)
     hc_f16_exact::State hc_exact;
@@ -1281,6 +1287,9 @@ bool Prefill::init(const core::WeightTable& wt, const core::ModelGeometry& g, co
         err = "prefill: geometry differs from the artifact's"; return false;
     }
     cudaGetDevice(&m.device);
+#if defined(STRATA_HC_BF16_CLONE_BUILT)
+    m.hc_clone = hc_bf16_clone::qualify(m.device);
+#endif
     if (stage_le_ < 0) stage_le_ = g.n_layers;
     if (stage_lb_ < 0 || stage_lb_ >= stage_le_ || stage_le_ > g.n_layers || (stage_le_ < g.n_layers) != (next_ != nullptr)) {
         err = "prefill: the stage's layer range is wrong";
@@ -2467,6 +2476,17 @@ bool Prefill::run_impl(const int64_t* tokens, int64_t n, int64_t pos0, std::stri
     const bool forced_single = force_single_, forced_planned = force_planned_;
     Impl& m = *impl_;
     const core::OnDevice on_device(m.device);
+#if defined(STRATA_HC_BF16_CLONE_BUILT)
+    uint64_t hc_clone_counts[2] = {};
+    struct CloneReceipt {
+        bool on; int64_t lb, le, n, pos; int device; const uint64_t* counts;
+        ~CloneReceipt() {
+            if (on) std::fprintf(stderr, "STRATA_HC_BF16_CLONE_V1 stage_lb=%lld stage_le=%lld device=%d run_n=%lld pos0=%lld down=%llu up=%llu%c",
+                (long long)lb,(long long)le,device,(long long)n,(long long)pos,
+                (unsigned long long)counts[0],(unsigned long long)counts[1],10);
+        }
+    } hc_clone_receipt{m.hc_clone,stage_lb_,stage_le_,n,pos0,m.device,hc_clone_counts};
+#endif
     const core::ModelGeometry& g = *m.g;
     core::SessionState& ss = *m.ss;
     const auto t_start = Clock::now();
@@ -3067,6 +3087,12 @@ bool Prefill::run_impl(const int64_t* tokens, int64_t n, int64_t pos0, std::stri
                         m.borrowed && !m.borrow_spill && !m.pp && !m.help_pp && !helper_ &&
                         !cpu_share_on() && !hc_upmix() && !split_help_env() && hc_region_geometry(m.g,m.region_bytes,T));
 #endif
+#if defined(STRATA_HC_BF16_CLONE_BUILT)
+                    hc_bf16_clone::Scope clone_scope(m.hc_clone && !hcd && !hdown &&
+                        !m.xn16_lo && !xf16 && !m.f16_io && wd->q8_scale == nullptr &&
+                        wd->kind == core::WeightKind::Bf16InF32,
+                        0,m.device,T,LR,D,m.cs,m.xn16,(const uint16_t*)wd->data,m.lo,hc_clone_counts);
+#endif
                     if (!hcd && !hdown && !bf16_proj(m.gemm, wd, m.xn16, m.lo, T, sd, err, 0, m.xn16_lo, ldx != D ? ldx : 0, m.cs, xf16)) return false;
                 }
                 gr_silu(m.lo, m.lo16, T, m.cs, m.lo16_lo);
@@ -3102,6 +3128,12 @@ bool Prefill::run_impl(const int64_t* tokens, int64_t n, int64_t pos0, std::stri
                     hc_f16_exact::State::RegionView hc_view(m.hc_exact,m.region,m.region_bytes,T,
                         m.borrowed && !m.borrow_spill && !m.pp && !m.help_pp && !helper_ &&
                         !cpu_share_on() && !hc_upmix() && !split_help_env() && hc_region_geometry(m.g,m.region_bytes,T));
+#endif
+#if defined(STRATA_HC_BF16_CLONE_BUILT)
+                    hc_bf16_clone::Scope clone_scope(m.hc_clone && !upmixed &&
+                        !m.lo16_lo && !m.f16_io && wu->q8_scale == nullptr &&
+                        wu->kind == core::WeightKind::Bf16InF32,
+                        1,m.device,T,D,LR,m.cs,m.lo16,(const uint16_t*)wu->data,m.gated,hc_clone_counts);
 #endif
                     if (!upmixed && !bf16_proj(m.gemm, wu, m.lo16, m.gated, T, su, err, 0, m.lo16_lo, 0, m.cs)) return false;
                 }

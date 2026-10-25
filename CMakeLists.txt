@@ -68,6 +68,11 @@ if(STRATA_HIP_GFX906)
   endif()
   set(STRATA_ENABLE_CUDA ON CACHE BOOL "" FORCE)
 endif()
+# Enabled by default only for the measured gfx906 compatibility backend.
+option(STRATA_GFX906_HC_BF16_CLONE "Build the exact-order gfx906 HC BF16 fallback clone" ${STRATA_HIP_GFX906})
+if(STRATA_GFX906_HC_BF16_CLONE AND NOT STRATA_HIP_GFX906)
+  message(FATAL_ERROR "HC BF16 clone requires the gfx906 compatibility backend")
+endif()
 option(STRATA_GFX906_HC_F16_EXACT "Experimental exact-guarded HC down/up (default OFF)" OFF)
 option(STRATA_GFX906_HC_BF16_N4 "Build the experimental opt-in gfx906 BF16 HC injection kernel" OFF)
 if((STRATA_GFX906_HC_BF16_N4 OR STRATA_GFX906_HC_F16_EXACT) AND NOT STRATA_HIP_GFX906)
@@ -259,6 +264,9 @@ target_link_libraries(strata-dequant PRIVATE strata_artifact)
 # this file is now nothing but the CLI entry point, and its inherited guard spells that as a "selftest"
 target_compile_definitions(strata-dequant PRIVATE STRATA_DEQUANT_SELFTEST)
 if(STRATA_BUILD_TESTS)
+  # Host-only selector/shape/provenance gate; available without HIP or a GPU.
+  add_executable(hc_bf16_clone_gate_test tests/core/hc_bf16_clone_gate_test.cpp)
+  add_test(NAME hc_bf16_clone_gate_test COMMAND hc_bf16_clone_gate_test)
   add_executable(logit_bias_test src/core/logit_bias_test.cpp)
   target_include_directories(logit_bias_test PRIVATE include)
   add_test(NAME logit_bias_test COMMAND logit_bias_test)
@@ -704,6 +712,23 @@ if(STRATA_ENABLE_CUDA OR STRATA_ENABLE_HIP)
   # against llama.cpp on the SAME ids and a tokenizer on one side of that comparison is a second variable.
   # plan v0.3 P5: batched prompt processing (tensor-core GEMMs through cuBLAS).
   add_library(strata_prefill STATIC src/prefill/gemm.cu src/prefill/kernels.cu src/prefill/prefill.cpp)
+  if(STRATA_GFX906_HC_BF16_CLONE)
+    if(NOT CMAKE_HIP_ARCHITECTURES STREQUAL "gfx906")
+      message(FATAL_ERROR "HC BF16 clone requires exactly CMAKE_HIP_ARCHITECTURES=gfx906")
+    endif()
+    # Keep the qualified component kernel out of the parent's O3/C++20 translation units.
+    add_library(strata_hc_bf16_clone OBJECT src/prefill/hc_bf16_clone.cu)
+    set_source_files_properties(src/prefill/hc_bf16_clone.cu PROPERTIES LANGUAGE HIP)
+    set_target_properties(strata_hc_bf16_clone PROPERTIES
+      HIP_ARCHITECTURES gfx906 HIP_STANDARD 17 HIP_STANDARD_REQUIRED ON HIP_EXTENSIONS OFF
+      INTERPROCEDURAL_OPTIMIZATION FALSE)
+    target_compile_options(strata_hc_bf16_clone PRIVATE
+      $<$<COMPILE_LANGUAGE:HIP>:-O2> $<$<COMPILE_LANGUAGE:HIP>:-fno-fast-math>)
+    target_sources(strata_prefill PRIVATE $<TARGET_OBJECTS:strata_hc_bf16_clone>)
+    set_property(SOURCE src/prefill/gemm.cu src/prefill/prefill.cpp APPEND PROPERTY
+      COMPILE_DEFINITIONS STRATA_HC_BF16_CLONE_BUILT=1)
+  endif()
+
   if(STRATA_GFX906_HC_F16_EXACT)
     if(NOT STRATA_HIP_GFX906 OR NOT CMAKE_HIP_ARCHITECTURES STREQUAL "gfx906")
       message(FATAL_ERROR "HC F16 exact requires gfx906 compatibility backend and exactly gfx906")

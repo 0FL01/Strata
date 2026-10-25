@@ -1,3 +1,6 @@
+#if defined(STRATA_HC_BF16_CLONE_BUILT)
+#include "hc_bf16_clone_gate.hpp"
+#endif
 #if defined(STRATA_HC_F16_EXACT_BUILT)
 #include "hc_f16_exact.hpp"
 #endif
@@ -1141,6 +1144,13 @@ void Gemm::bf16(const uint16_t* X, const uint16_t* W, float* Y, int64_t T, int64
         }
         return;
     }
+#endif
+#if defined(STRATA_HC_BF16_CLONE_BUILT) && defined(__HIPCC__)
+    bool clone_mode_allowed = true;
+#if defined(STRATA_HC_F16_EXACT_BUILT)
+    clone_mode_allowed = !hc_exact_ || (!hc_exact_->shadow && !hc_exact_->reference_only);
+#endif
+    if (clone_mode_allowed && hc_bf16_clone::dispatch(X,W,Y,stream_,T,N,K,ldy,beta,ldx,x_f16,f16_io_)) return;
 #endif
     // Column-major view: Y^T[N, T] = W[N, K] (stored K x N col-major, transposed) . X^T[K, T].
     ck(cublasGemmEx((cublasHandle_t) handle_, CUBLAS_OP_T, CUBLAS_OP_N, (int) N, (int) T, (int) K, &alpha, W,
