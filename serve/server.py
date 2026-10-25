@@ -3102,6 +3102,37 @@ def slot_save_dir(value, base: str | None = None) -> str:
         raise ValueError(f"slot_save_path {path} is not a directory")
     return path
 
+def reasoning_native_cap_enabled(engine, sampling, embeddings):
+    """Opt-in only for the pinned, greedy, single-request T<=2 native protocol."""
+    if os.environ.get("STRATA_REASONING_NATIVE_CAP") != "1" or embeddings or getattr(engine, "batch", 0):
+        return False
+    temperature = (sampling or {}).get("temperature", 0)
+    if temperature is not None and (type(temperature) not in (int, float) or temperature != 0):
+        return False
+    # sampling_keys enables a penalty history (default window 64) for any non-neutral
+    # penalty; native generation then bypasses pipeline2 and decodes serially.
+    for key, neutral in (("repetition_penalty", 1), ("presence_penalty", 0), ("frequency_penalty", 0)):
+        value = (sampling or {}).get(key, neutral)
+        if type(value) not in (int, float) or value != neutral:
+            return False
+    spawn = getattr(engine, "spawn", None)
+    if not isinstance(spawn, (tuple, list)) or len(spawn) < 2:
+        return False
+    args = spawn[1]
+    if not isinstance(args, (tuple, list)) or not all(isinstance(x, str) for x in args):
+        return False
+    required = {"--pipeline-windows": "2", "--mtp-max-t": "2", "--suffix-draft": "0"}
+    for flag, value in required.items():
+        if args.count(flag) != 1 or any(x.startswith(flag + "=") for x in args):
+            return False
+        i = args.index(flag)
+        if i + 1 >= len(args) or args[i + 1] != value:
+            return False
+    return (args.count("--no-coupled-draft") == 1
+            and not any(x == "--coupled-draft" or x.startswith("--coupled-draft=")
+                        or x.startswith("--no-coupled-draft=") for x in args))
+
+
 class Service:
     def __init__(self, engine: Engine, tokenizer, template: ChatTemplate, model_name: str = "qwen3.8-flash-next",
                  vision: Vision | None = None, sampling_defaults: dict | None = None,
@@ -4336,8 +4367,13 @@ class Service:
                     while True:
                         segment_before = getattr(self.engine, "last", None)
                         segments_before = len(segments)     # (#879: a pass sent again leaves no segment)
-                        gen = self.engine.generate(prompt, max_new - n, sampling, cancel, embeddings=emb) if emb \
-                            else self.engine.generate(prompt, max_new - n, sampling, cancel)
+                        native_cap = (bool(budget) and parser.state == "reasoning"
+                                      and reasoning_native_cap_enabled(self.engine, sampling, emb))
+                        segment_limit = min(max_new - n, max(1, budget - thought)) if native_cap else max_new - n
+                        artificial_cap = native_cap and segment_limit < max_new - n
+                        exhausted = False
+                        gen = self.engine.generate(prompt, segment_limit, sampling, cancel, embeddings=emb) if emb \
+                            else self.engine.generate(prompt, segment_limit, sampling, cancel)
                         recover_prompt = None
                         seg, wrap, leaving = [], False, False   # this pass's tokens; the budget is reached; closed
                         nonfinite = False               # #879: the engine ended this pass on non-finite logits
@@ -4354,6 +4390,8 @@ class Service:
                                     last_out = time.perf_counter()
                                     yield "ping", None
                                     continue
+                                if native_cap and len(seg) >= segment_limit:
+                                    raise ValueError("reasoning native cap: engine exceeded the segment limit")
                                 n += 1
                                 if trace is not None and trace["first_token_s"] is None:
                                     with self.status_lock:
@@ -4410,6 +4448,10 @@ class Service:
                                     # at a clean point: no tag held back, no character split across tokens
                                     if thought >= budget and not parser.buf and not detok.pending():
                                         wrap = True
+                                        if native_cap and len(seg) == segment_limit:
+                                            # Read DONE, not STOP: closing a suspended native generator drains
+                                            # a speculative window beyond the frontend's delivered prefix.
+                                            continue
                                         break
                                 if force:
                                     if any(ev.kind in ("tool_start", "tool_call") for ev in evs):
@@ -4417,6 +4459,8 @@ class Service:
                                     elif parser.state == "content" and not parser.buf and not detok.pending():
                                         opens = True
                                         break
+                            else:
+                                exhausted = True
                         except EngineNonFinite:
                             nonfinite = True
                         except EngineDied as e:
@@ -4443,6 +4487,28 @@ class Service:
                             segment_done = getattr(self.engine, "last", None)
                             if segment_done is not None and segment_done is not segment_before:
                                 segments.append(dict(segment_done))
+                        if native_cap:
+                            fresh_done = segment_done is not None and segment_done is not segment_before
+                            print(f"[strata] reasoning_native_cap segment={len(segments)} limit={segment_limit} "
+                                  f"delivered={len(seg)} fresh_done={int(fresh_done)} exhausted={int(exhausted)} "
+                                  f"finish={segment_done.get('finish') if fresh_done else 'missing'}", flush=True)
+                        if native_cap and exhausted and not cancel.is_set():
+                            # Only a fresh native length DONE proves an artificial boundary. EOS at the
+                            # same token count is terminal; absent/stale/malformed DONE must not loop.
+                            if segment_done is None or segment_done is segment_before:
+                                raise ValueError("reasoning native cap: missing fresh DONE")
+                            native_finish = segment_done.get("finish")
+                            if native_finish == "stop":
+                                finish, wrap = "stop", False
+                            elif native_finish != "length" or not seg or len(seg) != segment_limit or (
+                                    type(segment_done.get("generated")) is not int
+                                    or segment_done["generated"] != len(seg)):
+                                raise ValueError("reasoning native cap: invalid length DONE or no progress")
+                            elif (artificial_cap and not (wrap or opens or repeated or looped or nonfinite)
+                                  and recover_prompt is None and finish == "length"
+                                  and (stops is None or stops.hit is None) and n < max_new):
+                                prompt = prompt + seg
+                                continue
                         if nonfinite and not cancel.is_set():
                             # #879: the engine emitted none of the poisoned window's tokens and reads its next prompt
                             # from token 0.  Nothing sent yet: the same request once more, unseen by the client
