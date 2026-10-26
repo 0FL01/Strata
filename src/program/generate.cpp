@@ -99,7 +99,6 @@
 #include <io.h>
 #else
 #include <unistd.h>
-#include <cerrno>
 #include <sys/stat.h>
 #if !defined(__APPLE__)   // major() / minor(): <sys/types.h> on macOS
 #include <sys/sysmacros.h>
@@ -127,6 +126,7 @@ namespace strata::metal_engine { void set_model_shard(const char* shard1); }   /
 #include <optional>
 #include <new>
 #include <charconv>
+#include <cerrno>
 #include <cmath>
 #include <limits>
 #include <cstdio>
@@ -1216,6 +1216,24 @@ void extra_sources_reset() {
 }
 void extra_sources_append(const int32_t* t, size_t n) {
     for (auto& src : strata::spec::extra_draft_sources()) src->append(t, n);
+}
+
+// Validate untrusted lengths before addition, narrowing, vision setup, or reserve.
+bool gen_request_fits_context(size_t prompt_tokens, long long max_new, int64_t max_context) {
+    return prompt_tokens > 0 && max_new >= 1 && max_context > 8 &&
+           max_new <= max_context - 8 &&
+           prompt_tokens <= (uint64_t) (max_context - 8 - max_new);
+}
+
+bool gen_request_reserve(size_t prompt_tokens, long long max_new, int window,
+                         size_t capacity, size_t& reserve_tokens) {
+    if (max_new < 1 || window < 0 || prompt_tokens > capacity) return false;
+    const uint64_t output = (uint64_t) max_new;
+    if (output > capacity - prompt_tokens) return false;
+    const size_t total = prompt_tokens + (size_t) output;
+    if ((size_t) window > capacity - total) return false;
+    reserve_tokens = total + (size_t) window;
+    return true;
 }
 
 bool parse_i64_list(const char* s, std::vector<int64_t>& out, std::string& err) {
@@ -12066,10 +12084,22 @@ int main(int argc, char** argv) {
             if (line.rfind("BGEN ", 0) == 0 || line.rfind("BGENI ", 0) == 0) {
                 const bool bimg = line.rfind("BGENI ", 0) == 0;
                 char* e1 = nullptr;
-                const long b = std::strtol(line.c_str() + (bimg ? 6 : 5), &e1, 10);
+                const char* const slot_begin = line.c_str() + (bimg ? 6 : 5);
+                errno = 0;
+                const long b = std::strtol(slot_begin, &e1, 10);
+                const bool slot_parse_error = errno == ERANGE || e1 == slot_begin;
                 char* e2 = nullptr;
+                errno = 0;
                 const long long mn = std::strtoll(e1, &e2, 10);
-                if (bs.empty() || b < 0 || b >= (long) bs.size() || bs[(size_t) b].active || mn < 1 || e2 == e1) {
+                const bool budget_parse_error = errno == ERANGE || e2 == e1;
+                // Permanent bad lengths must not use the retryable BGEN: prefix.
+                if (slot_parse_error || budget_parse_error || mn < 1 ||
+                    !gen_request_fits_context(1, mn, o.max_context)) {
+                    std::printf("ERR bad request: batch slot or max_new\n");
+                    std::fflush(stdout);
+                    continue;
+                }
+                if (bs.empty() || b < 0 || (uint64_t) b >= bs.size() || bs[(size_t) b].active) {
                     std::printf("ERR BGEN: no such free slot (--batch %d) or a bad max_new\n", o.batch);
                     std::fflush(stdout);
                     continue;
@@ -12356,7 +12386,10 @@ int main(int argc, char** argv) {
                 continue;
             }
             char* endp = nullptr;
-            const long long max_new = std::strtoll(line.c_str() + (geni ? 5 : 4), &endp, 10);
+            const char* const max_new_begin = line.c_str() + (geni ? 5 : 4);
+            errno = 0;
+            const long long max_new = std::strtoll(max_new_begin, &endp, 10);
+            const bool max_new_parse_error = errno == ERANGE || endp == max_new_begin;
             // optional sampling keys between max_new and the ids: temperature=F, top_p=F, top_k=N, min_p=F,
             // penalty_last_n=N, penalty_repeat=F, penalty_freq=F, penalty_present=F, seed=N (text requests
             // only).  Absent keys keep today's behavior: greedy, no penalties.
@@ -12432,7 +12465,6 @@ int main(int argc, char** argv) {
                     // unknown keys are skipped: the ids start at the first token without '='
                 }
             }
-            strata::prefill::Prefill::set_pipe_request(req_pipe);   // every request sets it: none carries over
             std::vector<float> req_bias;
             std::string bias_error;
             if (req_bias_present && (o.batch > 0 ||
@@ -12448,11 +12480,21 @@ int main(int argc, char** argv) {
             }
             std::vector<int64_t> ids;
             std::string pe;
-            if (max_new < 1 || endp == nullptr || (geni && emb_path.empty()) || !parse_i64_list(endp, ids, pe)) {
+            if (max_new_parse_error || max_new < 1 || endp == nullptr || (geni && emb_path.empty()) || !parse_i64_list(endp, ids, pe)) {
                 std::printf("ERR bad request: %s\n", pe.empty() ? "max_new" : pe.c_str());
                 continue;
             }
+            // BGEN's GEN 1 is only its admission step, not its full output budget.
+            const long long request_max_new = admit_slot >= 0 ? admit_max_new : max_new;
+            size_t consumed_reserve = 0;
+            if (!gen_request_fits_context(ids.size(), request_max_new, o.max_context) ||
+                !gen_request_reserve(ids.size(), max_new, S, std::vector<int32_t>().max_size(), consumed_reserve)) {
+                std::printf("ERR prompt (%zu tokens) + max_new (%lld) exceeds the context (%lld) or capacity\n",
+                            ids.size(), request_max_new, (long long) o.max_context);
+                continue;
+            }
             const int64_t n = (int64_t) ids.size();
+            strata::prefill::Prefill::set_pipe_request(req_pipe);   // every request sets it: none carries over
             req_imgs.clear();
             if (geni && !o.vision) { std::printf("ERR this engine was started without --vision\n"); continue; }
             if (geni || !mrope_identity) {
@@ -12548,11 +12590,6 @@ int main(int argc, char** argv) {
                 mrope_identity = !geni;
             }
             sp.embd_rows = geni ? row_ptr.data() : nullptr;
-            if (n + max_new + 8 > o.max_context) {
-                std::printf("ERR prompt (%lld tokens) + max_new (%lld) exceeds the context (%lld)\n", (long long) n,
-                            (long long) max_new, (long long) o.max_context);
-                continue;
-            }
             bool bad = false;
             for (int64_t t : ids) bad = bad || t < 0 || t >= n_vocab;
             if (bad) { std::printf("ERR a token id is outside the vocabulary\n"); continue; }
@@ -14420,7 +14457,7 @@ int main(int argc, char** argv) {
             int64_t draft_offered = 0, draft_accepted = 0;
             // what the session holds once this request is done: the prompt read so far, then every committed token
             std::vector<int32_t> consumed;
-            consumed.reserve((size_t) (n + max_new + S));
+            consumed.reserve(consumed_reserve);
             for (int64_t i = 0; i < p; ++i) consumed.push_back((int32_t) ids[(size_t) i]);
             const char* finish = "length";
             const Clock::time_point d0 = Clock::now();
