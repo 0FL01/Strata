@@ -76,6 +76,7 @@
 #include "strata/program/split_ring.hpp"
 #include "strata/program/draft_kv_plan.hpp"
 #include "strata/program/pipeline_shape_plan.hpp"
+#include "strata/program/pending_prefix.hpp"
 #include "strata/program/message_boundary.hpp"
 #include "strata/spec/draft_policy.hpp"
 #include "strata/spec/draft_source.hpp"
@@ -12548,6 +12549,14 @@ int main(int argc, char** argv) {
                 mrope_identity = !geni;
             }
             sp.embd_rows = geni ? row_ptr.data() : nullptr;
+            const bool pending_prefix_requested = strata::program::pending_prefix::requested(
+                std::getenv("STRATA_PIPELINE_PENDING_PREFIX"));
+            int64_t pending_prefix_limit = 0;
+            if (pending_prefix_requested &&
+                !strata::program::pending_prefix::checked_limit(n, max_new, o.max_context, pending_prefix_limit)) {
+                std::printf("ERR pending-prefix request exceeds the context or has invalid lengths\n");
+                continue;
+            }
             if (n + max_new + 8 > o.max_context) {
                 std::printf("ERR prompt (%lld tokens) + max_new (%lld) exceeds the context (%lld)\n", (long long) n,
                             (long long) max_new, (long long) o.max_context);
@@ -14469,6 +14478,12 @@ int main(int argc, char** argv) {
             }
             if (pl_want && pl_serial == nullptr && !cancelled && produced_n < max_new) {
                 pl_ran = true;
+                const bool pl_pending_prefix = strata::program::pending_prefix::eligible(
+                    pending_prefix_requested, !geni, o.batch, pl_pw, S_mtp, merge_T,
+                    o.suffix_draft, o.lookup_chain, mtp.coupled(), hist_n);
+                if (pl_pending_prefix)
+                    std::fprintf(stderr, "strata serve: pending-prefix active limit=%lld\n",
+                                 (long long) pending_prefix_limit);
                 const uint32_t prompt_shapes[2] = {0, 0};
                 const auto shapes = strata::program::pipeline_shape_plan(pl_shape_eligible, S, S_mtp, o.suffix_draft, prompt_shapes);
                 if (!pl_prepare(shapes, err)) {
@@ -14596,8 +14611,12 @@ int main(int argc, char** argv) {
                     if (base >= avail) return;
                     B.seq = A.seq + 1;
                     B.p = A.p + A.T;
-                    B.tok[0] = oc[base];
                     B.T = t_rule(op, base + 1, avail);
+                    if (pl_pending_prefix) {
+                        B.T = strata::program::pending_prefix::width(pending_prefix_limit, B.p, B.T);
+                        if (B.T == 0) { B = PW{}; return; }
+                    }
+                    B.tok[0] = oc[base];
                     for (int i = 1; i < B.T; ++i) {
                         B.tok[i] = oc[base + i];
                         B.prob[i - 1] = op[base + i];
@@ -14822,6 +14841,10 @@ int main(int argc, char** argv) {
                                     A.prob[i - 1] = mtp.chain_prob()[i - 1];
                                 }
                                 pick_lookup(A, mtp.chain_tok());
+                                if (pl_pending_prefix) {
+                                    A.T = strata::program::pending_prefix::width(pending_prefix_limit, A.p, A.T);
+                                    if (A.T == 0) return die("pending-prefix: fresh window outside output budget");
+                                }
                                 A.ready = true;
                                 early_used = true;
                                 tre("CE", A.seq, A.T);
@@ -14839,6 +14862,10 @@ int main(int argc, char** argv) {
                                 A.prob[i - 1] = op[i - 1];
                             }
                             pick_lookup(A, oc);
+                            if (pl_pending_prefix) {
+                                A.T = strata::program::pending_prefix::width(pending_prefix_limit, A.p, A.T);
+                                if (A.T == 0) return die("pending-prefix: fresh window outside output budget");
+                            }
                             A.ready = true;
                             early_used = true;
                         }
