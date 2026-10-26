@@ -3103,12 +3103,24 @@ def slot_save_dir(value, base: str | None = None) -> str:
     return path
 
 def reasoning_native_cap_enabled(engine, sampling, embeddings):
-    """Opt-in only for the pinned, greedy, single-request T<=2 native protocol."""
+    """Opt-in for the pinned single-request T<=2 protocol; sampled mode needs a second flag."""
     if os.environ.get("STRATA_REASONING_NATIVE_CAP") != "1" or embeddings or getattr(engine, "batch", 0):
         return False
     temperature = (sampling or {}).get("temperature", 0)
     if temperature is not None and (type(temperature) not in (int, float) or temperature != 0):
-        return False
+        # Experimental sampled admission is deliberately one explicit effective profile.
+        # Keep the legacy greedy gate unchanged unless both exact opt-ins are present.
+        if os.environ.get("STRATA_REASONING_NATIVE_CAP_SAMPLED") != "1":
+            return False
+        profile = sampling or {}
+        for key, expected in (("temperature", 1.0), ("top_p", 0.95), ("min_p", 0.0)):
+            value = profile.get(key)
+            if type(value) not in (int, float) or value != expected:
+                return False
+        if type(profile.get("top_k")) is not int or profile["top_k"] != 20:
+            return False
+        if type(profile.get("seed")) is not int or profile["seed"] not in (12345, 23456, 34567):
+            return False
     # sampling_keys enables a penalty history (default window 64) for any non-neutral
     # penalty; native generation then bypasses pipeline2 and decodes serially.
     for key, neutral in (("repetition_penalty", 1), ("presence_penalty", 0), ("frequency_penalty", 0)):
