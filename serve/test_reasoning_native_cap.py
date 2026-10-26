@@ -220,4 +220,45 @@ class NativeCap(unittest.TestCase):
                     with self.subTest(key=key,value=repr(value)):
                         self.assertFalse(server.reasoning_native_cap_enabled(engine,{key:value},None))
 
+
+    def test_small_odd_even_clean_wrap_boundaries(self):
+        for budget in (1,2,3,4,5,8):
+            with self.subTest(budget=budget):
+                legacy,old=self.run_case(None,budget=budget)
+                candidate,new=self.run_case("1",budget=budget)
+                self.assertEqual(semantic(new),semantic(old))
+                self.assertEqual(legacy.calls[0][1],256)
+                self.assertEqual(candidate.calls[0][1],budget)
+                self.assertEqual(len(candidate.calls),2)
+                self.assertEqual(candidate.calls[1],legacy.calls[1])
+                self.assertEqual(candidate.calls[1][0],self.prompt+candidate.raw[:budget]+self.wrap)
+                self.assertEqual(len(self.wrap),18)
+                self.assertEqual(candidate.receipts[0]["generated"],budget)
+                self.assertEqual(candidate.receipts[0]["finish"],"length")
+                self.assertEqual(semantic(new)["completion_tokens"],budget+18+len(candidate.answer))
+
+    def test_genuine_split_think_end_preserves_natural_closure(self):
+        # Deliberately emit separate real-vocabulary byte tokens, not the merged special tag.
+        raw=self.bytes("</think>\n\nNatural answer without an injected wrap.")+self.eos
+        for budget in (1,2,3,4,5,8):
+            with self.subTest(budget=budget):
+                legacy,old=self.run_case(None,raw=raw,budget=budget)
+                candidate,new=self.run_case("1",raw=raw,budget=budget)
+                self.assertEqual(semantic(new),semantic(old))
+                self.assertEqual(semantic(new)["finish"],"stop")
+                self.assertEqual(semantic(new)["content"],"Natural answer without an injected wrap.")
+                self.assertEqual(semantic(new)["completion_tokens"],len(raw))
+                self.assertEqual(len(legacy.calls),1)
+                self.assertEqual(candidate.calls[0][1],budget)
+                self.assertGreater(len(candidate.calls),1)
+                self.assertLessEqual(len(candidate.calls),12,"bounded tag-boundary continuation")
+                self.assertEqual(sum(r["generated"] for r in candidate.receipts),len(raw))
+                consumed=0
+                for (ids,cap,_),receipt in zip(candidate.calls,candidate.receipts):
+                    self.assertEqual(ids,self.prompt+raw[:consumed])
+                    self.assertGreater(cap,0)
+                    self.assertEqual(receipt["ids"],raw[consumed:consumed+receipt["generated"]])
+                    consumed+=receipt["generated"]
+                self.assertEqual(consumed,len(raw))
+
 if __name__=="__main__":unittest.main()
