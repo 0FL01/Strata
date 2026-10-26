@@ -1,0 +1,637 @@
+{
+  "status": "DESCRIPTIVE_RETAINED_SAME_WORK_REPEATS",
+  "groups": [
+    {
+      "screen": "screen-wide-v1",
+      "task": "resolver",
+      "feature": "wide",
+      "variant": "A",
+      "target_context": 8192,
+      "n": 2,
+      "metrics": {
+        "startup_seconds": {
+          "values_in_screen_order": [
+            119.48429407505319,
+            124.17896791594103
+          ],
+          "min": 119.48429407505319,
+          "max": 124.17896791594103,
+          "mean": 121.83163099549711,
+          "range_seconds": 4.694673840887845,
+          "relative_pair_span_percent": 3.853411304213238,
+          "second_minus_first_percent_of_mean": 3.853411304213238
+        },
+        "taskwall_seconds": {
+          "values_in_screen_order": [
+            46.33652425091714,
+            46.865822072839364
+          ],
+          "min": 46.33652425091714,
+          "max": 46.865822072839364,
+          "mean": 46.60117316187825,
+          "range_seconds": 0.5292978219222277,
+          "relative_pair_span_percent": 1.1358036418602782,
+          "second_minus_first_percent_of_mean": 1.1358036418602782
+        },
+        "cold_first_native_pp_seconds": {
+          "values_in_screen_order": [
+            17.027,
+            17.567
+          ],
+          "min": 17.027,
+          "max": 17.567,
+          "mean": 17.297,
+          "range_seconds": 0.5399999999999991,
+          "relative_pair_span_percent": 3.121928658148807,
+          "second_minus_first_percent_of_mean": 3.121928658148807
+        },
+        "total_native_tg_seconds": {
+          "values_in_screen_order": [
+            18.647,
+            18.602
+          ],
+          "min": 18.602,
+          "max": 18.647,
+          "mean": 18.624499999999998,
+          "range_seconds": 0.04499999999999815,
+          "relative_pair_span_percent": 0.24161722462346993,
+          "second_minus_first_percent_of_mean": -0.24161722462346993
+        }
+      },
+      "members": [
+        {
+          "arm": 0,
+          "run_label": "pilot-wide8k-0-a",
+          "actual_initial_tokens": 8184,
+          "output_tokens": 1213,
+          "turns": 6,
+          "tools": 8
+        },
+        {
+          "arm": 3,
+          "run_label": "pilot-wide8k-3-a",
+          "actual_initial_tokens": 8184,
+          "output_tokens": 1213,
+          "turns": 6,
+          "tools": 8
+        }
+      ],
+      "matched_full_trajectory_and_recorded_native_counts": true,
+      "draft_accepted_offered_vectors_equal_independent_review": true
+    },
+    {
+      "screen": "screen-wide-v1",
+      "task": "resolver",
+      "feature": "wide",
+      "variant": "B",
+      "target_context": 8192,
+      "n": 2,
+      "metrics": {
+        "startup_seconds": {
+          "values_in_screen_order": [
+            111.886109465966,
+            97.90458589815535
+          ],
+          "min": 97.90458589815535,
+          "max": 111.886109465966,
+          "mean": 104.89534768206067,
+          "range_seconds": 13.981523567810655,
+          "relative_pair_span_percent": 13.329021617039544,
+          "second_minus_first_percent_of_mean": -13.329021617039544
+        },
+        "taskwall_seconds": {
+          "values_in_screen_order": [
+            44.744922908023,
+            44.433969730045646
+          ],
+          "min": 44.433969730045646,
+          "max": 44.744922908023,
+          "mean": 44.58944631903432,
+          "range_seconds": 0.31095317797735333,
+          "relative_pair_span_percent": 0.6973694531941604,
+          "second_minus_first_percent_of_mean": -0.6973694531941604
+        },
+        "cold_first_native_pp_seconds": {
+          "values_in_screen_order": [
+            16.775,
+            16.597
+          ],
+          "min": 16.597,
+          "max": 16.775,
+          "mean": 16.686,
+          "range_seconds": 0.17799999999999727,
+          "relative_pair_span_percent": 1.0667625554356783,
+          "second_minus_first_percent_of_mean": -1.0667625554356783
+        },
+        "total_native_tg_seconds": {
+          "values_in_screen_order": [
+            18.592,
+            18.603
+          ],
+          "min": 18.592,
+          "max": 18.603,
+          "mean": 18.5975,
+          "range_seconds": 0.011000000000002785,
+          "relative_pair_span_percent": 0.05914773491062124,
+          "second_minus_first_percent_of_mean": 0.05914773491062124
+        }
+      },
+      "members": [
+        {
+          "arm": 1,
+          "run_label": "pilot-wide8k-1-b",
+          "actual_initial_tokens": 8184,
+          "output_tokens": 1213,
+          "turns": 6,
+          "tools": 8
+        },
+        {
+          "arm": 2,
+          "run_label": "pilot-wide8k-2-b",
+          "actual_initial_tokens": 8184,
+          "output_tokens": 1213,
+          "turns": 6,
+          "tools": 8
+        }
+      ],
+      "matched_full_trajectory_and_recorded_native_counts": true,
+      "draft_accepted_offered_vectors_equal_independent_review": true
+    },
+    {
+      "screen": "screen-wide-v1",
+      "task": "resolver",
+      "feature": "wide",
+      "variant": "B",
+      "target_context": 65536,
+      "n": 2,
+      "metrics": {
+        "startup_seconds": {
+          "values_in_screen_order": [
+            118.45000960701145,
+            111.67380336206406
+          ],
+          "min": 111.67380336206406,
+          "max": 118.45000960701145,
+          "mean": 115.06190648453776,
+          "range_seconds": 6.776206244947389,
+          "relative_pair_span_percent": 5.889183007634233,
+          "second_minus_first_percent_of_mean": -5.889183007634233
+        },
+        "taskwall_seconds": {
+          "values_in_screen_order": [
+            133.7168620780576,
+            134.3908913799096
+          ],
+          "min": 133.7168620780576,
+          "max": 134.3908913799096,
+          "mean": 134.0538767289836,
+          "range_seconds": 0.6740293018519878,
+          "relative_pair_span_percent": 0.5028047814049207,
+          "second_minus_first_percent_of_mean": 0.5028047814049207
+        },
+        "cold_first_native_pp_seconds": {
+          "values_in_screen_order": [
+            90.305,
+            90.85
+          ],
+          "min": 90.305,
+          "max": 90.85,
+          "mean": 90.5775,
+          "range_seconds": 0.5449999999999875,
+          "relative_pair_span_percent": 0.6016946813502111,
+          "second_minus_first_percent_of_mean": 0.6016946813502111
+        },
+        "total_native_tg_seconds": {
+          "values_in_screen_order": [
+            29.744,
+            29.756
+          ],
+          "min": 29.744,
+          "max": 29.756,
+          "mean": 29.75,
+          "range_seconds": 0.012000000000000455,
+          "relative_pair_span_percent": 0.04033613445378304,
+          "second_minus_first_percent_of_mean": 0.04033613445378304
+        }
+      },
+      "members": [
+        {
+          "arm": 4,
+          "run_label": "pilot-wide64k-0-b",
+          "actual_initial_tokens": 65544,
+          "output_tokens": 1951,
+          "turns": 11,
+          "tools": 10
+        },
+        {
+          "arm": 7,
+          "run_label": "pilot-wide64k-3-b",
+          "actual_initial_tokens": 65544,
+          "output_tokens": 1951,
+          "turns": 11,
+          "tools": 10
+        }
+      ],
+      "matched_full_trajectory_and_recorded_native_counts": true,
+      "draft_accepted_offered_vectors_equal_independent_review": true
+    },
+    {
+      "screen": "screen-wide-v1",
+      "task": "resolver",
+      "feature": "wide",
+      "variant": "A",
+      "target_context": 65536,
+      "n": 2,
+      "metrics": {
+        "startup_seconds": {
+          "values_in_screen_order": [
+            120.40054786810651,
+            100.80013537500054
+          ],
+          "min": 100.80013537500054,
+          "max": 120.40054786810651,
+          "mean": 110.60034162155353,
+          "range_seconds": 19.600412493105978,
+          "relative_pair_span_percent": 17.721837207495838,
+          "second_minus_first_percent_of_mean": -17.721837207495838
+        },
+        "taskwall_seconds": {
+          "values_in_screen_order": [
+            138.34588699392043,
+            142.25730825890787
+          ],
+          "min": 138.34588699392043,
+          "max": 142.25730825890787,
+          "mean": 140.30159762641415,
+          "range_seconds": 3.911421264987439,
+          "relative_pair_span_percent": 2.7878665183859943,
+          "second_minus_first_percent_of_mean": 2.7878665183859943
+        },
+        "cold_first_native_pp_seconds": {
+          "values_in_screen_order": [
+            92.857,
+            96.946
+          ],
+          "min": 92.857,
+          "max": 96.946,
+          "mean": 94.9015,
+          "range_seconds": 4.088999999999999,
+          "relative_pair_span_percent": 4.3086779450272115,
+          "second_minus_first_percent_of_mean": 4.3086779450272115
+        },
+        "total_native_tg_seconds": {
+          "values_in_screen_order": [
+            29.883,
+            29.724
+          ],
+          "min": 29.724,
+          "max": 29.883,
+          "mean": 29.8035,
+          "range_seconds": 0.15899999999999892,
+          "relative_pair_span_percent": 0.533494388242988,
+          "second_minus_first_percent_of_mean": -0.533494388242988
+        }
+      },
+      "members": [
+        {
+          "arm": 5,
+          "run_label": "pilot-wide64k-1-a",
+          "actual_initial_tokens": 65544,
+          "output_tokens": 1951,
+          "turns": 11,
+          "tools": 10
+        },
+        {
+          "arm": 6,
+          "run_label": "pilot-wide64k-2-a",
+          "actual_initial_tokens": 65544,
+          "output_tokens": 1951,
+          "turns": 11,
+          "tools": 10
+        }
+      ],
+      "matched_full_trajectory_and_recorded_native_counts": true,
+      "draft_accepted_offered_vectors_equal_independent_review": true
+    },
+    {
+      "screen": "screen-wide-generalization-v1",
+      "task": "jobgraph",
+      "feature": "wide",
+      "variant": "A",
+      "target_context": 8192,
+      "n": 2,
+      "metrics": {
+        "startup_seconds": {
+          "values_in_screen_order": [
+            120.81231790501624,
+            125.67896078317426
+          ],
+          "min": 120.81231790501624,
+          "max": 125.67896078317426,
+          "mean": 123.24563934409525,
+          "range_seconds": 4.866642878158018,
+          "relative_pair_span_percent": 3.948734335801213,
+          "second_minus_first_percent_of_mean": 3.948734335801213
+        },
+        "taskwall_seconds": {
+          "values_in_screen_order": [
+            132.9997726639267,
+            129.4827981919516
+          ],
+          "min": 129.4827981919516,
+          "max": 132.9997726639267,
+          "mean": 131.24128542793915,
+          "range_seconds": 3.516974471975118,
+          "relative_pair_span_percent": 2.679777526185682,
+          "second_minus_first_percent_of_mean": -2.679777526185682
+        },
+        "cold_first_native_pp_seconds": {
+          "values_in_screen_order": [
+            20.515,
+            17.119
+          ],
+          "min": 17.119,
+          "max": 20.515,
+          "mean": 18.817,
+          "range_seconds": 3.396000000000001,
+          "relative_pair_span_percent": 18.047510230111072,
+          "second_minus_first_percent_of_mean": -18.047510230111072
+        },
+        "total_native_tg_seconds": {
+          "values_in_screen_order": [
+            91.79,
+            91.892
+          ],
+          "min": 91.79,
+          "max": 91.892,
+          "mean": 91.84100000000001,
+          "range_seconds": 0.10199999999998965,
+          "relative_pair_span_percent": 0.11106150847659503,
+          "second_minus_first_percent_of_mean": 0.11106150847659503
+        }
+      },
+      "members": [
+        {
+          "arm": 0,
+          "run_label": "pilot-wide8k-0-a",
+          "actual_initial_tokens": 8192,
+          "output_tokens": 6081,
+          "turns": 6,
+          "tools": 8
+        },
+        {
+          "arm": 3,
+          "run_label": "pilot-wide8k-3-a",
+          "actual_initial_tokens": 8192,
+          "output_tokens": 6081,
+          "turns": 6,
+          "tools": 8
+        }
+      ],
+      "matched_full_trajectory_and_recorded_native_counts": true,
+      "draft_accepted_offered_vectors_equal_independent_review": true
+    },
+    {
+      "screen": "screen-wide-generalization-v1",
+      "task": "jobgraph",
+      "feature": "wide",
+      "variant": "B",
+      "target_context": 8192,
+      "n": 2,
+      "metrics": {
+        "startup_seconds": {
+          "values_in_screen_order": [
+            116.82618825091049,
+            102.22725577792153
+          ],
+          "min": 102.22725577792153,
+          "max": 116.82618825091049,
+          "mean": 109.52672201441601,
+          "range_seconds": 14.598932472988963,
+          "relative_pair_span_percent": 13.329105632383884,
+          "second_minus_first_percent_of_mean": -13.329105632383884
+        },
+        "taskwall_seconds": {
+          "values_in_screen_order": [
+            128.9248803050723,
+            128.3774162400514
+          ],
+          "min": 128.3774162400514,
+          "max": 128.9248803050723,
+          "mean": 128.65114827256184,
+          "range_seconds": 0.547464065020904,
+          "relative_pair_span_percent": 0.42554153023262575,
+          "second_minus_first_percent_of_mean": -0.42554153023262575
+        },
+        "cold_first_native_pp_seconds": {
+          "values_in_screen_order": [
+            16.958,
+            16.89
+          ],
+          "min": 16.89,
+          "max": 16.958,
+          "mean": 16.924,
+          "range_seconds": 0.06799999999999784,
+          "relative_pair_span_percent": 0.40179626565822407,
+          "second_minus_first_percent_of_mean": -0.40179626565822407
+        },
+        "total_native_tg_seconds": {
+          "values_in_screen_order": [
+            92.457,
+            91.902
+          ],
+          "min": 91.902,
+          "max": 92.457,
+          "mean": 92.17949999999999,
+          "range_seconds": 0.5549999999999926,
+          "relative_pair_span_percent": 0.6020861471368283,
+          "second_minus_first_percent_of_mean": -0.6020861471368283
+        }
+      },
+      "members": [
+        {
+          "arm": 1,
+          "run_label": "pilot-wide8k-1-b",
+          "actual_initial_tokens": 8192,
+          "output_tokens": 6081,
+          "turns": 6,
+          "tools": 8
+        },
+        {
+          "arm": 2,
+          "run_label": "pilot-wide8k-2-b",
+          "actual_initial_tokens": 8192,
+          "output_tokens": 6081,
+          "turns": 6,
+          "tools": 8
+        }
+      ],
+      "matched_full_trajectory_and_recorded_native_counts": true,
+      "draft_accepted_offered_vectors_equal_independent_review": true
+    },
+    {
+      "screen": "screen-reasoning-cap-v2",
+      "task": "jobgraph",
+      "feature": "reasoning_cap",
+      "variant": "A",
+      "target_context": 8192,
+      "n": 2,
+      "metrics": {
+        "startup_seconds": {
+          "values_in_screen_order": [
+            122.88301263796166,
+            122.9013592780102
+          ],
+          "min": 122.88301263796166,
+          "max": 122.9013592780102,
+          "mean": 122.89218595798593,
+          "range_seconds": 0.01834664004854858,
+          "relative_pair_span_percent": 0.014929053385722086,
+          "second_minus_first_percent_of_mean": 0.014929053385722086
+        },
+        "taskwall_seconds": {
+          "values_in_screen_order": [
+            128.465233966941,
+            128.55893700011075
+          ],
+          "min": 128.465233966941,
+          "max": 128.55893700011075,
+          "mean": 128.51208548352588,
+          "range_seconds": 0.0937030331697315,
+          "relative_pair_span_percent": 0.07291379080587981,
+          "second_minus_first_percent_of_mean": 0.07291379080587981
+        },
+        "cold_first_native_pp_seconds": {
+          "values_in_screen_order": [
+            16.807,
+            16.774
+          ],
+          "min": 16.774,
+          "max": 16.807,
+          "mean": 16.7905,
+          "range_seconds": 0.0329999999999977,
+          "relative_pair_span_percent": 0.19653970995502038,
+          "second_minus_first_percent_of_mean": -0.19653970995502038
+        },
+        "total_native_tg_seconds": {
+          "values_in_screen_order": [
+            91.746,
+            91.826
+          ],
+          "min": 91.746,
+          "max": 91.826,
+          "mean": 91.786,
+          "range_seconds": 0.0799999999999983,
+          "relative_pair_span_percent": 0.08715926176105103,
+          "second_minus_first_percent_of_mean": 0.08715926176105103
+        }
+      },
+      "members": [
+        {
+          "arm": 0,
+          "run_label": "pilot-reasoning2-abba-0-a",
+          "actual_initial_tokens": 8192,
+          "output_tokens": 6081,
+          "turns": 6,
+          "tools": 8
+        },
+        {
+          "arm": 3,
+          "run_label": "pilot-reasoning2-abba-3-a",
+          "actual_initial_tokens": 8192,
+          "output_tokens": 6081,
+          "turns": 6,
+          "tools": 8
+        }
+      ],
+      "matched_full_trajectory_and_recorded_native_counts": true,
+      "draft_accepted_offered_vectors_equal_independent_review": true
+    },
+    {
+      "screen": "screen-reasoning-cap-v2",
+      "task": "jobgraph",
+      "feature": "reasoning_cap",
+      "variant": "B",
+      "target_context": 8192,
+      "n": 2,
+      "metrics": {
+        "startup_seconds": {
+          "values_in_screen_order": [
+            115.6875665790867,
+            96.61442971392535
+          ],
+          "min": 96.61442971392535,
+          "max": 115.6875665790867,
+          "mean": 106.15099814650603,
+          "range_seconds": 19.07313686516136,
+          "relative_pair_span_percent": 17.967929834100342,
+          "second_minus_first_percent_of_mean": -17.967929834100342
+        },
+        "taskwall_seconds": {
+          "values_in_screen_order": [
+            103.23154762783088,
+            103.47812810400501
+          ],
+          "min": 103.23154762783088,
+          "max": 103.47812810400501,
+          "mean": 103.35483786591794,
+          "range_seconds": 0.24658047617413104,
+          "relative_pair_span_percent": 0.23857661747195566,
+          "second_minus_first_percent_of_mean": 0.23857661747195566
+        },
+        "cold_first_native_pp_seconds": {
+          "values_in_screen_order": [
+            16.908,
+            16.822
+          ],
+          "min": 16.822,
+          "max": 16.908,
+          "mean": 16.865000000000002,
+          "range_seconds": 0.08600000000000207,
+          "relative_pair_span_percent": 0.5099318114438308,
+          "second_minus_first_percent_of_mean": -0.5099318114438308
+        },
+        "total_native_tg_seconds": {
+          "values_in_screen_order": [
+            75.661,
+            75.879
+          ],
+          "min": 75.661,
+          "max": 75.879,
+          "mean": 75.77000000000001,
+          "range_seconds": 0.21800000000000352,
+          "relative_pair_span_percent": 0.28771281509832847,
+          "second_minus_first_percent_of_mean": 0.28771281509832847
+        }
+      },
+      "members": [
+        {
+          "arm": 1,
+          "run_label": "pilot-reasoning2-abba-1-b",
+          "actual_initial_tokens": 8192,
+          "output_tokens": 5129,
+          "turns": 6,
+          "tools": 8
+        },
+        {
+          "arm": 2,
+          "run_label": "pilot-reasoning2-abba-2-b",
+          "actual_initial_tokens": 8192,
+          "output_tokens": 5129,
+          "turns": 6,
+          "tools": 8
+        }
+      ],
+      "matched_full_trajectory_and_recorded_native_counts": true,
+      "draft_accepted_offered_vectors_equal_independent_review": true
+    }
+  ],
+  "method": "Each group has two same-screen/same-variant/context repeats with full normalized semantics and native prompt/reuse/read/generated vectors identical. No cross-group pooling or outlier removal. PP/TG use integer-ms native logs; startup separate.",
+  "not_claims": [
+    "statistical significance",
+    "universal noise floor",
+    "measurement-cause attribution",
+    "retroactive gate change",
+    "exhaustive device-work identity"
+  ]
+}
