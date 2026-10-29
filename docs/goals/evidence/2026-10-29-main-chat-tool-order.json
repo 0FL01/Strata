@@ -1,0 +1,15 @@
+{
+  "base": "53e6c6a5e9aa1d934469b499a881cef6c446905c",
+  "source_checkpoint": "7e98ae808f15ddbdf8f646fdb39cd22da8428399",
+  "tests": 37,
+  "failures": 0,
+  "errors": 0,
+  "scope": "Chat normalization only; no live deploy/native/GPU/model tests",
+  "image": "sha256:bccb7ee7e7a78274519db9a43ba63c34ddd2e74bb60f8764a8f50aaee1f2c646",
+  "log_sha256": "959089e6059c0bf98b09f74ee8961c24e848f54be72920eb409c8cbc19775c5f",
+  "source_sha256": {
+    "serve/frontend.py": "505f1681356593872e043cdf5e3177eb1e829414775772ba8c8f142bf1884b26",
+    "serve/test_chat_tool_results.py": "a8031a58268a90c5083dfbcf1f75fee6aa6d51f2584f5f59d7605a4896e5e0e0",
+    "tools/run_agent_toolorder_cpu.py": "9e57d12deac544c4ff78b127e898793210a64f5dc52710f61c2d1bce0c940539"
+  }
+}
