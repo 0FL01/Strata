@@ -1,57 +1,23 @@
-# Upstream gfx906 and agent-runtime goal   -  2026-10-29
+# Goal: upstream gfx906 performance and agent API correctness
 
-Improve applicable agent-runtime correctness and measured PP/TG without a wholesale
-upstream merge. Work iteratively: reproduce the baseline failure, make the smallest
-change, run isolated tests, obtain review, and retain negative results.
+## Method
 
-## Published scope: Chat tool-result association
+For each hypothesis: reproduce the baseline defect, make the smallest compatible change, run isolated tests, review the complete composition, and only then decide whether to publish. Performance needs matched measurements; CPU correctness tests are not performance or live deployment evidence.
 
-Based on upstream11237f831f3cc4691369186d3c51e90ac4b59a6d. Preserve call IDs until
-normalizing Chat history. Reorder a contiguous result run only when the preceding
-assistant call IDs and result IDs are complete, unique, nonempty strings with
-identical sets. Ambiguous, missing, duplicate and partial IDs keep received order.
-Private IDs are removed before rendering. Tool arguments and input objects are
-not mutated. Existing ordered and legacy prompts remain identical.
+## Checked API changes
 
-Only serve/frontend.py changes executable production behavior. No server/native
-code, model settings, GPU kernels, defaults for performance experiments or service
-deployment is included. This is a correctness fix, not a speed claim.
+The historical first phase (main 9103b410) fixed Chat tool-result association. This phase extends the same complete, unique ID matching to Anthropic and Responses, and fixes cancellation at FIFO ownership and request preparation boundaries. Executable changes are limited to serve/frontend.py, serve/responses.py and serve/server.py.
 
-Validation:10 focused tests and27 existing frontend regressions pass on the
-main-based tree. They cover permutations, multiple turns, malformed IDs, mixed
-image/text result association, input immutability and in-process Service.prepare.
-Tests run with no network, Docker socket, GPU devices or writable source; a Python
-audit hook rejects process launches, socket operations and process signals.
-Run tools/run_agent_toolorder_cpu.py inside that isolated environment mounted at
-/src. CPU mocks are not native/model or deployment qualification.
+- Exact-main protocol tests reproduced reversed Anthropic results and malformed/ambiguous Responses ID handling.
+- Exact-main server tests reproduced cancellation before or during successful FIFO acquisition, and preparation continuing after cancellation.
+- Final combined suite: 97 tests passed, including converter permutations, malformed/partial IDs, multimodal results, repeated turns, FIFO ownership, image preparation cancellation, and fake-engine handler tests for all three API protocols.
+- The suite also passed from a different checkout path. Tests derive fixture paths from their source file.
+- Existing main nonfinite accounting and quiet polling passed 15 tests unchanged; legacy server overlays were not copied into main.
 
-## Retained research, not installed by this publication
+Run the selected CPU suite with tools/run_api_adaptation_cpu.py in an isolated CPU container without network, Docker socket, GPU devices or production configuration. The runner denies socket and external process effects. No live deployment or restart is part of this publication.
 
-The deployed legacy Python was separately snapshotted, preserving local changes.
-Its nonfinite/cancellation overlays are NOT substitutes for newer main server.py.
-Local checkpoints remain remote:00d5fdd4(nonfinite),dcc61843(quiet cancellation),
-6bcf3f3d(FIFO ownership),1307a96a(preparation cancellation),e5b88821(cross-protocol
-tool ordering). These are independently scoped offline candidates, not a tested
-composition on this publication tree.
+## Limits and remaining hypotheses
 
-PR4132 headaffadaa4a2375363d7159cfbf48168ae14a8ef7f is rejected for now: its own tests
-pass but21 adversarial direct/stream cases fail. A depth experiment fixes14, not
-the7 unfinished-opener cases. No parser experiment is installed.
+Partial or ambiguous tool IDs preserve arrival order; they are not claimed semantically repaired. Cancellation is checked between synchronous download/encode calls, not inside those calls. Batch/replica ownership paths are unchanged. Fake-engine tests do not establish real GPU, disconnect-latency or vision-model performance.
 
-## Pending hypotheses and gates
-
-- Reconcile live serial nonfinite handling fromf332a855, preserving local prefix
-  diagnostics and reasoning-close behavior. Main already has newer handling.
-- Cancellation423f5893/875d6a92/873a0d66: preserve ownership, bounded polling and
-  between-image checks; do not imply interruption of a synchronous encode.
-- Native copy pool3478382: actual-header CPU model shows bounded handle reuse;
-  hardware/error-path qualification remains pending. Companionf62589 has a
-  wrong-device error-check counterexample and must not be imported blindly.
-- PP routed issuer PR4283(ab73738f4cf19503ff746d76e40acd07b0c42531): review
-  concurrent logging, event-error propagation and selected-route applicability.
-- Sparse eventsa11f8b0a requiref217b23 and an additional captured-state lifetime
-  fix. Do not stack with the alternate PP issuer without integrated proof.
-
-Any future native/GPU or temporary service test needs a frozen reviewed plan,
-live-work check and exact original-model restoration. No main publication implies
-deployment. No speed claim without matched workload measurements.
+Quoted-tool-call PR #4132 is not included: adversarial parser fixtures exposed unresolved ambiguity. Vision-cache file lifetime across concurrent preparation needs a separate baseline reproduction and ownership review. Native checkpoint-copy and prefill performance experiments remain pending; no native code or performance default is changed here.

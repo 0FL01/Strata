@@ -3909,10 +3909,14 @@ class Service:
         if cancel is None:
             self.fifo.acquire()
         else:
+            if cancel.is_set():
+                raise ClientGone()
             while not self.fifo.acquire(timeout=0.25):
                 if cancel.is_set():
                     raise ClientGone()
         try:
+            if cancel is not None and cancel.is_set():
+                raise ClientGone()
             yield
         finally:
             self.fifo.release()
@@ -3959,7 +3963,11 @@ class Service:
         prompt; with thinking, Service.run writes it once the thinking is over."""
         # `cancel` (#1999): set when the client hangs up; the downloads, the wait for the turn and the encodes stop
         # between pictures and raise ClientGone
+        if cancel is not None and cancel.is_set():
+            raise ClientGone()
         fetched = self._note_unreadable_tool_images(messages, cancel)
+        if cancel is not None and cancel.is_set():
+            raise ClientGone()
         ids = encoded_ids = self.encode_prompt(messages, tools, kwargs)
         if force and kwargs.get("enable_thinking", True) is False:
             ids = ids + self.tok.encode(force, parse_special=True)
@@ -3987,8 +3995,16 @@ class Service:
             with self._turn(cancel):
                 self._vision_up()
                 try:
-                    encoded = (self.vision.encode_all(images, cancel) if hasattr(self.vision, "encode_all")
-                               else [self.vision.encode(src) for src in images])
+                    if hasattr(self.vision, "encode_all"):
+                        encoded = self.vision.encode_all(images, cancel)
+                    else:
+                        encoded = []
+                        for src in images:
+                            if cancel is not None and cancel.is_set():
+                                raise ClientGone()
+                            encoded.append(self.vision.encode(src))
+                    if cancel is not None and cancel.is_set():
+                        raise ClientGone()
                 finally:
                     self.last_image_at = time.time()
             # one <|image_pad|> per image -> one per image token.  Only the markers the template writes for an image
@@ -4038,6 +4054,8 @@ class Service:
                                  f"max_tokens (at most {max(0, room)} here), or add \"fit_max_tokens\": true to the "
                                  "model's strata-<model>.json to shorten it to the room left (#545)")
             max_new = max(1, room)          # --fit-max-tokens: a shorter completion beats a 400
+        if cancel is not None and cancel.is_set():
+            raise ClientGone()
         if images:
             # The request's images in one file for GENI (~10 MB a picture), written once nothing above refuses the
             # request: one refused after it (the engine starting, no room) left it in the vision directory for good,
@@ -4274,20 +4292,22 @@ class Service:
                 # a stream idle timeout does not abort a healthy queued request (and its retry read the prompt again);
                 # a client that left while queued gives its place up instead of taking the turn only to cancel there
                 got = False
+                beat = time.monotonic()
                 try:
-                    while not got:
-                        got = self.fifo.acquire(timeout=QUEUE_BEAT_S)
+                    while not got and not cancel.is_set():
+                        got = self.fifo.acquire(timeout=0.25)
                         if got:
                             turn.callback(self.fifo.release)
-                        elif cancel.is_set():
-                            break
-                        else:
+                        elif not cancel.is_set() and time.monotonic() - beat >= QUEUE_BEAT_S:
+                            beat = time.monotonic()
                             yield "ping", None
                 except BaseException:                    # the consumer closed us at a ping: no longer queued
+                    turn.close()                         # releases only a turn acquired by this request
                     with self.status_lock:
                         self.status["queued"] -= 1
                     raise
-                if not got:                              # cancelled while queued
+                if not got or cancel.is_set():           # includes cancellation racing a successful acquire
+                    turn.close()
                     with self.status_lock:
                         self.status["queued"] -= 1
                     yield "done", {"finish": "cancel", "completion_tokens": 0, "reused": 0, "timings": None,

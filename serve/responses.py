@@ -211,26 +211,9 @@ def input_messages(req: dict) -> list[dict]:
 
 
 def _order_tool_results(messages):
-    """The template places tool results by position: each run of tool messages is put in the order of the calls of
-    the assistant turn before it (a client may send the results in the order they finished), then the private call
-    ids are dropped."""
-    i = 0
-    while i < len(messages):
-        if messages[i]["role"] != "tool":
-            i += 1
-            continue
-        j = i
-        while j < len(messages) and messages[j]["role"] == "tool":
-            j += 1
-        prev = messages[i - 1] if i else {}
-        order = [c.get("_call_id") for c in prev.get("tool_calls") or []]
-        rank = {cid: k for k, cid in enumerate(order) if cid}
-        messages[i:j] = sorted(messages[i:j], key=lambda m: rank.get(m.get("_call_id"), len(order)))
-        i = j
-    for m in messages:
-        m.pop("_call_id", None)
-        for c in m.get("tool_calls") or []:
-            c.pop("_call_id", None)
+    """Use the same complete, unambiguous ID matching as Chat before dropping private IDs."""
+    from serve.frontend import _order_chat_tool_results
+    _order_chat_tool_results(messages)
 
 
 def request_tools(req: dict):
