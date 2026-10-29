@@ -9,8 +9,8 @@ def audit(event,args):
   raise RuntimeError('DENIED_EXTERNAL_EFFECT:'+event)
 sys.addaudithook(audit)
 sys.path.insert(0,str(pathlib.Path(__file__).resolve().parents[1]))
-from serve import test_protocol_tool_results,test_chat_tool_results,test_frontend,test_tool_name_space,test_main_fifo_cancel,test_main_prepare_cancel,test_main_nonfinite,test_main_quiet_cancel,test_responses
-suite=unittest.TestSuite(unittest.defaultTestLoader.loadTestsFromModule(m) for m in [test_protocol_tool_results,test_chat_tool_results,test_frontend,test_tool_name_space,test_main_fifo_cancel,test_main_prepare_cancel,test_main_nonfinite,test_main_quiet_cancel])
+from serve import test_protocol_tool_results,test_chat_tool_results,test_frontend,test_tool_name_space,test_main_fifo_cancel,test_main_prepare_cancel,test_main_nonfinite,test_main_quiet_cancel,test_vision_prepare_lifetime,test_responses
+suite=unittest.TestSuite(unittest.defaultTestLoader.loadTestsFromModule(m) for m in [test_protocol_tool_results,test_chat_tool_results,test_frontend,test_tool_name_space,test_main_fifo_cancel,test_main_prepare_cancel,test_main_nonfinite,test_main_quiet_cancel,test_vision_prepare_lifetime])
 suite.addTests(unittest.defaultTestLoader.loadTestsFromTestCase(c) for c in [test_responses.Parsing,test_responses.CodexCompaction])
 if os.environ.get('API_TEST_SCOPE') == 'nonfinite':
  suite=unittest.TestSuite(unittest.defaultTestLoader.loadTestsFromModule(m) for m in [test_main_nonfinite,test_main_quiet_cancel])

@@ -20,4 +20,10 @@ Run the selected CPU suite with tools/run_api_adaptation_cpu.py in an isolated C
 
 Partial or ambiguous tool IDs preserve arrival order; they are not claimed semantically repaired. Cancellation is checked between synchronous download/encode calls, not inside those calls. Batch/replica ownership paths are unchanged. Fake-engine tests do not establish real GPU, disconnect-latency or vision-model performance.
 
-Quoted-tool-call PR #4132 is not included: adversarial parser fixtures exposed unresolved ambiguity. Vision-cache file lifetime across concurrent preparation needs a separate baseline reproduction and ownership review. Native checkpoint-copy and prefill performance experiments remain pending; no native code or performance default is changed here.
+Quoted-tool-call PR #4132 is not included: adversarial parser fixtures exposed unresolved ambiguity. Vision-cache file lifetime across concurrent preparation was subsequently reproduced and corrected as described below. Native checkpoint-copy and prefill performance experiments remain pending; no native code or performance default is changed here.
+
+## Concurrent image preparation
+
+A deterministic two-thread CPU test reproduced a cache lifetime bug: one request released the image turn before copying its cached embeddings, allowing another request to evict the first request's source file. The fix retains that acquired turn until preparation returns or raises. Text-only requests acquire no image turn; image cache limits, context validation and caller cleanup remain unchanged.
+
+The same interleaving now passes, including a copy-error unwind followed by a waiting request. Eight ownership/cache tests plus the existing API suite pass: 105 total. These use actual preparation/cache code with fake encoder I/O, not a vision model or GPU. Holding the turn through copying may increase queue time; no speed improvement is claimed. Cancellation does not interrupt a synchronous copy already in progress.

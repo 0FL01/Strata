@@ -3958,6 +3958,11 @@ class Service:
 
 
     def prepare(self, messages, tools, kwargs, max_new=None, force=None, req=None, cancel=None):
+        """Prepare one request, retaining an acquired image turn until cached files have been copied."""
+        with contextlib.ExitStack() as image_turn:
+            return self._prepare(messages, tools, kwargs, max_new, force, req, cancel, image_turn=image_turn)
+
+    def _prepare(self, messages, tools, kwargs, max_new=None, force=None, req=None, cancel=None, *, image_turn):
         """-> (ids, thinking, max_new). An unset or non-positive max_new (some clients send -1) means "unlimited":
         the rest of the context.  `force` (forced_call): without thinking the reply starts with it, so it ends the
         prompt; with thinking, Service.run writes it once the thinking is over."""
@@ -3992,21 +3997,21 @@ class Service:
             # run on the GPU at the same time - an encode during a running request left that request stuck at
             # "reading the prompt" with CPU and GPU busy, for good (reproduced).  So encoding takes its turn in the
             # same FIFO as the requests.
-            with self._turn(cancel):
-                self._vision_up()
-                try:
-                    if hasattr(self.vision, "encode_all"):
-                        encoded = self.vision.encode_all(images, cancel)
-                    else:
-                        encoded = []
-                        for src in images:
-                            if cancel is not None and cancel.is_set():
-                                raise ClientGone()
-                            encoded.append(self.vision.encode(src))
-                    if cancel is not None and cancel.is_set():
-                        raise ClientGone()
-                finally:
-                    self.last_image_at = time.time()
+            image_turn.enter_context(self._turn(cancel))
+            self._vision_up()
+            try:
+                if hasattr(self.vision, "encode_all"):
+                    encoded = self.vision.encode_all(images, cancel)
+                else:
+                    encoded = []
+                    for src in images:
+                        if cancel is not None and cancel.is_set():
+                            raise ClientGone()
+                        encoded.append(self.vision.encode(src))
+                if cancel is not None and cancel.is_set():
+                    raise ClientGone()
+            finally:
+                self.last_image_at = time.time()
             # one <|image_pad|> per image -> one per image token.  Only the markers the template writes for an image
             # (right after <|vision_start|>) are images: the same text inside a message (an agent reading these docs,
             # #150) is kept as plain text, or it took an image's place and the counts no longer matched.
