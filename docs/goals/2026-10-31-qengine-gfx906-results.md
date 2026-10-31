@@ -1,4 +1,6 @@
 # QEngine transfer experiment log
+
+Final status: this bounded round is complete. Earlier Next/pending paragraphs below are contemporaneous checkpoints, superseded by E006/E007 and the final decisions. No production deployment.
 ## E001: existing PP staging ring, 2026-10-31
 Outcome: negative single-pair screen; retain 384 slots, do not promote 512.
 
@@ -107,3 +109,79 @@ It records all phases; the "hc read" phase includes more than the clone, so it c
 causality alone. Instrumented timings are not production performance qualification.
 No new HC shape is enabled: the current 4096/4093 whitelist is retained.
 Production stays stopped in R&D mode; original native/model/config/overlay rollback is preserved.
+
+## E006: reverse-order and held-out qualification
+The reverse 64K/4K pair preserved all 4096 output IDs:
+- Shortlist: PP611.1135, TG73.6161, TTFT107.6485s, wall162.9066s.
+- Control: PP595.4192, TG72.3045, TTFT110.4770s, wall166.7403s.
+Together with the first pair, synthetic TG gains are +2.11% and +1.81%.
+The control's PP variation is not caused by a changed PP algorithm; do not attribute all wall improvement to the shortlist.
+
+| Short held-out task | Arm | TG tok/s | TTFT s | Wall s | Draft accepted/tested |
+|---|---|---:|---:|---:|---:|
+| Russian, first pair | control | 42.1793 | 2.5213 | 26.4199 | 268/458 |
+| Russian, first pair | shortlist | 58.5843 | 2.6531 | 19.7575 | 391/478 |
+| Russian, reverse pair | shortlist | 58.8969 | 3.3665 | 20.3698 | 391/478 |
+| Russian, reverse pair | control | 40.1624 | 2.4678 | 27.5881 | 268/458 |
+| English code, single pair | shortlist | 71.9789 | 2.2419 | 16.0827 | 448/512 |
+| English code, single pair | control | 71.0371 | 2.3549 | 16.3945 | 448/512 |
+
+All held-out 1024-token output IDs match; each Russian repeat also matches the original control.
+Russian TG improves +38.9%/+46.6%, and request wall improves about25.2%/26.2%.
+Unlike the small synthetic head-size benefit, this task also has substantially better draft acceptance.
+TTFT is worse in both Russian pairs. Do not hide that tradeoff or promise universally faster responses.
+Code's single-pair +1.33% TG is not separately qualified as a stable gain.
+These short requests use163/116 input tokens and fixed1024 output tokens with EOS stopping disabled.
+The language-specific result is not a representative Russian benchmark suite.
+
+Decision: save a [tested opt-in shortlist profile](2026-10-31-qengine-gfx906-shortlist-profile.md).
+No production default, model, native or API overlay is changed.
+
+## E007: instrumented PP phase attribution
+This is a diagnostic pair, not performance qualification.
+For8192 input/128 output, PP cap4096 versus8192:
+- Native PP wall18.7681s versus22.3881s.
+- Primary measured GPU timeline (including waits)13.059s versus12.211s.
+- Summed peer measured GPU timelines (including waits)9.993s versus9.071s.
+- Combined "hc read" phase4.791s versus4.986s, only+0.195s versus+3.620s total wall.
+- HC clone receipts: eligible4096 chunks execute;8191 executes zero clone dispatches.
+- Cap4096 makes bulk chunks4096+4095; cap8192 makes one8191 bulk chunk.
+  The final input token is handled separately in both.
+- Output divergence remains; no long-context8192 qualification was attempted.
+
+Source prefill.cpp4743-4794 hands completed chunks asynchronously to the successor GPU,
+alternating two buffers;4841 deliberately does not drain the successor at stage return.
+This inter-GPU chunk handoff exists even when INFO reports prefill_pipe=0.
+In the4096 diagnostic, the first peer chunk finishes before the primary stage summary.
+With8192, primary wall12.237s plus peer wall9.719s nearly accounts for complete PP22.388s.
+The lower sum of measured GPU timelines (including waits) but higher wall supports loss of chunk overlap as the main explanation.
+Timing observers add events/synchronization; this is supporting attribution, not a proof that all
+wall difference is overlap or a production-speed estimate.
+
+Decision: park8192 HC whitelist expansion this round. Its shape gate is a qualification whitelist,
+not a hard fixed-T kernel dimension, but the measured HC-phase increase is too small to explain
+the regression, other chunk arithmetic already changes token output, and larger chunks lose overlap.
+Do not broaden a default merely because a kernel can accept more rows.
+
+## Deliverables and retained state
+- [Machine-readable uninstrumented measurements](../../bench/results/2026-10-31-qengine-gfx906/measurements.json) contain22 runs.
+- [Held-out prompt fixtures](../../bench/results/2026-10-31-qengine-gfx906/heldout-prompts.json) contain only researcher-authored synthetic text.
+- [Instrumented phase runs/receipts](../../bench/results/2026-10-31-qengine-gfx906/phase-diagnostic.json) are stored separately to prevent pooling them with performance data.
+- Existing suffix-drafter CPU tests and analyzer boundary checks passed; no native/kernel source was modified.
+- Final preservation check: original container config/mounts unchanged, native SHA unchanged,
+  recorded model-file identities unchanged, no running benchmark containers.
+- Production remains intentionally OFF as requested; GPUs are idle. Original rollback artifacts remain private on remote storage.
+
+## Remaining cache/transport eligibility
+No additional transport kernel is justified by this round's trace.
+The existing ring already budgets against the expert cache and borrows/refills its region
+(prefill.cpp285-337,1327,1416,1605+,2302,2559). This is not a missing generic QEngine feature.
+The cap4096 diagnostic exposes only30ms total compute-stream "wait copy" against18.768s PP.
+That does not exclude hidden PCIe or host costs, but provides no positive case for enlarging staging;
+the larger512 ring also failed its earlier screen.
+A smaller ring is an available tuning knob, not a port: it might retain experts but could increase
+DMA and change resident-versus-streamed numerics. Park it until missed-byte/admission tracing
+establishes a concrete expected saving; do not start an arbitrary ring grid.
+Existing piecewise handoff and persistent successor worker already provide inter-GPU overlap.
+QEngine tensor-parallel/all-reduce work is not a direct fit for this layer-split runtime.
+A separate topology/transfer bottleneck profile would be required to revive that direction.

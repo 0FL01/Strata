@@ -1,0 +1,18 @@
+{
+  "ru": {
+    "rendered_prompt": "<|im_start|>system\nYou are a careful technical assistant. Be precise and complete.<|im_end|>\n<|im_start|>user\nНапиши подробное техническое руководство на русском языке для команды, которая диагностирует медленный локальный inference на двух AMD GPU. Раздельно объясни prefill, decode, время первого токена, полное время запроса, экспертов MoE, передачу PCIe, KV cache, speculative decoding и проверку точности. Для каждого этапа укажи гипотезы, контрольные эксперименты, возможные ложные выводы и критерии остановки. Добавь пример таблицы протокола и подробный разбор трёх разных инцидентов. Не придумывай измеренные результаты. Требуется развёрнутый текст не менее 3000 слов.<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n",
+    "manifest": {
+      "tokens": 163,
+      "sha256": "ab88f485baf6ea0c817bba31ba57bf2bf12abe7e20b2f1d00451f32241e2c856",
+      "thinking": false
+    }
+  },
+  "code": {
+    "rendered_prompt": "<|im_start|>system\nYou are a careful technical assistant. Be precise and complete.<|im_end|>\n<|im_start|>user\nImplement a production-quality Python 3 standard-library module for a bounded async work queue with per-key deduplication, cancellation, timeouts, retry with jitter, graceful drain, and deterministic test hooks. Explain invariants and failure semantics. Include complete implementation followed by at least 15 unittest cases, including racing cancellations and shutdown. No external libraries, no abbreviated code, no TODO placeholders. Explain tradeoffs in detail after the code.<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n",
+    "manifest": {
+      "tokens": 116,
+      "sha256": "f7ba374793ef45c1b3e13fb4302d4c119c13e176480424fe0a73db3fdda6f23c",
+      "thinking": false
+    }
+  }
+}

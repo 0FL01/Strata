@@ -1,0 +1,469 @@
+{
+  "schema": 1,
+  "native_sha256": "731cbb6c886d4631e2ee71c5dc633de36b639288fc3a1acf30652a6518ac8180",
+  "scope": "Cold native GEN; fixed output length; EOS stopping disabled; exactness controls, not production-as-is",
+  "runs": [
+    {
+      "label": "ring384-short",
+      "input_tokens": 4096,
+      "output_tokens": 128,
+      "pp_tps": 328.9404999959846,
+      "tg_tps": 42.291680433489724,
+      "pp_ms": 12452.1,
+      "tg_ms": 3026.6,
+      "ttft_s": 12.852539837127551,
+      "request_wall_s": 15.491631933953613,
+      "first1024_wall_s": null,
+      "ready_vram_bytes": {
+        "card1": 16351014912,
+        "card2": 16198082560
+      },
+      "peak_vram_bytes": {
+        "card1": 16384393216,
+        "card2": 16238739456
+      },
+      "token_sha256": "f81ece874b85c2a2dfb76b8e43b70786809a7f0ab3d46544647e61c19b4d4e43"
+    },
+    {
+      "label": "ring512-short",
+      "input_tokens": 4096,
+      "output_tokens": 128,
+      "pp_tps": 332.82683416350443,
+      "tg_tps": 60.990136751322254,
+      "pp_ms": 12306.7,
+      "tg_ms": 2098.7,
+      "ttft_s": 12.706017357064411,
+      "request_wall_s": 14.41841843095608,
+      "first1024_wall_s": null,
+      "ready_vram_bytes": {
+        "card1": 16351002624,
+        "card2": 16197144576
+      },
+      "peak_vram_bytes": {
+        "card1": 16384385024,
+        "card2": 16231895040
+      },
+      "token_sha256": "f81ece874b85c2a2dfb76b8e43b70786809a7f0ab3d46544647e61c19b4d4e43"
+    },
+    {
+      "label": "ring384-64k-1k",
+      "input_tokens": 65536,
+      "output_tokens": 1024,
+      "pp_tps": 610.5186278236114,
+      "tg_tps": 66.35003531325123,
+      "pp_ms": 107344.8,
+      "tg_ms": 15433.3,
+      "ttft_s": 107.75269982800819,
+      "request_wall_s": 122.80393639602698,
+      "first1024_wall_s": 122.79887299798429,
+      "ready_vram_bytes": {
+        "card1": 16351019008,
+        "card2": 16198189056
+      },
+      "peak_vram_bytes": {
+        "card1": 16431636480,
+        "card2": 16280170496
+      },
+      "token_sha256": "b0df5c141e6adacd5902d2008a2fa0c20ebbc2265fd8b18703cda7b9cb89f8ef"
+    },
+    {
+      "label": "ring512-64k-1k",
+      "input_tokens": 65536,
+      "output_tokens": 1024,
+      "pp_tps": 588.6992312487761,
+      "tg_tps": 66.19177515481377,
+      "pp_ms": 111323.4,
+      "tg_ms": 15470.2,
+      "ttft_s": 111.73427219106816,
+      "request_wall_s": 126.81731933588162,
+      "first1024_wall_s": 126.8130359959323,
+      "ready_vram_bytes": {
+        "card1": 16351006720,
+        "card2": 16198332416
+      },
+      "peak_vram_bytes": {
+        "card1": 16431624192,
+        "card2": 16286216192
+      },
+      "token_sha256": "b0df5c141e6adacd5902d2008a2fa0c20ebbc2265fd8b18703cda7b9cb89f8ef"
+    },
+    {
+      "label": "suffix3-short",
+      "input_tokens": 4096,
+      "output_tokens": 128,
+      "pp_tps": 336.5266115648159,
+      "tg_tps": 58.95628943853347,
+      "pp_ms": 12171.4,
+      "tg_ms": 2171.1,
+      "ttft_s": 12.578563971910626,
+      "request_wall_s": 14.361243474995717,
+      "first1024_wall_s": null,
+      "ready_vram_bytes": {
+        "card1": 16351006720,
+        "card2": 16197976064
+      },
+      "peak_vram_bytes": {
+        "card1": 16384385024,
+        "card2": 16232718336
+      },
+      "token_sha256": "f81ece874b85c2a2dfb76b8e43b70786809a7f0ab3d46544647e61c19b4d4e43"
+    },
+    {
+      "label": "suffix3-64k-1k",
+      "input_tokens": 65536,
+      "output_tokens": 1024,
+      "pp_tps": 587.0376259086247,
+      "tg_tps": 64.97626843320896,
+      "pp_ms": 111638.5,
+      "tg_ms": 15759.6,
+      "ttft_s": 112.05486636399291,
+      "request_wall_s": 127.43066121800803,
+      "first1024_wall_s": 127.42784655187279,
+      "ready_vram_bytes": {
+        "card1": 16351014912,
+        "card2": 16198393856
+      },
+      "peak_vram_bytes": {
+        "card1": 16431632384,
+        "card2": 16286281728
+      },
+      "token_sha256": "b0df5c141e6adacd5902d2008a2fa0c20ebbc2265fd8b18703cda7b9cb89f8ef"
+    },
+    {
+      "label": "chunk4096-8k-short",
+      "input_tokens": 8192,
+      "output_tokens": 128,
+      "pp_tps": 430.5573804956245,
+      "tg_tps": 58.04462180301107,
+      "pp_ms": 19026.5,
+      "tg_ms": 2205.2,
+      "ttft_s": 19.42921856790781,
+      "request_wall_s": 21.2447989708744,
+      "first1024_wall_s": null,
+      "ready_vram_bytes": {
+        "card1": 16351019008,
+        "card2": 16198541312
+      },
+      "peak_vram_bytes": {
+        "card1": 16384421888,
+        "card2": 16233312256
+      },
+      "token_sha256": "94e18c2167450d809ff8a0a7ad88927a3de2520239eb334640fabe53492d01b7"
+    },
+    {
+      "label": "chunk8192-8k-short",
+      "input_tokens": 8192,
+      "output_tokens": 128,
+      "pp_tps": 370.82303520827105,
+      "tg_tps": 57.73567884528642,
+      "pp_ms": 22091.4,
+      "tg_ms": 2217.0,
+      "ttft_s": 22.492106284946203,
+      "request_wall_s": 24.321789893088862,
+      "first1024_wall_s": null,
+      "ready_vram_bytes": {
+        "card1": 16351006720,
+        "card2": 16198467584
+      },
+      "peak_vram_bytes": {
+        "card1": 16384389120,
+        "card2": 16233218048
+      },
+      "token_sha256": "ed771edcc85d944658c8f74963d8479a381691bae90a205761d34f560be692ca"
+    },
+    {
+      "label": "shortlist59k-short",
+      "input_tokens": 4096,
+      "output_tokens": 128,
+      "pp_tps": 330.06172541056264,
+      "tg_tps": 62.20839813374806,
+      "pp_ms": 12409.8,
+      "tg_ms": 2057.6,
+      "ttft_s": 12.804911564104259,
+      "request_wall_s": 14.480093952966854,
+      "first1024_wall_s": null,
+      "ready_vram_bytes": {
+        "card1": 16351014912,
+        "card2": 16115048448
+      },
+      "peak_vram_bytes": {
+        "card1": 16384397312,
+        "card2": 16149798912
+      },
+      "token_sha256": "f81ece874b85c2a2dfb76b8e43b70786809a7f0ab3d46544647e61c19b4d4e43"
+    },
+    {
+      "label": "control-repeat-64k-1k",
+      "input_tokens": 65536,
+      "output_tokens": 1024,
+      "pp_tps": 609.8698108115653,
+      "tg_tps": 65.01050706925778,
+      "pp_ms": 107459.0,
+      "tg_ms": 15751.3,
+      "ttft_s": 107.8635612949729,
+      "request_wall_s": 123.23619021405466,
+      "first1024_wall_s": 123.2319184220396,
+      "ready_vram_bytes": {
+        "card1": 16351006720,
+        "card2": 16198524928
+      },
+      "peak_vram_bytes": {
+        "card1": 16431620096,
+        "card2": 16286408704
+      },
+      "token_sha256": "b0df5c141e6adacd5902d2008a2fa0c20ebbc2265fd8b18703cda7b9cb89f8ef"
+    },
+    {
+      "label": "shortlist59k-64k-1k",
+      "input_tokens": 65536,
+      "output_tokens": 1024,
+      "pp_tps": 611.3889096201209,
+      "tg_tps": 66.44518272425249,
+      "pp_ms": 107192.0,
+      "tg_ms": 15411.2,
+      "ttft_s": 107.5979004399851,
+      "request_wall_s": 122.6272973739542,
+      "first1024_wall_s": 122.62224839394912,
+      "ready_vram_bytes": {
+        "card1": 16351006720,
+        "card2": 16115347456
+      },
+      "peak_vram_bytes": {
+        "card1": 16431616000,
+        "card2": 16203235328
+      },
+      "token_sha256": "b0df5c141e6adacd5902d2008a2fa0c20ebbc2265fd8b18703cda7b9cb89f8ef"
+    },
+    {
+      "label": "control-64k-4k",
+      "input_tokens": 65536,
+      "output_tokens": 4096,
+      "pp_tps": 608.1679885894263,
+      "tg_tps": 72.39396740504036,
+      "pp_ms": 107759.7,
+      "tg_ms": 56579.3,
+      "ttft_s": 108.1641523768194,
+      "request_wall_s": 164.36266904789954,
+      "first1024_wall_s": 123.41611889889464,
+      "ready_vram_bytes": {
+        "card1": 16351002624,
+        "card2": 16198627328
+      },
+      "peak_vram_bytes": {
+        "card1": 16431616000,
+        "card2": 16286511104
+      },
+      "token_sha256": "2835baa2b2027d171248390815461b2ab65f826aa75c56f0c30c796689edfe20"
+    },
+    {
+      "label": "shortlist59k-64k-4k",
+      "input_tokens": 65536,
+      "output_tokens": 4096,
+      "pp_tps": 608.0935003140864,
+      "tg_tps": 73.91793953743539,
+      "pp_ms": 107772.9,
+      "tg_ms": 55412.8,
+      "ttft_s": 108.17715250095353,
+      "request_wall_s": 163.2093567699194,
+      "first1024_wall_s": 123.09919337998144,
+      "ready_vram_bytes": {
+        "card1": 16351002624,
+        "card2": 16115335168
+      },
+      "peak_vram_bytes": {
+        "card1": 16431611904,
+        "card2": 16203223040
+      },
+      "token_sha256": "2835baa2b2027d171248390815461b2ab65f826aa75c56f0c30c796689edfe20"
+    },
+    {
+      "label": "suffix3-64k-4k",
+      "input_tokens": 65536,
+      "output_tokens": 4096,
+      "pp_tps": 610.6853157279237,
+      "tg_tps": 72.19160384857388,
+      "pp_ms": 107315.5,
+      "tg_ms": 56737.9,
+      "ttft_s": 107.73527728300542,
+      "request_wall_s": 164.08395286579616,
+      "first1024_wall_s": 123.00697836698964,
+      "ready_vram_bytes": {
+        "card1": 16351002624,
+        "card2": 16198676480
+      },
+      "peak_vram_bytes": {
+        "card1": 16431628288,
+        "card2": 16292474880
+      },
+      "token_sha256": "2835baa2b2027d171248390815461b2ab65f826aa75c56f0c30c796689edfe20"
+    },
+    {
+      "label": "shortlist59k-repeat-64k-4k",
+      "input_tokens": 65536,
+      "output_tokens": 4096,
+      "pp_tps": 611.1135459337581,
+      "tg_tps": 73.61610352264557,
+      "pp_ms": 107240.3,
+      "tg_ms": 55640.0,
+      "ttft_s": 107.6484594559297,
+      "request_wall_s": 162.90658272313885,
+      "first1024_wall_s": 122.5082188360393,
+      "ready_vram_bytes": {
+        "card1": 16351014912,
+        "card2": 16115634176
+      },
+      "peak_vram_bytes": {
+        "card1": 16431624192,
+        "card2": 16209424384
+      },
+      "token_sha256": "2835baa2b2027d171248390815461b2ab65f826aa75c56f0c30c796689edfe20"
+    },
+    {
+      "label": "control-repeat-64k-4k",
+      "input_tokens": 65536,
+      "output_tokens": 4096,
+      "pp_tps": 595.4191537881472,
+      "tg_tps": 72.30451214754639,
+      "pp_ms": 110067.0,
+      "tg_ms": 56649.3,
+      "ttft_s": 110.47695632604882,
+      "request_wall_s": 166.74026051606052,
+      "first1024_wall_s": 125.50537153705955,
+      "ready_vram_bytes": {
+        "card1": 16351006720,
+        "card2": 16198766592
+      },
+      "peak_vram_bytes": {
+        "card1": 16431616000,
+        "card2": 16292564992
+      },
+      "token_sha256": "2835baa2b2027d171248390815461b2ab65f826aa75c56f0c30c796689edfe20"
+    },
+    {
+      "label": "heldout-ru-control",
+      "input_tokens": 163,
+      "output_tokens": 1024,
+      "pp_tps": 76.52582159624413,
+      "tg_tps": 42.17931977608713,
+      "pp_ms": 2130.0,
+      "tg_ms": 24277.3,
+      "ttft_s": 2.5213399161584675,
+      "request_wall_s": 26.419907093048096,
+      "first1024_wall_s": 26.416611060034484,
+      "ready_vram_bytes": {
+        "card1": 16351014912,
+        "card2": 16199720960
+      },
+      "peak_vram_bytes": {
+        "card1": 16384393216,
+        "card2": 16246284288
+      },
+      "token_sha256": "2c75237ce0e5334713cfe3b42dc574c2f75f636266e833dcdda40db027b5bb55"
+    },
+    {
+      "label": "heldout-ru-shortlist59k",
+      "input_tokens": 163,
+      "output_tokens": 1024,
+      "pp_tps": 71.94244604316548,
+      "tg_tps": 58.58425204959066,
+      "pp_ms": 2265.7,
+      "tg_ms": 17479.1,
+      "ttft_s": 2.6530643049627542,
+      "request_wall_s": 19.757461603963748,
+      "first1024_wall_s": 19.75683933799155,
+      "ready_vram_bytes": {
+        "card1": 16351010816,
+        "card2": 16114982912
+      },
+      "peak_vram_bytes": {
+        "card1": 16384389120,
+        "card2": 16161542144
+      },
+      "token_sha256": "2c75237ce0e5334713cfe3b42dc574c2f75f636266e833dcdda40db027b5bb55"
+    },
+    {
+      "label": "heldout-code-shortlist59k",
+      "input_tokens": 116,
+      "output_tokens": 1024,
+      "pp_tps": 62.916960459944676,
+      "tg_tps": 71.97885621098803,
+      "pp_ms": 1843.7,
+      "tg_ms": 14226.4,
+      "ttft_s": 2.241938682971522,
+      "request_wall_s": 16.082655268954113,
+      "first1024_wall_s": 16.079179158899933,
+      "ready_vram_bytes": {
+        "card1": 16351010816,
+        "card2": 16115617792
+      },
+      "peak_vram_bytes": {
+        "card1": 16388325376,
+        "card2": 16162172928
+      },
+      "token_sha256": "dcd306a89844319f22a4612553da2454e5ba8391c559957c7255ae4f34bbe486"
+    },
+    {
+      "label": "heldout-code-control",
+      "input_tokens": 116,
+      "output_tokens": 1024,
+      "pp_tps": 58.97905226764287,
+      "tg_tps": 71.03711411723899,
+      "pp_ms": 1966.8,
+      "tg_ms": 14415.0,
+      "ttft_s": 2.3549011568538845,
+      "request_wall_s": 16.394455757923424,
+      "first1024_wall_s": 16.390414139954373,
+      "ready_vram_bytes": {
+        "card1": 16351002624,
+        "card2": 16198934528
+      },
+      "peak_vram_bytes": {
+        "card1": 16388325376,
+        "card2": 16239591424
+      },
+      "token_sha256": "dcd306a89844319f22a4612553da2454e5ba8391c559957c7255ae4f34bbe486"
+    },
+    {
+      "label": "heldout-ru-repeat-shortlist59k",
+      "input_tokens": 163,
+      "output_tokens": 1024,
+      "pp_tps": 54.865528964286916,
+      "tg_tps": 58.89694759667094,
+      "pp_ms": 2970.9,
+      "tg_ms": 17386.3,
+      "ttft_s": 3.366512494860217,
+      "request_wall_s": 20.369765118928626,
+      "first1024_wall_s": 20.36907608085312,
+      "ready_vram_bytes": {
+        "card1": 16351002624,
+        "card2": 16115961856
+      },
+      "peak_vram_bytes": {
+        "card1": 16384385024,
+        "card2": 16162525184
+      },
+      "token_sha256": "2c75237ce0e5334713cfe3b42dc574c2f75f636266e833dcdda40db027b5bb55"
+    },
+    {
+      "label": "heldout-ru-repeat-control",
+      "input_tokens": 163,
+      "output_tokens": 1024,
+      "pp_tps": 78.4030784030784,
+      "tg_tps": 40.16237522797247,
+      "pp_ms": 2079.0,
+      "tg_ms": 25496.5,
+      "ttft_s": 2.4678082899190485,
+      "request_wall_s": 27.588096335995942,
+      "first1024_wall_s": 27.584763830993325,
+      "ready_vram_bytes": {
+        "card1": 16351006720,
+        "card2": 16198922240
+      },
+      "peak_vram_bytes": {
+        "card1": 16384389120,
+        "card2": 16245481472
+      },
+      "token_sha256": "2c75237ce0e5334713cfe3b42dc574c2f75f636266e833dcdda40db027b5bb55"
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "instrumented": true,
+  "warning": "Diagnostic only; do not pool with uninstrumented performance runs",
+  "runs": [
+    {
+      "label": "phase4096-8k-short",
+      "input_tokens": 8192,
+      "output_tokens": 128,
+      "pp_tps": 436.4853128446673,
+      "tg_tps": 56.75016626025272,
+      "pp_ms": 18768.1,
+      "tg_ms": 2255.5,
+      "ttft_s": 19.17016120487824,
+      "request_wall_s": 21.036825314862654,
+      "token_sha256": "94e18c2167450d809ff8a0a7ad88927a3de2520239eb334640fabe53492d01b7",
+      "phase_receipts": [
+        "strata prefill timing: 4096 tokens, GPU timeline 4859 ms, wall 5291 ms, host staging 33 ms: embed+steps 16 (0.3%) hc read 814 (16.8%) gdn 660 (13.6%) qsa proj 389 (8.0%) qsa indexer 0 (0.0%) qsa select 17 (0.4%) qsa attn 660 (13.6%) router+shared 188 (3.9%) host grouping 36 (0.7%) gather 13 (0.3%) wait copy 7 (0.2%) dequant 129 (2.7%) gemm gate/up 964 (19.8%) gemm down 566 (11.7%) combine 30 (0.6%) kv stage 0 (0.0%) gdn conv+gates 14 (0.3%) gdn recurrence 123 (2.5%) gdn out proj 232 (4.8%)",
+        "strata prefill timing: host: chunk setup (PLE rows, the expert stream plan) 0 ms, waiting for each chunk 78 ms, after each chunk (the draft layer, progress) 425 ms, PLE 0 ms",
+        "STRATA_HC_BF16_CLONE_V1 stage_lb=27 stage_le=48 device=1 run_n=4096 pos0=0 down=42 up=42",
+        "strata prefill timing: 8191 tokens, GPU timeline 13059 ms, wall 13073 ms, host staging 182 ms: embed+steps 36 (0.3%) hc read 3024 (23.2%) gdn 1858 (14.2%) qsa proj 680 (5.2%) qsa indexer 1 (0.0%) qsa select 62 (0.5%) qsa attn 1534 (11.7%) router+shared 484 (3.7%) host grouping 42 (0.3%) gather 22 (0.2%) wait copy 17 (0.1%) dequant 296 (2.3%) gemm gate/up 2334 (17.9%) gemm down 1395 (10.7%) combine 84 (0.6%) ple 165 (1.3%) kv stage 5 (0.0%) gdn conv+gates 38 (0.3%) gdn recurrence 347 (2.7%) gdn out proj 634 (4.9%)",
+        "strata prefill timing: host: chunk setup (PLE rows, the expert stream plan) 23 ms, waiting for each chunk 0 ms, after each chunk (the draft layer, progress) 0 ms, PLE 2 ms",
+        "STRATA_HC_BF16_CLONE_V1 stage_lb=0 stage_le=27 device=0 run_n=8191 pos0=0 down=54 up=54",
+        "strata prefill timing: 4095 tokens, GPU timeline 5134 ms, wall 5438 ms, host staging 52 ms: embed+steps 22 (0.4%) hc read 953 (18.6%) gdn 662 (12.9%) qsa proj 350 (6.8%) qsa indexer 0 (0.0%) qsa select 45 (0.9%) qsa attn 873 (17.0%) router+shared 189 (3.7%) host grouping 13 (0.3%) gather 7 (0.1%) wait copy 6 (0.1%) dequant 118 (2.3%) gemm gate/up 925 (18.0%) gemm down 562 (10.9%) combine 30 (0.6%) kv stage 9 (0.2%) gdn conv+gates 14 (0.3%) gdn recurrence 123 (2.4%) gdn out proj 233 (4.5%)",
+        "strata prefill timing: host: chunk setup (PLE rows, the expert stream plan) 0 ms, waiting for each chunk 74 ms, after each chunk (the draft layer, progress) 303 ms, PLE 0 ms",
+        "STRATA_HC_BF16_CLONE_V1 stage_lb=27 stage_le=48 device=1 run_n=4095 pos0=4096 down=0 up=0"
+      ]
+    },
+    {
+      "label": "phase8192-8k-short",
+      "input_tokens": 8192,
+      "output_tokens": 128,
+      "pp_tps": 365.9086746977189,
+      "tg_tps": 57.82958344628174,
+      "pp_ms": 22388.1,
+      "tg_ms": 2213.4,
+      "ttft_s": 22.787272867979482,
+      "request_wall_s": 24.61471049883403,
+      "token_sha256": "ed771edcc85d944658c8f74963d8479a381691bae90a205761d34f560be692ca",
+      "phase_receipts": [
+        "strata prefill timing: 8191 tokens, GPU timeline 12211 ms, wall 12237 ms, host staging 128 ms: embed+steps 28 (0.2%) hc read 3170 (26.0%) gdn 1698 (13.9%) qsa proj 634 (5.2%) qsa indexer 0 (0.0%) qsa select 62 (0.5%) qsa attn 1533 (12.6%) router+shared 437 (3.6%) host grouping 33 (0.3%) gather 22 (0.2%) wait copy 9 (0.1%) dequant 154 (1.3%) gemm gate/up 1991 (16.3%) gemm down 1195 (9.8%) combine 84 (0.7%) ple 159 (1.3%) kv stage 0 (0.0%) gdn conv+gates 37 (0.3%) gdn recurrence 345 (2.8%) gdn out proj 620 (5.1%)",
+        "strata prefill timing: host: chunk setup (PLE rows, the expert stream plan) 22 ms, waiting for each chunk 0 ms, after each chunk (the draft layer, progress) 0 ms, PLE 2 ms",
+        "STRATA_HC_BF16_CLONE_V1 stage_lb=0 stage_le=27 device=0 run_n=8191 pos0=0 down=0 up=0",
+        "strata prefill timing: 8191 tokens, GPU timeline 9071 ms, wall 9719 ms, host staging 23 ms: embed+steps 29 (0.3%) hc read 1816 (20.0%) gdn 1214 (13.4%) qsa proj 638 (7.0%) qsa indexer 0 (0.0%) qsa select 62 (0.7%) qsa attn 1532 (16.9%) router+shared 340 (3.7%) host grouping 23 (0.3%) gather 17 (0.2%) wait copy 7 (0.1%) dequant 124 (1.4%) gemm gate/up 1551 (17.1%) gemm down 944 (10.4%) combine 61 (0.7%) kv stage 0 (0.0%) gdn conv+gates 26 (0.3%) gdn recurrence 244 (2.7%) gdn out proj 443 (4.9%)",
+        "strata prefill timing: host: chunk setup (PLE rows, the expert stream plan) 5 ms, waiting for each chunk 126 ms, after each chunk (the draft layer, progress) 644 ms, PLE 0 ms",
+        "STRATA_HC_BF16_CLONE_V1 stage_lb=27 stage_le=48 device=1 run_n=8191 pos0=0 down=0 up=0"
+      ]
+    }
+  ]
+}
