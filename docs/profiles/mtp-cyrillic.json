@@ -1,0 +1,6 @@
+{
+  "args": [
+    "--mtp-draft-vocab",
+    "/src/data/draft_vocab_cyrillic.bin"
+  ]
+}
