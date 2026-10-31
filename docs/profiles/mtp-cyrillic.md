@@ -86,3 +86,21 @@ vocabulary override. Preserve the original model and MTP pack.
 To roll back, restore the exact prior configuration and restart. If there was no previous
 override, removing the two arguments restores the MTP pack's default vocabulary. Do not
 overwrite the pack's original `draft_vocab.bin`.
+
+## Deployment verification (2026-10-31)
+
+The existing production container was started with only the two shortlist arguments
+added to its saved configuration. Startup confirmed 58,963 draft rows. The native binary
+remained SHA256 731cbb6c886d4631e2ee71c5dc633de36b639288fc3a1acf30652a6518ac8180;
+the target model/full verifier, API overlay, mounts, remaining arguments and environment
+were preserved. All 56 expected effective native environment keys matched at runtime.
+Health remained healthy with restart count 0 through the bounded post-smoke observation.
+
+Authenticated live checks passed: ordinary generation; reversed tool-result history
+through Chat Completions, Anthropic and Responses; invalid-request rejection followed
+by successful recovery; unauthenticated rejection; and streaming cancellation draining
+back to idle. This was text/tool/API smoke, not vision qualification, fault injection
+or a long-duration soak. Rollback retains the exact original configuration.
+
+Five public profile CPU tests and 13 isolated deployment/environment harness tests passed.
+There are no repository CI workflows; these results are local checks, not a CI-green claim.
