@@ -38,3 +38,31 @@ Decision: one bounded GPU suffix-draft=3 screen against today's exact control is
 E003 tests suffix drafting, then E004 screens PP cap 8192 after a short exactness gate.
 8192 is not a free improvement: the existing HC BF16 clone is only qualified for chunk sizes 4096/4093,
 so larger chunks use its generic fallback. No QEngine source code was copied.
+
+## E003: existing suffix-draft=3, first screen
+Both 128-token and 1024-token outputs matched their suffix-disabled control.
+At cold 65536 / 1024, suffix=3 produced PP 587.0376, TG 64.9763,
+TTFT 112.0549 s and wall 127.4307 s; accepted drafts 470/541 versus 457/517.
+No TG gain in this pass. PP changed despite identical 164512 expert transfers and no PP feature change,
+so the earlier ring single-pair PP delta must not be over-attributed. A repeated control is required.
+A 4096-output pair remains pending because offline suffix opportunities differ later in the output.
+
+## E004: PP cap 8192, rejected short screen
+At 8192 input / 128 output, cap 4096 versus 8192:
+- PP 430.5574 versus 370.8230 tok/s; TG 58.0446 versus 57.7357 tok/s.
+- TTFT 19.4292 versus 22.4921 s; wall 21.2448 versus 24.3218 s.
+- Actual chunks 4096 versus 8191; expert transfers 20564 versus 12616.
+- Outputs diverged at zero-based index 89. The long-context candidate was not run.
+Fewer transfers did not improve complete PP. Source inspection shows the current HC clone specializes
+4096/4093, and larger chunks fall back; that is a possible explanation, not measured attribution.
+No correctness or performance promotion.
+
+## Source exclusions
+- QEngine's shortlist is static corpus frequency ranking, not a dynamic per-context algorithm.
+  Strata already provides static draft vocabulary selection. A 58963-token shipped Cyrillic subset
+  is being screened against the current 106299-token subset with fixed expert-cache counts.
+  It covers the same number of target tokens in the two historical traces, not proof of equal draft quality.
+- QEngine's sparse attention union-inflation fallback has no reachable equivalent gap in gfx906.
+  qsa_prompt_attn.cu returns false under STRATA_HIP_GFX906; prefill.cpp invokes qsa_decode_attn_batch.
+  That kernel indexes each query's own selected IDs, not a cross-query union. STRATA_SEL_OVERLAP computes
+  union ratios only for diagnostics. No redundant kernel port or GPU test is warranted.
