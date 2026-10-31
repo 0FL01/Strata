@@ -66,3 +66,44 @@ No correctness or performance promotion.
   qsa_prompt_attn.cu returns false under STRATA_HIP_GFX906; prefill.cpp invokes qsa_decode_attn_batch.
   That kernel indexes each query's own selected IDs, not a cross-query union. STRATA_SEL_OVERLAP computes
   union ratios only for diagnostics. No redundant kernel port or GPU test is warranted.
+
+## E005: fixed-cache draft shortlist and longer suffix screen
+Current native 731... baseline is retained; only the existing draft-only vocabulary path changes.
+The verifier remains full-vocabulary. Explicit cache settings freeze actual slots at 9399 + 8619;
+the shortlist cannot silently spend saved memory on extra expert slots.
+
+| Cold input / output | Arm | PP tok/s | TG tok/s | TTFT s | Request wall s |
+|---|---|---:|---:|---:|---:|
+| 65536 / 1024 | repeated control, 106299 rows | 609.8698 | 65.0105 | 107.8636 | 123.2362 |
+| 65536 / 1024 | Cyrillic shortlist, 58963 rows | 611.3889 | 66.4452 | 107.5979 | 122.6273 |
+| 65536 / 4096 | control, 106299 rows | 608.1680 | 72.3940 | 108.1642 | 164.3627 |
+| 65536 / 4096 | Cyrillic shortlist, 58963 rows | 608.0935 | 73.9179 | 108.1772 | 163.2094 |
+| 65536 / 4096 | suffix=3, default shortlist | 610.6853 | 72.1916 | 107.7353 | 164.0840 |
+
+All tested 128-, 1024- and 4096-token shortlist outputs match their control exactly.
+Repeated control also matches the original 1024-token control.
+The 4K shortlist pair has +2.11% TG and -0.70% whole-request wall, with essentially unchanged PP.
+This is a small first-pair signal, NOT a qualified speedup: the original 1K control was 66.3500 TG,
+close to the shortlist's 66.4452, whereas the fresh repeated control was 65.0105.
+A reverse-order 4K repetition and two held-out Russian/code pairs are pending.
+These held-out cases have short prompts (163/116 tokens), fixed 1024-token generation and disabled
+EOS stopping; they do not qualify natural completion or varied long-context traffic.
+
+Fixed-cache second-GPU READY memory falls by about 79.4 MiB in the 4K pair.
+The shipped shortlist SHA256 is
+25d7fd1670a2e0ec885868d1718d410a3baab03bceeacf0a156cf93ffe4e1ef4.
+This is measurable memory saving, not removal of all MTP weights or a PP speedup.
+
+Suffix=3 also matches all 4096 output IDs but produces no TG gain.
+Only five suffix windows actually execute (21 of 22 draft tokens accepted).
+The offline overlapping opportunity count was deliberately not a scheduler prediction.
+Retain suffix=0; no further suffix grid is warranted from these results.
+
+## PP phase diagnostic plan
+Existing native dispatch receipts confirm HC clone execution for the eligible 4096 chunks,
+and zero clone dispatches at cap 8192 on both GPUs.
+A two-arm 8K/128 diagnostic using existing STRATA_PREFILL_TIMING is prepared.
+It records all phases; the "hc read" phase includes more than the clone, so it cannot isolate clone
+causality alone. Instrumented timings are not production performance qualification.
+No new HC shape is enabled: the current 4096/4093 whitelist is retained.
+Production stays stopped in R&D mode; original native/model/config/overlay rollback is preserved.
