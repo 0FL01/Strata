@@ -2126,3 +2126,19 @@ set_property(SOURCE src/prefill/prefill.cpp APPEND PROPERTY COMPILE_DEFINITIONS 
 # Isolated fixed-J48 prefill candidate. Runtime is default OFF.
 set_property(SOURCE src/prefill/moe_mmq.cu APPEND PROPERTY COMPILE_DEFINITIONS STRATA_GFX906_PREFILL_J48_BUILT=1)
 set_property(SOURCE src/prefill/prefill.cpp APPEND PROPERTY COMPILE_DEFINITIONS STRATA_GFX906_PREFILL_J48_BUILT=1)
+
+# Research-only gfx906 grouped-Q2 scheduler qualification.
+option(STRATA_GFX906_COMPACT_MMQ "Build opt-in exact J48 Q2_0 compact scheduler" OFF)
+if(STRATA_GFX906_COMPACT_MMQ)
+  if(NOT STRATA_HIP_GFX906)
+    message(FATAL_ERROR "Compact MMQ requires gfx906")
+  endif()
+  file(SHA256 "${STRATA_GGML_DIR}/ggml/src/ggml-cuda/mmq.cuh" _compact_mmq_sha)
+  if(NOT _compact_mmq_sha STREQUAL "50db23f5055af6e28c142fcb4c7fb16c51f7137184ebf8c0ca113ed88906851b")
+    message(FATAL_ERROR "Compact MMQ requires the qualified upstream scheduler fingerprint")
+  endif()
+  target_compile_definitions(strata_mmq PRIVATE STRATA_GFX906_COMPACT_MMQ_BUILT=1)
+  add_executable(mmq_compact_parity src/prefill/mmq_compact_parity.cpp)
+  target_link_libraries(mmq_compact_parity PRIVATE strata_mmq CUDA::cudart)
+  target_include_directories(mmq_compact_parity PRIVATE include)
+endif()

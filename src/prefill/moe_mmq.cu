@@ -525,7 +525,20 @@ void profile_tiles(const Product& p, const mmq_args& a) {
 
 void tile_profile_dump() { if (tile_profile_enabled()) tile_counters().dump(); }
 
+bool compact_tiles_enabled() {
+#if defined(STRATA_HIP_GFX906) && defined(STRATA_GFX906_COMPACT_MMQ_BUILT)
+    static const bool on=[] {const char* e=std::getenv("STRATA_GFX906_COMPACT_MMQ");return e && std::strcmp(e,"1")==0;}();
+    return on;
+#else
+    return false;
+#endif
+}
+namespace {
+#include "moe_mmq_compact_q2.cuh"
+} // namespace
+
 void Context::run(const Product& p, void* stream) {
+    if (p.compact_taken) *p.compact_taken = false;
     if (p.n <= 0 || p.max_rows <= 0) return;
     const ggml_type t = (ggml_type) p.type;
     const int64_t qk = ggml_blck_size(t), bpr = p.w_cols / qk;
@@ -537,6 +550,7 @@ void Context::run(const Product& p, void* stream) {
     profile_tiles(p,a);
     auto& ctx = *(ggml_backend_cuda_context*) ctx_;
     const cudaStream_t s = (cudaStream_t) stream;
+    if (try_compact_q2_j48(p,a,s)) { if (p.compact_taken) *p.compact_taken = true; return; }
     if (p.tab) {
         if (p.n > kGatherGroupMax) {
             std::fprintf(stderr, "prefill mmq: a pointer table holds at most %d experts (got %d)\n", kGatherGroupMax, p.n);

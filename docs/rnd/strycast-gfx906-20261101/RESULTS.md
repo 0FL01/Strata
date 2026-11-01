@@ -45,3 +45,23 @@ The original incomplete run remains in private evidence. No performance qualific
 
 Profile-off 2K/128 retained exactly the baseline token hash, MTP acceptance 59/65 and expert admission. Its PP 301.30 / TG 73.06 / wall 8.562 s remain baseline noise, not a gain.
 In the first 8K diagnostic, the combine phase was only 0.5–0.7% of each reported stage timeline, and even that includes waits. This bounds the motivation for combine/HC work; the entire phase cannot be credited as removable time.
+
+### Measured scope and compact scheduler prototype
+
+The corrected 8K diagnostic emitted one complete snapshot: 27,399,000 rectangular CTAs versus 6,354,840 live CTAs, or 76.806% empty. Per device the empty fractions were 73.219% and 80.104%. Almost all covered calls selected J48/I64/K256. These are scheduling counts, not compute or time savings.
+
+The prototype is deliberately narrow: gfx906, native Q2_0, 16 full-local-routing experts, the existing selected J48/I64/K256 configuration, no stream-K, current 4K chunk bounds. A 17-entry by-value prefix maps live tiles to expert/tile indices; upstream tile arithmetic is reused unchanged. It also omits the now-redundant shared-ID initialization/barrier before loading actual IDs. The copied outer-wrapper material retains the upstream MIT notice.
+Build option `STRATA_GFX906_COMPACT_MMQ` defaults OFF; runtime `STRATA_GFX906_COMPACT_MMQ=1` is also required by the engine. The build pins the upstream scheduler SHA256 and checks device configuration at compile/run time. Unknown paths fall back.
+
+Isolated qualification completed on both GPUs:
+- 20 cases: GU/down × balanced/skewed/long-skew/zero-count/tail distributions × two devices.
+- Shuffled destination IDs, nonzero absolute GU bounds, full output bytes and untouched canaries matched exactly.
+- Each compact arm asserted that the candidate actually ran; a silent fallback cannot pass.
+- Forty measured alternating AB/BA pairs per case after five warmups; paired medians and quartiles are in [compact-micro.json](compact-micro.json). Raw paired samples are retained privately.
+- Skewed GPU-kernel gains were only about 0.5–1.4%. Balanced down and zero-row synthetic down cases were about 0.2–0.4% slower. This is not a universal win and not promotion evidence.
+
+First same-binary cold 8K/128 screen:
+- OFF: PP 490.20 tok/s, request wall 18.600 s.
+- ON: PP 492.98 tok/s, request wall 18.505 s.
+- All output token IDs, work, MTP acceptance 54/67 and 20,564 streamed experts matched.
+- About +0.57% PP / -0.51% wall is below a trustworthy one-pair claim. Reverse-order confirmation is pending. No main promotion or deployment.

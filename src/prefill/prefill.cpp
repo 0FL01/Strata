@@ -76,6 +76,7 @@ namespace strata::prefill::mmq {
 bool built() { return false; }
 bool tile_profile_enabled() { return false; }
 void tile_profile_dump() {}
+bool compact_tiles_enabled() { return false; }
 bool supported(int) { return false; }
 bool fits(int, int64_t) { return false; }
 size_t matrix_bytes(int, int64_t, int64_t) { return 0; }
@@ -4484,7 +4485,8 @@ bool Prefill::run_impl(const int64_t* tokens, int64_t n, int64_t pos0, std::stri
 #if defined(STRATA_GFX906_PREFILL_J48_BUILT) && STRATA_GFX906_PREFILL_J48_BUILT == 1 && defined(STRATA_HIP_GFX906)
                                 gu.local_full_routing_prefill = local_full_routing_prefill;
 #endif
-                                if (mmq::tile_profile_enabled()) {
+                                gu.compact_tiles = mmq::compact_tiles_enabled();
+                                if (mmq::tile_profile_enabled() || gu.compact_tiles) {
                                     gu.host_counts_valid = true;
                                     for (int e=0;e<ngx;++e) gu.host_counts[e] = m.cnt[(size_t) order[j0+e]];
                                 }
@@ -4506,6 +4508,7 @@ bool Prefill::run_impl(const int64_t* tokens, int64_t n, int64_t pos0, std::stri
 #if defined(STRATA_GFX906_PREFILL_J48_BUILT) && STRATA_GFX906_PREFILL_J48_BUILT == 1 && defined(STRATA_HIP_GFX906)
                                 dn.local_full_routing_prefill = local_full_routing_prefill;
 #endif
+                                dn.compact_tiles = gu.compact_tiles;
                                 dn.host_counts_valid = gu.host_counts_valid;
                                 if (dn.host_counts_valid) for (int e=0;e<ngx;++e) dn.host_counts[e] = gu.host_counts[e];
                                 m.mmq_ctx->run(dn, m.cs);

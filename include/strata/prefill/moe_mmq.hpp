@@ -15,6 +15,7 @@ bool built();
 /// Research-only host CTA counters, disabled unless STRATA_MMQ_TILE_PROFILE=1.
 bool tile_profile_enabled();
 void tile_profile_dump();
+bool compact_tiles_enabled();
 /// MMQ covers this ggml type (the i-quants and Q2_0 the packs use, Q8_0, NVFP4 unless fp16, and with
 /// STRATA_MMQ_KQUANTS the K-quants Q4_K / Q5_K / Q5_1 / Q6_K: Unsloth's UD-Q4_K_XL experts (CUDA), and the dense GGUF
 /// projections of the mixed-quant packs through Gemm::native's STRATA_DENSE_MMQ path (HIP); IQ1_M is not covered).
@@ -86,6 +87,8 @@ struct Product {
     const WeightTab* tab = nullptr;
     // Host provenance: only the original local, full-routing FP32 expert prefill calls set this.
     bool local_full_routing_prefill = false;
+    bool compact_tiles = false;
+    bool* compact_taken = nullptr; // optional host diagnostic, written synchronously by run()
     bool host_counts_valid = false;
     int32_t host_counts[kGatherGroupMax] = {};
 };
