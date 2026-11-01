@@ -75,6 +75,7 @@
 namespace strata::prefill::mmq {
 bool built() { return false; }
 bool tile_profile_enabled() { return false; }
+void tile_profile_dump() {}
 bool supported(int) { return false; }
 bool fits(int, int64_t) { return false; }
 size_t matrix_bytes(int, int64_t, int64_t) { return 0; }
@@ -5044,6 +5045,7 @@ bool Prefill::run(const int64_t* tokens, int64_t n, int64_t pos0, std::string& e
         err = drain_err;
         return false;
     }
+    mmq::tile_profile_dump(); // --serve uses _Exit, so static destructors cannot report diagnostics.
     // STRATA_MMQ_DIRECT=1 with STRATA_MMQ_DIRECT_LOG=1 (a check, not a default): each stage's totals so far - how many
     // resident experts its prompt MMQ read in their slots, of all its resident and streamed ones
     if (mmq::direct_mode() == 1) {

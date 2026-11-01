@@ -14,6 +14,7 @@ namespace strata::prefill::mmq {
 bool built();
 /// Research-only host CTA counters, disabled unless STRATA_MMQ_TILE_PROFILE=1.
 bool tile_profile_enabled();
+void tile_profile_dump();
 /// MMQ covers this ggml type (the i-quants and Q2_0 the packs use, Q8_0, NVFP4 unless fp16, and with
 /// STRATA_MMQ_KQUANTS the K-quants Q4_K / Q5_K / Q5_1 / Q6_K: Unsloth's UD-Q4_K_XL experts (CUDA), and the dense GGUF
 /// projections of the mixed-quant packs through Gemm::native's STRATA_DENSE_MMQ path (HIP); IQ1_M is not covered).

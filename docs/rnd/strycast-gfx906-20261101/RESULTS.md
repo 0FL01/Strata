@@ -33,3 +33,15 @@ It reports rectangular/live/empty CTA counts, grouped by device/type/projection 
 "Live" includes terminal partially filled tiles; empty CTA share is not saved GEMM FLOPs. Upstream already skips empty CTAs before the product, after shared-ID initialization and a barrier.
 Counters add CPU work and locking; profile-on timing is not promotion evidence. Measure profile-off controls and candidates separately.
 No scheduler optimization is enabled or promoted yet.
+
+### Diagnostic lifecycle correction
+
+The first profile-enabled 8K run completed with valid phase timing but no CTA report.
+Investigation found that serve-mode clean QUIT intentionally calls `std::_Exit(0)`; a C++ static destructor is therefore not a reporting hook even when process exit status is zero.
+This was a diagnostic implementation error, not evidence of zero MMQ work.
+The counters now emit an explicit locked cumulative snapshot after successful prefill pipeline drain, with a monotonic sequence number. Consume the final snapshot (or differences), never sum cumulative snapshots.
+The collector is explicitly restricted to the observed Q2_0 grouped-local path; direct/other paths and stream-K are excluded.
+The original incomplete run remains in private evidence. No performance qualification or main promotion used it.
+
+Profile-off 2K/128 retained exactly the baseline token hash, MTP acceptance 59/65 and expert admission. Its PP 301.30 / TG 73.06 / wall 8.562 s remain baseline noise, not a gain.
+In the first 8K diagnostic, the combine phase was only 0.5–0.7% of each reported stage timeline, and even that includes waits. This bounds the motivation for combine/HC work; the entire phase cannot be credited as removable time.

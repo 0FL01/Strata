@@ -479,7 +479,10 @@ struct TileCounters {
     using Key = std::tuple<int,int,int64_t,int,int,int>;
     struct Count { uint64_t calls=0,rect=0,live=0; };
     std::map<Key,Count> counts;
-    ~TileCounters() {
+    uint64_t sequence=0;
+    void dump() {
+        std::lock_guard<std::mutex> lock(mutex);
+        std::fprintf(stderr, "MMQ_TILE_SNAPSHOT seq=%llu scope=local_grouped_q2_0 units=CTA cumulative=1 keys=%zu\n", (unsigned long long)++sequence, counts.size());
         for (const auto& [key,c] : counts) {
             const auto [dev,type,rows,I,J,K] = key;
             std::fprintf(stderr, "MMQ_TILE_PROFILE dev=%d type=%d rows=%lld I=%d J=%d K=%d calls=%llu rect=%llu live=%llu empty=%llu\n",
@@ -488,8 +491,9 @@ struct TileCounters {
         }
     }
 };
+TileCounters& tile_counters() { static TileCounters data; return data; }
 void profile_tiles(const Product& p, const mmq_args& a) {
-    if (!tile_profile_enabled() || !p.host_counts_valid || p.tab || p.n<=0 || p.n>kGatherGroupMax) return;
+    if (!tile_profile_enabled() || p.type != GGML_TYPE_Q2_0 || p.total_rows<=0 || !p.host_counts_valid || p.tab || p.n<=0 || p.n>kGatherGroupMax) return;
     const int id=ggml_cuda_get_device();
     const auto& dev=ggml_cuda_info().devices[id];
     const bool fallback=a.nrows_x%128!=0;
@@ -509,15 +513,17 @@ void profile_tiles(const Product& p, const mmq_args& a) {
     for (int e=0;e<p.n;++e) {
         if (p.host_counts[e]<0 || p.host_counts[e]>p.max_rows) return;
         rows+=p.host_counts[e]; max_count=std::max<int64_t>(max_count,p.host_counts[e]);
-        live+=ni*((p.host_counts[e]+c.J-1)/c.J);
+        live+=ni*(((int64_t)p.host_counts[e]+c.J-1)/c.J);
     }
     if (max_count!=p.max_rows || rows>(uint64_t)p.total_rows) return;
-    static TileCounters data;
+    auto& data=tile_counters();
     std::lock_guard<std::mutex> lock(data.mutex);
     auto& sum=data.counts[{id,p.type,p.w_rows,c.I,c.J,c.K_vram}];
     ++sum.calls;sum.rect+=rect;sum.live+=live;
 }
 } // namespace
+
+void tile_profile_dump() { if (tile_profile_enabled()) tile_counters().dump(); }
 
 void Context::run(const Product& p, void* stream) {
     if (p.n <= 0 || p.max_rows <= 0) return;
