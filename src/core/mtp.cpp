@@ -676,7 +676,7 @@ bool mtp_head_borrow_env() {
 // Runtime safety contract only. Qualification pins the canonical file's SHA-256 externally;
 // every admitted map keeps its original ordering, with no sorting or new inverse output mapping.
 bool mtp_head_borrow_vocab(const std::vector<uint8_t>& raw) {
-    if (raw.size() != 106299u * 4u) return false;
+    if (raw.size() != 106299u * 4u && raw.size() != 58963u * 4u) return false;
     std::vector<uint8_t> seen(248320u, 0);
     for (size_t at = 0; at < raw.size(); at += 4) {
         int32_t id = -1;
@@ -793,7 +793,10 @@ bool MtpDrafter::bind(const WeightTable& wt, const NativeHead* head, const float
             borrow = mtp_head_borrow_env() && head_borrow_scope_ && !q4_ && !q4_head_ &&
                 owns_weights_ && owns_draft_head_ && owns_draft_vocab_ && cs_ != nullptr &&
                 head->type() == 13 && g_->n_embd == 2560 && wo->ne0 == 2560 && n_vocab_ == 248320 &&
-                n_dvocab_ == 106299 && row_bytes == 1760 && head->weight_bytes() == 437043200ull &&
+                (n_dvocab_ == 106299 || (n_dvocab_ == 58963 &&
+                    std::getenv("STRATA_GFX906_Q5_HEAD_58963_R2") &&
+                    std::strcmp(std::getenv("STRATA_GFX906_Q5_HEAD_58963_R2"), "1") == 0)) &&
+                row_bytes == 1760 && head->weight_bytes() == 437043200ull &&
                 head->device() == device_ && cudaGetDevice(&current_device) == cudaSuccess &&
                 current_device == device_ && strata::kernels::native_q5_k_mtp_head_indexed_available();
             if (borrow && !mtp_head_borrow_vocab(raw)) {
@@ -833,9 +836,9 @@ bool MtpDrafter::bind(const WeightTable& wt, const NativeHead* head, const float
                     return false;
                 }
                 std::fprintf(stderr, "strata mtp: indexed borrowed Q5_K head CUDA%d: source_rows=248320 "
-                                     "shortlist_rows=106299 head_bytes=437043200 duplicate_bytes=%llu reserved_bytes=%llu "
+                                     "shortlist_rows=%lld head_bytes=437043200 duplicate_bytes=%llu reserved_bytes=%llu "
                                      "vocabulary_bytes=%llu free=%llu total=%llu; full_head=borrowed vocabulary=owned\n",
-                             device_, (unsigned long long) bytes, (unsigned long long) bytes,
+                             device_, (long long) n_dvocab_, (unsigned long long) bytes, (unsigned long long) bytes,
                              (unsigned long long) raw.size(), (unsigned long long) free_b, (unsigned long long) total_b);
             } else {
             if (cudaMalloc((void**) &dvocab_, raw.size()) != cudaSuccess ||

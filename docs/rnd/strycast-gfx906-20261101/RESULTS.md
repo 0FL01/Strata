@@ -82,3 +82,32 @@ The first +0.57% therefore does not establish a reproducible end-to-end gain. **
 
 A comparison of the earlier diagnostic phase logs found nearly unchanged MMQ GU/down times but large first-chunk HC/generic-GDN phase differences; those phases include host/library/wait gaps. Their cause is not established. Do not blame the scheduler, clocking, or any single component from these observations alone.
 A separate bounded diagnostic will repeat uncached requests within one persistent process, asserting read=8,192/reused=0 each time and recording phase/clock/load telemetry. This separates process-cold behavior from context-cold behavior; it does not replace or erase the fresh-process failures.
+
+## Persistent baseline diagnostic and next head hypothesis
+
+Three same-process requests, each a fully uncached 8192-token context and 128
+generated tokens, produced PP 474.40, 504.95, 502.85 tok/s and wall 19.158,
+17.906, 17.974 seconds. Tokens, MTP54/67 and streamed experts20564 were identical.
+This is persistent-process warming, not a repeated cold-start benchmark and not
+proof of its underlying cause. Its 6-7% effect exceeds the compact first-pair
+signal. The original mixed cold-start pairs remain retained and unqualified.
+
+A separate concrete eligibility gap was found: the live immutable 58963-token
+Q5_K MTP head misses the existing contiguous R2 and borrowed indexed-head row
+count gates. A separately default-off 58963/T1 qualification flag now permits
+three-arm testing without changing full verifier dispatch or admission policy.
+
+The component microgate passed on both GPUs: R1, R2 and indexed R2 produced
+identical full 58963-logit framed records, including odd-row tail, canaries,
+three finite inputs, graph replay and post-timing outputs. Captured ELF kernel
+identity and grid sizes prove actual dispatch (R1:14741 blocks; R2/indexed:7371).
+All four 8-record dumps share SHA256
+102f3dae286ff34995e919f041dfb9db71a47af046f5428cab081c1866708c85.
+Canonical full-head/map hashes and file stats were rechecked before/after.
+
+Indexed graph time was ~286us versus ~279us R1 and ~277us R2: about 2.5% slower
+than R1 and 3.35% slower than R2 at the head component. R2 itself appears only
+~0.8% faster than R1 across separate pairs; this is not a paired R1/R2 gain.
+Borrowing remains a memory hypothesis (~98.97MiB removed duplicate allocation),
+not a speed claim. Exact engine, state/undo, memory and no-regression gates are
+not yet complete. Main remains unchanged; production remains stopped.

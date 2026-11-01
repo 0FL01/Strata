@@ -1908,6 +1908,11 @@ void wave_launch(const void* weights, const void* x_q8_1, float* y, int n_in, in
         default: throw std::invalid_argument("native MMVQ (wave) requires 1 <= ncols <= 8");
     }
 }
+// Separate qualification gate: unchanged default dispatch for the smaller shortlist.
+bool q5_head_58963_r2_enabled() {
+    const char* e = std::getenv("STRATA_GFX906_Q5_HEAD_58963_R2");
+    return e && std::strcmp(e, "1") == 0;
+}
 bool q5_head_r2_enabled() {
     const char* e = std::getenv("STRATA_GFX906_Q5_HEAD_R2");
     if (!e || std::string(e) != "1") return false;
@@ -2474,7 +2479,8 @@ void native_q5_k_mmvq(const void* weights, const void* x_q8_1, float* y,
     validate_pointer(y);
     validate_stream(stream);
 #if defined(STRATA_HIP_GFX906)
-    if (!g_wave_off && n_in == 2560 && (n_out == 248320 || n_out == 106299) &&
+    if (!g_wave_off && n_in == 2560 && (n_out == 248320 || n_out == 106299 ||
+        (n_out == 58963 && ncols == 1 && q5_head_58963_r2_enabled())) &&
         (ncols == 1 || ncols == 2 || ncols == 4) && q5_head_r2_enabled()) {
         wave_launch<Q5KTraits, 2>(weights, x_q8_1, y, n_in, n_out, ncols, stream);
         launch_check();
@@ -2513,8 +2519,12 @@ void native_q5_k_mtp_head_indexed_component(
         const void* weights, const void* x_q8_1, float* y, const int* source_row_ids,
         int n_in, int n_source_rows, int n_out, int ncols, void* stream) {
     static_assert(sizeof(int) == 4, "indexed MTP head requires 32-bit row IDs");
-    if (n_in != 2560 || n_source_rows != 248320 || n_out != 106299 || ncols != 1) {
-        throw std::invalid_argument("indexed MTP head component requires Q5_K shape 2560/248320/106299/T1");
+    bool qualified_rows = n_out == 106299;
+#if defined(STRATA_HIP_GFX906)
+    qualified_rows = qualified_rows || (n_out == 58963 && q5_head_58963_r2_enabled());
+#endif
+    if (n_in != 2560 || n_source_rows != 248320 || !qualified_rows || ncols != 1) {
+        throw std::invalid_argument("indexed MTP head component requires Q5_K shape 2560/248320/{106299, opt-in 58963}/T1");
     }
     validate_pointer(weights);
     validate_pointer(x_q8_1);

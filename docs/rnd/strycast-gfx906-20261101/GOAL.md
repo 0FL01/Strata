@@ -52,3 +52,23 @@ Previously tested ring384->512 and prefill4096->8192 were negative; the latter r
 - Fresh production snapshot and authorized stop completed.
 - Empty-CTA early return found: corrected expected benefit before writing scheduler code.
 - Goal/protocol is committed before GPU experiments. Full environment receipt, baseline harness and performance evidence follow in this branch.
+
+## Research-derived next hypothesis: qualify the existing 58963-token head
+
+The live immutable 58963-token MTP shortlist misses both existing Q5_K contiguous
+R2 and borrowed indexed-head size qualification gates (106299 is supported).
+Before dynamic vocabulary mutation, isolate three arms: current contiguous R1,
+opt-in contiguous R2 for 58963/T1, and opt-in borrowed indexed R2 using the exact
+same canonical map. No verifier vocabulary, graph lifetime or admission changes.
+The new size stays separately opt-in; existing size/backend fallbacks are preserved.
+First gate: full logits, odd-row tail and canaries, immutable head/map/input,
+captured kernel identity, direct and graph replay, both GPUs, alternating timings.
+Only then proceed to exact engine work/tokens and persistent/cold performance.
+Borrowing could remove 103774880 bytes (~98.97 MiB), but the existing startup
+reservation preserves expert/workspace admission: this is not a PP gain claim.
+
+Compact MMQ is parked after mixed end-to-end pairs. Baseline same-process cold
+contexts alone warmed by 6-7%, exceeding its first 0.57% signal. MoE-combine fusion
+has a small measured ceiling. Dynamic extras require graph/alias lifetime work
+and show only small coverage opportunity in old code fixtures, none in the RU
+fixture; coverage is not acceptance or speed. These are not promotion candidates.

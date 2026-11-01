@@ -54,8 +54,9 @@ void native_q5_k_mmvq(const void* weights, const void* x_q8_1, float* y,
 bool native_q5_k_mtp_head_indexed_available();
 
 // Indexed MTP head component; an opt-in production caller must satisfy the same contract.
-// Only raw Q5_K [n_in=2560, n_source_rows=248320], n_out=106299, ncols=1;
+// Only raw Q5_K [n_in=2560, n_source_rows=248320], n_out=106299 or separately opt-in 58963, ncols=1;
 // gfx906 wave64 with STRATA_GFX906_Q5_HEAD_R2=1 and STRATA_MMVQ_WAVE!=0.
+// 58963 additionally requires STRATA_GFX906_Q5_HEAD_58963_R2=1.
 // weights contains the full immutable native head, not the gathered shortlist.
 // source_row_ids contains exactly n_out immutable 32-bit device IDs in the
 // ORIGINAL shortlist order. Before upload/capture, the harness must validate
