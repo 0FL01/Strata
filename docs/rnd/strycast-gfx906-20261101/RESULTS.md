@@ -111,3 +111,40 @@ than R1 and 3.35% slower than R2 at the head component. R2 itself appears only
 Borrowing remains a memory hypothesis (~98.97MiB removed duplicate allocation),
 not a speed claim. Exact engine, state/undo, memory and no-regression gates are
 not yet complete. Main remains unchanged; production remains stopped.
+
+### Head engine follow-through: no qualified speed benefit
+
+Same candidate binary, fixed cold 2048-token prompt and 1024 generated tokens:
+
+| Arm | PP tok/s | TG tok/s | Wall seconds |
+|---|---:|---:|---:|
+| Current contiguous R1 | 300.93 | 84.96 | 18.871 |
+| Contiguous R2 | 294.47 | 83.38 | 19.249 |
+| Borrowed indexed R2 | 301.42 | 84.78 | 18.886 |
+
+All three match all 1024 output tokens, MTP490/519, prompt work and 9399/18018
+expert admission. However, primary decode-cache lookups differ: 527040/526770/
+526710, so full physical-work equivalence is NOT established.
+
+A separately instrumented reverse-order diagnostic (DECODE_TIMING=1 in all its
+arms) produced TG 75.86 indexed, 72.58 R2, 82.35 R1. These are not pooled with the
+timing-OFF first pass. Logical pipeline counts match: 534 windows, 465 successful
+speculative windows, 15 forced disagreements, 533 chains. Chain-late counts and
+primary-cache lookups still differ. Source inspection shows doomed speculative
+windows can stop servicing experts at timing-dependent layer boundaries; the
+specific lookup deltas are not causally attributed by existing logs. These
+counters are primary-cache subsets, not all-GPU expert-work totals.
+
+Borrowing releases 103774880 logical bytes after admission and reports 100 MiB
+additional allocator free space; no extra experts/workspace are admitted.
+READY sysfs residency did not show a matching 100 MiB drop, so this is an allocator
+slack observation, not a demonstrated physical-device-residency reduction.
+The original sampled-peak field omitted the READY instant. Raw records remain
+unchanged with correction sidecars; future records explicitly report the maximum
+of 250 ms samples and READY, not an exact allocator/whole-lifecycle peak.
+
+Neither head arm is eligible for main promotion. They remain opt-in R&D only.
+Full 64K, undo/rebranch, owner-lifetime and cancellation gates were not run for
+these non-winning candidates. Next PP work is projection attribution, not more
+head row-factor tuning: warmed GDN input projection time is much larger than
+recurrence, and an all-layer dequant cache would require ~2880 MiB.
