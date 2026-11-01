@@ -65,3 +65,20 @@ First same-binary cold 8K/128 screen:
 - ON: PP 492.98 tok/s, request wall 18.505 s.
 - All output token IDs, work, MTP acceptance 54/67 and 20,564 streamed experts matched.
 - About +0.57% PP / -0.51% wall is below a trustworthy one-pair claim. Reverse-order confirmation is pending. No main promotion or deployment.
+
+### Reverse order: performance claim rejected
+
+The reverse ON→OFF fresh-process pair did not reproduce the first pair:
+
+| Order | Mode | PP tok/s | Request wall s |
+|---|---|---:|---:|
+| First pair | OFF | 490.20 | 18.600 |
+| First pair | ON | 492.98 | 18.505 |
+| Reverse pair | ON | 392.69 | 22.751 |
+| Reverse pair | OFF | 419.76 | 21.406 |
+
+The reverse pair was -6.45% PP / +6.28% wall for ON. All four runs kept identical token IDs, requested work, MTP 54/67, expert admission, 20,564 streamed experts and the same candidate binary. HC exact/N4 dispatch counts also matched.
+The first +0.57% therefore does not establish a reproducible end-to-end gain. **Main promotion is blocked.** No full 64K qualification is justified by these mixed results.
+
+A comparison of the earlier diagnostic phase logs found nearly unchanged MMQ GU/down times but large first-chunk HC/generic-GDN phase differences; those phases include host/library/wait gaps. Their cause is not established. Do not blame the scheduler, clocking, or any single component from these observations alone.
+A separate bounded diagnostic will repeat uncached requests within one persistent process, asserting read=8,192/reused=0 each time and recording phase/clock/load telemetry. This separates process-cold behavior from context-cold behavior; it does not replace or erase the fresh-process failures.
