@@ -16,6 +16,9 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
+#include <map>
+#include <mutex>
+#include <tuple>
 
 namespace strata::prefill::mmq {
 #if defined(STRATA_KQ_DSO)
@@ -465,6 +468,57 @@ static int64_t prefill_j48_opt(const Product& p) {
     return p.max_rows;
 }
 
+// Diagnostic only: preserve upstream selection exactly; never changes dispatch.
+bool tile_profile_enabled() {
+    static const bool on = [] { const char* p = std::getenv("STRATA_MMQ_TILE_PROFILE"); return p && p[0] == '1'; }();
+    return on;
+}
+namespace {
+struct TileCounters {
+    std::mutex mutex;
+    using Key = std::tuple<int,int,int64_t,int,int,int>;
+    struct Count { uint64_t calls=0,rect=0,live=0; };
+    std::map<Key,Count> counts;
+    ~TileCounters() {
+        for (const auto& [key,c] : counts) {
+            const auto [dev,type,rows,I,J,K] = key;
+            std::fprintf(stderr, "MMQ_TILE_PROFILE dev=%d type=%d rows=%lld I=%d J=%d K=%d calls=%llu rect=%llu live=%llu empty=%llu\n",
+                dev,type,(long long)rows,I,J,K,(unsigned long long)c.calls,(unsigned long long)c.rect,
+                (unsigned long long)c.live,(unsigned long long)(c.rect-c.live));
+        }
+    }
+};
+void profile_tiles(const Product& p, const mmq_args& a) {
+    if (!tile_profile_enabled() || !p.host_counts_valid || p.tab || p.n<=0 || p.n>kGatherGroupMax) return;
+    const int id=ggml_cuda_get_device();
+    const auto& dev=ggml_cuda_info().devices[id];
+    const bool fallback=a.nrows_x%128!=0;
+    int selected=0,best=INT_MAX;
+    for (int J=8;J<=128 && best>1;J+=8) {
+        const auto c=ggml_cuda_mmq_get_config((ggml_type)p.type,J,fallback,dev.cc);
+        if (c.type==GGML_TYPE_COUNT || mmq_get_nbytes_shared(c,dev.cc)>dev.smpbo) continue;
+        const int tiles=(a.ncols_opt+c.J-1)/c.J;
+        if (tiles<best) { best=tiles; selected=J; }
+    }
+    if (!selected) return;
+    const auto c=ggml_cuda_mmq_get_config((ggml_type)p.type,selected,fallback,dev.cc);
+    if (c.stream_k) return; // rectangular CTA counts are not valid for stream-K.
+    const uint64_t ni=(a.nrows_x+c.I-1)/c.I;
+    const uint64_t rect=ni*((a.ncols_max+c.J-1)/c.J)*p.n;
+    uint64_t live=0, rows=0; int64_t max_count=0;
+    for (int e=0;e<p.n;++e) {
+        if (p.host_counts[e]<0 || p.host_counts[e]>p.max_rows) return;
+        rows+=p.host_counts[e]; max_count=std::max<int64_t>(max_count,p.host_counts[e]);
+        live+=ni*((p.host_counts[e]+c.J-1)/c.J);
+    }
+    if (max_count!=p.max_rows || rows>(uint64_t)p.total_rows) return;
+    static TileCounters data;
+    std::lock_guard<std::mutex> lock(data.mutex);
+    auto& sum=data.counts[{id,p.type,p.w_rows,c.I,c.J,c.K_vram}];
+    ++sum.calls;sum.rect+=rect;sum.live+=live;
+}
+} // namespace
+
 void Context::run(const Product& p, void* stream) {
     if (p.n <= 0 || p.max_rows <= 0) return;
     const ggml_type t = (ggml_type) p.type;
@@ -474,6 +528,7 @@ void Context::run(const Product& p, void* stream) {
                         p.n, p.n, p.tab ? 0 : (int64_t) (p.expert_bytes / ggml_type_size(t)), 0, 0,
                         1, 1, 0, 0, 0,
                         p.max_rows, prefill_j48_opt(p)};
+    profile_tiles(p,a);
     auto& ctx = *(ggml_backend_cuda_context*) ctx_;
     const cudaStream_t s = (cudaStream_t) stream;
     if (p.tab) {

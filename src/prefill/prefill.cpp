@@ -74,6 +74,7 @@
 // A build without the llama.cpp sources (no STRATA_NATIVE_EXPERTS): no MMQ, the FP16 expert path everywhere.
 namespace strata::prefill::mmq {
 bool built() { return false; }
+bool tile_profile_enabled() { return false; }
 bool supported(int) { return false; }
 bool fits(int, int64_t) { return false; }
 size_t matrix_bytes(int, int64_t, int64_t) { return 0; }
@@ -4482,6 +4483,10 @@ bool Prefill::run_impl(const int64_t* tokens, int64_t n, int64_t pos0, std::stri
 #if defined(STRATA_GFX906_PREFILL_J48_BUILT) && STRATA_GFX906_PREFILL_J48_BUILT == 1 && defined(STRATA_HIP_GFX906)
                                 gu.local_full_routing_prefill = local_full_routing_prefill;
 #endif
+                                if (mmq::tile_profile_enabled()) {
+                                    gu.host_counts_valid = true;
+                                    for (int e=0;e<ngx;++e) gu.host_counts[e] = m.cnt[(size_t) order[j0+e]];
+                                }
                                 m.mmq_ctx->run(gu, m.cs);
                                 if (lay.native && lay.fmt[(size_t) l].tail_off)   // gate/up scales applied as read
                                     mmq::swiglu_scaled(m.GU + r0 * 1280, m.H + r0 * 640, nr, 640, m.bounds_dev + j0, ngx,
@@ -4500,6 +4505,8 @@ bool Prefill::run_impl(const int64_t* tokens, int64_t n, int64_t pos0, std::stri
 #if defined(STRATA_GFX906_PREFILL_J48_BUILT) && STRATA_GFX906_PREFILL_J48_BUILT == 1 && defined(STRATA_HIP_GFX906)
                                 dn.local_full_routing_prefill = local_full_routing_prefill;
 #endif
+                                dn.host_counts_valid = gu.host_counts_valid;
+                                if (dn.host_counts_valid) for (int e=0;e<ngx;++e) dn.host_counts[e] = gu.host_counts[e];
                                 m.mmq_ctx->run(dn, m.cs);
                                 if (lay.native && lay.fmt[(size_t) l].tail_off)   // s_down: applied by the combine
                                     mmq::down_row_scales(m.row_sd + r0, dn.bounds, ngx, m.grp_tail, nr, m.cs);
